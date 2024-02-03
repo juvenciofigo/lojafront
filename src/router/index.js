@@ -1,26 +1,67 @@
 import { createRouter, createWebHistory } from "vue-router";
-import HomeView from "../views/HomeView.vue";
 
 const routes = [
-  {
-    path: "/",
-    name: "home",
-    component: HomeView,
-  },
-  {
-    path: "/about",
-    name: "about",
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () =>
-      import(/* webpackChunkName: "about" */ "../views/AboutView.vue"),
-  },
+    {
+        path: "/",
+        name: "home",
+        component: () => import("../views/HomeView.vue"),
+    },
+    {
+        path: "/dashboard",
+        component: () => import("@/resources/Dashboard/_components/DashboardView.vue"),
+        children: [
+            {
+                path: "",
+                component: () => import("@/resources/Dashboard/_components/DashboardComp.vue"),
+            },
+            {
+                path: "produtos",
+                name: "produtos",
+                component: () => import("@/resources/Dashboard/_components/Store/_components/ProductsComp.vue"),
+            },
+            {
+                path: "pedidos",
+                name: "pedidos",
+                component: () => import("@/resources/Dashboard/_components/Store/_components/OrdersComp.vue"),
+            },
+            {
+                path: "clientes",
+                name: "clientes",
+                component: () => import("@/resources/Dashboard/_components/Store/_components/CustomersComp.vue"),
+            },
+            {
+                path: "carinhos",
+                name: "carinhos",
+                component: () => import("@/resources/Dashboard/_components/Store/_components/CartsComp.vue"),
+            },
+            {
+                path: "compras",
+                name: "compras",
+                component: () => import("@/resources/Dashboard/_components/Store/_components/ShopsComp.vue"),
+            },
+        ],
+    },
+    {
+        path: "/about",
+        name: "about",
+        component: () => import("../views/AboutView.vue"),
+    },
+    {
+        path: "/login",
+        name: "login",
+        component: () => import("@/resources/_components/LoginView.vue"),
+    },
+    {
+        path: "/register",
+        name: "register",
+        component: () => import("@/resources/_components/RegisterView.vue"),
+    },
 ];
 
 const router = createRouter({
-  history: createWebHistory(process.env.BASE_URL),
-  routes,
+    history: createWebHistory(process.env.BASE_URL),
+    linkExactActiveClass: "border-2",
+    routes,
 });
 
 export default router;

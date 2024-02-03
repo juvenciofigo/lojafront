@@ -1,13 +1,3 @@
-import { createApp } from "vue";
-import App from "./App.vue";
-import router from "./router";
-import store from "./store";
-import vuetify from "./plugins/vuetify";
-import { loadFonts } from "./plugins/webfontloader";
-import { useVuelidate } from "@vuelidate/core";
-import "./assets/tailwind.css";
-loadFonts();
-
 // compontes
 
 import { Separator } from "@/components/ui/separator";
@@ -27,8 +17,6 @@ import { ListOrdered } from "lucide-vue-next";
 import { PersonStanding } from "lucide-vue-next";
 import { ShoppingCart } from "lucide-vue-next";
 import { Shirt } from "lucide-vue-next";
-
-const app = createApp(App);
 
 // icones user
 app.component("UserRound", UserRound);
@@ -62,13 +50,5 @@ app.component("Collapsible", Collapsible);
 app.component("CollapsibleContent", CollapsibleContent);
 app.component("CollapsibleTrigger", CollapsibleTrigger);
 
-
-
-
-
-
-app.use(useVuelidate);
-app.use(router);
-app.use(store);
-app.use(vuetify);
-app.mount("#app");
+export var icons = ["Separator"];
+export var comp = [Separator];
