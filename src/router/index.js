@@ -10,6 +10,10 @@ const routes = [
         path: "/dashboard",
         component: () => import("@/resources/Dashboard/_components/DashboardView.vue"),
         children: [
+
+            /*
+            Produtos
+            */
             {
                 path: "",
                 component: () => import("@/resources/Dashboard/_components/DashboardComp.vue"),
@@ -19,6 +23,22 @@ const routes = [
                 name: "produtos",
                 component: () => import("@/resources/Dashboard/_components/Store/_components/ProductsComp.vue"),
             },
+            {
+                path: "novoproduto",
+                name: "novoproduto",
+                component: () => import("@/resources/Dashboard/_components/Store/_components/products/AddProduct.vue"),
+            },
+            {
+                path: "produto/:id/detalhes",
+                name: "detalhes",
+                component: () => import("@/resources/Dashboard/_components/Store/_components/products/ProductsDetails.vue"),
+            },
+
+
+
+            /*
+            Pedidos
+            */
             {
                 path: "pedidos",
                 name: "pedidos",
@@ -60,7 +80,6 @@ const routes = [
 
 const router = createRouter({
     history: createWebHistory(process.env.BASE_URL),
-    linkExactActiveClass: "border-2",
     routes,
 });
 

@@ -1,11 +1,13 @@
 import { createStore } from "vuex";
+import dashboard from "@/resources/Dashboard/_store";
+import store from "@/resources/Store/_store";
 
 export default createStore({
     state: {
-        loja: ["Produtos", "Pedidos", "Clientes", "Carinhos", "Compras"],
+        StoreDasboard: ["Produtos", "Pedidos", "Clientes", "Carinhos", "Compras"],
     },
     getters: {},
     mutations: {},
     actions: {},
-    modules: {},
+    modules: { dashboard, store },
 });

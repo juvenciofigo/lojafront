@@ -92,7 +92,6 @@
 <script>
     import { Heart } from "lucide-vue-next";
     import { ShoppingBag } from "lucide-vue-next";
-    import { Search } from "lucide-vue-next";
     import { ChevronsUpDown } from "lucide-vue-next";
     import { Check } from "lucide-vue-next";
     import { LogIn } from "lucide-vue-next";
@@ -105,7 +104,6 @@
         components: {
             Heart,
             ShoppingBag,
-            Search,
             ChevronsUpDown,
             Check,
             LogIn,

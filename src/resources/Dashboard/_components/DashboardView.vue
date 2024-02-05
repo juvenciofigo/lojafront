@@ -7,7 +7,7 @@
             <div class="flex flex-col px-3 mt-2">
                 <p class="text-xs">Menu</p>
                 <div class="flex flex-col px-3 gap-2 mt-2">
-                    <router-link to="/dashboard" class="flex flex-row items-center">
+                    <router-link exact-active-class="border-2" to="/dashboard" class="flex flex-row items-center">
                         <LayoutDashboard class="w-4 h-4 mr-2" />
                         Dahsboard
                     </router-link>
@@ -20,27 +20,27 @@
                             <ChevronDown class="w-4 h-4 self-end" />
                         </CollapsibleTrigger>
                         <CollapsibleContent class="flex-1 flex flex-col gap-2 ml-9 mt-2">
-                            <router-link class="h-[35px] flex flex-row items-center" :to="{ name: 'produtos' }">
+                            <router-link exact-active-class=" pl-4" class="h-[35px] flex flex-row items-center" :to="{ name: 'produtos' }">
                                 <Shirt class="w-4 h-4 mr-2" />
                                 <span>Produtos</span>
                             </router-link>
 
-                            <router-link class="h-[35px] flex flex-row items-center" :to="{ name: 'pedidos' }">
+                            <router-link exact-active-class=" pl-4" class="h-[35px] flex flex-row items-center" :to="{ name: 'pedidos' }">
                                 <ListOrdered class="w-4 h-4 mr-2" />
                                 <span>Pedidos</span>
                             </router-link>
 
-                            <router-link class="h-[35px] flex flex-row items-center" :to="{ name: 'clientes' }">
+                            <router-link exact-active-class=" pl-4" class="h-[35px] flex flex-row items-center" :to="{ name: 'clientes' }">
                                 <PersonStanding class="w-4 h-4 mr-2" />
                                 <span>Clientes</span>
                             </router-link>
 
-                            <router-link class="h-[35px] flex flex-row items-center" :to="{ name: 'carinhos' }">
+                            <router-link exact-active-class=" pl-4" class="h-[35px] flex flex-row items-center" :to="{ name: 'carinhos' }">
                                 <ShoppingCart class="w-4 h-4 mr-2" />
                                 <span>Carinhos</span>
                             </router-link>
 
-                            <router-link class="h-[35px] flex flex-row items-center" :to="{ name: 'compras' }">
+                            <router-link exact-active-class=" pl-4" class="h-[35px] flex flex-row items-center" :to="{ name: 'compras' }">
                                 <ShoppingBasket class="w-4 h-4 mr-2" />
                                 <span>Compras</span>
                             </router-link>
@@ -52,10 +52,10 @@
 
         <Separator orientation="vertical" class="mt-7 w-[2px] self-end" />
 
-        <div class="flex-1 flex flex-col gap-1 bg-slate-100">
-            <div class="h-[50px] bg-white"></div>
-            <div class="h-[47px] flex items-center px-5 bg-white">( DASHBOARD )</div>
+        <div class="flex-1 flex flex-col gap-[2px] bg-slate-100">
+            <div class="h-[50px] bg-white">Profile</div>
 
+            <div class="h-[47px] pb-2 flex items-center px-5 bg-white">( DASHBOARD )</div>
             <router-view></router-view>
         </div>
     </div>
@@ -70,10 +70,5 @@
     const store = useStore();
     const open = ref(false);
     const isOpen = ref(false);
-
-    const suaPropriedade = store.state.dashStore;
-    console.log(suaPropriedade.loja[0]);
-
-
 </script>
 <style lang=""></style>
