@@ -1,4 +1,4 @@
-<template lang="">
+<template>
     <div class="flex flex-row h-100">
         <div class="flex-1"></div>
 
@@ -6,52 +6,59 @@
             <div class="flex flex-col flex-1">
                 <LogoPart />
 
-                <Separator orientation="horizontal" class="w-[85%] self-center my-4 mb-6" decotarive />
+                <Separator
+                    orientation="horizontal"
+                    class="w-[85%] self-center my-4 mb-6"
+                    decotarive />
 
-                <p class="text-blue-600 text-2xl self-center">Bem-vindo de volta!</p>
+                <p class="text-blue-600 text-2xl self-center">Bem-vindo!</p>
 
                 <div class="px-7 mt-10">
-                    <form @submit="onSubmit">
-                        <FormField v-slot="{ componentField }" name="username">
-                            <div class="flex flex-col gap-6">
-                                <FormItem>
-                                    <FormLabel>Email:</FormLabel>
-                                    <FormControl>
-                                        <Input type="email" placeholder="exemplo@email.com" v-bind="" />
-                                    </FormControl>
-                                    <!-- <FormDescription> This is your public display name. </FormDescription> -->
-                                    <FormMessage />
-                                </FormItem>
-                                <FormItem>
-                                    <FormLabel>Senha:</FormLabel>
-                                    <FormControl>
-                                        <Input type="password" placeholder="Password" v-bind="" />
-                                    </FormControl>
-                                    <!-- <FormDescription> This is your public display name. </FormDescription> -->
-                                    <FormMessage />
-                                </FormItem>
-                            </div>
-                        </FormField>
+                    <form @submit.prevent="submit">
+                        <div class="flex flex-col gap-3">
+                            <v-text-field
+                                v-model="email.value.value"
+                                autocomplete="email"
+                                variant="outlined"
+                                density="compact"
+                                bg-color="white"
+                                :error-messages="email.errorMessage.value"
+                                label="E-mail">
+                            </v-text-field>
+                            <v-text-field
+                                v-model="password.value.value"
+                                autocomplete="current-password"
+                                variant="outlined"
+                                density="compact"
+                                bg-color="white"
+                                :counter="8"
+                                type="password"
+                                :error-messages="password.errorMessage.value"
+                                label="Senha">
+                            </v-text-field>
+                        </div>
 
-                        <Button variant="outline" class="w-full mt-[20px]" type="submit"> Entrar </Button>
+                        <v-btn
+                            class="me-4"
+                            type="submit">
+                            Enviar
+                        </v-btn>
+
+                        <v-btn @click="handleReset"> Limpar </v-btn>
                     </form>
-                    <Button variant="outline" class="w-full mt-[20px]"> <router-link to="/dashboard">Dahsboard</router-link> </Button>
-
                     <p class="px-2 mt-[25px]">
                         <span>Esqueceu a senha? </span>
                         <span class="underline">
-                            <router-link to="/register"><span class="whitespace-nowrap"> Recuperar senha!</span></router-link>
+                            <router-link to="#"><span class="whitespace-nowrap"> Recuperar senha!</span></router-link>
                         </span>
                     </p>
 
                     <p class="px-2 mt-[25px]">
                         <span>Ainda não se tem uma conta? </span>
                         <span class="underline">
-                            <router-link to="/register"><span class="whitespace-nowrap"> Cria conta!</span></router-link>
+                            <router-link to="/register"><span class="whitespace-nowrap"> Criar conta!</span></router-link>
                         </span>
                     </p>
-
-
                 </div>
             </div>
 
@@ -59,30 +66,42 @@
         </div>
     </div>
 </template>
-<script>
-    import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-
-    import { useForm } from "vee-validate";
+<script setup>
+    // Componentes
+    import LogoPart from "@/components/partials/LogoPart.vue";
+    import SignaturePart from "@/components/partials/SignaturePart.vue";
+    import { useStore } from "vuex";
+    import { useRouter } from "vue-router";
+    import { useField, useForm } from "vee-validate";
     import { toTypedSchema } from "@vee-validate/zod";
     import * as z from "zod";
 
-    //components
-    import LogoPart from "@/components/parrtials/LogoPart.vue";
-    import SignaturePart from "@/components/parrtials/SignaturePart.vue";
+    const store = useStore();
+    const router = useRouter();
 
-    export default {
-        components: {
-            FormControl,
-            FormDescription,
-            FormField,
-            FormItem,
-            FormLabel,
-            FormMessage,
+    const { handleSubmit, handleReset } = useForm({
+        validationSchema: toTypedSchema(
+            z.object({
+                email: z.string().email({ message: "E-mail inválido" }),
+                // password
+                password: z
+                    .string()
+                    .min(8, { message: "A senha deve ter no mínimo 8 caracteres" })
+                    .regex(/[a-z]/, { message: "A senha deve conter pelo menos uma letra minúscula" })
+                    .regex(/[A-Z]/, { message: "A senha deve conter pelo menos uma letra maiúscula" })
+                    .regex(/\d/, { message: "A senha deve conter pelo menos um número" }),
+            })
+        ),
+    });
 
-            //components
-            LogoPart,
-            SignaturePart,
-        },
-    };
+    const email = useField("email");
+    const password = useField("password");
+
+    const submit = handleSubmit(async (values) => {
+        await store.dispatch("login", { values, router });
+    });
+
+    const cookieName = `authToken=`;
+    const decodedCookie = decodeURIComponent(document.cookie);
+    const cookieArray = decodedCookie.split(";");
 </script>
-<style lang=""></style>

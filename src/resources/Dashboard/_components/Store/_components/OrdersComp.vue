@@ -1,13 +1,6 @@
 <template lang="">
-    <div>
-        pedidos
+    <div class="flex-1 flex flex-col">
+        <router-view></router-view>
     </div>
 </template>
-<script>
-export default {
-    
-}
-</script>
-<style lang="">
-    
-</style>
+<script setup></script>

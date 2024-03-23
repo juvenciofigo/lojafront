@@ -1,13 +1,9 @@
 <template lang="">
-    <div>
-        clinete
+    <div class="flex-1 flex flex-col">
+        <router-view></router-view>
     </div>
 </template>
 <script>
-export default {
-    
-}
+    export default {};
 </script>
-<style lang="">
-    
-</style>
+<style lang=""></style>

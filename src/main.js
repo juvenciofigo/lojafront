@@ -17,6 +17,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Command, CommandDialog, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList, CommandSeparator, CommandShortcut } from "@/components/ui/command";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Label } from "@/components/ui/label";
 
 // icones import
 import { UserRound } from "lucide-vue-next";
@@ -30,7 +31,9 @@ import { ShoppingCart } from "lucide-vue-next";
 import { Shirt } from "lucide-vue-next";
 import { Search } from "lucide-vue-next";
 import { Undo2 } from "lucide-vue-next";
+import { X } from "lucide-vue-next";
 
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 const app = createApp(App);
 
 // icones user
@@ -44,12 +47,25 @@ app.component("PersonStanding", PersonStanding);
 app.component("ShoppingCart", ShoppingCart);
 app.component("Shirt", Shirt);
 app.component("Undo2", Undo2);
+app.component("X", X);
 
 // use compontes
 app.component("Button", Button);
 app.component("Input", Input);
+app.component("Label", Label);
+
 app.component("Separator", Separator);
 app.component("Search", Search);
+
+app.component("Dialog", Dialog);
+app.component("DialogContent", DialogContent);
+app.component("DialogDescription", DialogDescription);
+app.component("DialogFooter", DialogFooter);
+app.component("DialogHeader", DialogHeader);
+app.component("DialogTitle", DialogTitle);
+app.component("DialogTrigger", DialogTrigger);
+
+
 
 app.component("Select", Select);
 app.component("SelectContent", SelectContent);
