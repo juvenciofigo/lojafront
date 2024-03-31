@@ -20,9 +20,7 @@
     import { useStore } from "vuex";
     import { ref } from "vue";
     import { useRoute } from "vue-router";
-    import axios from "axios";
-
-    // Declaração dos dados reativos
+    
     const store = useStore();
     const route = useRoute();
     const imagens = ref([]);

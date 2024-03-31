@@ -41,12 +41,12 @@
 </template>
 <script setup>
     import { useStore } from "vuex";
-    
+
     import { computed, ref } from "vue";
     import CartProductsComp from "@/resources/Store/_components/CartProductsComp.vue";
-    
+
     import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
-    
+
     const store = useStore();
     const cartProducts = computed(() => store.getters.cartProducts);
 
@@ -57,11 +57,6 @@
             currency: "MZN",
         });
     };
-
-    // Calculando o número total de produtos no carrinho
-    const cartTotal = computed(() => {
-        return calculateCartTotal(cartProducts.value);
-    });
 
     // Calculando o preço total de produtos
     const priceTotal = computed(() => {
@@ -75,11 +70,6 @@
     const totalPedido = computed(() => {
         return priceTotal.value + taxaEnvio.value;
     });
-
-    // Função para calcular o total de produtos no carrinho
-    const calculateCartTotal = (cartProducts) => {
-        return cartProducts.reduce((total, product) => total + product.quantity, 0);
-    };
 
     // Função para calcular o preço total de produtos
     const calculatePriceTotal = (cartProducts) => {

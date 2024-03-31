@@ -95,7 +95,6 @@
             <div class="flex items-center space-x-2 py-4">
                 <v-pagination
                     v-model="curenntPage"
-                    total-visible="5"
                     @update:modelValue="pageEvent"
                     :length="totalPages"
                     :total-visible="4"
@@ -127,7 +126,6 @@
 
     const curenntPage = ref(Number(route.query.offset) || 1);
     const totalPages = computed(() => Number(store.state.orders.totalPages));
-    const limit = computed(() => Number(store.state.orders.limit));
 
     onMounted(async () => {
         const offset = route.query.offset || 1;

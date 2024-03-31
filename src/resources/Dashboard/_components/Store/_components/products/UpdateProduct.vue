@@ -274,11 +274,8 @@
 
 <script setup>
     import { useStore } from "vuex";
-    import { ref, onMounted, computed, defineProps } from "vue";
+    import { ref, onMounted, computed, } from "vue";
     import Editor from "@tinymce/tinymce-vue";
-    import { useForm } from "vee-validate";
-    import { toTypedSchema } from "@vee-validate/zod";
-    import * as z from "zod";
     import { useRoute } from "vue-router";
 
     const availabilityStatus = [
@@ -348,7 +345,7 @@
         store.dispatch("getAllCategory");
     }
 
-    async function updateProduct(event) {
+    async function updateProduct() {
         if (
             !productName.value ||
             !productDescription.value ||

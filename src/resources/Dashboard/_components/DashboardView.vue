@@ -116,21 +116,18 @@
 </template>
 
 <script setup>
-    import { onMounted, onActivated, computed, ref } from "vue";
+    import { computed, ref } from "vue";
     import { useStore } from "vuex";
     import { useRouter } from "vue-router";
 
     import LogoPart from "@/components/partials/LogoPart.vue";
-    import axios from "axios";
 
     import { Menu } from "lucide-vue-next";
     import { LogOut } from "lucide-vue-next";
-    import { LogIn } from "lucide-vue-next";
     import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
     const store = useStore();
     const router = useRouter();
-    const open = ref(false);
     const isOpen = ref(false);
     const user = computed(() => JSON.parse(localStorage.getItem("userData")));
 

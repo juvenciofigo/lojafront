@@ -57,7 +57,7 @@
 <script setup>
     import { defineProps } from "vue";
 
-    import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+    import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
     import { Trash2 } from "lucide-vue-next";
     defineProps({
         cartProducts: Array,

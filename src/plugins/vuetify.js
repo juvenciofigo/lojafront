@@ -1,15 +1,10 @@
-import 'material-design-icons-iconfont/dist/material-design-icons.css' // Ensure your project is capable of handling css files
+// Styles
+import '@mdi/font/css/materialdesignicons.css'
+import 'vuetify/styles'
+
+// Vuetify
 import { createVuetify } from 'vuetify'
-import { aliases, md } from 'vuetify/iconsets/md'
-import "vuetify/styles";
 
-
-export default createVuetify({
-  icons: {
-    defaultSet: 'md',
-    aliases,
-    sets: {
-      md,
-    },
-  },
-})
+export default createVuetify(
+  // https://vuetifyjs.com/en/introduction/why-vuetify/#feature-guides
+)

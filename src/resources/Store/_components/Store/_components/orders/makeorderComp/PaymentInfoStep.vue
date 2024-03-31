@@ -32,7 +32,7 @@
     import { toTypedSchema } from "@vee-validate/zod";
     import * as z from "zod";
 
-    const { handleSubmit, handleReset } = useForm({
+    useForm({
         validationSchema: toTypedSchema(
             z.object({
                 // Cell number
@@ -42,9 +42,5 @@
     });
 
     const cellNumber = useField("cellNumber");
-
-    const submit = handleSubmit(async (values) => {
-        await store.dispatch("newUser", { values, router });
-    });
 </script>
 <style></style>

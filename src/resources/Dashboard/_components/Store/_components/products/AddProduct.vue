@@ -373,21 +373,17 @@
     import { useStore } from "vuex";
     import { ref, onMounted, computed } from "vue";
     import Editor from "@tinymce/tinymce-vue";
-    import { useForm } from "vee-validate";
-    import { toTypedSchema } from "@vee-validate/zod";
-    import * as z from "zod";
-    import { Input } from "@/components/ui/input";
+
     import { Label } from "@/components/ui/label";
     import CreateCategoryVue from "../_partials/CreateCategory.vue";
     import { Button } from "@/components/ui/button";
     import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 
-    import { Check, ChevronDown, ChevronUp, X } from "lucide-vue-next";
+    import { ChevronDown, ChevronUp, X } from "lucide-vue-next";
     import {
         SelectContent,
         SelectGroup,
         SelectItem,
-        SelectItemIndicator,
         SelectItemText,
         SelectLabel,
         SelectPortal,
@@ -431,20 +427,20 @@
     const categories = computed(() => store.state.categories);
 
     // Função para pré-visualizar as imagens
-    function previewImages(event) {
-        const files = event.target.files;
-        for (let i = 0; i < files.length; i++) {
-            const reader = new FileReader();
+    // function previewImages(event) {
+    //     const files = event.target.files;
+    //     for (let i = 0; i < files.length; i++) {
+    //         const reader = new FileReader();
 
-            reader.onload = (e) => {
-                productImage.value.push({
-                    url: e.target.result,
-                    file: files[i],
-                });
-            };
-            reader.readAsDataURL(files[i]);
-        }
-    }
+    //         reader.onload = (e) => {
+    //             productImage.value.push({
+    //                 url: e.target.result,
+    //                 file: files[i],
+    //             });
+    //         };
+    //         reader.readAsDataURL(files[i]);
+    //     }
+    // }
 
     // Função para remover uma imagem da pré-visualização
     function removeImage(index) {

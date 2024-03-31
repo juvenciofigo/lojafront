@@ -28,12 +28,12 @@
                     </div>
 
                     <div class="flex flex-wrap flex-row justify-center gap-4">
-                        <Button
+                        <ButtonComp
                             variant="destructive"
                             @click="firstButton"
-                            >{{ titleFirst }}</Button
+                            >{{ titleFirst }}</ButtonComp
                         >
-                        <Button @click="secondButton">{{ titleSecond }}</Button>
+                        <ButtonComp @click="secondButton">{{ titleSecond }}</ButtonComp>
                         <button
                             :class="styl"
                             @click="thirdButton">
@@ -162,10 +162,6 @@
 
     function quantityValue(e) {
         emits("value-updated", e.target.value);
-    }
-
-    function back() {
-        window.history.back();
     }
 
     function updateImageLink(index) {

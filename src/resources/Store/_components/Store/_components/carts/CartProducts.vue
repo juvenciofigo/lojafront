@@ -42,15 +42,14 @@
     import CartProductsComp from "@/resources/Store/_components/CartProductsComp.vue";
     import { computed, ref } from "vue";
     import { useStore } from "vuex";
-    import { useRoute, useRouter } from "vue-router";
+    import { useRouter } from "vue-router";
 
-    import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+    import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
 
     const store = useStore();
     const router = useRouter();
 
     const cartProducts = ref(computed(() => store.getters.cartProducts));
-    const cartPrice = ref(computed(() => store.getters.cartPrice));
 
     function makeOrder() {
         router.push({ name: "makeOrder" });
@@ -68,11 +67,6 @@
     // Definindo uma taxa de envio fixa
     const taxaEnvio = ref(10);
 
-    // Função para calcular o total de produtos no carrinho
-    const calculateCartTotal = (cartProducts) => {
-        return cartProducts.reduce((total, product) => total + product.quantity, 0);
-    };
-
     // Função para calcular o preço total de produtos
     const calculatePriceTotal = (cartProducts) => {
         return cartProducts.reduce((total, product) => total + product.subtotal, 0);
@@ -85,8 +79,4 @@
             currency: "MZN",
         });
     };
-
-    function goTo(id) {
-        router.push({ name: "detailsClient", params: { id } });
-    }
 </script>

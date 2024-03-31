@@ -93,10 +93,9 @@
 </template>
 <script setup>
     import { useStore } from "vuex";
-    import { ref, onMounted, computed } from "vue";
-    import { useRoute, useRouter } from "vue-router";
+    import { onMounted, computed } from "vue";
+    import { useRouter } from "vue-router";
     import ProductViewComp from "@/resources/_components/ProductViewComp.vue";
-    import { target } from "vuelidate/lib/params";
 
     const store = useStore();
     const router = useRouter();

@@ -7,11 +7,10 @@
 <script setup>
     import AllProductsComp from "@/resources/_components/AllProductsComp.vue";
 
-    import { computed, ref, onMounted, onBeforeUnmount, watchEffect } from "vue";
+    import { computed, onMounted, onBeforeUnmount } from "vue";
     import { useStore } from "vuex";
-    import { useRouter, useRoute } from "vue-router";
+    import { useRoute } from "vue-router";
 
-    const router = useRouter();
     const route = useRoute();
 
     const store = useStore();

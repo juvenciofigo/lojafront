@@ -26,7 +26,6 @@
                 <div>
                     <v-pagination
                         @update:model-value="pushWithQuery"
-                        @click=""
                         density="compact"
                         variant="flat"
                         v-model="currentPage"

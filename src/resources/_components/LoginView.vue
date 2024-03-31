@@ -69,6 +69,7 @@
 <script setup>
     // Componentes
     import LogoPart from "@/components/partials/LogoPart.vue";
+    import { Separator } from "radix-vue";
     import SignaturePart from "@/components/partials/SignaturePart.vue";
     import { useStore } from "vuex";
     import { useRouter } from "vue-router";
@@ -100,8 +101,4 @@
     const submit = handleSubmit(async (values) => {
         await store.dispatch("login", { values, router });
     });
-
-    const cookieName = `authToken=`;
-    const decodedCookie = decodeURIComponent(document.cookie);
-    const cookieArray = decodedCookie.split(";");
 </script>

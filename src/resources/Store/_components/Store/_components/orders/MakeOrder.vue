@@ -45,16 +45,16 @@
 </template>
 
 <script setup>
-    import { useRouter } from "vue-router";
-    import { useStore } from "vuex";
+    // import { useRouter } from "vue-router";
+    // import { useStore } from "vuex";
     import { ref, computed } from "vue";
 
     import ShippingInfoStep from "@/resources/Store/_components/Store/_components/orders/makeorderComp/ShippingInfoStep.vue";
     import PaymentInfoStep from "@/resources/Store/_components/Store/_components/orders/makeorderComp/PaymentInfoStep.vue";
     import ConfirmationStep from "@/resources/Store/_components/Store/_components/orders/makeorderComp/ConfirmationStep.vue";
 
-    const router = useRouter();
-    const store = useStore();
+    // const router = useRouter();
+    // const store = useStore();
     const steps = ref(["Informações de Envio", "Informações de Pagamento", "Confirmação"]);
     const currentStep = ref(1);
 
@@ -69,8 +69,8 @@
     const disabled = computed(() => (currentStep.value === 1 ? "prev" : currentStep.value === steps.value.length ? "next" : undefined));
 
     // Finalizar o pedido
-    const sendOrder = () => {
-        console.log(1);
-        store.dispatch("sendOrder", { cart: { ...cartProducts.value }, payment: { PaymentForm, PaymentStatus }, delivery: { deliveryCost, deliveryType }, router });
-    };
+    // const sendOrder = () => {
+    //     console.log(1);
+    //     store.dispatch("sendOrder", { cart: { ...cartProducts.value }, payment: { PaymentForm, PaymentStatus }, delivery: { deliveryCost, deliveryType }, router });
+    // };
 </script>

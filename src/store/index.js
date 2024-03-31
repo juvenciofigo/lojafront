@@ -2,7 +2,6 @@ import { createStore } from "vuex";
 import axios from "axios";
 import config from "@/config/config";
 import { setCookie, getCookie, removeCookie, cookieExists, errorMessage } from "@/config/cookieUtils";
-import { tryOnUnmounted } from "@vueuse/core";
 
 const authToken = getCookie("authToken");
 const headers = {
@@ -48,10 +47,10 @@ export default createStore({
 
     getters: {
         ///user
-        isAuthenticated: (state) => (cookieName) => {
+        isAuthenticated: () => (cookieName) => {
             return cookieExists(cookieName);
         },
-        isUserAdmin: async (state) => {
+        isUserAdmin: async () => {
             try {
                 const roleCookieValue = await getCookie("poRO");
                 if (roleCookieValue) {
@@ -65,7 +64,7 @@ export default createStore({
         },
 
         ///cart
-        tempCart: (state) => (cookieName) => {
+        tempCart: () => (cookieName) => {
             return getCookie(cookieName);
         },
         cartProducts: (state) => state.cartProducts,
@@ -182,7 +181,6 @@ export default createStore({
                 const res = await axios.put(`${config.apiURL}/product/image/${productId}`, formData, { headers: { "Content-Type": "multipart/form-data", ...headers } });
 
                 if (res.data) {
-                    const products = res.data;
                     commit("updateSnackbar", { show: true, text: "Produto actualizado", color: "green" });
                     window.location.reload();
                 }
@@ -194,7 +192,7 @@ export default createStore({
         ////////////// delete
         async deleteProduct({ commit }, { productId, router }) {
             try {
-                const res = await axios.delete(`${config.apiURL}/product/${productId}`, { headers });
+                axios.delete(`${config.apiURL}/product/${productId}`, { headers });
 
                 commit("updateSnackbar", { show: true, text: "Produto apagado", color: "green" });
                 router.push({ name: "produtos" });
@@ -266,20 +264,9 @@ export default createStore({
                 errorMessage(error);
             }
         },
-
         async getAllCategory({ commit }) {
             try {
                 const res = await axios.get(`${config.apiURL}/categories/all`);
-                const categories = res.data.categories;
-                commit("SET_CATEGORIES", categories);
-            } catch (error) {
-                errorMessage(error);
-            }
-        },
-
-        async getAllCategoryAdmin({ commit }) {
-            try {
-                const res = await axios.get(`${config.apiURL}/categories`, { headers });
                 const categories = res.data.categories;
                 commit("SET_CATEGORIES", categories);
             } catch (error) {
@@ -501,18 +488,18 @@ export default createStore({
                                 errorMessage(error);
                             }
                         }
-                        const totalPrice = tempPrices.reduce((total, currentValue) => total + currentValue, 0);
+                        // const totalPrice = tempPrices.reduce((total, currentValue) => total + currentValue, 0);
                         commit("SET_CARTPRODUCTS", cartProducts);
 
                         return;
                     }
                 }
-            } catch (error) {}
+            } catch (error) {
+                errorMessage(error);
+            }
         },
 
         async sendOrder({ commit }, payload) {
-            console.log(payload);
-            return
             try {
                 const res = await axios.request({
                     method: "post",
@@ -520,8 +507,10 @@ export default createStore({
                     url: "/user",
                     data: payload.values,
                 });
-                commit("updateSnackbar", { show: true, text: "Pedido enviado", color: "green" });
-                payload.router.push({ name: "/" });
+                if (res.data) {
+                    commit("updateSnackbar", { show: true, text: "Pedido enviado", color: "green" });
+                    payload.router.push({ name: "/" });
+                }
             } catch (error) {
                 errorMessage(error);
             }
@@ -535,8 +524,10 @@ export default createStore({
                     url: "/user",
                     data: payload.values,
                 });
-                commit("updateSnackbar", { show: true, text: "Conta criada", color: "green" });
-                payload.router.push({ name: "login" });
+                if (res.data) {
+                    commit("updateSnackbar", { show: true, text: "Conta criada", color: "green" });
+                    payload.router.push({ name: "login" });
+                }
             } catch (error) {
                 errorMessage(error);
             }
@@ -546,6 +537,7 @@ export default createStore({
             try {
                 const res = await api.post("/login", payload.values);
                 const user = res.data.user;
+                commit("updateSnackbar", { show: true, text: "Bem-vindo", color: "green" });
                 if (user.role.includes("admin")) {
                     setCookie("authToken", user.token, 1);
                     setCookie("poRO", user.role[1], 1);
@@ -568,6 +560,7 @@ export default createStore({
                 removeCookie("poRO");
                 localStorage.removeItem("userData");
                 router.push({ name: "login" });
+                commit("updateSnackbar", { show: false, text: "", color: "" });
             } catch (error) {
                 errorMessage(error);
             }

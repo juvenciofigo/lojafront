@@ -4,11 +4,11 @@
             <div>
                 <p class="text-xs text-center hidden lg:block">Bem-vindo ao {{ storeName }}.</p>
                 <div class="lg:hidden flex flex-row">
-                    <Button
+                    <ButtonComp
                         @click.stop="drawer = !drawer"
                         variant="gost">
                         <Menu class="h-7.5 w-7.5" />
-                    </Button>
+                    </ButtonComp>
                     <LogoPart />
                 </div>
             </div>
@@ -27,7 +27,7 @@
                         title="Todos Produtos">
                     </v-list-item>
                     <v-list-item
-                        v-for="(category, index) in categories"
+                        v-for="category in categories"
                         :key="category._id"
                         @click="filterProduct(category._id)"
                         :title="category.categoryName"
@@ -98,7 +98,7 @@
 
             <div class="search flex-1 lg:flex flex-row hidden">
                 <div class="border-2 border-yellow-300 flex flex-1 flex-row mr-20 rounded-[50px]">
-                    <Input
+                    <InputComp
                         class="flex-1 rounded-l-[50px]"
                         autocomplete="off"
                         type="text"
@@ -126,7 +126,7 @@
                                     <SelectViewport class="p-[5px]">
                                         <SelectGroup>
                                             <SelectItem
-                                                v-for="(category, index) in categories"
+                                                v-for="category in categories"
                                                 :key="category._id"
                                                 class="text-[13px] leading-none flex items-center h-[25px] pr-[35px] pl-[25px] relative select-none"
                                                 :value="category._id">
@@ -147,33 +147,33 @@
                             </SelectPortal>
                         </SelectRoot>
 
-                        <Button
+                        <ButtonComp
                             variant="ghost"
                             type="button"
                             class="w-max bg-yellow-300 rounded-r-[50px] flex gap-2 h-full px-[15px]">
-                            <Search
-                        /></Button>
+                            <SearchComp
+                        /></ButtonComp>
                     </div>
                 </div>
 
                 <div class="flex flex-row items-center">
-                    <Button
+                    <ButtonComp
                         variant="Ghost"
                         class="flex gap-2 h-max">
                         <Heart class="w-4 h-4"
-                    /></Button>
-                    <Button
+                    /></ButtonComp>
+                    <ButtonComp
                         variant="Ghost"
                         class="flex gap-2 h-max">
                         <UserRound class="w-4 h-4"
-                    /></Button>
-                    <Button
+                    /></ButtonComp>
+                    <ButtonComp
                         variant="Ghost"
                         class="flex gap-2 h-max"
                         @click="cartProducts">
                         <ShoppingBag class="w-4 h-4" />
                         <span>{{ formatCurrency(priceTotal) }} </span>
-                    </Button>
+                    </ButtonComp>
                 </div>
             </div>
         </div>
@@ -186,7 +186,6 @@
 
     import { Heart } from "lucide-vue-next";
     import { ShoppingBag } from "lucide-vue-next";
-    import { ChevronsUpDown } from "lucide-vue-next";
     import { Check } from "lucide-vue-next";
     import { LogIn } from "lucide-vue-next";
     import { Book } from "lucide-vue-next";
@@ -205,12 +204,10 @@
         SelectItem,
         SelectItemIndicator,
         SelectItemText,
-        SelectLabel,
         SelectPortal,
         SelectRoot,
         SelectScrollDownButton,
         SelectScrollUpButton,
-        SelectSeparator,
         SelectTrigger,
         SelectValue,
         SelectViewport,
@@ -226,10 +223,8 @@
         return value.toLocaleString("pt-MZ", {
             style: "currency",
             currency: "MZN",
-           
         });
     };
-    
 
     const priceTotal = computed(() => {
         return calculatePriceTotal(store.getters.cartProducts);

@@ -7,7 +7,7 @@
 <script setup>
     import AllProductsComp from "@/resources/_components/AllProductsComp.vue";
 
-    import { computed, ref, onMounted, onBeforeUnmount, watch } from "vue";
+    import { computed, onMounted, onBeforeUnmount, watch } from "vue";
     import { useStore } from "vuex";
     import { useRouter, useRoute } from "vue-router";
 

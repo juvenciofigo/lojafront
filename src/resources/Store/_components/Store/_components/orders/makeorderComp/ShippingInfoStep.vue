@@ -102,9 +102,13 @@
     </v-stepper-window-item>
 </template>
 <script setup>
-    import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-    import { Input } from "@/components/ui/input";
+    import { useStore } from "vuex";
+    import { useRouter } from "vue-router";
 
+    // import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+    // import { Input } from "@/components/ui/input";
+    const store = useStore();
+    const router = useRouter();
     import { useField, useForm } from "vee-validate";
     import { toTypedSchema } from "@vee-validate/zod";
     import * as z from "zod";

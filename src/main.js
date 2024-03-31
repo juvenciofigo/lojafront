@@ -20,18 +20,18 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrig
 import { Label } from "@/components/ui/label";
 
 // icones import
-import { UserRound } from "lucide-vue-next";
-import { ChevronDown } from "lucide-vue-next";
-import { LayoutDashboard } from "lucide-vue-next";
-import { FolderKanban } from "lucide-vue-next";
-import { ShoppingBasket } from "lucide-vue-next";
-import { ListOrdered } from "lucide-vue-next";
-import { PersonStanding } from "lucide-vue-next";
-import { ShoppingCart } from "lucide-vue-next";
-import { Shirt } from "lucide-vue-next";
-import { Search } from "lucide-vue-next";
-import { Undo2 } from "lucide-vue-next";
-import { X } from "lucide-vue-next";
+import { UserRound, ChevronDown, LayoutDashboard, FolderKanban, ShoppingBasket, ListOrdered, PersonStanding, ShoppingCart, Shirt, Search, Undo2, X } from "lucide-vue-next";
+// import { ChevronDown } from "lucide-vue-next";
+// import { LayoutDashboard } from "lucide-vue-next";
+// import { FolderKanban } from "lucide-vue-next";
+// import { ShoppingBasket } from "lucide-vue-next";
+// import { ListOrdered } from "lucide-vue-next";
+// import { PersonStanding } from "lucide-vue-next";
+// import { ShoppingCart } from "lucide-vue-next";
+// import { Shirt,  } from "lucide-vue-next";
+// import { Search } from "lucide-vue-next";
+// import { Undo2 } from "lucide-vue-next";
+// import { X } from "lucide-vue-next";
 
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 const app = createApp(App);
@@ -45,19 +45,19 @@ app.component("ShoppingBasket", ShoppingBasket);
 app.component("ListOrdered", ListOrdered);
 app.component("PersonStanding", PersonStanding);
 app.component("ShoppingCart", ShoppingCart);
-app.component("Shirt", Shirt);
-app.component("Undo2", Undo2);
-app.component("X", X);
+app.component("ShirtComp", Shirt);
+app.component("Undo2Comp", Undo2);
+app.component("XComp", X);
 
 // use compontes
-app.component("Button", Button);
-app.component("Input", Input);
-app.component("Label", Label);
+app.component("ButtonComp", Button);
+app.component("InputComp", Input);
+app.component("LabelComp", Label);
 
-app.component("Separator", Separator);
-app.component("Search", Search);
+app.component("SeparatorComp", Separator);
+app.component("SearchComp", Search);
 
-app.component("Dialog", Dialog);
+app.component("DialogComp", Dialog);
 app.component("DialogContent", DialogContent);
 app.component("DialogDescription", DialogDescription);
 app.component("DialogFooter", DialogFooter);
@@ -65,9 +65,7 @@ app.component("DialogHeader", DialogHeader);
 app.component("DialogTitle", DialogTitle);
 app.component("DialogTrigger", DialogTrigger);
 
-
-
-app.component("Select", Select);
+app.component("SelectComp", Select);
 app.component("SelectContent", SelectContent);
 app.component("SelectGroup", SelectGroup);
 app.component("SelectItem", SelectItem);
@@ -75,10 +73,10 @@ app.component("SelectLabel", SelectLabel);
 app.component("SelectTrigger", SelectTrigger);
 app.component("SelectValue", SelectValue);
 
-app.component("Popover", Popover);
+app.component("PopoverComp", Popover);
 app.component("PopoverContent", PopoverContent);
 app.component("PopoverTrigger", PopoverTrigger);
-app.component("Command", Command);
+app.component("CommandComp", Command);
 app.component("CommandDialog", CommandDialog);
 app.component("CommandEmpty", CommandEmpty);
 app.component("CommandGroup", CommandGroup);
@@ -87,7 +85,7 @@ app.component("CommandList", CommandList);
 app.component("CommandItem", CommandItem);
 app.component("CommandSeparator", CommandSeparator);
 app.component("CommandShortcut", CommandShortcut);
-app.component("Collapsible", Collapsible);
+app.component("CollapsibleComp", Collapsible);
 app.component("CollapsibleContent", CollapsibleContent);
 app.component("CollapsibleTrigger", CollapsibleTrigger);
 

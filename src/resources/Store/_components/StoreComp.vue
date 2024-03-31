@@ -260,6 +260,6 @@
     const e1 = ref(1);
     const steps = ref(2);
     function disabled() {
-        return e1 === 1 ? "prev" : e1 === steps ? "next" : undefined;
+        return e1.value === 1 ? "prev" : e1.value === steps.value ? "next" : undefined;
     }
 </script>
