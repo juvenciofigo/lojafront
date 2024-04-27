@@ -24,6 +24,7 @@
     "core-js": "^3.8.3",
     "date-fns": "^3.6.0",
     "lucide-vue-next": "^0.363.0",
+    "mpesa-api-nodejs": "^1.0.4",
     "postcss": "^8",
     "radix-vue": "^1.5.3",
     "roboto-fontface": "*",
