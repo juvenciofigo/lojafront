@@ -24,10 +24,6 @@
                     <ShippingInfoStep
                         :currentStep="currentStep"
                         @next="nextStep" />
-                    <PaymentInfoStep
-                        :currentStep="currentStep"
-                        @prev="prevStep"
-                        @next="nextStep" />
                     <ConfirmationStep
                         :currentStep="currentStep"
                         @prev="prevStep"
@@ -45,17 +41,16 @@
 </template>
 
 <script setup>
-    // import { useRouter } from "vue-router";
-    // import { useStore } from "vuex";
-    import { ref, computed } from "vue";
+    import { ref, computed, onBeforeUnmount, onBeforeMount } from "vue";
+    import { useStore } from "vuex";
+    import { useRoute, useRouter } from "vue-router";
+    const route = useRoute();
+    const router = useRouter();
 
     import ShippingInfoStep from "@/resources/Store/_components/Store/_components/orders/makeorderComp/ShippingInfoStep.vue";
-    import PaymentInfoStep from "@/resources/Store/_components/Store/_components/orders/makeorderComp/PaymentInfoStep.vue";
     import ConfirmationStep from "@/resources/Store/_components/Store/_components/orders/makeorderComp/ConfirmationStep.vue";
 
-    // const router = useRouter();
-    // const store = useStore();
-    const steps = ref(["Informações de Envio", "Informações de Pagamento", "Confirmação"]);
+    const steps = ref(["Informações de Envio", "Confirmação"]);
     const currentStep = ref(1);
 
     const nextStep = () => {
@@ -66,11 +61,31 @@
         currentStep.value--;
     };
 
+    const store = useStore();
+
+    onBeforeUnmount(() => {
+        store.commit("CLEAR_CARTPRODUCTS");
+    });
     const disabled = computed(() => (currentStep.value === 1 ? "prev" : currentStep.value === steps.value.length ? "next" : undefined));
 
+    const isAuthenticated = ref(computed(() => store.getters.isAuthenticated("authToken")));
+    onBeforeMount(async () => {
+        switch (route.query.productsFrom) {
+            case "cartProducts":
+                await store.dispatch("displayTempCartProducts", isAuthenticated.value);
+                break;
+            case "payNow":
+                await store.dispatch("buyNow", { product: { id: route.query.product, quantity: route.query.quantity } });
+                break;
+            default:
+                router.push({ name: "homepage" });
+                break;
+        }
+    });
+
     // Finalizar o pedido
-    // const sendOrder = () => {
-    //     console.log(1);
-    //     store.dispatch("sendOrder", { cart: { ...cartProducts.value }, payment: { PaymentForm, PaymentStatus }, delivery: { deliveryCost, deliveryType }, router });
-    // };
+    function sendOrder() {
+        console.log(1);
+        // store.dispatch("sendOrder", { cart: { ...cartProducts.value }, delivery: { deliveryCost }, router });
+    }
 </script>

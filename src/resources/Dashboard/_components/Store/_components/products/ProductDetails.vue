@@ -1,5 +1,4 @@
 <template lang="">
-    <!-- <div class="absolute bottom-0 top-[4px] right-0 flex-1 w-full flex flex-col overflow-auto bg-white gap-2 flex-nowrap"> -->
     <div class="flex relative flex-row flex-1 gap-1 m-2 rounded-md bg-white">
         <ProductDetailsComp
             :firstButton="deleteProduct"
@@ -10,7 +9,6 @@
             :titleThird="`Fotos`"
             :styl="`bg-yellow-300 px-4 rounded-md`" />
     </div>
-    <!-- </div> -->
 </template>
 <script setup>
     import ProductDetailsComp from "@/resources/_components/ProductDetailsComp.vue";

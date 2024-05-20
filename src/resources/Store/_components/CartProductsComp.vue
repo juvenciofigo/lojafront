@@ -40,6 +40,7 @@
                         :class="actionButton">
                         <button class="bg-slate-300 p-[3px] rounded-md">
                             <Trash2
+                                @click="removeProduct(product.productId)"
                                 color="red"
                                 size="18" />
                         </button>
@@ -55,16 +56,31 @@
     </div>
 </template>
 <script setup>
-    import { defineProps } from "vue";
+    import { defineProps, ref,computed } from "vue";
+    import { useRouter } from "vue-router";
+    import { useStore } from "vuex";
 
     import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
     import { Trash2 } from "lucide-vue-next";
+
+    const router = useRouter();
+    const store = useStore();
+
     defineProps({
         cartProducts: Array,
         image: String,
         tableRowHeight: String,
         actionButton: String,
     });
+
+    function goTo(product) {
+        router.push({ name: "detailsClient", params: { id: product } });
+    }
+
+    const isAuthenticated = ref(computed(() => store.getters.isAuthenticated("authToken")));
+    async function removeProduct(product) {
+        await store.dispatch("removeProductCart", { isAuthenticated: isAuthenticated.value, product });
+    }
 
     // Função para formatar valores monetários
     const formatCurrency = (value) => {

@@ -1,5 +1,5 @@
 <template>
-    <v-stepper-window-item :value="3">
+    <v-stepper-window-item :value="2">
         <CartProductsComp
             :cartProducts="cartProducts"
             :image="'hidden'"
@@ -30,6 +30,7 @@
                 </TableBody>
             </Table>
         </div>
+        <br>
         <div class="flex flex-row justify-end">
             <Button
                 class="self-end w-max"
@@ -41,14 +42,13 @@
 </template>
 <script setup>
     import { useStore } from "vuex";
-
     import { computed, ref } from "vue";
     import CartProductsComp from "@/resources/Store/_components/CartProductsComp.vue";
-
     import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
+    import { Button } from "@/components/ui/button";
 
     const store = useStore();
-    const cartProducts = computed(() => store.getters.cartProducts);
+    const cartProducts = computed(() => store.state.cartProducts);
 
     // Função para formatar valores monetários
     const formatCurrency = (value) => {
@@ -68,7 +68,8 @@
 
     // Calculando o total do pedido
     const totalPedido = computed(() => {
-        return priceTotal.value + taxaEnvio.value;
+        const total = priceTotal.value + taxaEnvio.value;
+        return total;
     });
 
     // Função para calcular o preço total de produtos

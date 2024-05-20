@@ -4,6 +4,8 @@ import config from "@/config/config";
 import { setCookie, getCookie, removeCookie, cookieExists, errorMessage } from "@/config/cookieUtils";
 
 const authToken = getCookie("authToken");
+let tempCart = getCookie("tempCart");
+
 const headers = {
     Authorization: authToken ? `Ecommerce ${authToken}` : null,
 };
@@ -32,12 +34,14 @@ export default createStore({
 
         /// orders:
         orders: {},
+        totalprice: 0,
 
         /// customers
         customers: {},
 
         ///carts
         cartProducts: [],
+        cartPrice: [],
 
         /// snackbar
         snackbar: false,
@@ -58,7 +62,6 @@ export default createStore({
                 }
                 return false;
             } catch (error) {
-                console.error("Erro ao obter o cookie 'poRO':", error);
                 return false;
             }
         },
@@ -68,6 +71,7 @@ export default createStore({
             return getCookie(cookieName);
         },
         cartProducts: (state) => state.cartProducts,
+        cartPrice: (state) => state.cartPrice,
     },
 
     mutations: {
@@ -125,6 +129,12 @@ export default createStore({
         },
         SET_CARTPRODUCTS(state, products) {
             state.cartProducts = products;
+        },
+        SET_CARTPRICE(state, price) {
+            state.cartPrice = price;
+        },
+        CLEAR_CARTPRICE(state) {
+            state.cartPrice = [];
         },
 
         // categories
@@ -427,69 +437,97 @@ export default createStore({
             }
         },
 
-        /*
-            Users
-        */
-
         async addToCart({ commit }, { isAuthenticated, item }) {
+            const user = JSON.parse(localStorage.getItem("userData"));
+            
             if (!isAuthenticated) {
                 let tempCart = getCookie("tempCart");
+
                 if (!tempCart) {
                     tempCart = [];
                 } else {
                     tempCart = JSON.parse(tempCart);
                 }
+                setCookie("tempCart", JSON.stringify(tempCart), 7);
 
-                const existingProductIndex = tempCart.findIndex((product) => product.id === item.id);
+                const existingProductIndex = tempCart.findIndex((product) => item.productId === product.productId);
 
-                if (existingProductIndex !== -1) {
+                if (existingProductIndex !== true) {
                     tempCart[existingProductIndex].quantity += item.quantity;
                 } else {
                     tempCart.push(item);
                 }
 
-                setCookie("tempCart", JSON.stringify(tempCart), 7);
 
                 commit("updateSnackbar", { show: true, text: "Produto adicionado ao carrinho ", color: "green" });
+                return;
             } else {
-                console.log("Usuário autenticado, adicionando produto ao carrinho no servidor...");
+                const res = await axios.request({
+                    method: "post",
+                    baseURL: config.apiURL,
+                    url: `/cart/${user.id}/addProduct`,
+                    data: item,
+                });
+
+                commit("updateSnackbar", { show: true, text: `${res.data.msg}`, color: "green" });
+                return;
+            }
+        },
+
+        async removeProductCart({ commit }, payload) {
+            const user = JSON.parse(localStorage.getItem("userData"));
+            if (!payload.isAuthenticated) {
+                let tempCart = getCookie("tempCart");
+
+                if (!tempCart) {
+                    return;
+                } else {
+                    console.log("sim");
+                    tempCart = JSON.parse(tempCart);
+                }
+
+                commit("updateSnackbar", { show: true, text: "Produto adicionado ao carrinho ", color: "green" });
+                return;
+            } else {
+                const res = await axios.request({
+                    method: "patch",
+                    baseURL: config.apiURL,
+                    url: `/cart/${user.id}/remove/${payload.product}"`,
+                });
+
+                commit("updateSnackbar", { show: true, text: `${res.data.msg}`, color: "green" });
+                return;
             }
         },
 
         async displayTempCartPrices({ commit }, isAuthenticated) {
+            const user = JSON.parse(localStorage.getItem("userData"));
             const tempCart = getCookie("tempCart");
 
             try {
                 if (isAuthenticated) {
-                    return;
+                    const res = await axios.request({
+                        method: "get",
+                        baseURL: config.apiURL,
+                        url: `/cart/${user.id}/prices`,
+                    });
+                    commit("SET_CARTPRICE", res.data);
                 } else {
                     if (tempCart) {
                         const Products = JSON.parse(tempCart);
-
                         const tempPrices = [];
-                        const cartProducts = [];
 
                         for (const product of Products) {
                             try {
-                                const res = await axios.get(`${config.apiURL}/product/${product.id}`);
+                                const res = await axios.get(`${config.apiURL}/product/${product.productId}`);
                                 const productDetails = res.data.product;
-
-                                cartProducts.push({
-                                    productId: productDetails._id,
-                                    productName: productDetails.productName,
-                                    productPrice: productDetails.productPrice,
-                                    picture: productDetails.productImage[0],
-                                    quantity: Number(product.quantity),
-                                    subtotal: product.quantity * productDetails.productPrice,
-                                });
 
                                 tempPrices.push(product.quantity * productDetails.productPrice);
                             } catch (error) {
                                 errorMessage(error);
                             }
                         }
-                        // const totalPrice = tempPrices.reduce((total, currentValue) => total + currentValue, 0);
-                        commit("SET_CARTPRODUCTS", cartProducts);
+                        commit("SET_CARTPRICE", tempPrices);
 
                         return;
                     }
@@ -498,23 +536,44 @@ export default createStore({
                 errorMessage(error);
             }
         },
+        async displayTempCartProducts({ commit }, isAuthenticated) {
+            const tempCart = getCookie("tempCart");
+            const user = JSON.parse(localStorage.getItem("userData"));
 
-        async sendOrder({ commit }, payload) {
+            let cartProducts = [];
+
             try {
-                const res = await axios.request({
-                    method: "post",
-                    baseURL: config.apiURL,
-                    url: "/user",
-                    data: payload.values,
-                });
-                if (res.data) {
-                    commit("updateSnackbar", { show: true, text: "Pedido enviado", color: "green" });
-                    payload.router.push({ name: "/" });
+                if (isAuthenticated) {
+                    const res = await axios.request({
+                        method: "post",
+                        baseURL: config.apiURL,
+                        url: `/cart/${user.id}/products`,
+                    });
+                    cartProducts = res.data;
+                } else {
+                    if (tempCart) {
+                        const userId = false;
+                        const res = await axios.request({
+                            method: "post",
+                            baseURL: config.apiURL,
+                            url: `/cart/${userId}/products`,
+                            data: JSON.parse(tempCart),
+                        });
+                        cartProducts = res.data;
+                    }
                 }
+                commit("SET_CARTPRODUCTS", cartProducts);
+                return;
             } catch (error) {
                 errorMessage(error);
             }
         },
+
+        // CLEAR_CARTPRODUCTS
+
+        /*
+            Users
+        */
 
         async newUser({ commit }, payload) {
             try {
@@ -533,20 +592,45 @@ export default createStore({
             }
         },
 
+        // auth
         async login({ commit }, payload) {
             try {
                 const res = await api.post("/login", payload.values);
-                const user = res.data.user;
-                commit("updateSnackbar", { show: true, text: "Bem-vindo", color: "green" });
-                if (user.role.includes("admin")) {
-                    setCookie("authToken", user.token, 1);
-                    setCookie("poRO", user.role[1], 1);
+                const auth = res.data.user;
+
+                // Definir o tempo de expiração do cookie baseado no papel do usuário
+                if (auth.role.includes("admin")) {
+                    setCookie("authToken", auth.token, 1);
+                    setCookie("poRO", auth.role[1], 1);
                 } else {
-                    setCookie("authToken", user.token, 4);
+                    setCookie("authToken", auth.token, 4);
                 }
 
-                localStorage.setItem("userData", JSON.stringify({ name: user.name, email: user.email, id: user._id }));
+                // Armazenar dados do usuário no localStorage
+                localStorage.setItem(
+                    "userData",
+                    JSON.stringify({
+                        name: auth.name,
+                        email: auth.email,
+                        id: auth._id,
+                    })
+                );
 
+                const user = JSON.parse(localStorage.getItem("userData"));
+
+                // Se houver um carrinho temporário, enviá-lo para o banco de dados
+                if (tempCart) {
+                    console.log("user", user);
+                    const cartRes = await api.post(`/cart/${user.id}/addProduct`, JSON.parse(tempCart));
+                    console.log("cart", cartRes);
+
+                    if (cartRes.data.success) {
+                        // Limpar o cookie do carrinho
+                        removeCookie("tempCart");
+                    }
+                }
+
+                commit("updateSnackbar", { show: true, text: "Bem-vindo", color: "green" });
                 const redirect = payload.router.currentRoute.value.query.redirect || "/";
                 payload.router.push(redirect);
             } catch (error) {
@@ -559,8 +643,122 @@ export default createStore({
                 removeCookie("authToken");
                 removeCookie("poRO");
                 localStorage.removeItem("userData");
+                commit("CLEAR_CARTPRICE");
                 router.push({ name: "login" });
                 commit("updateSnackbar", { show: false, text: "", color: "" });
+            } catch (error) {
+                errorMessage(error);
+            }
+        },
+
+        // order ////////
+        async sendOrder({ commit }, payload) {
+            try {
+                const res = await axios.request({
+                    method: "post",
+                    baseURL: config.apiURL,
+                    url: "/user",
+                    data: payload.values,
+                });
+                if (res.data) {
+                    commit("updateSnackbar", { show: true, text: "Pedido enviado", color: "green" });
+                    payload.router.push({ name: "/" });
+                }
+            } catch (error) {
+                errorMessage(error);
+            }
+        },
+
+        async buyNow({ commit }, { product }) {
+            const tempPrices = [];
+            const cartProducts = [];
+
+            try {
+                const res = await axios.get(`${config.apiURL}/product/${product.id}`);
+                const productDetails = res.data.product;
+
+                cartProducts.push({
+                    productId: productDetails._id,
+                    productName: productDetails.productName,
+                    productPrice: productDetails.productPrice,
+                    picture: productDetails.productImage[0],
+                    quantity: Number(product.quantity),
+                    subtotal: product.quantity * productDetails.productPrice,
+                });
+
+                tempPrices.push(product.quantity * productDetails.productPrice);
+            } catch (error) {
+                errorMessage(error);
+            }
+
+            commit("SET_CARTPRODUCTS", cartProducts);
+        },
+
+        async mpesapay({ commit }, payload) {
+            try {
+                const res = await axios.request({
+                    method: "post",
+                    baseURL: config.apiURL,
+                    url: "/mpesaPay",
+                    data: { ...payload, value: this.state.totalprice },
+                });
+                if (res.data.error) {
+                    commit("updateSnackbar", { show: true, text: res.data.error, color: "red" });
+                    payload.router.push({ name: "login" });
+                }
+                if (res.data.data) {
+                    switch (res.data.data.output_ResponseCode) {
+                        case "INS-0":
+                            commit("updateSnackbar", { show: true, text: "Pagamento efectuado", color: "green" });
+                            payload.router.push({ name: "login" });
+                            break;
+
+                        case "INS-4":
+                            commit("updateSnackbar", { show: true, text: "Número fora de área", color: "red" });
+                            payload.router.push({ name: "login" });
+                            break;
+
+                        case "INS-6":
+                            commit("updateSnackbar", { show: true, text: "TFalha na transação", color: "red" });
+                            payload.router.push({ name: "login" });
+                            break;
+
+                        case "INS-9":
+                            commit("updateSnackbar", { show: true, text: "	Tempo limite da solicitação", color: "red" });
+                            payload.router.push({ name: "login" });
+                            break;
+
+                        case "INS-15":
+                            commit("updateSnackbar", { show: true, text: "Valor inválido usado", color: "red" });
+                            payload.router.push({ name: "login" });
+                            break;
+
+                        case "INS-995":
+                            commit("updateSnackbar", { show: true, text: "Perfil do cliente tem problemas", color: "red" });
+                            payload.router.push({ name: "login" });
+                            break;
+
+                        case "INS-2006":
+                            commit("updateSnackbar", { show: true, text: "Saldo insuficiente", color: "red" });
+                            payload.router.push({ name: "login" });
+                            break;
+
+                        case "INS-2051":
+                            commit("updateSnackbar", { show: true, text: "Número inválido", color: "red" });
+                            payload.router.push({ name: "login" });
+                            break;
+
+                        case "INS-10":
+                            commit("updateSnackbar", { show: true, text: "Trasanção duplicada", color: "red" });
+                            payload.router.push({ name: "login" });
+                            break;
+
+                        default:
+                            commit("updateSnackbar", { show: true, text: "Erro", color: "red" });
+                            payload.router.push({ name: "login" });
+                            break;
+                    }
+                }
             } catch (error) {
                 errorMessage(error);
             }

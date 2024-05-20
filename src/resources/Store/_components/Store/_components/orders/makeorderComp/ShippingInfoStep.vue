@@ -105,8 +105,6 @@
     import { useStore } from "vuex";
     import { useRouter } from "vue-router";
 
-    // import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-    // import { Input } from "@/components/ui/input";
     const store = useStore();
     const router = useRouter();
     import { useField, useForm } from "vee-validate";

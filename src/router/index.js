@@ -44,6 +44,7 @@ const routes = [
                 path: "/pedido",
                 name: "makeOrder",
                 component: () => import("@/resources/Store/_components/Store/_components/orders/MakeOrder.vue"),
+                meta: { requiresLogin: true },
             },
             /*
             Carinhos
@@ -180,6 +181,11 @@ const routes = [
                 path: "compras",
                 name: "compras",
                 component: () => import("@/resources/Dashboard/_components/Store/_components/ShopsComp.vue"),
+            },
+            {
+                path: "comprar",
+                name: "comprar",
+                component: () => import("@/resources/Store/_components/Store/_components/paynow/payNow.vue"),
             },
         ],
     },

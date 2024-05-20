@@ -39,9 +39,8 @@
     </div>
 </template>
 <script setup>
-    import { Button } from "@/components/ui/button";
     import CartProductsComp from "@/resources/Store/_components/CartProductsComp.vue";
-    import { computed, ref, onBeforeMount } from "vue";
+    import { computed, ref } from "vue";
     import { useStore } from "vuex";
     import { useRouter } from "vue-router";
 
@@ -53,7 +52,7 @@
     const cartProducts = ref(computed(() => store.getters.cartProducts));
 
     function makeOrder() {
-        router.push({ name: "makeOrder", query: { productsFrom: `cartProducts` } });
+        router.push({ name: "makeOrder" });
     }
 
     // Calculando o preço total de produtos
@@ -80,10 +79,4 @@
             currency: "MZN",
         });
     };
-
-    const isAuthenticated = ref(computed(() => store.getters.isAuthenticated("authToken")));
-
-    onBeforeMount(async () => {
-        await store.dispatch("displayTempCartProducts", isAuthenticated.value);
-    });
 </script>

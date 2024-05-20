@@ -55,7 +55,6 @@
     });
     const products = computed(() => store.state.products.products);
 
-
     const router = useRouter();
     const route = useRoute();
 

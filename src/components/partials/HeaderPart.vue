@@ -57,7 +57,7 @@
                 </router-link>
 
                 <div
-                    v-if="user"
+                    v-if="user && isAuthenticated"
                     class="hidden lg:flex flex-row items-end gap-1">
                     <Avatar class="hidden lg:block">
                         <AvatarFallback>{{ user.name.split(" ")[0] }}</AvatarFallback>
@@ -227,13 +227,13 @@
     };
 
     const priceTotal = computed(() => {
-        return calculatePriceTotal(store.getters.cartProducts);
+        return calculatePriceTotal(store.getters.cartPrice);
     });
 
     const storeName = store.state.storeName;
     const isAuthenticated = ref(computed(() => store.getters.isAuthenticated("authToken")));
 
-    function cartProducts() {
+    async function cartProducts() {
         router.push({
             name: "cart",
         });
@@ -250,8 +250,8 @@
         });
     }
     // Função para calcular o preço total de produtos
-    const calculatePriceTotal = (cartProducts) => {
-        return cartProducts.reduce((total, product) => total + product.subtotal, 0);
+    const calculatePriceTotal = (cartPrices) => {
+        return cartPrices.reduce((total, product) => total + product, 0);
     };
 
     const user = computed(() => JSON.parse(localStorage.getItem("userData")));
