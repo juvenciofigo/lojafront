@@ -47,6 +47,8 @@
     import { defineProps, computed, ref, onBeforeUnmount } from "vue";
     import { useStore } from "vuex";
     import { useRouter, useRoute } from "vue-router";
+    
+    import { Search,Input } from "lucide-vue-next";
 
     defineProps({
         nameRoute: String,

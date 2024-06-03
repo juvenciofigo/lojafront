@@ -125,6 +125,9 @@
     import { Menu } from "lucide-vue-next";
     import { LogOut } from "lucide-vue-next";
     import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+    import { Separator } from "@/components/ui/separator";
+    import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+    import { Shirt,  } from "lucide-vue-next";
 
     const store = useStore();
     const router = useRouter();

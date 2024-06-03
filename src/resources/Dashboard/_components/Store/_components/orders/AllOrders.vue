@@ -33,10 +33,11 @@
                             <TableCell class="text-center">{{ order.paymentOrder.PaymentStatus }}</TableCell>
                             <TableCell class="text-center">{{ order.paymentOrder.PaymentForm }}</TableCell>
                             <TableCell class="text-center">{{ order.paymentOrder.PaymentInstallments }}</TableCell>
+
                             <TableCell class="text-center">
-                                <v-dialog width="500">
+                                <v-dialog  class="flex flex-col lg:items-start lg:flex-row lg:pr-5 flex-1 gap-4 flex-wrap">
                                     <template v-slot:activator="{ props }">
-                                        <Button v-bind="props">Detalhes</Button>
+                                        <button v-bind="props">Ver</button>
                                     </template>
 
                                     <template v-slot:default="{ isActive }">
@@ -47,10 +48,69 @@
                                                 <X @click="isActive.value = false" />
                                             </button>
                                         </v-card-actions>
-                                        <v-card title="Dialog">
-                                            <v-card-text> Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </v-card-text>
 
-                                            <Table class="border-2 p-4">
+                                        <v-card title="Detalhes do pedido de: ">
+                                            <v-card-text> {{ order.customerOrder.name }} </v-card-text>
+
+                                            <div
+                                                v-if="order.Ordercart && order.Ordercart.length > 0"
+                                                class="">
+                                                <Table>
+                                                    <TableHeader>
+                                                        <TableRow>
+                                                            <TableHead class="text-center flex-1">Product</TableHead>
+                                                            <TableHead class="text-center">Preço unit.</TableHead>
+                                                            <TableHead class="text-center">Quant.</TableHead>
+                                                            <TableHead class="text-center">Subtotal</TableHead>
+                                                            <TableHead
+                                                                class="text-center"
+                                                                :class="actionButton"
+                                                                >Ações</TableHead
+                                                            >
+                                                        </TableRow>
+                                                    </TableHeader>
+
+                                                    <TableBody
+                                                        v-for="product in order.Ordercart"
+                                                        :key="product.productId">
+                                                        <TableRow :class="tableRowHeight">
+                                                            <TableCell class="text-center">
+                                                                <button
+                                                                    @click="goTo(product.productId)"
+                                                                    class="flex flex-row flex-wrap justify-center items-center text-lg gap-2">
+                                                                    <img
+                                                                        :src="product.picture"
+                                                                        alt="Imagem do Produto"
+                                                                        class="min-h-10 max-h-24 border"
+                                                                        :class="image" />
+                                                                    {{ product.productName }}
+                                                                </button>
+                                                            </TableCell>
+                                                            <TableCell class="text-center">{{ product.productPrice }}</TableCell>
+                                                            <TableCell class="text-center">
+                                                                <input
+                                                                    class="text-center"
+                                                                    type="number"
+                                                                    v-model.number="product.quantity"
+                                                                    @change="updateQuantity(product.productId, product.quantity)"
+                                                                    min="1" />
+                                                            </TableCell>
+                                                            <TableCell class="text-center">{{ formatCurrency(product.subtotal) }} </TableCell>
+                                                            <TableCell
+                                                                class="text-center"
+                                                                :class="actionButton">
+                                                                <button class="bg-slate-300 p-[3px] rounded-md">
+                                                                    <Trash2
+                                                                        @click="removeProduct(product.productId)"
+                                                                        color="red"
+                                                                        size="18" />
+                                                                </button>
+                                                            </TableCell>
+                                                        </TableRow>
+                                                    </TableBody>
+                                                </Table>
+                                            </div>
+                                            <!-- <Table class="border-2 p-4">
                                                 <TableHeader>
                                                     <TableRow>
                                                         <TableHead class="text-left">Imagem</TableHead>
@@ -73,7 +133,7 @@
                                                         <TableCell class="text-center">{{ order.paymentOrder.Amount }}</TableCell>
                                                     </TableRow>
                                                 </TableBody>
-                                            </Table>
+                                            </Table> -->
                                         </v-card>
                                     </template>
                                 </v-dialog>
@@ -94,15 +154,18 @@
             </div>
             <div class="flex items-center space-x-2 py-4">
                 <v-pagination
-                    v-model="curenntPage"
+                    v-model="curentPage"
                     @update:modelValue="pageEvent"
                     :length="totalPages"
                     :total-visible="4"
                     density="compact"
-                    variant="flat"></v-pagination>
+                    variant="flat">
+                </v-pagination>
             </div>
         </div>
-        <div v-else class="text-center">
+        <div
+            v-else
+            class="text-center">
             <p>Sem pedidos</p>
         </div>
     </div>
@@ -117,15 +180,18 @@
     import { Pen } from "lucide-vue-next";
     import { Trash2 } from "lucide-vue-next";
     import { X } from "lucide-vue-next";
+    import { Input } from "@/components/ui/input";
 
     const store = useStore();
     const route = useRoute();
     const router = useRouter();
 
     const orders = computed(() => store.state.orders.docs);
-
-    const curenntPage = ref(Number(route.query.offset) || 1);
-    const totalPages = computed(() => Number(store.state.orders.totalPages));
+    const curentPage = ref(Number(route.query.offset) || 1);
+    const totalPages = computed(() => {
+        const orderDocs = store.state.orders.docs || {};
+        return orderDocs.totalPages || 0;
+    });
 
     onMounted(async () => {
         const offset = route.query.offset || 1;
@@ -152,4 +218,11 @@
     watchEffect(() => {
         fetchOrders();
     });
+
+    const formatCurrency = (value) => {
+        return value.toLocaleString("pt-MZ", {
+            style: "currency",
+            currency: "MZN",
+        });
+    };
 </script>

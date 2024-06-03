@@ -28,11 +28,8 @@
                             :key="customer._id">
                             <TableCell class="text-center">{{ customer.name }}</TableCell>
                             <TableCell class="text-center">{{ customer.email }}</TableCell>
-                            <TableCell
-                                class="text-center"
-                                v-for="(contact, index) in customer.contacts"
-                                :key="index">
-                                <p>{{ contact }}</p></TableCell
+                            <TableCell class="text-center">
+                                <p>{{ customer.contacts }}</p></TableCell
                             >
                             <TableCell class="text-center">{{ formatDate(customer.createdAt) }}</TableCell>
 
@@ -40,15 +37,15 @@
                             <TableCell class="text-center">
                                 <v-dialog width="500">
                                     <template v-slot:activator="{ props }">
-                                        <Button v-bind="props">Detalhes</Button>
+                                        <button v-bind="props">Detalhes</button>
                                     </template>
 
                                     <template v-slot:default="{ isActive }">
                                         <v-card-actions class="bg-slate-200 rounded-md">
                                             <v-spacer>Detalhes do pedido</v-spacer>
-                                            <button class="bg-slate-300 p-[3px] rounded-md">
+                                            <Button class="bg-slate-300 p-[3px] rounded-md">
                                                 <X @click="isActive.value = false" />
-                                            </button>
+                                            </Button>
                                         </v-card-actions>
 
                                         <v-card>
@@ -117,15 +114,18 @@
     import { Pen } from "lucide-vue-next";
     import { Trash2 } from "lucide-vue-next";
     import { X } from "lucide-vue-next";
+    import { Input, Button } from "@/components/ui/input";
 
     const store = useStore();
     const route = useRoute();
     const router = useRouter();
 
-    // const customers = computed(() => store.state.customers.docs);
-    const customers = computed(() => store.state.customers.docs);
+    const customers = ref(computed(() => store.state.customers.docs));
     const curentPage = ref(Number(route.query.offset) || 1);
-    const totalPages = ref(Number(customers.value.totalPages));
+    const totalPages = computed(() => {
+        const customerDocs = store.state.customers.docs || {};
+        return customerDocs.totalPages || 0;
+    });
 
     onMounted(async () => {
         const offset = route.query.offset || 1;
@@ -137,7 +137,7 @@
     });
 
     function pageEvent(e) {
-        router.push({ name: "allCustomers", query: { offset: e } });
+        router.push({ name: "allCustomers", query: { offset: `${e}` } });
     }
 
     const fetchCustomrs = () => {

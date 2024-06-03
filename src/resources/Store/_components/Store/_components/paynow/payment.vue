@@ -33,28 +33,7 @@
     const store = useStore();
     const number = ref("");
 
-    function gerReferenceNumeber() {
-        const caracteres = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-        const caracteresLength = caracteres.length;
-        const tamanhoMinimo = 6;
-        const tamanhoMaximo = 20;
-
-        // Gera um timestamp único
-        const timestamp = new Date().getTime().toString();
-
-        // Gera um número aleatório de caracteres
-        const numeroAleatorio = Array.from({ length: tamanhoMaximo }, () => caracteres.charAt(Math.floor(Math.random() * caracteresLength))).join("");
-
-        // Calcula o tamanho do número de referência
-        const tamanho = Math.floor(Math.random() * (tamanhoMaximo - tamanhoMinimo + 1)) + tamanhoMinimo;
-
-        // Combina o timestamp e o número aleatório para formar o número de referência
-        const numeroReferencia = `${timestamp}${numeroAleatorio}`.slice(0, tamanho);
-
-        return numeroReferencia;
-    }
-    const transaction_reference = gerReferenceNumeber();
-
+    
     async function confirmePayment() {
         const payload = {
             client_number: `258${number.value}`,

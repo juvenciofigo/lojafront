@@ -33,7 +33,14 @@
                         </button>
                     </TableCell>
                     <TableCell class="text-center">{{ formatCurrency(product.productPrice) }}</TableCell>
-                    <TableCell class="text-center">{{ formatCurrency(product.quantity) }} </TableCell>
+                    <TableCell class="text-center">
+                        <input
+                            class="text-center"
+                            type="number"
+                            v-model.number="product.quantity"
+                            @change="updateQuantity(product.productId, product.quantity)"
+                            min="1" />
+                    </TableCell>
                     <TableCell class="text-center">{{ formatCurrency(product.subtotal) }} </TableCell>
                     <TableCell
                         class="text-center"
@@ -56,7 +63,7 @@
     </div>
 </template>
 <script setup>
-    import { defineProps, ref,computed } from "vue";
+    import { defineProps, ref, computed } from "vue";
     import { useRouter } from "vue-router";
     import { useStore } from "vuex";
 
@@ -80,6 +87,13 @@
     const isAuthenticated = ref(computed(() => store.getters.isAuthenticated("authToken")));
     async function removeProduct(product) {
         await store.dispatch("removeProductCart", { isAuthenticated: isAuthenticated.value, product });
+        await store.dispatch("displayTempCartPrices", isAuthenticated.value);
+        await store.dispatch("displayTempCartProducts", isAuthenticated.value);
+    }
+    async function updateQuantity(productId, quantity) {
+        await store.dispatch("updateProductQuantity", { productId, quantity: quantity || 1, isAuthenticated: isAuthenticated.value, store });
+        await store.dispatch("displayTempCartPrices", isAuthenticated.value);
+        await store.dispatch("displayTempCartProducts", isAuthenticated.value);
     }
 
     // Função para formatar valores monetários

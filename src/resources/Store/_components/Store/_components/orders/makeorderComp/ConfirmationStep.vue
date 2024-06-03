@@ -18,7 +18,7 @@
                     <TableRow>
                         <TableCell class="items-center h-10 flex flex-row justify-between">
                             <div>Taxa de envio</div>
-                            <div>{{ formatCurrency(taxaEnvio) }}</div>
+                            <div>{{ formatCurrency(shippingPrice) }}</div>
                         </TableCell>
                     </TableRow>
                     <TableRow>
@@ -30,22 +30,14 @@
                 </TableBody>
             </Table>
         </div>
-        <br>
-        <div class="flex flex-row justify-end">
-            <Button
-                class="self-end w-max"
-                @click="$emit('sendOrder')">
-                Finalizar Pedido
-            </Button>
-        </div>
+        <br />
     </v-stepper-window-item>
 </template>
 <script setup>
     import { useStore } from "vuex";
-    import { computed, ref } from "vue";
+    import { computed, ref, watch, defineEmits } from "vue";
     import CartProductsComp from "@/resources/Store/_components/CartProductsComp.vue";
     import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
-    import { Button } from "@/components/ui/button";
 
     const store = useStore();
     const cartProducts = computed(() => store.state.cartProducts);
@@ -59,22 +51,36 @@
     };
 
     // Calculando o preço total de produtos
-    const priceTotal = computed(() => {
-        return calculatePriceTotal(cartProducts.value);
-    });
+    const priceTotal = computed(() => calculatePriceTotal(cartProducts.value));
 
     // Definindo uma taxa de envio fixa
-    const taxaEnvio = ref(10);
+    const shippingPrice = ref(10);
 
     // Calculando o total do pedido
-    const totalPedido = computed(() => {
-        const total = priceTotal.value + taxaEnvio.value;
-        return total;
-    });
+    const totalPedido = computed(() => priceTotal.value + shippingPrice.value);
 
     // Função para calcular o preço total de produtos
-    const calculatePriceTotal = (cartProducts) => {
-        return cartProducts.reduce((total, product) => total + product.subtotal, 0);
-    };
+    const calculatePriceTotal = (cartProducts) => cartProducts.reduce((total, product) => total + product.subtotal, 0);
+    
+    const emit = defineEmits(["inFocus", "submit"]);
+
+    const confirmationData = ref("");
+    watch(cartProducts, () => {
+        confirmationData.value = {
+            totalPrecoProdutos: priceTotal.value,
+            shippingPrice: shippingPrice.value,
+            total: totalPedido.value,
+        };
+    });
+
+    watch(priceTotal, () => {
+        sendData();
+    });
+
+
+    function sendData() {
+        // Emitindo o evento 'submit' com os dados de entrega
+        emit("submit", confirmationData.value);
+    }
 </script>
 <style lang=""></style>

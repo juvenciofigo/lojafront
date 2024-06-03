@@ -31,6 +31,7 @@
                 </TableBody>
             </Table>
             <Button
+                :disabled="buttonStatus"
                 @click="makeOrder()"
                 class="w-max lg:w-full self-end">
                 Fazer pedido
@@ -38,42 +39,28 @@
         </div>
     </div>
 </template>
+
 <script setup>
     import { Button } from "@/components/ui/button";
     import CartProductsComp from "@/resources/Store/_components/CartProductsComp.vue";
-    import { computed, ref, onBeforeMount } from "vue";
+    import { computed, ref, onBeforeMount, effect } from "vue";
     import { useStore } from "vuex";
     import { useRouter } from "vue-router";
-
     import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
 
     const store = useStore();
     const router = useRouter();
 
-    const cartProducts = ref(computed(() => store.getters.cartProducts));
+    const cartProducts = computed(() => store.getters.cartProducts);
 
     function makeOrder() {
-        router.push({ name: "makeOrder", query: { productsFrom: `cartProducts` } });
+        router.push({ name: "makeOrder", query: { productsFrom: "cartProducts" } });
     }
 
-    // Calculando o preço total de produtos
-    const priceTotal = computed(() => {
-        return calculatePriceTotal(store.getters.cartProducts);
-    });
-    // Calculando o total do pedido
-    const totalPedido = computed(() => {
-        return priceTotal.value + taxaEnvio.value;
-    });
-
-    // Definindo uma taxa de envio fixa
-    const taxaEnvio = ref(10);
-
-    // Função para calcular o preço total de produtos
     const calculatePriceTotal = (cartProducts) => {
         return cartProducts.reduce((total, product) => total + product.subtotal, 0);
     };
 
-    // Função para formatar valores monetários
     const formatCurrency = (value) => {
         return value.toLocaleString("pt-MZ", {
             style: "currency",
@@ -81,9 +68,17 @@
         });
     };
 
-    const isAuthenticated = ref(computed(() => store.getters.isAuthenticated("authToken")));
+    const priceTotal = computed(() => calculatePriceTotal(store.getters.cartProducts));
+    const taxaEnvio = ref(10);
+    const totalPedido = computed(() => priceTotal.value + taxaEnvio.value);
+
+    const isAuthenticated = computed(() => store.getters.isAuthenticated("authToken"));
+    const buttonStatus = ref(false);
 
     onBeforeMount(async () => {
         await store.dispatch("displayTempCartProducts", isAuthenticated.value);
+    });
+    effect(() => {
+        buttonStatus.value = store.getters.cartProducts.length === 0;
     });
 </script>

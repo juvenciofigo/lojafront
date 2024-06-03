@@ -20,12 +20,12 @@
     const quantity = ref(1);
 
     async function addToCart() {
-        await store.dispatch("addToCart", { isAuthenticated: isAuthenticated.value, item: { productId: route.params.id, quantity: quantity.value } });
+        await store.dispatch("addToCart", { isAuthenticated: isAuthenticated.value, item: { productId: route.params.id, quantity: quantity.value || 1 } });
         await store.dispatch("displayTempCartPrices", isAuthenticated.value);
     }
 
     async function buyNow() {
-        router.push({ name: "makeOrder", query: { productsFrom: "payNow", product: route.params.id, quantity: quantity.value } });
+        router.push({ name: "makeOrder", query: { productsFrom: "payNow", product: route.params.id, quantity: quantity.value || 1 } });
     }
 
     function handleValueUpdate(value) {

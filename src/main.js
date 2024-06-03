@@ -28,7 +28,6 @@ import { UserRound, ChevronDown, LayoutDashboard, FolderKanban, ShoppingBasket, 
 // import { ListOrdered } from "lucide-vue-next";
 // import { PersonStanding } from "lucide-vue-next";
 // import { ShoppingCart } from "lucide-vue-next";
-// import { Shirt,  } from "lucide-vue-next";
 // import { Search } from "lucide-vue-next";
 // import { Undo2 } from "lucide-vue-next";
 // import { X } from "lucide-vue-next";

@@ -4,10 +4,11 @@
 
         <br />
 
-        <form @submit.prevent="submit">
+        <form>
             <div class="flex flex-col gap-3">
                 <!-- Nome -->
                 <v-text-field
+                    @change="submit"
                     v-model="name.value.value"
                     variant="outlined"
                     placeholder="Nome"
@@ -20,6 +21,7 @@
 
                 <!-- Email -->
                 <v-text-field
+                    @change="submit"
                     v-model="email.value.value"
                     autocomplete="email"
                     variant="outlined"
@@ -31,6 +33,7 @@
 
                 <!-- Número de Celular -->
                 <v-text-field
+                    @change="submit"
                     v-model="cellNumber.value.value"
                     autocomplete="tel"
                     variant="outlined"
@@ -42,6 +45,7 @@
 
                 <!-- Endereço -->
                 <v-text-field
+                    @change="submit"
                     v-model="address.value.value"
                     variant="outlined"
                     placeholder="Endereço"
@@ -51,8 +55,21 @@
                     label="Endereço Completo">
                 </v-text-field>
 
+                <!-- Referencia -->
+                <v-text-field
+                    v-model="reference.value.value"
+                    @change="submit"
+                    variant="outlined"
+                    placeholder="Referência"
+                    density="compact"
+                    bg-color="white"
+                    :error-messages="reference.errorMessage.value"
+                    label="Referência">
+                </v-text-field>
+
                 <!-- País -->
                 <v-text-field
+                    @change="submit"
                     v-model="country.value.value"
                     variant="outlined"
                     placeholder="País"
@@ -64,6 +81,7 @@
 
                 <!-- Província -->
                 <v-text-field
+                    @change="submit"
                     v-model="province.value.value"
                     variant="outlined"
                     placeholder="Província"
@@ -76,6 +94,7 @@
                 <!-- Cidade -->
                 <v-text-field
                     v-model="city.value.value"
+                    @change="submit"
                     variant="outlined"
                     placeholder="Cidade"
                     density="compact"
@@ -86,6 +105,7 @@
 
                 <!-- Nota -->
                 <v-textarea
+                    @change="submit"
                     v-model="note.value.value"
                     variant="outlined"
                     placeholder="Nota"
@@ -102,11 +122,10 @@
     </v-stepper-window-item>
 </template>
 <script setup>
+    import { defineEmits, ref, computed, watch, toRaw } from "vue";
     import { useStore } from "vuex";
-    import { useRouter } from "vue-router";
-
     const store = useStore();
-    const router = useRouter();
+
     import { useField, useForm } from "vee-validate";
     import { toTypedSchema } from "@vee-validate/zod";
     import * as z from "zod";
@@ -125,7 +144,7 @@
 
                 // Cell number
                 cellNumber: z.string().regex(/^(\+258)?\d{9}$/, { message: "O número de celular deve começar com +258 e ter exatamente 13 dígitos" }),
-                // Address
+                // address
                 address: z.string(),
 
                 // Country
@@ -136,6 +155,8 @@
 
                 // City
                 city: z.string(),
+                //reference
+                reference: z.string(),
 
                 // Note
                 note: z.string().optional(),
@@ -143,17 +164,38 @@
         ),
     });
 
-    const name = useField("name"),
+    let name = useField("name"),
         email = useField("email"),
         cellNumber = useField("cellNumber"),
         address = useField("address"),
         country = useField("country"),
         province = useField("province"),
         city = useField("city"),
+        reference = useField("reference"),
         note = useField("note");
+    const deliveryData = ref(computed(() => store.getters.deliveryData));
+    const emit = defineEmits(["deliveryData"]);
 
     const submit = handleSubmit(async (values) => {
-        await store.dispatch("newUser", { values, router });
+        emit("deliveryData", values);
+    });
+    watch(deliveryData, async () => {
+        if (deliveryData.value !== false) {
+            const customer = toRaw(deliveryData.value.customer);
+
+            name.value.value = customer.name;
+            email.value.value = customer.email;
+            cellNumber.value.value = customer.contacts;
+            address.value.value = customer.address.address;
+            country.value.value = customer.address.country;
+            province.value.value = customer.address.province;
+            city.value.value = customer.address.city;
+            reference.value.value = customer.address.reference;
+            if (customer.note) {
+                note.value.value = customer.note;
+            }
+            submit();
+        }
     });
 </script>
 <style lang=""></style>

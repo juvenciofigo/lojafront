@@ -2,7 +2,6 @@
 
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Command, CommandDialog, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList, CommandSeparator, CommandShortcut } from "@/components/ui/command";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
@@ -31,7 +30,6 @@ app.component("Shirt", Shirt);
 
 // use compontes
 app.component("Button", Button);
-app.component("Input", Input);
 app.component("Separator", Separator);
 
 app.component("Popover", Popover);

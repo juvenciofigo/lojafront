@@ -35,6 +35,7 @@ export default createStore({
         /// orders:
         orders: {},
         totalprice: 0,
+        deliveryData: {},
 
         /// customers
         customers: {},
@@ -72,6 +73,7 @@ export default createStore({
         },
         cartProducts: (state) => state.cartProducts,
         cartPrice: (state) => state.cartPrice,
+        deliveryData: (state) => state.deliveryData,
     },
 
     mutations: {
@@ -113,6 +115,9 @@ export default createStore({
         },
         SET_ORDERS(state, orders) {
             state.orders = orders;
+        },
+        SET_DELIVERYDATA(state, data) {
+            state.deliveryData = data;
         },
 
         // customers
@@ -357,6 +362,7 @@ export default createStore({
                 });
 
                 const orders = res.data.orders;
+                console.log(orders);
                 commit("SET_ORDERS", { ...orders });
             } catch (error) {
                 errorMessage(error);
@@ -374,11 +380,8 @@ export default createStore({
                     baseURL: config.apiURL,
                     url: "/customers",
                     params: { offset: payload },
-                    headers: {
-                        Authorization: `Ecommerce ${authToken}`,
-                    },
+                    headers: headers,
                 });
-
                 const customers = res.data;
 
                 commit("SET_CUSTOMERS", { ...customers });
@@ -439,7 +442,7 @@ export default createStore({
 
         async addToCart({ commit }, { isAuthenticated, item }) {
             const user = JSON.parse(localStorage.getItem("userData"));
-            
+
             if (!isAuthenticated) {
                 let tempCart = getCookie("tempCart");
 
@@ -448,17 +451,16 @@ export default createStore({
                 } else {
                     tempCart = JSON.parse(tempCart);
                 }
-                setCookie("tempCart", JSON.stringify(tempCart), 7);
 
                 const existingProductIndex = tempCart.findIndex((product) => item.productId === product.productId);
 
-                if (existingProductIndex !== true) {
-                    tempCart[existingProductIndex].quantity += item.quantity;
+                if (existingProductIndex !== -1) {
+                    tempCart[existingProductIndex].quantity += Number(item.quantity);
                 } else {
                     tempCart.push(item);
                 }
 
-
+                setCookie("tempCart", JSON.stringify(tempCart), 7);
                 commit("updateSnackbar", { show: true, text: "Produto adicionado ao carrinho ", color: "green" });
                 return;
             } else {
@@ -476,23 +478,27 @@ export default createStore({
 
         async removeProductCart({ commit }, payload) {
             const user = JSON.parse(localStorage.getItem("userData"));
+
             if (!payload.isAuthenticated) {
                 let tempCart = getCookie("tempCart");
 
                 if (!tempCart) {
                     return;
                 } else {
-                    console.log("sim");
                     tempCart = JSON.parse(tempCart);
+
+                    tempCart = tempCart.filter((item) => item.productId !== payload.product);
+
+                    setCookie("tempCart", JSON.stringify(tempCart), 1);
                 }
 
-                commit("updateSnackbar", { show: true, text: "Produto adicionado ao carrinho ", color: "green" });
+                commit("updateSnackbar", { show: false, text: "Produto adicionado ao carrinho ", color: "green" });
                 return;
             } else {
                 const res = await axios.request({
-                    method: "patch",
+                    method: "delete",
                     baseURL: config.apiURL,
-                    url: `/cart/${user.id}/remove/${payload.product}"`,
+                    url: `/cart/${user.id}/remove/${payload.product}`,
                 });
 
                 commit("updateSnackbar", { show: true, text: `${res.data.msg}`, color: "green" });
@@ -511,6 +517,10 @@ export default createStore({
                         baseURL: config.apiURL,
                         url: `/cart/${user.id}/prices`,
                     });
+
+                    // if (res.data.success === false) {
+                    //     return;
+                    // }
                     commit("SET_CARTPRICE", res.data);
                 } else {
                     if (tempCart) {
@@ -536,40 +546,78 @@ export default createStore({
                 errorMessage(error);
             }
         },
-        async displayTempCartProducts({ commit }, isAuthenticated) {
-            const tempCart = getCookie("tempCart");
-            const user = JSON.parse(localStorage.getItem("userData"));
 
+        async displayTempCartProducts({ commit }, isAuthenticated) {
+            const tempCart = JSON.parse(getCookie("tempCart"));
+            const user = JSON.parse(localStorage.getItem("userData"));
             let cartProducts = [];
 
             try {
-                if (isAuthenticated) {
+                if (isAuthenticated === true) {
                     const res = await axios.request({
                         method: "post",
                         baseURL: config.apiURL,
                         url: `/cart/${user.id}/products`,
                     });
+
                     cartProducts = res.data;
-                } else {
-                    if (tempCart) {
-                        const userId = false;
-                        const res = await axios.request({
-                            method: "post",
-                            baseURL: config.apiURL,
-                            url: `/cart/${userId}/products`,
-                            data: JSON.parse(tempCart),
-                        });
-                        cartProducts = res.data;
+                    commit("SET_CARTPRODUCTS", cartProducts);
+                    return;
+                } else if (tempCart) {
+                    if (tempCart.length === 0) {
+                        return false;
                     }
+                    const userId = false;
+                    const res = await axios.request({
+                        method: "post",
+                        baseURL: config.apiURL,
+                        url: `/cart/${userId}/products`,
+                        data: tempCart,
+                    });
+                    cartProducts = res.data;
+                    commit("SET_CARTPRODUCTS", cartProducts);
+                    return;
                 }
-                commit("SET_CARTPRODUCTS", cartProducts);
+
                 return;
             } catch (error) {
                 errorMessage(error);
             }
         },
 
-        // CLEAR_CARTPRODUCTS
+        async updateProductQuantity({ commit }, payload) {
+            const user = JSON.parse(localStorage.getItem("userData"));
+
+            if (!payload.isAuthenticated) {
+                let tempCart = getCookie("tempCart");
+
+                if (!tempCart) {
+                    return;
+                } else {
+                    let tempCart = JSON.parse(getCookie("tempCart"));
+
+                    const existingProductIndex = tempCart.findIndex((product) => payload.productId === product.productId);
+
+                    if (existingProductIndex !== -1) {
+                        tempCart[existingProductIndex].quantity = Number(payload.quantity);
+
+                        setCookie("tempCart", JSON.stringify(tempCart), 1);
+                    }
+                }
+
+                commit("updateSnackbar", { show: false, text: "Produto adicionado ao carrinho ", color: "green" });
+                return;
+            } else {
+                const res = await axios.request({
+                    method: "put",
+                    baseURL: config.apiURL,
+                    url: `/cart/${user.id}/update/${payload.productId}/${Number(payload.quantity)}`,
+                });
+
+                commit("updateSnackbar", { show: false, text: `${res.data.msg}`, color: "green" });
+                return;
+            }
+        },
 
         /*
             Users
@@ -620,9 +668,7 @@ export default createStore({
 
                 // Se houver um carrinho temporário, enviá-lo para o banco de dados
                 if (tempCart) {
-                    console.log("user", user);
                     const cartRes = await api.post(`/cart/${user.id}/addProduct`, JSON.parse(tempCart));
-                    console.log("cart", cartRes);
 
                     if (cartRes.data.success) {
                         // Limpar o cookie do carrinho
@@ -651,18 +697,67 @@ export default createStore({
             }
         },
 
-        // order ////////
+        // Order ////////
+
         async sendOrder({ commit }, payload) {
-            try {
+            const user = JSON.parse(localStorage.getItem("userData"));
+
+            async function sendOrder(data) {
+                const cart = data.cart;
+                console.log(data);
+                const payment = {
+                    Amount: data.confirmationData.totalPrecoProdutos,
+                };
+                const delivery = {
+                    deliveryCost: data.confirmationData.shippingPrice,
+                    referenceOrder: data.referece,
+                };
                 const res = await axios.request({
                     method: "post",
                     baseURL: config.apiURL,
-                    url: "/user",
-                    data: payload.values,
+                    url: `/order/`,
+                    data: { cart, payment, delivery },
+                    headers: headers,
                 });
-                if (res.data) {
-                    commit("updateSnackbar", { show: true, text: "Pedido enviado", color: "green" });
-                    payload.router.push({ name: "/" });
+                console.log(res);
+                if (res.data.success === true) {
+                    window.location.reload();
+                }
+            }
+
+            try {
+                if (payload.status === false) {
+                    const res = await axios.request({
+                        method: "post",
+                        baseURL: config.apiURL,
+                        url: `/customer/${user.id}`,
+                        data: payload.data.delivery,
+                    });
+                    if (res.data) {
+                        commit("updateSnackbar", { show: true, text: "Pedido enviado", color: "green" });
+                        payload.router.push({ name: "/" });
+                    }
+                    return;
+                } else {
+                    sendOrder(payload.data);
+                }
+            } catch (error) {
+                errorMessage(error);
+            }
+        },
+
+        async deliveryData({ commit }) {
+            const user = JSON.parse(localStorage.getItem("userData"));
+
+            try {
+                const res = await axios.request({
+                    method: "get",
+                    baseURL: config.apiURL,
+                    url: `/customer/${user.id}/delivery`,
+                    headers: headers,
+                });
+                if (res) {
+                    commit("SET_DELIVERYDATA", res.data);
                 }
             } catch (error) {
                 errorMessage(error);
@@ -682,7 +777,7 @@ export default createStore({
                     productName: productDetails.productName,
                     productPrice: productDetails.productPrice,
                     picture: productDetails.productImage[0],
-                    quantity: Number(product.quantity),
+                    quantity: product.quantity,
                     subtotal: product.quantity * productDetails.productPrice,
                 });
 
