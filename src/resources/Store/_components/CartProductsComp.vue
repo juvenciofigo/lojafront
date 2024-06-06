@@ -85,15 +85,19 @@
     }
 
     const isAuthenticated = ref(computed(() => store.getters.isAuthenticated("authToken")));
-    async function removeProduct(product) {
-        await store.dispatch("removeProductCart", { isAuthenticated: isAuthenticated.value, product });
+
+    async function update() {
         await store.dispatch("displayTempCartPrices", isAuthenticated.value);
         await store.dispatch("displayTempCartProducts", isAuthenticated.value);
     }
+
+    async function removeProduct(product) {
+        await store.dispatch("removeProductCart", { isAuthenticated: isAuthenticated.value, product });
+        update();
+    }
     async function updateQuantity(productId, quantity) {
         await store.dispatch("updateProductQuantity", { productId, quantity: quantity || 1, isAuthenticated: isAuthenticated.value, store });
-        await store.dispatch("displayTempCartPrices", isAuthenticated.value);
-        await store.dispatch("displayTempCartProducts", isAuthenticated.value);
+        update();
     }
 
     // Função para formatar valores monetários

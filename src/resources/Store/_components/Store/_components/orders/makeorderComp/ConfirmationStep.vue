@@ -61,13 +61,13 @@
 
     // Função para calcular o preço total de produtos
     const calculatePriceTotal = (cartProducts) => cartProducts.reduce((total, product) => total + product.subtotal, 0);
-    
+
     const emit = defineEmits(["inFocus", "submit"]);
 
     const confirmationData = ref("");
     watch(cartProducts, () => {
         confirmationData.value = {
-            totalPrecoProdutos: priceTotal.value,
+            totalProductsPrice: priceTotal.value,
             shippingPrice: shippingPrice.value,
             total: totalPedido.value,
         };
@@ -76,7 +76,6 @@
     watch(priceTotal, () => {
         sendData();
     });
-
 
     function sendData() {
         // Emitindo o evento 'submit' com os dados de entrega

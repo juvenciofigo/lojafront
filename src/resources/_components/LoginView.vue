@@ -1,7 +1,5 @@
 <template>
     <div class="flex flex-row h-100">
-        <div class="flex-1"></div>
-
         <div class="max-w-[400px] w-screen flex flex-col justify-between bg-slate-300">
             <div class="flex flex-col flex-1">
                 <LogoPart />
@@ -56,7 +54,11 @@
                     <p class="px-2 mt-[25px]">
                         <span>Ainda não se tem uma conta? </span>
                         <span class="underline">
-                            <router-link to="/register"><span class="whitespace-nowrap"> Criar conta!</span></router-link>
+                            <router-link
+                                to="/register"
+                                @click="dialogLogClose"
+                                ><span class="whitespace-nowrap"> Criar conta!</span></router-link
+                            >
                         </span>
                     </p>
                 </div>
@@ -69,7 +71,7 @@
 <script setup>
     // Componentes
     import LogoPart from "@/components/partials/LogoPart.vue";
-    import { Separator } from "radix-vue";
+    import { Separator } from "@/components/ui/separator";
     import SignaturePart from "@/components/partials/SignaturePart.vue";
     import { useStore } from "vuex";
     import { useRouter } from "vue-router";
@@ -97,7 +99,9 @@
 
     const email = useField("email");
     const password = useField("password");
-
+    function dialogLogClose() {
+        store.commit("dialogLog");
+    }
     const submit = handleSubmit(async (values) => {
         await store.dispatch("login", { values, router });
     });

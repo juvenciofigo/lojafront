@@ -7,12 +7,10 @@
                 <div class="flex flex-row justify-between">
                     <h2>{{ category }}</h2>
                 </div>
-
-                <div
-                    class="rounded-lg pr-2 gap-1 flex-row items-center flex-nowrap bg-slate-300"
-                    :class="inputShow">
-                    <Input class="w-[10%] min-w-28 flex-1 bg-slate-300" />
-                    <Search class="w-5 h-5" />
+                <div>
+                    <router-link :to="{ name: newProduct }">
+                        <Button :class="buttonShow"> <Plus />Novo Produto </Button>
+                    </router-link>
                 </div>
             </div>
 
@@ -30,7 +28,8 @@
                         variant="flat"
                         v-model="currentPage"
                         class="my-4"
-                        :length="totalPages"></v-pagination>
+                        :length="totalPages">
+                    </v-pagination>
                 </div>
             </div>
             <div
@@ -47,13 +46,15 @@
     import { defineProps, computed, ref, onBeforeUnmount } from "vue";
     import { useStore } from "vuex";
     import { useRouter, useRoute } from "vue-router";
-    
-    import { Search,Input } from "lucide-vue-next";
+
+    import { Plus } from "lucide-vue-next";
+    import { Button } from "@/components/ui/button";
 
     defineProps({
         nameRoute: String,
-        inputShow: String,
         category: String,
+        buttonShow: String,
+        newProduct: String,
     });
     const products = computed(() => store.state.products.products);
 

@@ -2,12 +2,13 @@
     <AllProductsComp
         :nameRoute="`details`"
         :inputShow="`flex`"
-        :category="categorySelected.categoryName || 'Todos Produtos'" />
+        :category="categorySelected.categoryName || 'Todos Produtos'"
+        :newProduct="`novoproduto`" />
 </template>
 <script setup>
     import AllProductsComp from "@/resources/_components/AllProductsComp.vue";
 
-    import { computed, onMounted, onBeforeUnmount } from "vue";
+    import { computed, onBeforeMount, onBeforeUnmount } from "vue";
     import { useStore } from "vuex";
     import { useRoute } from "vue-router";
 
@@ -25,8 +26,9 @@
     onBeforeUnmount(() => {
         store.commit("CLEAR_CATEGORY");
     });
+    
 
-    onMounted(() => {
+    onBeforeMount(() => {
         fetchProducts();
     });
 </script>

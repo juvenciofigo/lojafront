@@ -213,28 +213,39 @@ const router = createRouter({
 });
 
 router.beforeEach(async (to, from, next) => {
-    if (to.matched.some((record) => record.meta.requiresAdmin)) {
-        try {
-            const admin = await store.getters.isUserAdmin;
+    try {
+        if (to.matched.some((record) => record.meta.requiresLogin)) {
+            const isAuthenticated = await store.getters.isAuthenticated("authToken");
+            if (isAuthenticated === true) {
+                next();
+            } else {
+                store.commit("setRedirectTo", to.fullPath);
+                store.commit("dialogLog", true);
+                store.commit("updateSnackbar", { show: true, text: "Faça Login", color: "red" });
+                next(false);
+            }
+        } else if (to.matched.some((record) => record.meta.requiresAdmin)) {
+            const isAdmin = await store.getters.isUserAdmin;
             const tring = store.state.tring;
-            if (admin) {
+            if (isAdmin) {
                 next();
                 return;
-            }
-            if (Number(tring) < 2) {
-                store.commit("Set_tringValue");
-                store.commit("updateSnackbar", { show: true, text: "Sem permisão", color: "red" });
-                next({ name: "login", query: { redirect: to.fullPath } });
             } else {
-                store.commit("updateSnackbar", { show: true, text: "Página inicial", color: "orange" });
-                next({ name: "home" });
+                if (Number(tring) < 2) {
+                    store.commit("Set_tringValue");
+                    store.commit("updateSnackbar", { show: true, text: "Sem permisão", color: "red" });
+                    next({ name: "login", query: { redirect: to.fullPath } });
+                } else {
+                    store.commit("updateSnackbar", { show: true, text: "Página inicial", color: "orange" });
+                    next({ name: "home" });
+                }
             }
-        } catch (error) {
-            console.error("Erro ao verificar se o usuário é um administrador:", error);
-            next({ name: "home" });
+        } else {
+            next();
         }
-    } else {
-        next();
+    } catch (error) {
+        console.error("Erro na verificação de rota:", error);
+        next({ name: "home" });
     }
 });
 

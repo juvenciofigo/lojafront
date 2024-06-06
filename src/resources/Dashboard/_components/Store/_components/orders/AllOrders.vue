@@ -8,159 +8,89 @@
                     class="max-w-sm"
                     placeholder="Filter emails..." />
             </div>
-            <div class="absolute bottom-0 top-[60px] right-0 flex-1 w-full flex flex-col overflow-auto">
-                <Table class="border-2 p-4">
-                    <TableCaption>Lista de pedidos</TableCaption>
-                    <TableHeader>
-                        <TableRow>
-                            <TableHead class="text-center">Cliente</TableHead>
-                            <TableHead class="text-center">Data</TableHead>
-                            <TableHead class="text-center">Total</TableHead>
-                            <TableHead class="text-center">Estado do pagamento</TableHead>
-                            <TableHead class="text-center">Forma de pagamento</TableHead>
-                            <TableHead class="text-center">Prestações</TableHead>
-                            <TableHead class="text-center">Detalhes</TableHead>
-                            <TableHead class="text-center">Ações</TableHead>
-                        </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                        <TableRow
-                            v-for="order in orders"
+            <div class="absolute bottom-0 items-center top-[60px] left-0 flex-1 w-full max-w-[1400px] flex flex-col overflow-auto">
+                <v-table
+                    density="compact"
+                    fixed-header>
+                    <thead>
+                        <tr>
+                            <th class="text-center font-extrabold">#</th>
+                            <th class="text-center">Referência</th>
+                            <th class="text-center">Cliente</th>
+                            <th class="text-center">Data</th>
+                            <th class="text-center">Total</th>
+                            <th class="text-center whitespace-nowrap">Forma de pagamento</th>
+                            <th class="text-center whitespace-nowrap">Estado do pagamento</th>
+                            <th class="text-center whitespace-nowrap">Estado da entrega</th>
+                            <th class="text-center">Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr
+                            v-for="(order, index) in orders"
                             :key="order._id">
-                            <TableCell class="text-center">{{ order.customerOrder.name }}</TableCell>
-                            <TableCell class="text-center">{{ formatDate(order.createdAt) }}</TableCell>
-                            <TableCell class="text-center">{{ order.paymentOrder.Amount }}</TableCell>
-                            <TableCell class="text-center">{{ order.paymentOrder.PaymentStatus }}</TableCell>
-                            <TableCell class="text-center">{{ order.paymentOrder.PaymentForm }}</TableCell>
-                            <TableCell class="text-center">{{ order.paymentOrder.PaymentInstallments }}</TableCell>
-
-                            <TableCell class="text-center">
-                                <v-dialog  class="flex flex-col lg:items-start lg:flex-row lg:pr-5 flex-1 gap-4 flex-wrap">
-                                    <template v-slot:activator="{ props }">
-                                        <button v-bind="props">Ver</button>
+                            <td class="text-center font-bold">{{ index + 1 }}</td>
+                            <td class="text-center">
+                                <span v-if="order.referenceOrder">{{ order.referenceOrder }}</span>
+                                <span v-else>Sem Referência</span>
+                            </td>
+                            <td class="text-center whitespace-nowrap">{{ order.customerOrder.name }}</td>
+                            <td class="text-center whitespace-nowrap">{{ formatDate(order.createdAt) }}</td>
+                            <td class="text-center">{{ formatCurrency(order.paymentOrder.amount) }}</td>
+                            <td class="text-center">{{ order.paymentOrder.paymentForm }}</td>
+                            <td class="text-center">{{ order.paymentOrder.paymentStatus }}</td>
+                            <td class="text-center">{{ order.deliveryOrder.deliveryStatus }}</td>
+                            <td class="flex flex-row gap-2">
+                                <v-dialog
+                                    class="w-full"
+                                    transition="dialog-bottom-transition">
+                                    <template v-slot:activator="{ props: activatorProps }">
+                                        <button
+                                            v-bind="activatorProps"
+                                            class="p-[3px] rounded-md">
+                                            <Eye size="18" />
+                                        </button>
                                     </template>
 
                                     <template v-slot:default="{ isActive }">
-                                        <v-card-actions>
-                                            <v-spacer>Detalhes do pedido</v-spacer>
-
-                                            <button class="bg-slate-300 p-[3px] rounded-md">
-                                                <X @click="isActive.value = false" />
-                                            </button>
-                                        </v-card-actions>
-
-                                        <v-card title="Detalhes do pedido de: ">
-                                            <v-card-text> {{ order.customerOrder.name }} </v-card-text>
-
-                                            <div
-                                                v-if="order.Ordercart && order.Ordercart.length > 0"
-                                                class="">
-                                                <Table>
-                                                    <TableHeader>
-                                                        <TableRow>
-                                                            <TableHead class="text-center flex-1">Product</TableHead>
-                                                            <TableHead class="text-center">Preço unit.</TableHead>
-                                                            <TableHead class="text-center">Quant.</TableHead>
-                                                            <TableHead class="text-center">Subtotal</TableHead>
-                                                            <TableHead
-                                                                class="text-center"
-                                                                :class="actionButton"
-                                                                >Ações</TableHead
-                                                            >
-                                                        </TableRow>
-                                                    </TableHeader>
-
-                                                    <TableBody
-                                                        v-for="product in order.Ordercart"
-                                                        :key="product.productId">
-                                                        <TableRow :class="tableRowHeight">
-                                                            <TableCell class="text-center">
-                                                                <button
-                                                                    @click="goTo(product.productId)"
-                                                                    class="flex flex-row flex-wrap justify-center items-center text-lg gap-2">
-                                                                    <img
-                                                                        :src="product.picture"
-                                                                        alt="Imagem do Produto"
-                                                                        class="min-h-10 max-h-24 border"
-                                                                        :class="image" />
-                                                                    {{ product.productName }}
-                                                                </button>
-                                                            </TableCell>
-                                                            <TableCell class="text-center">{{ product.productPrice }}</TableCell>
-                                                            <TableCell class="text-center">
-                                                                <input
-                                                                    class="text-center"
-                                                                    type="number"
-                                                                    v-model.number="product.quantity"
-                                                                    @change="updateQuantity(product.productId, product.quantity)"
-                                                                    min="1" />
-                                                            </TableCell>
-                                                            <TableCell class="text-center">{{ formatCurrency(product.subtotal) }} </TableCell>
-                                                            <TableCell
-                                                                class="text-center"
-                                                                :class="actionButton">
-                                                                <button class="bg-slate-300 p-[3px] rounded-md">
-                                                                    <Trash2
-                                                                        @click="removeProduct(product.productId)"
-                                                                        color="red"
-                                                                        size="18" />
-                                                                </button>
-                                                            </TableCell>
-                                                        </TableRow>
-                                                    </TableBody>
-                                                </Table>
-                                            </div>
-                                            <!-- <Table class="border-2 p-4">
-                                                <TableHeader>
-                                                    <TableRow>
-                                                        <TableHead class="text-left">Imagem</TableHead>
-                                                        <TableHead class="text-left">Product</TableHead>
-                                                        <TableHead class="text-left">Quantidade</TableHead>
-                                                        <TableHead class="text-left">Preço</TableHead>
-                                                    </TableRow>
-                                                </TableHeader>
-                                                <TableBody>
-                                                    <TableRow>
-                                                        <TableCell>{{ order.customerOrder.name }}</TableCell>
-                                                        <TableCell>{{ order.customerOrder.name }}</TableCell>
-                                                        <TableCell>{{ formatDate(order.createdAt) }}</TableCell>
-                                                        <TableCell>{{ order.paymentOrder.Amount }}</TableCell>
-                                                    </TableRow>
-                                                    <TableRow>
-                                                        <TableCell class="text-center">Total:</TableCell>
-                                                        <TableCell></TableCell>
-                                                        <TableCell></TableCell>
-                                                        <TableCell class="text-center">{{ order.paymentOrder.Amount }}</TableCell>
-                                                    </TableRow>
-                                                </TableBody>
-                                            </Table> -->
+                                        <v-card :title="`Pedido ${order.referenceOrder}`">
+                                            <v-card-actions>
+                                                <v-btn
+                                                    color="surface-variant"
+                                                    text="Fechar"
+                                                    variant="flat"
+                                                    @click="isActive.value = false">
+                                                </v-btn>
+                                            </v-card-actions>
+                                            <v-card-text class="bg-[#f3f3f9] 0 p-1 overflow-x-hidden">
+                                                <OrdersDetails
+                                                    
+                                                    :order="order" />
+                                            </v-card-text>
                                         </v-card>
                                     </template>
                                 </v-dialog>
-                            </TableCell>
-                            <TableCell>
-                                <div class="flex flex-row gap-2">
-                                    <button class="bg-slate-300 p-[3px] rounded-md"><Pen size="18" /></button>
-                                    <button class="bg-slate-300 p-[3px] rounded-md">
-                                        <Trash2
-                                            color="red"
-                                            size="18" />
-                                    </button>
-                                </div>
-                            </TableCell>
-                        </TableRow>
-                    </TableBody>
-                </Table>
-            </div>
-            <div class="flex items-center space-x-2 py-4">
-                <v-pagination
-                    v-model="curentPage"
-                    @update:modelValue="pageEvent"
-                    :length="totalPages"
-                    :total-visible="4"
-                    density="compact"
-                    variant="flat">
-                </v-pagination>
+
+                                <button class="p-[3px] rounded-md"><Pen size="18" /></button>
+                                <button class="p-[3px] rounded-md">
+                                    <Trash2
+                                        color="red"
+                                        size="18" />
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </v-table>
+                <div class="flex items-center space-x-2 py-4">
+                    <v-pagination
+                        v-model="curentPage"
+                        @update:modelValue="pageEvent"
+                        :length="totalPages"
+                        :total-visible="4"
+                        density="compact"
+                        variant="flat">
+                    </v-pagination>
+                </div>
             </div>
         </div>
         <div
@@ -171,16 +101,14 @@
     </div>
 </template>
 <script setup>
-    import { onMounted, computed, watchEffect, ref, onBeforeUnmount } from "vue";
+    import { onBeforeMount, computed, watchEffect, ref, onBeforeUnmount } from "vue";
     import { useStore } from "vuex";
     import { useRoute, useRouter } from "vue-router";
     import { format } from "date-fns";
-
-    import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-    import { Pen } from "lucide-vue-next";
-    import { Trash2 } from "lucide-vue-next";
-    import { X } from "lucide-vue-next";
+    import { Pen, Eye, Trash2 } from "lucide-vue-next";
     import { Input } from "@/components/ui/input";
+
+    import OrdersDetails from "@/resources/Dashboard/_components/Store/_components/orders/OrdersDetails.vue";
 
     const store = useStore();
     const route = useRoute();
@@ -189,11 +117,11 @@
     const orders = computed(() => store.state.orders.docs);
     const curentPage = ref(Number(route.query.offset) || 1);
     const totalPages = computed(() => {
-        const orderDocs = store.state.orders.docs || {};
-        return orderDocs.totalPages || 0;
+        const orders = store.state.orders || {};
+        return orders.totalPages || 0;
     });
 
-    onMounted(async () => {
+    onBeforeMount(async () => {
         const offset = route.query.offset || 1;
         await store.dispatch("getAllOrders", offset);
     });
@@ -212,7 +140,7 @@
     };
 
     function formatDate(date) {
-        return format(new Date(date), "dd/MM/yyyy");
+        return format(new Date(date), "dd/MM/yyyy HH:mm");
     }
 
     watchEffect(() => {
@@ -226,3 +154,4 @@
         });
     };
 </script>
+<style scoped></style>

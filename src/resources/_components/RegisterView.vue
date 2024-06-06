@@ -87,6 +87,8 @@
     import { toTypedSchema } from "@vee-validate/zod";
     import * as z from "zod";
 
+    import { Separator } from "@/components/ui/separator";
+
     const store = useStore();
     const router = useRouter();
 

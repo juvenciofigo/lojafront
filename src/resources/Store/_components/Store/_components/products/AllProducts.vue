@@ -2,7 +2,8 @@
     <AllProductsComp
         :nameRoute="`detailsClient`"
         :inputShow="`hidden`"
-        :category="categorySelected.categoryName || 'Todos Produtos'" />
+        :category="categorySelected.categoryName || 'Todos Produtos'"
+        :buttonShow="`hidden`" />
 </template>
 <script setup>
     import AllProductsComp from "@/resources/_components/AllProductsComp.vue";

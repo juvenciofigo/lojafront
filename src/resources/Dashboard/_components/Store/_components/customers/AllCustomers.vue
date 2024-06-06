@@ -8,126 +8,114 @@
                     class="max-w-sm"
                     placeholder="Filter emails..." />
             </div>
-            <div class="absolute bottom-0 top-[60px] right-0 flex-1 w-full flex flex-col overflow-auto">
-                <Table class="border-2 p-4">
-                    <TableCaption>Lista de clientes</TableCaption>
-                    <TableHeader>
-                        <TableRow>
-                            <TableHead class="text-center">Name</TableHead>
-                            <TableHead class="text-center">Email</TableHead>
-                            <TableHead class="text-center">Telefones</TableHead>
-                            <TableHead class="text-center">Data de Registro</TableHead>
-                            <TableHead class="text-center">Estado</TableHead>
-                            <TableHead class="text-center">Detalhes</TableHead>
-                            <TableHead class="text-center">Ações</TableHead>
-                        </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                        <TableRow
-                            v-for="customer in customers"
+            <div class="absolute bottom-0 items-center top-[60px] left-0 flex-1 w-full max-w-[14 00px] flex flex-col overflow-auto">
+                <v-table
+                    density="compact"
+                    fixed-header>
+                    <thead>
+                        <tr>
+                            <th class="text-center">#</th>
+                            <th class="text-center">Cliente</th>
+                            <th class="text-center">Email</th>
+                            <th class="text-center">Telefone</th>
+                            <th class="text-center">Data de Registro</th>
+                            <th class="text-center whitespace-nowrap">Estado</th>
+                            <th class="text-center">Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr
+                            v-for="(customer, index) in customers"
                             :key="customer._id">
-                            <TableCell class="text-center">{{ customer.name }}</TableCell>
-                            <TableCell class="text-center">{{ customer.email }}</TableCell>
-                            <TableCell class="text-center">
-                                <p>{{ customer.contacts }}</p></TableCell
-                            >
-                            <TableCell class="text-center">{{ formatDate(customer.createdAt) }}</TableCell>
-
-                            <TableCell class="text-center"> <span v-if="customer.deleted === false"> Activo </span> <span v-else> Apadado </span> </TableCell>
-                            <TableCell class="text-center">
-                                <v-dialog width="500">
-                                    <template v-slot:activator="{ props }">
-                                        <button v-bind="props">Detalhes</button>
+                            <td class="text-center font-bold">{{ index + 1 }}</td>
+                            <td class="text-center whitespace-nowrap">{{ customer.name }}</td>
+                            <td class="text-center whitespace-nowrap">{{ customer.email }}</td>
+                            <td class="text-center whitespace-nowrap">{{ customer.contacts }}</td>
+                            <td class="text-center whitespace-nowrap">{{ formatDate(customer.createdAt) }}</td>
+                            <td class="text-center">
+                                <span v-if="customer.deleted === false"> Activo </span>
+                                <span v-else> Apadado </span>
+                            </td>
+                            <td class="flex flex-row gap-2">
+                                <v-dialog max-width="1000">
+                                    <template v-slot:activator="{ props: activatorProps }">
+                                        <button
+                                            v-bind="activatorProps"
+                                            class="p-[3px] rounded-md">
+                                            <Eye size="18" />
+                                        </button>
                                     </template>
 
                                     <template v-slot:default="{ isActive }">
-                                        <v-card-actions class="bg-slate-200 rounded-md">
-                                            <v-spacer>Detalhes do pedido</v-spacer>
-                                            <Button class="bg-slate-300 p-[3px] rounded-md">
-                                                <X @click="isActive.value = false" />
-                                            </Button>
-                                        </v-card-actions>
+                                        <v-card title="Use Google's location service?">
+                                            <template v-slot:text>
+                                                <CustumerDetails />
+                                            </template>
 
-                                        <v-card>
-                                            <!-- <Table class="border-2 p-4">
-                                                <TableHeader>
-                                                    <TableRow>
-                                                        <TableHead class="text-left">Imagem</TableHead>
-                                                        <TableHead class="text-left">Product</TableHead>
-                                                        <TableHead class="text-left">Quantidade</TableHead>
-                                                        <TableHead class="text-left">Preço</TableHead>
-                                                    </TableRow>
-                                                </TableHeader>
-                                                <TableBody>
-                                                    <TableRow>
-                                                        <TableCell>{{ order.customerOrder.name }}</TableCell>
-                                                        <TableCell>{{ order.customerOrder.name }}</TableCell>
-                                                        <TableCell>{{ formatDate(order.createdAt) }}</TableCell>
-                                                        <TableCell>{{ order.paymentOrder.Amount }}</TableCell>
-                                                    </TableRow>
-                                                    <TableRow>
-                                                        <TableCell class="text-center">Total:</TableCell>
-                                                        <TableCell></TableCell>
-                                                        <TableCell></TableCell>
-                                                        <TableCell class="text-center">{{ order.paymentOrder.Amount }}</TableCell>
-                                                    </TableRow>
-                                                </TableBody>
-                                            </Table> -->
+                                            <v-card-actions>
+                                                <v-spacer></v-spacer>
+
+                                                <v-btn
+                                                    color="surface-variant"
+                                                    text="Fechar"
+                                                    variant="flat"
+                                                    @click="isActive.value = false">
+                                                </v-btn>
+                                            </v-card-actions>
                                         </v-card>
                                     </template>
                                 </v-dialog>
-                            </TableCell>
-                            <TableCell>
-                                <div class="flex justify-center flex-row gap-2">
-                                    <button class="bg-slate-300 p-[3px] rounded-md"><Pen size="18" /></button>
-                                    <button class="bg-slate-300 p-[3px] rounded-md">
-                                        <Trash2
-                                            color="red"
-                                            size="18" />
-                                    </button>
-                                </div>
-                            </TableCell>
-                        </TableRow>
-                    </TableBody>
-                </Table>
+
+                                <button class="p-[3px] rounded-md"><Pen size="18" /></button>
+                                <button class="p-[3px] rounded-md">
+                                    <Trash2
+                                        color="red"
+                                        size="18" />
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </v-table>
+                <div class="flex items-center space-x-2 py-4">
+                    <v-pagination
+                        v-model="curentPage"
+                        @update:modelValue="pageEvent"
+                        :length="totalPages"
+                        :total-visible="4"
+                        density="compact"
+                        variant="flat">
+                    </v-pagination>
+                </div>
             </div>
         </div>
-        <div class="flex items-center space-x-2 py-4">
-            <v-pagination
-                v-model="curentPage"
-                @update:modelValue="pageEvent"
-                :length="totalPages"
-                :total-visible="4"
-                density="compact"
-                variant="flat">
-            </v-pagination>
+        <div
+            v-else
+            class="text-center">
+            <p>Sem pedidos</p>
         </div>
     </div>
 </template>
 <script setup>
-    import { onMounted, computed, watchEffect, ref, onBeforeUnmount } from "vue";
+    import { onBeforeMount, computed, watchEffect, ref, onBeforeUnmount } from "vue";
     import { useStore } from "vuex";
     import { useRoute, useRouter } from "vue-router";
     import { format } from "date-fns";
+    import { Pen, Eye, Trash2 } from "lucide-vue-next";
+    import { Input } from "@/components/ui/input";
 
-    import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-    import { Pen } from "lucide-vue-next";
-    import { Trash2 } from "lucide-vue-next";
-    import { X } from "lucide-vue-next";
-    import { Input, Button } from "@/components/ui/input";
-
+    import CustumerDetails from "@/resources/Dashboard/_components/Store/_components/customers/CustumerDetails.vue";
     const store = useStore();
     const route = useRoute();
     const router = useRouter();
 
-    const customers = ref(computed(() => store.state.customers.docs));
+    const customers = computed(() => store.state.customers.docs);
     const curentPage = ref(Number(route.query.offset) || 1);
     const totalPages = computed(() => {
-        const customerDocs = store.state.customers.docs || {};
-        return customerDocs.totalPages || 0;
+        const customers = store.state.customers || {};
+        return customers.totalPages || 0;
     });
 
-    onMounted(async () => {
+    onBeforeMount(async () => {
         const offset = route.query.offset || 1;
         await store.dispatch("getAllCustomers", offset);
     });
@@ -146,7 +134,7 @@
     };
 
     function formatDate(date) {
-        return format(new Date(date), "dd/MM/yyyy");
+        return format(new Date(date), "dd/MM/yyyy HH:mm");
     }
 
     watchEffect(() => {

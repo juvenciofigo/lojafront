@@ -10,7 +10,6 @@ loadFonts();
 
 // compontes
 
-import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
@@ -53,7 +52,6 @@ app.component("ButtonComp", Button);
 app.component("InputComp", Input);
 app.component("LabelComp", Label);
 
-app.component("SeparatorComp", Separator);
 app.component("SearchComp", Search);
 
 app.component("DialogComp", Dialog);
