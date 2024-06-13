@@ -17,14 +17,24 @@
                     <form @submit.prevent="submit">
                         <div class="flex flex-col gap-3">
                             <v-text-field
-                                v-model="name.value.value"
+                                v-model="firstName.value.value"
                                 variant="outlined"
                                 placeholder="Nome"
                                 density="compact"
                                 bg-color="white"
                                 :counter="40"
-                                :error-messages="name.errorMessage.value"
+                                :error-messages="firstName.errorMessage.value"
                                 label="Nome">
+                            </v-text-field>
+                            <v-text-field
+                                v-model="lastName.value.value"
+                                variant="outlined"
+                                placeholder="Apelido"
+                                density="compact"
+                                bg-color="white"
+                                :counter="40"
+                                :error-messages="lastName.errorMessage.value"
+                                label="Apelido">
                             </v-text-field>
                             <v-text-field
                                 v-model="password.value.value"
@@ -67,7 +77,7 @@
                     <p class="px-2 mt-[25px]">
                         <span>Ja tem uma conta? </span>
                         <span class="underline">
-                            <router-link to="/login"><span class="whitespace-nowrap"> Entrar!</span></router-link>
+                            <button @click="login"><span class="whitespace-nowrap"> Entrar!</span></button>
                         </span>
                     </p>
                 </div>
@@ -82,7 +92,6 @@
     import LogoPart from "@/components/partials/LogoPart.vue";
     import SignaturePart from "@/components/partials/SignaturePart.vue";
     import { useStore } from "vuex";
-    import { useRouter } from "vue-router";
     import { useField, useForm } from "vee-validate";
     import { toTypedSchema } from "@vee-validate/zod";
     import * as z from "zod";
@@ -90,7 +99,6 @@
     import { Separator } from "@/components/ui/separator";
 
     const store = useStore();
-    const router = useRouter();
 
     const { handleSubmit, handleReset } = useForm({
         validationSchema: toTypedSchema(
@@ -103,8 +111,13 @@
                     .regex(/[a-z]/, { message: "A senha deve conter pelo menos uma letra minúscula" })
                     .regex(/[A-Z]/, { message: "A senha deve conter pelo menos uma letra maiúscula" })
                     .regex(/\d/, { message: "A senha deve conter pelo menos um número" }),
-                //name
-                name: z
+                //firstName
+                firstName: z
+                    .string()
+                    .regex(/^[\p{L}\s'-]+$/u, { message: "O nome deve conter apenas letras, espaços, apóstrofos e hífens" })
+                    .min(4, { message: "O nome deve ter no mínimo 4 caracteres" }),
+                //lastName
+                lastName: z
                     .string()
                     .regex(/^[\p{L}\s'-]+$/u, { message: "O nome deve conter apenas letras, espaços, apóstrofos e hífens" })
                     .min(4, { message: "O nome deve ter no mínimo 4 caracteres" }),
@@ -112,11 +125,17 @@
         ),
     });
 
-    const name = useField("name");
+    const firstName = useField("firstName");
+    const lastName = useField("lastName");
     const email = useField("email");
     const password = useField("password");
 
     const submit = handleSubmit(async (values) => {
-        await store.dispatch("newUser", { values, router });
+        await store.dispatch("newUser", { values });
     });
+
+    function login() {
+        store.commit("SET_LOGIN_OVERLAY", true);
+        store.commit("SET_REGISTER_OVERLAY", false);
+    }
 </script>

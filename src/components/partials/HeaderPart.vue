@@ -17,6 +17,48 @@
                 v-model="drawer"
                 temporary
                 touchless>
+                <v-divider></v-divider>
+
+                <v-list>
+                    <v-list-item
+                        class="login/logout cursor-pointer"
+                        v-if="isAuthenticated === false"
+                        @click="login()">
+                        <div class="flex flex-row items-center gap-2 h-max">
+                            <LogIn class="w-4 h-4" />
+                            <span class="lg:inline text-[15px] font-normal">Entrar</span>
+                        </div>
+                    </v-list-item>
+
+                    <v-list-item
+                        class="login/logout"
+                        v-else>
+                        <v-list class="flex flex-col gap-2 h-max">
+                            <router-link
+                                v-if="user"
+                                class="cursor-pointer"
+                                :to="{ name: `profile`, params: { user: user.id } }">
+                                <div class="flex flex-row justify-between">
+                                    <span>{{ user.firstName.split(" ")[0] }} {{ user.lastName.split(" ")[0] }} </span>
+                                    <span class="text-muted-foreground text-xs">Ver perfil</span>
+                                </div>
+                            </router-link>
+                            <p
+                                class="flex flex-row items-center h-3 text-red-400 cursor-pointer"
+                                @click="store.dispatch('logout', router)">
+                                <span class="block text-[px] font-normal">Sair</span>
+                                <LogOut class="h-full" />
+                            </p>
+                        </v-list>
+                    </v-list-item>
+
+                    <v-list-item
+                        class="orders cursor-pointer"
+                        v-if="isAuthenticated === true">
+                        <router-link to="/">Meus pedidos</router-link>
+                    </v-list-item>
+                </v-list>
+                <hr />
                 <v-list-item title="Categorias"></v-list-item>
 
                 <v-divider></v-divider>
@@ -37,12 +79,22 @@
             </v-navigation-drawer>
 
             <div class="items-center flex flex-row">
-                <button
-                    @click="cartProducts"
+                <router-link
+                    to="/carrinho"
                     class="flex flex-row items-center gap-2 h-max w-max mx-[15px]">
-                    <ShoppingBag class="w-4 h-4" />
-                    <span class="hidden lg:inline text-[15px] font-normal">Loja</span>
-                </button>
+                    <span class="text-xs md:text-base">{{ formatCurrency(priceTotal) }} </span>
+                    <ButtonComp
+                        variant="Ghost"
+                        class="flex gap-2 h-max">
+                        <lord-icon
+                            src="https://cdn.lordicon.com/odavpkmb.json"
+                            trigger="hover"
+                            style="width: 25px; height: 25px">
+                        </lord-icon>
+                    </ButtonComp>
+
+                    <span class="hidden lg:inline text-[15px] font-normal">Carrinho</span>
+                </router-link>
 
                 <Separator
                     orientation="vertical"
@@ -56,38 +108,66 @@
                     <span class="hidden lg:inline text-[15px] font-normal">Sobre nós</span>
                 </router-link>
 
-                <div
-                    v-if="user && isAuthenticated"
-                    class="hidden lg:flex flex-row items-end gap-1">
-                    <Avatar class="hidden lg:block">
-                        <AvatarFallback>{{ user.name.split(" ")[0] }}</AvatarFallback>
+                <div class="flex">
+                    <v-menu
+                        open-on-focus
+                        open-on-hover>
+                        <template v-slot:activator="{ props }">
+                            <button
+                                color="indigo"
+                                v-bind="props">
+                                <div class="hidden lg:flex flex-row justify-center items-end gap-1 cursor-pointer">
+                                    <User />
+                                    <p v-if="isAuthenticated === true">
+                                        <span>{{ user.firstName.split(" ")[0] }} {{ user.lastName.split(" ")[0] }}</span>
+                                    </p>
+                                    <ChevronDown class="hover:rotate-180 duration-300" />
+                                </div>
+                            </button>
+                        </template>
 
-                        <AvatarImage
-                            src="https://github.com/radix-vue.png"
-                            alt="@radix-vue" />
-                    </Avatar>
-                    <p>{{ user.name.split(" ")[0] }}</p>
+                        <v-card min-width="300">
+                            <v-list>
+                                <v-list-item
+                                    class="orders vListItem cursor-pointer"
+                                    :to="{ name: `profile`, params: { user: user.id } }"
+                                    v-if="isAuthenticated === true">
+                                    Meu perfil
+                                </v-list-item>
+                                <v-list-item
+                                    class="orders vListItem cursor-pointer"
+                                    v-if="isAuthenticated === true">
+                                    <router-link to="/">Meus pedidos</router-link>
+                                </v-list-item>
+
+                                <v-list-item
+                                    class="login/logout cursor-pointer vListItem"
+                                    v-if="isAuthenticated === false"
+                                    @click="login()">
+                                    <div class="flex flex-row items-center gap-2 h-max mx-[15px]">
+                                        <LogIn class="w-4 h-4" />
+                                        <span class="hidden lg:inline text-[15px] font-normal">Entrar</span>
+                                    </div>
+                                </v-list-item>
+
+                                <v-list-item
+                                    class="login/logout vListItem cursor-pointer"
+                                    @click="store.dispatch('logout', router)"
+                                    v-else>
+                                    <div class="flex flex-row items-center gap-2 h-max mx-[15px]">
+                                        <p
+                                            class="lg:hidden"
+                                            v-if="user">
+                                            {{ user.lastName.split(" ")[0] }}
+                                        </p>
+                                        <span class="hidden lg:inline text-[15px] font-normal">Sair</span>
+                                        <LogOut class="w-4 h-4" />
+                                    </div>
+                                </v-list-item>
+                            </v-list>
+                        </v-card>
+                    </v-menu>
                 </div>
-
-                <router-link
-                    v-if="isAuthenticated === false"
-                    to="/login"
-                    class="flex flex-row items-center gap-2 h-max w-max mx-[15px]">
-                    <LogIn class="w-4 h-4" />
-                    <span class="hidden lg:inline text-[15px] font-normal">Entrar</span>
-                </router-link>
-                <button
-                    v-else
-                    @click="store.dispatch('logout', router)"
-                    class="flex flex-row items-center gap-2 h-max w-max mx-[15px]">
-                    <p
-                        class="lg:hidden"
-                        v-if="user">
-                        {{ user.name.split(" ")[0] }}
-                    </p>
-                    <span class="hidden lg:inline text-[15px] font-normal">Sair</span>
-                    <LogOut class="w-4 h-4" />
-                </button>
             </div>
         </div>
 
@@ -96,16 +176,18 @@
                 <LogoPart />
             </div>
 
-            <div class="search flex-1 lg:flex flex-row hidden">
-                <div class="border-2 border-yellow-300 flex flex-1 flex-row mr-20 rounded-[50px]">
-                    <InputComp
-                        class="flex-1 rounded-l-[50px]"
+            <div class="search flex-1 flex flex-row md:gap-[10%] justify-end">
+                <div class="border-2 ml-3 w-full md:m-0 border-yellow-300 flex flex-1 max-w-[700px] flex-row rounded-[50px]">
+                    <Input
+                        class="flex-1 w-full rounded-l-[50px]"
                         autocomplete="off"
                         type="text"
                         placeholder="Pesquise pelo nome do produto" />
 
                     <div class="flex flex-row">
-                        <SelectRoot class="bg-black">
+                        <SelectRoot
+                            v-model="category"
+                            class="bg-black">
                             <SelectTrigger
                                 class="flex items-center justify-between w-32 px-[15px] text-[13px] gap-[5px]"
                                 aria-label="Customise options">
@@ -155,26 +237,6 @@
                         /></ButtonComp>
                     </div>
                 </div>
-
-                <div class="flex flex-row items-center">
-                    <ButtonComp
-                        variant="Ghost"
-                        class="flex gap-2 h-max">
-                        <Heart class="w-4 h-4"
-                    /></ButtonComp>
-                    <ButtonComp
-                        variant="Ghost"
-                        class="flex gap-2 h-max">
-                        <UserRound class="w-4 h-4"
-                    /></ButtonComp>
-                    <ButtonComp
-                        variant="Ghost"
-                        class="flex gap-2 h-max"
-                        @click="cartProducts">
-                        <ShoppingBag class="w-4 h-4" />
-                        <span>{{ formatCurrency(priceTotal) }} </span>
-                    </ButtonComp>
-                </div>
             </div>
         </div>
     </div>
@@ -184,19 +246,12 @@
     import { useStore } from "vuex";
     import { useRouter } from "vue-router";
 
-    import { Heart } from "lucide-vue-next";
-    import { ShoppingBag } from "lucide-vue-next";
-    import { Check } from "lucide-vue-next";
-    import { LogIn } from "lucide-vue-next";
-    import { Book } from "lucide-vue-next";
-    import { LogOut } from "lucide-vue-next";
-    import { ChevronDown } from "lucide-vue-next";
-    import { ChevronUp } from "lucide-vue-next";
-    import { Menu } from "lucide-vue-next";
-    import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+    import { Check, LogIn, Book, LogOut, ChevronDown, ChevronUp, Menu, User } from "lucide-vue-next";
+
+    import { Input } from "@/components/ui/input";
     import { Separator } from "@/components/ui/separator";
 
-    const drawer = ref(null);
+    const drawer = ref(false);
 
     import {
         SelectContent,
@@ -218,7 +273,7 @@
     const router = useRouter();
 
     const categories = computed(() => store.state.categories);
-
+    const category = ref();
     const formatCurrency = (value) => {
         return value.toLocaleString("pt-MZ", {
             style: "currency",
@@ -229,15 +284,11 @@
     const priceTotal = computed(() => {
         return calculatePriceTotal(store.getters.cartPrice);
     });
-
+    function login() {
+        store.commit("SET_LOGIN_OVERLAY", true);
+    }
     const storeName = store.state.storeName;
     const isAuthenticated = ref(computed(() => store.getters.isAuthenticated("authToken")));
-
-    async function cartProducts() {
-        router.push({
-            name: "cart",
-        });
-    }
 
     function filterProduct(category) {
         const query = {
@@ -261,3 +312,9 @@
         await store.dispatch("getAllCategory");
     });
 </script>
+<style scoped>
+    .vListItem:hover {
+        background-color: rgb(253 224 71);
+        transition-duration: 0.4s;
+    }
+</style>

@@ -24,7 +24,7 @@
                     <ShippingInfoStep
                         :currentStep="currentStep"
                         @next="nextStep"
-                        @deliveryData="handleDeliveryData" />
+                        @address="handleDeliveryData" />
                     <ConfirmationStep
                         :currentStep="currentStep"
                         @submit="handleConfirmationData"
@@ -39,12 +39,13 @@
             </template>
         </v-stepper>
         <div class="mt-2 flex flex-row justify-end">
-            <Button
+            <v-btn
                 :disabled="buttonStatus"
+                :loading="loading"
                 class="self-end w-max"
-                @click="makeOrder()">
+                @click="sendOrder(), (loading = true)">
                 Finalizar Pedido
-            </Button>
+            </v-btn>
         </div>
     </div>
 </template>
@@ -56,7 +57,6 @@
 
     import ShippingInfoStep from "@/resources/Store/_components/Store/_components/orders/makeorderComp/ShippingInfoStep.vue";
     import ConfirmationStep from "@/resources/Store/_components/Store/_components/orders/makeorderComp/ConfirmationStep.vue";
-    import { Button } from "@/components/ui/button";
 
     const route = useRoute();
     const router = useRouter();
@@ -79,6 +79,9 @@
     // before Unmount
     onBeforeUnmount(() => {
         store.commit("CLEAR_CARTPRODUCTS");
+        store.commit("CLEAR_ADDRESSES");
+        store.commit("CLEAR_ADDRESS");
+        store.commit("CLEAR_PROVIDE_ADDRESS");
     });
     const cartProducts = ref(computed(() => toRaw(store.getters.cartProducts)));
 
@@ -87,7 +90,7 @@
         const from = route.query.productsFrom;
 
         async function userDara() {
-            await store.dispatch("deliveryData");
+            await store.dispatch("addresses");
         }
 
         if (from === "cartProducts") {
@@ -95,9 +98,8 @@
 
             if (!cartProducts.value || cartProducts.value.length <= 0) {
                 router.push({ name: "homepage" });
-                return;
+                window.location.href = "/";
             }
-
             if (isAuthenticated.value === true) {
                 userDara();
             }
@@ -138,36 +140,33 @@
     }
 
     // Finalizar o pedido
-    let deliveryData = null;
-    let confirmationData = null;
+    let selectAddress = ref(null);
+    const confirmationData = ref(null);
 
     const handleDeliveryData = (data) => {
-        deliveryData = data;
+        selectAddress.value = data;
     };
     const handleConfirmationData = (data) => {
-        confirmationData = data;
+        confirmationData.value = data;
     };
-    const status = ref(computed(() => store.state.deliveryData));
-
-    async function makeOrder() {
-        if (!deliveryData) {
+    const loading = ref(false);
+    async function sendOrder() {
+        loading.value = true;
+        if (!selectAddress.value) {
+            loading.value = false;
             store.commit("updateSnackbar", { show: true, text: "Preencha o campo com as informações de envio", color: "red" });
             return;
         }
-        const delivery = {
-            email: deliveryData.email,
-            name: deliveryData.name,
-            contacts: deliveryData.cellNumber,
-            address: {
-                country: deliveryData.country,
-                address: deliveryData.address,
-                city: deliveryData.city,
-                province: deliveryData.province,
-                reference: deliveryData.reference,
-            },
-            note: deliveryData.note,
-        };
+        if (!confirmationData.value) {
+            window.location.reload();
+            return;
+        }
 
-        store.dispatch("sendOrder", { status: toRaw(status.value), data: { delivery, confirmationData: toRaw(confirmationData), cart: cartProducts.value, referece: gerReferenceNumeber() } });
+        const res = await store.dispatch("sendOrder", { selectAddress: { ...selectAddress.value }, prices: toRaw(confirmationData.value), cart: cartProducts.value, reference: gerReferenceNumeber() });
+        if (res !== false) {
+            loading.value = false;
+        } else {
+            loading.value = true;
+        }
     }
 </script>

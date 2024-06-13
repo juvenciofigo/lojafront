@@ -11,7 +11,6 @@ loadFonts();
 // compontes
 
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Command, CommandDialog, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList, CommandSeparator, CommandShortcut } from "@/components/ui/command";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
@@ -19,7 +18,7 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrig
 import { Label } from "@/components/ui/label";
 
 // icones import
-import { UserRound, ChevronDown, LayoutDashboard, FolderKanban, ShoppingBasket, ListOrdered, PersonStanding, ShoppingCart, Shirt, Search, Undo2, X } from "lucide-vue-next";
+import { UserRound, ChevronDown, LayoutDashboard, FolderKanban, ShoppingBasket, ListOrdered, PersonStanding, ShoppingCart, Shirt, Search, Undo2,  } from "lucide-vue-next";
 // import { ChevronDown } from "lucide-vue-next";
 // import { LayoutDashboard } from "lucide-vue-next";
 // import { FolderKanban } from "lucide-vue-next";
@@ -29,7 +28,6 @@ import { UserRound, ChevronDown, LayoutDashboard, FolderKanban, ShoppingBasket, 
 // import { ShoppingCart } from "lucide-vue-next";
 // import { Search } from "lucide-vue-next";
 // import { Undo2 } from "lucide-vue-next";
-// import { X } from "lucide-vue-next";
 
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 const app = createApp(App);
@@ -45,11 +43,9 @@ app.component("PersonStanding", PersonStanding);
 app.component("ShoppingCart", ShoppingCart);
 app.component("ShirtComp", Shirt);
 app.component("Undo2Comp", Undo2);
-app.component("XComp", X);
 
 // use compontes
 app.component("ButtonComp", Button);
-app.component("InputComp", Input);
 app.component("LabelComp", Label);
 
 app.component("SearchComp", Search);

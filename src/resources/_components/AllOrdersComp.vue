@@ -58,14 +58,14 @@
                                     </template>
 
                                     <template v-slot:default="{ isActive }">
-                                        <v-card :title="`Pedido ${order.referenceOrder}`">
-                                            <v-card-actions>
-                                                <v-btn
-                                                    color="surface-variant"
-                                                    text="Fechar"
-                                                    variant="flat"
+                                        <v-card>
+                                            <v-card-actions class="flex flex-row justify-between text-end p-0">
+                                                <p class="ml-3 text-2xl font-bold">Pedido {{ order.referenceOrder }}</p>
+                                                <button
+                                                    class="text-red-500 bg-red-100 active:text-red-100 active:bg-red-500 duration-500 rounded-md mr-3"
                                                     @click="isActive.value = false">
-                                                </v-btn>
+                                                    <X />
+                                                </button>
                                             </v-card-actions>
                                             <v-card-text class="bg-[#f3f3f9] 0 p-1 overflow-x-hidden">
                                                 <OrdersDetails :order="order" />
@@ -104,11 +104,11 @@
     </div>
 </template>
 <script setup>
-    import { computed, watchEffect, ref, onBeforeUnmount } from "vue";
+    import { computed, watchEffect, ref, onBeforeUnmount, defineProps } from "vue";
     import { useStore } from "vuex";
     import { useRoute, useRouter } from "vue-router";
     import { format } from "date-fns";
-    import { Pen, Eye, Trash2 } from "lucide-vue-next";
+    import { Pen, Eye, Trash2, X } from "lucide-vue-next";
     import { Input } from "@/components/ui/input";
 
     import OrdersDetails from "@/resources/Dashboard/_components/Store/_components/orders/OrdersDetails.vue";
@@ -116,7 +116,10 @@
     const store = useStore();
     const route = useRoute();
     const router = useRouter();
-
+    const props = defineProps({
+        mutation: String,
+        route: String,
+    });
     const orders = computed(() => store.state.orders);
     const orderDocs = ref(computed(() => orders.value.docs));
     const curentPage = ref(Number(route.query.offset) || 1);
@@ -126,13 +129,12 @@
     onBeforeUnmount(() => {
         store.commit("CLEAR_ORDERS");
     });
-
     function pageEvent(e) {
-        router.push({ name: "allOrders", query: { offset: `${e}` } });
+        router.push({ name: `${props.route}`, query: { offset: `${e}` } });
     }
 
     const fetchOrders = () => {
-        store.dispatch("getAllOrders", offset.value);
+        store.dispatch(`${props.mutation}`, { offset: offset.value, user: route.params.user });
     };
 
     function formatDate(date) {

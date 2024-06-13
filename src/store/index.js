@@ -15,6 +15,8 @@ function headers() {
     };
 }
 
+const user = JSON.parse(localStorage.getItem("userData"));
+
 async function sendAxio(method, url, data = null, headers = null) {
     try {
         const res = await axios.request({
@@ -52,8 +54,12 @@ export default createStore({
 
         /// orders:
         orders: {},
-        totalprice: 0,
-        deliveryData: {},
+        addresses: null,
+        selectAddress: null,
+        selected: false,
+        /// payment
+        amoutPayment: null,
+        orderPaymentId: null,
 
         /// customers
         customers: {},
@@ -66,9 +72,15 @@ export default createStore({
         snackbar: false,
         snackbarText: "",
         snackbarColor: "",
-        dialogLog: false,
         redirectTo: null,
         authToken: null,
+
+        // confirmation dialog
+        overlay: false,
+        // dialog
+        payment: false,
+        loginOverlay: false,
+        registerOverlay: false,
     },
 
     getters: {
@@ -87,14 +99,25 @@ export default createStore({
                 return false;
             }
         },
-
+        /// payment
+        amoutPayment: (state) => state.amoutPayment,
         ///cart
+        cartProducts: (state) => state.cartProducts,
         tempCart: () => (cookieName) => {
             return getCookie(cookieName);
         },
-        cartProducts: (state) => state.cartProducts,
         cartPrice: (state) => state.cartPrice,
-        deliveryData: (state) => state.deliveryData,
+        addresses: (state) => state.addresses,
+        selectAddress: (state) => state.selectAddress,
+
+        // overlay
+        overlay: (state) => state.overlay,
+        payment: (state) => state.payment,
+        loginOverlay: (state) => state.loginOverlay,
+        registerOverlay: (state) => state.registerOverlay,
+        snackbar: (state) => state.snackbar,
+        snackbarText: (state) => state.snackbarText,
+        snackbarColor: (state) => state.snackbarColor,
     },
 
     mutations: {
@@ -107,12 +130,30 @@ export default createStore({
                 state.snackbarText = "";
             }, 4000);
         },
-        // Dialog login
-        dialogLog(state, status) {
-            state.dialogLog = status;
+        // loginOverlay
+        SET_LOGIN_OVERLAY(state, status) {
+            state.loginOverlay = status;
+        },
+        SET_REGISTER_OVERLAY(state, status) {
+            state.registerOverlay = status;
         },
         setRedirectTo(state, route) {
             state.redirectTo = route;
+        },
+
+        //  Overlay
+        SET_OVERLAY(state, data) {
+            state.overlay = data;
+        },
+        //  Payment
+        SET_PAYMENT(state) {
+            state.payment = !state.payment;
+        },
+        SET_AMOUTPAYMENT(state, amont) {
+            state.amoutPayment = amont;
+        },
+        SET_ID_ORDER(state, amont) {
+            state.orderPaymentId = amont;
         },
 
         // users
@@ -144,8 +185,23 @@ export default createStore({
         SET_ORDERS(state, orders) {
             state.orders = orders;
         },
-        SET_DELIVERYDATA(state, data) {
-            state.deliveryData = data;
+        SET_ADDRESSES(state, data) {
+            state.addresses = data;
+        },
+        CLEAR_ADDRESSES(state) {
+            state.addresses = null;
+        },
+        SET_ADDRESS(state, data) {
+            state.selectAddress = data;
+        },
+        CLEAR_ADDRESS(state) {
+            state.selectAddress = null;
+        },
+        SET_PROVIDE_ADDRESS(state, data) {
+            state.selected = data;
+        },
+        CLEAR_PROVIDE_ADDRESS(state) {
+            state.selected = false;
         },
 
         // customers
@@ -282,24 +338,6 @@ export default createStore({
             }
         },
 
-        async getProducts({ commit }, payload) {
-            try {
-                const res = await axios.request({
-                    method: "get",
-                    baseURL: config.apiURL,
-                    url: "/products",
-                    params: { offset: payload },
-                });
-
-                if (res.data) {
-                    const products = res.data;
-                    commit("SET_PRODUCTS", products);
-                }
-            } catch (error) {
-                errorMessage(error);
-            }
-        },
-
         async detailsProductAdmin({ commit }, produtoId) {
             try {
                 const res = await axios.request({
@@ -420,7 +458,7 @@ export default createStore({
                     params: { offset: payload },
                     headers: headers(),
                 });
-
+                console.log(res);
                 const orders = res.data.orders;
                 commit("SET_ORDERS", { ...orders });
             } catch (error) {
@@ -437,10 +475,11 @@ export default createStore({
                 const res = await axios.request({
                     method: "get",
                     baseURL: config.apiURL,
-                    url: "/customers",
+                    url: "/customers/admin",
                     params: { offset: payload },
                     headers: headers(),
                 });
+
                 const customers = res.data;
                 commit("SET_CUSTOMERS", { ...customers });
             } catch (error) {
@@ -457,7 +496,7 @@ export default createStore({
                 const res = await axios.request({
                     method: "get",
                     baseURL: config.apiURL,
-                    url: "/carts",
+                    url: "/carts/admin",
                     headers: headers(),
                 });
                 console.log(res);
@@ -466,11 +505,12 @@ export default createStore({
                 errorMessage(error);
             }
         },
+        /////////////////////////////////////////////////////////////////////////////////////////////////////
 
         /*/////////////////// Cliente /////////////////////*/
 
         /*
-            Categories
+            Categories cliente
         */
         async detailsCategory({ commit }, categoryId) {
             try {
@@ -483,8 +523,9 @@ export default createStore({
                 errorMessage(error);
             }
         },
+
         /*
-       Products
+       Products cliente
        */
 
         async getAllProducts({ commit }, payload) {
@@ -506,6 +547,25 @@ export default createStore({
                 errorMessage(error);
             }
         },
+
+        async getProducts({ commit }, payload) {
+            try {
+                const res = await axios.request({
+                    method: "get",
+                    baseURL: config.apiURL,
+                    url: "/products",
+                    params: { offset: payload },
+                });
+
+                if (res.data) {
+                    const products = res.data;
+                    commit("SET_PRODUCTS", products);
+                }
+            } catch (error) {
+                errorMessage(error);
+            }
+        },
+
         async detailsProduct({ commit }, produtoId) {
             try {
                 const res = await axios.get(`${config.apiURL}/product/${produtoId}`);
@@ -516,6 +576,10 @@ export default createStore({
                 errorMessage(error);
             }
         },
+
+        /*
+       Carts cliente
+       */
 
         async addToCart({ commit }, { isAuthenticated, item }) {
             const user = JSON.parse(localStorage.getItem("userData"));
@@ -567,13 +631,9 @@ export default createStore({
                 commit("updateSnackbar", { show: false, text: "Produto adicionado ao carrinho ", color: "green" });
                 return;
             } else {
-                const res = await axios.request({
-                    method: "delete",
-                    baseURL: config.apiURL,
-                    url: `/cart/${user.id}/remove/${payload.product}`,
-                });
+                const res = await sendAxio("delete", `/cart/${user.id}/remove/${payload.product}`, null, headers());
 
-                commit("updateSnackbar", { show: true, text: `${res.data.msg}`, color: "green" });
+                commit("updateSnackbar", { show: true, text: `${res.data.message}`, color: "green" });
                 return;
             }
         },
@@ -679,136 +739,76 @@ export default createStore({
         },
 
         /*
-            Users
-        */
+           Olders cliente
+       */
 
-        async newUser({ commit }, payload) {
-            try {
-                const res = await sendAxio("post", `/user`, payload.values, null, null);
-                if (res.data) {
-                    commit("updateSnackbar", { show: true, text: "Conta criada", color: "green" });
-                    payload.router.push({ name: "login" });
-                }
-            } catch (error) {
-                errorMessage(error);
-            }
-        },
-
-        // auth
-        async login({ commit, state }, payload) {
-            try {
-                const res = await sendAxio("post", `/login`, payload.values, null, null);
-
-                const auth = res.data.user;
-
-                // Definir o tempo de expiração do cookie baseado no papel do usuário
-                if (auth.role.includes("admin")) {
-                    setCookie("authToken", auth.token, 1);
-                    setCookie("poRO", auth.role[1], 1);
-                } else {
-                    setCookie("authToken", auth.token, 4);
-                }
-
-                // Armazenar dados do usuário no localStorage
-                localStorage.setItem(
-                    "userData",
-                    JSON.stringify({
-                        name: auth.name,
-                        email: auth.email,
-                        id: auth._id,
-                    })
-                );
-
-                const user = JSON.parse(localStorage.getItem("userData"));
-                // Se houver um carrinho temporário, enviá-lo para o banco de dados
-                if (tempCart) {
-                    const res = await sendAxio("post", `/cart/${user.id}/addProduct`, JSON.parse(tempCart), headers());
-                    if (res.data.success) {
-                        // Limpar o cookie do carrinho
-                        removeCookie("tempCart");
-                    }
-                }
-
-                commit("updateSnackbar", { show: true, text: "Bem-vindo", color: "green" });
-                let redirect = null;
-
-                if (state.redirectTo) {
-                    redirect = state.redirectTo;
-                    commit("setRedirectTo", null);
-                    commit("dialogLog", false);
-                } else {
-                    redirect = payload.router.currentRoute.value.query.redirect || "/";
-                }
-                payload.router.push(redirect);
-            } catch (error) {
-                errorMessage(error);
-            }
-        },
-
-        async logout({ commit }, router) {
-            try {
-                removeCookie("authToken");
-                removeCookie("poRO");
-                localStorage.removeItem("userData");
-                commit("CLEAR_CARTPRICE");
-                router.push({ name: "login" });
-                commit("updateSnackbar", { show: false, text: "", color: "" });
-            } catch (error) {
-                errorMessage(error);
-            }
-        },
-
-        // Order ////////
-
-        async sendOrder({ commit }, payload) {
+        async sendOrder({ commit, state }, payload) {
+            console.log(payload);
             const user = JSON.parse(localStorage.getItem("userData"));
 
-            async function sendOrder(data) {
-                const cart = data.cart;
-                const payment = {
-                    totalProductsPrice: data.confirmationData.totalProductsPrice,
-                    amount: data.confirmationData.total,
-                };
-                const delivery = {
-                    deliveryCost: data.confirmationData.shippingPrice,
-                    referenceOrder: data.referece,
-                };
-                const res = await sendAxio("post", `/order/`, { cart, payment, delivery }, headers());
+            async function sendOrderRequest(data) {
+                const { cart, prices, address, reference } = data;
+                const payment = { ...prices };
+                const delivery = { address, reference };
 
-                if (res.data.success === true) {
-                    // window.location.reload();
+                const res = await sendAxio("post", `/order`, { cart, payment, delivery }, headers());
+                console.log(res);
+                if (res.status === 200) {
+                    const order = res.data.order;
                     commit("updateSnackbar", { show: true, text: "Pedido enviado", color: "green" });
+                    // window.location.reload();
+                    commit("SET_ID_ORDER", order._id);
+                    commit("SET_AMOUTPAYMENT", order.totalPrice);
+                    commit("SET_PAYMENT");
+                    return true;
+                } else {
+                    return false;
                 }
             }
 
             try {
-                if (payload.status === false) {
-                    const res = await sendAxio("post", `/customer/${user.id}`, payload.data.delivery, headers());
+                if (state.selected === false) {
+                    const res = await sendAxio("post", `/customer/${user.id}/address`, payload.selectAddress, headers());
 
-                    if (res.data) {
-                        commit("updateSnackbar", { show: true, text: "Pedido enviado", color: "green" });
-                        payload.router.push({ name: "/" });
+                    if (res.status === 200) {
+                        const addressId = res.data.addressId;
+                        await sendOrderRequest({
+                            cart: payload.cart,
+                            prices: payload.prices,
+                            address: addressId,
+                            reference: payload.reference,
+                        });
                     }
-                    return;
                 } else {
-                    sendOrder(payload.data);
+                    await sendOrderRequest({
+                        cart: payload.cart,
+                        prices: payload.prices,
+                        address: payload.selectAddress.addressId,
+                        reference: payload.reference,
+                    });
                 }
             } catch (error) {
                 errorMessage(error);
             }
         },
 
-        async deliveryData({ commit }) {
-            const user = JSON.parse(localStorage.getItem("userData"));
-
+        async getOldersCustomer({ commit }, payload) {
             try {
-                const res = await sendAxio("get", `/customer/${user.id}/delivery`, null, headers());
+                const res = await axios.request({
+                    method: "get",
+                    baseURL: config.apiURL,
+                    url: `/orders/${payload.user}`,
+                    params: { offset: payload.offset },
+                    headers: headers(),
+                });
 
-                if (res) {
-                    commit("SET_DELIVERYDATA", res.data);
+                if (res.status === 200) {
+                    commit("SET_ORDERS", { ...res.data.orders });
                 }
             } catch (error) {
                 errorMessage(error);
+                console.log(error);
+                return false;
             }
         },
 
@@ -838,69 +838,153 @@ export default createStore({
             commit("SET_CARTPRODUCTS", cartProducts);
         },
 
-        async mpesapay({ commit }, payload) {
+        /*
+            Users
+        */
+
+        async newUser({ commit }, payload) {
             try {
-                const res = await sendAxio("post", `/mpesaPay`, { ...payload, value: this.state.totalprice }, headers());
-
-                if (res.data.error) {
-                    commit("updateSnackbar", { show: true, text: res.data.error, color: "red" });
-                    payload.router.push({ name: "login" });
-                }
-                if (res.data.data) {
-                    switch (res.data.data.output_ResponseCode) {
-                        case "INS-0":
-                            commit("updateSnackbar", { show: true, text: "Pagamento efectuado", color: "green" });
-                            payload.router.push({ name: "login" });
-                            break;
-
-                        case "INS-4":
-                            commit("updateSnackbar", { show: true, text: "Número fora de área", color: "red" });
-                            payload.router.push({ name: "login" });
-                            break;
-
-                        case "INS-6":
-                            commit("updateSnackbar", { show: true, text: "TFalha na transação", color: "red" });
-                            payload.router.push({ name: "login" });
-                            break;
-
-                        case "INS-9":
-                            commit("updateSnackbar", { show: true, text: "	Tempo limite da solicitação", color: "red" });
-                            payload.router.push({ name: "login" });
-                            break;
-
-                        case "INS-15":
-                            commit("updateSnackbar", { show: true, text: "Valor inválido usado", color: "red" });
-                            payload.router.push({ name: "login" });
-                            break;
-
-                        case "INS-995":
-                            commit("updateSnackbar", { show: true, text: "Perfil do cliente tem problemas", color: "red" });
-                            payload.router.push({ name: "login" });
-                            break;
-
-                        case "INS-2006":
-                            commit("updateSnackbar", { show: true, text: "Saldo insuficiente", color: "red" });
-                            payload.router.push({ name: "login" });
-                            break;
-
-                        case "INS-2051":
-                            commit("updateSnackbar", { show: true, text: "Número inválido", color: "red" });
-                            payload.router.push({ name: "login" });
-                            break;
-
-                        case "INS-10":
-                            commit("updateSnackbar", { show: true, text: "Trasanção duplicada", color: "red" });
-                            payload.router.push({ name: "login" });
-                            break;
-
-                        default:
-                            commit("updateSnackbar", { show: true, text: "Erro", color: "red" });
-                            payload.router.push({ name: "login" });
-                            break;
-                    }
+                const res = await sendAxio("post", `/user`, payload.values, null);
+                if (res.status === 200) {
+                    commit("updateSnackbar", { show: true, text: "Conta criada", color: "green" });
+                    commit("SET_LOGIN_OVERLAY", true);
+                    commit("SET_REGISTER_OVERLAY", false);
                 }
             } catch (error) {
                 errorMessage(error);
+            }
+        },
+
+        // auth
+        async login({ commit, state }, payload) {
+            try {
+                const res = await sendAxio("post", `/login`, payload.values, null);
+                if (!res.status === 200) {
+                    commit("updateSnackbar", { show: true, text: "Dados errados", color: "red" });
+                }
+                const auth = res.data.user;
+
+                // Definir o tempo de expiração do cookie baseado no papel do usuário
+                if (auth.role.includes("admin")) {
+                    setCookie("authToken", auth.token, 1);
+                    setCookie("poRO", auth.role[1], 1);
+                } else {
+                    setCookie("authToken", auth.token, 4);
+                }
+
+                // Armazenar dados do usuário no localStorage
+                localStorage.setItem(
+                    "userData",
+                    JSON.stringify({
+                        firstName: auth.firstName,
+                        lastName: auth.lastName,
+                        email: auth.email,
+                        id: auth._id,
+                    })
+                );
+
+                const user = JSON.parse(localStorage.getItem("userData"));
+                // Se houver um carrinho temporário, enviá-lo para o banco de dados
+                if (tempCart) {
+                    const res = await sendAxio("post", `/cart/${user.id}/addProduct`, JSON.parse(tempCart), headers());
+                    if (res.data.success) {
+                        // Limpar o cookie do carrinho
+                        removeCookie("tempCart");
+                    }
+                }
+
+                commit("updateSnackbar", { show: true, text: "Bem-vindo", color: "green" });
+                let redirect = null;
+                if (state.redirectTo !== null) {
+                    redirect = state.redirectTo;
+                    commit("setRedirectTo", null);
+                    commit("SET_LOGIN_OVERLAY", false);
+                    window.location.href = redirect;
+                    return;
+                }
+                window.location.reload();
+                return;
+            } catch (error) {
+                errorMessage(error);
+            }
+        },
+
+        async logout({ commit }) {
+            try {
+                await removeCookie("authToken");
+                await removeCookie("poRO");
+
+                localStorage.removeItem("userData");
+
+                commit("CLEAR_CARTPRICE");
+
+                commit("updateSnackbar", { show: false, text: "", color: "" });
+
+                window.location.reload();
+            } catch (error) {
+                errorMessage(error);
+            }
+        },
+
+        async getUser({ commit }, payload) {
+            try {
+                const res = await sendAxio("get", `user/${payload}`, null, headers());
+                if (res.status === 200) commit("updateSnackbar", { show: false, text: "", color: "" });
+            } catch (error) {
+                errorMessage(error);
+            }
+        },
+
+        async addresses({ commit }) {
+            const user = JSON.parse(localStorage.getItem("userData"));
+
+            try {
+                const res = await sendAxio("get", `/customer/${user.id}/addresses`, null, headers());
+
+                if (res.status === 200) {
+                    commit("SET_ADDRESSES", res.data);
+                }
+            } catch (error) {
+                errorMessage(error);
+            }
+        },
+
+        async deleteAddress({ commit }, payload) {
+            try {
+                const res = await sendAxio("put", `/customer/${payload}/address`, null, headers());
+
+                if (res.status === 200) {
+                    commit("updateSnackbar", { show: true, text: "Endereço apagado", color: "green" });
+                    return;
+                } else {
+                    commit("updateSnackbar", { show: true, text: "Falha ao apagar", color: "green" });
+                    return;
+                }
+            } catch (error) {
+                console.log("errrrrr", error);
+                errorMessage(error);
+            }
+        },
+
+        /*
+          Payment Cliente
+        */
+
+        async mpesapay({ commit, state }, payload) {
+            try {
+                const res = await sendAxio("post", `/mpesaPay`, { ...payload, orderId: state.orderPaymentId }, headers());
+
+                console.log(res);
+
+                if (res.status === 200 || res.status === 201) {
+                    commit("updateSnackbar", { show: true, text: res.data.message, color: "green" });
+                    commit("SET_PAYMENT");
+                    window.location.href = `/perfil/${user.id}/pedidos`;
+                    return;
+                }
+            } catch (error) {
+                errorMessage(error);
+                return false;
             }
         },
     },

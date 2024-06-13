@@ -15,7 +15,7 @@
                             </thead>
                             <tbody>
                                 <tr
-                                    v-for="(product, index) in order.ordercart"
+                                    v-for="(product, index) in order.cart"
                                     :key="index">
                                     <td class="">
                                         <div class="flex flex-row">
@@ -53,11 +53,11 @@
                                     <tbody>
                                         <tr>
                                             <td>Sub Total :</td>
-                                            <td class="">{{ formatCurrency(order.paymentOrder.totalProductsPrice) }}</td>
+                                            <td class="">{{ formatCurrency(order.payment.totalProductsPrice) }}</td>
                                         </tr>
                                         <tr>
                                             <td>Shipping Charge :</td>
-                                            <td class="">{{ formatCurrency(order.deliveryOrder.deliveryCost) }}</td>
+                                            <td class="">{{ formatCurrency(order.delivery.cost) }}</td>
                                         </tr>
                                         <tr>
                                             <td>Iva</td>
@@ -65,7 +65,7 @@
                                         </tr>
                                         <tr>
                                             <th>Total :</th>
-                                            <th>{{ formatCurrency(order.paymentOrder.amount) }}</th>
+                                            <th>{{ formatCurrency(order.payment.amount) }}</th>
                                         </tr>
                                     </tbody>
                                 </v-table>
@@ -78,9 +78,15 @@
             <div class="card">
                 <div class="p-4">
                     <div class="flex flex-row justify-between">
-                        <h5 class="  ">Order Status</h5>
-                        <div class="mt-2 mt-sm-0">
-                            
+                        <h5 class="whitespace-nowrap">Order Status</h5>
+                        <div class="mt-2 mt-sm-0 flex-row flex-wrap flex justify-end gap-2 w-max">
+                            <button
+                                class="bg-green-500 text-green-100 active:text-green-500 duration-500 active:bg-green-100 text-xs p-1 rounded-md w-max"
+                                @click="makePayment(order._id,order.payment.amount)">
+                                Fazer pagamento
+                            </button>
+                            <button class="bg-blue-100 text-blue-500 active:text-blue-100 duration-500 active:bg-blue-500 text-xs p-1 rounded-md w-max">Mudar Endereço</button>
+                            <button class="text-red-500 bg-red-100 active:text-red-100 active:bg-red-500 duration-500 text-xs p-1 rounded-md">Cancelar Pedido</button>
                         </div>
                     </div>
                 </div>
@@ -184,9 +190,7 @@
                 <div class="p-4">
                     <div class="flex justify-between flex-row">
                         <h5 class="">Detalhes da logistica</h5>
-                        <div class="">
-                            
-                        </div>
+                        <div class=""></div>
                     </div>
                 </div>
                 <hr class="" />
@@ -225,13 +229,16 @@
                         <li>
                             <div class="mb-1">
                                 <div class=" ">
-                                    <h6 class="text-lg font-semibold">{{ order.customerOrder.name }}</h6>
+                                    <h6 class="text-lg font-semibold">
+                                        <span>{{ order.customer.firstName }}</span>
+                                        <span>{{ order.customer.lastName }}</span>
+                                    </h6>
                                     <p class="text-xs text-muted-foreground">Customer</p>
                                 </div>
                             </div>
                         </li>
-                        <li>{{ order.customerOrder.email }}</li>
-                        <li>{{ order.customerOrder.contacts }}</li>
+                        <li>{{ order.customer.email }}</li>
+                        <li>{{ order.customer.cellNumber }}</li>
                     </ul>
                 </div>
             </div>
@@ -248,7 +255,8 @@
                                 <p class=" ">Nome:</p>
                             </div>
                             <div class="font-semibold">
-                                <h6 class="">{{ order.customerOrder.name }}</h6>
+                                <span class="">{{ order.address.firstName }}</span>
+                                <span class="">{{ order.address.lastName }}</span>
                             </div>
                         </div>
                         <div class="flex flex-row gap-1">
@@ -256,7 +264,7 @@
                                 <p class=" ">Contacto:</p>
                             </div>
                             <div class=" ">
-                                <h6 class="">{{ order.customerOrder.contacts }}</h6>
+                                <h6 class="">{{ order.address.cellNumber }}</h6>
                             </div>
                         </div>
                         <div class="flex flex-row gap-1">
@@ -264,7 +272,7 @@
                                 <p class=" ">Cidade:</p>
                             </div>
                             <div class="">
-                                <h6 class="">{{ order.customerOrder.address.city }}</h6>
+                                <h6 class="">{{ order.address.city }}</h6>
                             </div>
                         </div>
                         <div class="flex flex-row gap-1">
@@ -272,7 +280,7 @@
                                 <p class=" ">Província:</p>
                             </div>
                             <div class=" ">
-                                <h6 class="">{{ order.customerOrder.address.province }}</h6>
+                                <h6 class="">{{ order.address.province }}</h6>
                             </div>
                         </div>
                         <div class="flex flex-row gap-1">
@@ -280,7 +288,7 @@
                                 <p class=" ">Referência:</p>
                             </div>
                             <div class=" ">
-                                <h6 class="">{{ order.customerOrder.address.reference }}</h6>
+                                <h6 class="">{{ order.address.reference }}</h6>
                             </div>
                         </div>
                         <div class="flex flex-row gap-1">
@@ -288,7 +296,7 @@
                                 <p class=" ">País:</p>
                             </div>
                             <div class=" ">
-                                <h6 class="">{{ order.customerOrder.address.country }}</h6>
+                                <h6 class="">{{ order.address.country }}</h6>
                             </div>
                         </div>
                         <div class="flex flex-row gap-1">
@@ -297,7 +305,7 @@
                             </div>
                             <div class=" ">
                                 <h6>
-                                    <span v-if="order.customerOrder.address.none">{{ order.customerOrder.address.note }}</span>
+                                    <span v-if="order.address.none">{{ order.address.note }}</span>
                                     <span v-else>Sem notas</span>
                                 </h6>
                             </div>
@@ -318,7 +326,7 @@
                             <p class=" ">Referência:</p>
                         </div>
                         <div class=" ">
-                            <h6 class="">#VLZ124561278124</h6>
+                            <h6 class="">{{ order.referenceOrder }}</h6>
                         </div>
                     </div>
                     <div class="flex flex-row gap-1">
@@ -326,23 +334,29 @@
                             <p class=" ">Método de pagamento:</p>
                         </div>
                         <div class=" ">
-                            <h6 class="">Debit Card</h6>
+                            <h6 class="">
+                                <span v-if="order.payment.paymentMethod">{{ order.payment.paymentMethod }}</span> <span v-else>{{ order.payment.status }}</span>
+                            </h6>
+                        </div>
+                    </div>
+                    <div class="flex flex-row gap-1 ">
+                        <div class="text-muted-foreground">
+                            <p class=" ">Nome do Titular:</p>
+                        </div>
+                        <div class=" ">
+                            <h6 class="">
+                                <span v-if="order.payment.paymentMethod">{{  order.payment.holderName }}</span> <span v-else>{{ order.payment.status }}</span>
+                            </h6>
                         </div>
                     </div>
                     <div class="flex flex-row gap-1">
                         <div class="text-muted-foreground">
-                            <p class=" ">Card Holder Name:</p>
+                            <p class=" ">Número:</p>
                         </div>
                         <div class=" ">
-                            <h6 class="">Joseph Parker</h6>
-                        </div>
-                    </div>
-                    <div class="flex flex-row gap-1">
-                        <div class="text-muted-foreground">
-                            <p class=" ">Númbero:</p>
-                        </div>
-                        <div class=" ">
-                            <h6 class="">xxxx xxxx xxxx 2456</h6>
+                            <h6 class="">
+                                <span v-if="order.payment.paymentMethod">{{ order.payment.number }}</span> <span v-else>{{ order.payment.status }}</span>
+                            </h6>
                         </div>
                     </div>
                     <div class="flex flex-row gap-1">
@@ -350,7 +364,7 @@
                             <p class=" ">Total amount:</p>
                         </div>
                         <div class=" ">
-                            <h6 class="">$415.96</h6>
+                            <h6 class="">{{ formatCurrency(order.payment.amount) }}</h6>
                         </div>
                     </div>
                 </div>
@@ -364,14 +378,21 @@
 <script setup>
     import { defineProps } from "vue";
     import { format } from "date-fns";
+    import { useStore } from "vuex";
 
+    const store = useStore();
     defineProps({
         order: {
             type: Object,
             required: true,
         },
     });
-
+    function makePayment(orderId,amount) {
+        console.log(amount);
+        store.commit("SET_ID_ORDER", orderId);
+        store.commit("SET_AMOUTPAYMENT", amount);
+        store.commit("SET_PAYMENT");
+    }
     const formatCurrency = (value) => {
         return value.toLocaleString("pt-MZ", {
             style: "currency",

@@ -35,7 +35,7 @@
 </template>
 <script setup>
     import { useStore } from "vuex";
-    import { computed, ref, watch, defineEmits } from "vue";
+    import { computed, ref, watch, defineEmits, onBeforeMount } from "vue";
     import CartProductsComp from "@/resources/Store/_components/CartProductsComp.vue";
     import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
 
@@ -64,7 +64,12 @@
 
     const emit = defineEmits(["inFocus", "submit"]);
 
-    const confirmationData = ref("");
+    const confirmationData = ref(null);
+
+    function sendData() {
+        emit("submit", confirmationData.value);
+    }
+
     watch(cartProducts, () => {
         confirmationData.value = {
             totalProductsPrice: priceTotal.value,
@@ -77,9 +82,9 @@
         sendData();
     });
 
-    function sendData() {
-        // Emitindo o evento 'submit' com os dados de entrega
-        emit("submit", confirmationData.value);
-    }
+    onBeforeMount(() => {
+        sendData();
+    });
+    
 </script>
 <style lang=""></style>

@@ -1,5 +1,5 @@
 <template>
-    <div class="flex flex-col text-center bg-yellow-200">
+    <div class="flex flex-col text-center bg-yellow-300">
         <p>© 2024 Shop. Criando por</p>
         <a
             target="_blank"

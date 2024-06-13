@@ -46,17 +46,54 @@ const routes = [
                 component: () => import("@/resources/Store/_components/Store/_components/orders/MakeOrder.vue"),
                 meta: { requiresLogin: true },
             },
+
             /*
-            Carinhos
+            Carrinhos
             */
             {
                 path: "/carrinho",
                 name: "cart",
                 component: () => import("@/resources/Store/_components/Store/_components/carts/CartProducts.vue"),
             },
+        ],
+    },
+    /// Profile ////
+    {
+        path: "/perfil/:user",
+        name: "profile",
+        redirect: { name: "myProfile" },
+        component: () => import("@/resources/_components/ProfileComp.vue"),
+        meta: { requiresLogin: true },
+        children: [
+            {
+                path: "",
+                name: "myProfile",
+                component: () => import("@/resources/_components/MyProfile.vue"),
+            },
             /*
-            Compras
+             Compras
             */
+            {
+                path: "pedidos",
+                name: "selfOrders",
+                component: () => import("@/resources/Store/_components/Store/_components/orders/AllOrders.vue"),
+            },
+            /*
+             Pagamentos
+            */
+            {
+                path: "pagamentos",
+                name: "selfPayments",
+                component: () => import("@/resources/Store/_components/Store/_components/payment/AllPayments.vue"),
+            },
+            /*
+             Endereços
+            */
+            {
+                path: "enderecos",
+                name: "selfAddresses",
+                component: () => import("@/resources/Store/_components/Store/_components/addresses/AllAddresses"),
+            },
         ],
     },
 
@@ -65,6 +102,7 @@ const routes = [
     {
         path: "/dashboard",
         name: "dashboard",
+        redirect: { name: "dashboard" },
         component: () => import("@/resources/Dashboard/_components/DashboardView.vue"),
         meta: { requiresAdmin: true },
         children: [
@@ -115,12 +153,6 @@ const routes = [
             /*
             Pedidos
             */
-
-            {
-                path: "pedido",
-                name: "pedido",
-                redirect: { name: "pedidos" },
-            },
             {
                 path: "pedidos",
                 name: "pedidos",
@@ -137,11 +169,7 @@ const routes = [
             /*
             Clientes
             */
-            {
-                path: "cliente",
-                name: "cliente",
-                redirect: { name: "clientes" },
-            },
+
             {
                 path: "clientes",
                 name: "clientes",
@@ -156,36 +184,36 @@ const routes = [
             },
 
             /*
-            Carinhos
+            Carrinhos
             */
             {
-                path: "carinho",
-                name: "carinho",
-                redirect: { name: "carinhos" },
-            },
-            {
-                path: "carinhos",
-                name: "carinhos",
+                path: "carrinhos",
+                name: "carrinhos",
+                redirect: { name: "carts" },
                 component: () => import("@/resources/Dashboard/_components/Store/_components/CartsComp.vue"),
+                children: [
+                    {
+                        path: "",
+                        name: "carts",
+                        component: () => import("@/resources/Dashboard/_components/Store/_components/CartsComp.vue"),
+                    },
+                ],
             },
 
             /*
             Compras
             */
             {
-                path: "compra",
-                name: "compra",
-                redirect: { name: "compras" },
-            },
-            {
                 path: "compras",
                 name: "compras",
                 component: () => import("@/resources/Dashboard/_components/Store/_components/ShopsComp.vue"),
-            },
-            {
-                path: "comprar",
-                name: "comprar",
-                component: () => import("@/resources/Store/_components/Store/_components/paynow/payNow.vue"),
+                children: [
+                    {
+                        path: "",
+                        name: "sellers",
+                        component: () => import("@/resources/Dashboard/_components/Store/_components/ShopsComp.vue"),
+                    },
+                ],
             },
         ],
     },
@@ -194,16 +222,6 @@ const routes = [
         path: "/about",
         name: "about",
         component: () => import("../views/AboutView.vue"),
-    },
-    {
-        path: "/login",
-        name: "login",
-        component: () => import("@/resources/_components/LoginView.vue"),
-    },
-    {
-        path: "/register",
-        name: "register",
-        component: () => import("@/resources/_components/RegisterView.vue"),
     },
 ];
 
@@ -220,8 +238,8 @@ router.beforeEach(async (to, from, next) => {
                 next();
             } else {
                 store.commit("setRedirectTo", to.fullPath);
-                store.commit("dialogLog", true);
                 store.commit("updateSnackbar", { show: true, text: "Faça Login", color: "red" });
+                store.commit("SET_LOGIN_OVERLAY", true);
                 next(false);
             }
         } else if (to.matched.some((record) => record.meta.requiresAdmin)) {
@@ -234,7 +252,8 @@ router.beforeEach(async (to, from, next) => {
                 if (Number(tring) < 2) {
                     store.commit("Set_tringValue");
                     store.commit("updateSnackbar", { show: true, text: "Sem permisão", color: "red" });
-                    next({ name: "login", query: { redirect: to.fullPath } });
+                    store.commit("SET_LOGIN_OVERLAY", true);
+                    next(false);
                 } else {
                     store.commit("updateSnackbar", { show: true, text: "Página inicial", color: "orange" });
                     next({ name: "home" });

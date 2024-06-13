@@ -54,11 +54,7 @@
                     <p class="px-2 mt-[25px]">
                         <span>Ainda não se tem uma conta? </span>
                         <span class="underline">
-                            <router-link
-                                to="/register"
-                                @click="dialogLogClose"
-                                ><span class="whitespace-nowrap"> Criar conta!</span></router-link
-                            >
+                            <button @click="register"><span class="whitespace-nowrap"> Criar conta!</span></button>
                         </span>
                     </p>
                 </div>
@@ -99,8 +95,9 @@
 
     const email = useField("email");
     const password = useField("password");
-    function dialogLogClose() {
-        store.commit("dialogLog");
+    function register() {
+        store.commit("SET_LOGIN_OVERLAY", false);
+        store.commit("SET_REGISTER_OVERLAY", true);
     }
     const submit = handleSubmit(async (values) => {
         await store.dispatch("login", { values, router });
