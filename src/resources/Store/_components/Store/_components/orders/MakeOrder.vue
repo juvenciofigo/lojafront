@@ -150,6 +150,7 @@
         confirmationData.value = data;
     };
     const loading = ref(false);
+
     async function sendOrder() {
         loading.value = true;
         if (!selectAddress.value) {
@@ -163,10 +164,12 @@
         }
 
         const res = await store.dispatch("sendOrder", { selectAddress: { ...selectAddress.value }, prices: toRaw(confirmationData.value), cart: cartProducts.value, reference: gerReferenceNumeber() });
+
         if (res !== false) {
             loading.value = false;
         } else {
             loading.value = true;
+            
         }
     }
 </script>

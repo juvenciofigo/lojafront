@@ -6,6 +6,9 @@
             href="https://www.linkedin.com/in/juvenciofigocumbane"
             >Juvencio Figo</a
         >
+        <div class="text-[9px] self-end">
+            <a target="_blank" href="https://lordicon.com/">Icons by Lordicon.com</a>
+        </div>
     </div>
 </template>
 

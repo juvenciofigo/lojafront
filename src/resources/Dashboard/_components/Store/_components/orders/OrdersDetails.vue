@@ -81,12 +81,18 @@
                         <h5 class="whitespace-nowrap">Order Status</h5>
                         <div class="mt-2 mt-sm-0 flex-row flex-wrap flex justify-end gap-2 w-max">
                             <button
+                                v-if="order.payment.status !== `Pago`"
                                 class="bg-green-500 text-green-100 active:text-green-500 duration-500 active:bg-green-100 text-xs p-1 rounded-md w-max"
-                                @click="makePayment(order._id,order.payment.amount)">
+                                @click="makePayment(order.payment.status, order._id, order.payment.amount)">
                                 Fazer pagamento
                             </button>
                             <button class="bg-blue-100 text-blue-500 active:text-blue-100 duration-500 active:bg-blue-500 text-xs p-1 rounded-md w-max">Mudar Endereço</button>
-                            <button class="text-red-500 bg-red-100 active:text-red-100 active:bg-red-500 duration-500 text-xs p-1 rounded-md">Cancelar Pedido</button>
+
+                            <button
+                                v-if="order.payment.status !== `Pago`"
+                                class="text-red-500 bg-red-100 active:text-red-100 active:bg-red-500 duration-500 text-xs p-1 rounded-md">
+                                Cancelar Pedido
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -339,13 +345,13 @@
                             </h6>
                         </div>
                     </div>
-                    <div class="flex flex-row gap-1 ">
+                    <div class="flex flex-row gap-1">
                         <div class="text-muted-foreground">
                             <p class=" ">Nome do Titular:</p>
                         </div>
                         <div class=" ">
                             <h6 class="">
-                                <span v-if="order.payment.paymentMethod">{{  order.payment.holderName }}</span> <span v-else>{{ order.payment.status }}</span>
+                                <span v-if="order.payment.paymentMethod">{{ order.payment.holderName }}</span> <span v-else>{{ order.payment.status }}</span>
                             </h6>
                         </div>
                     </div>
@@ -387,8 +393,10 @@
             required: true,
         },
     });
-    function makePayment(orderId,amount) {
-        console.log(amount);
+
+    function makePayment(status, orderId, amount) {
+        if (status === "Pago") return;
+
         store.commit("SET_ID_ORDER", orderId);
         store.commit("SET_AMOUTPAYMENT", amount);
         store.commit("SET_PAYMENT");

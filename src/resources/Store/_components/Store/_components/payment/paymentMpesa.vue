@@ -42,7 +42,7 @@
     import { useStore } from "vuex";
     import { ref, computed } from "vue";
     const store = useStore();
-    const number = ref("840657153");
+    const number = ref("");
     const total = computed(() => store.getters.amoutPayment);
     const errorDialog = ref(false);
     const errorMessage = ref("");
