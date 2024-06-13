@@ -308,6 +308,7 @@
     const user = computed(() => JSON.parse(localStorage.getItem("userData")));
 
     onMounted(async () => {
+        console.log(process.env.VUE_APP_API_URL);
         await store.dispatch("displayTempCartPrices", isAuthenticated.value);
         await store.dispatch("getAllCategory");
     });
