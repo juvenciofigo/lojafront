@@ -4,11 +4,11 @@
             <div>
                 <p class="text-xs text-center hidden lg:block">Bem-vindo ao {{ storeName }}.</p>
                 <div class="lg:hidden flex flex-row">
-                    <ButtonComp
+                    <Button
                         @click.stop="drawer = !drawer"
                         variant="gost">
                         <Menu class="h-7.5 w-7.5" />
-                    </ButtonComp>
+                    </Button>
                     <LogoPart />
                 </div>
             </div>
@@ -83,7 +83,7 @@
                     to="/carrinho"
                     class="flex flex-row items-center gap-2 h-max w-max mx-[15px]">
                     <span class="text-xs md:text-base">{{ formatCurrency(priceTotal) }} </span>
-                    <ButtonComp
+                    <Button
                         variant="Ghost"
                         class="flex gap-2 h-max">
                         <lord-icon
@@ -91,7 +91,7 @@
                             trigger="hover"
                             style="width: 25px; height: 25px">
                         </lord-icon>
-                    </ButtonComp>
+                    </Button>
 
                     <span class="hidden lg:inline text-[15px] font-normal">Carrinho</span>
                 </router-link>
@@ -229,12 +229,12 @@
                             </SelectPortal>
                         </SelectRoot>
 
-                        <ButtonComp
+                        <Button
                             variant="ghost"
                             type="button"
                             class="w-max bg-yellow-300 rounded-r-[50px] flex gap-2 h-full px-[15px]">
-                            <SearchComp
-                        /></ButtonComp>
+                            <Search
+                        /></Button>
                     </div>
                 </div>
             </div>
@@ -246,7 +246,8 @@
     import { useStore } from "vuex";
     import { useRouter } from "vue-router";
 
-    import { Check, LogIn, Book, LogOut, ChevronDown, ChevronUp, Menu, User } from "lucide-vue-next";
+    import { Search, Check, LogIn, Book, LogOut, ChevronDown, ChevronUp, Menu, User } from "lucide-vue-next";
+    import { Button } from "@/components/ui/button";
 
     import { Input } from "@/components/ui/input";
     import { Separator } from "@/components/ui/separator";
@@ -306,7 +307,7 @@
     };
 
     const user = computed(() => JSON.parse(localStorage.getItem("userData")));
-
+    console.log(process.env.VUE_APP_API_URL);
     onMounted(async () => {
         await store.dispatch("displayTempCartPrices", isAuthenticated.value);
         await store.dispatch("getAllCategory");

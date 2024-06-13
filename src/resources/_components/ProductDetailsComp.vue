@@ -28,12 +28,12 @@
                     </div>
 
                     <div class="flex flex-wrap flex-row justify-center gap-4">
-                        <ButtonComp
+                        <Button
                             variant="destructive"
                             @click="firstButton"
-                            >{{ titleFirst }}</ButtonComp
+                            >{{ titleFirst }}</Button
                         >
-                        <ButtonComp @click="secondButton">{{ titleSecond }}</ButtonComp>
+                        <Button @click="secondButton">{{ titleSecond }}</Button>
                         <button
                             :class="styl"
                             @click="thirdButton">
@@ -142,6 +142,7 @@
     import { format, differenceInHours } from "date-fns";
     import { useStore } from "vuex";
     import { ref, defineProps, computed, watch, defineEmits } from "vue";
+    import { Button } from "@/components/ui/button";
 
     defineProps({
         firstButton: { type: Function, required: true },

@@ -236,6 +236,7 @@
     import { Input } from "@/components/ui/input";
     import { Label } from "@/components/ui/label";
     import { useRoute } from "vue-router";
+    import { Button } from "@/components/ui/button";
 
     const availabilityStatus = [
         { statusName: "Visível", statusValue: true },

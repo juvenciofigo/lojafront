@@ -40,11 +40,11 @@
         <div class="header h-[50px] flex flex-row justify-between items-center border-b-[1px] p-1 lg:p-7">
             <p class="text-xs text-center hidden lg:block">Bem-vindo ao {{ storeName }}.</p>
             <div class="lg:hidden flex flex-row">
-                <ButtonComp
+                <Button
                     @click.stop="drawer = !drawer"
                     variant="gost">
                     <Menu class="h-7.5 w-7.5" />
-                </ButtonComp>
+                </Button>
                 <LogoPart />
             </div>
 
@@ -53,7 +53,7 @@
                     to="/carrinho"
                     class="flex flex-row items-center gap-2 h-max w-max mx-[15px]">
                     <span class="text-xs md:text-base">{{ formatCurrency(priceTotal) }} </span>
-                    <ButtonComp
+                    <Button
                         variant="Ghost"
                         class="flex gap-2 h-max">
                         <lord-icon
@@ -61,7 +61,7 @@
                             trigger="hover"
                             style="width: 25px; height: 25px">
                         </lord-icon>
-                    </ButtonComp>
+                    </Button>
                 </router-link>
 
                 <Separator
@@ -152,6 +152,7 @@
     import SignaturePart from "@/components/partials/SignaturePart.vue";
     import { Separator } from "@/components/ui/separator";
     import LogoPart from "@/components/partials/LogoPart.vue";
+    import { Button } from "@/components/ui/button";
 
     import { onBeforeMount, ref, computed } from "vue";
     import { useStore } from "vuex";
@@ -186,7 +187,7 @@
     const priceTotal = computed(() => {
         return calculatePriceTotal(store.getters.cartPrice);
     });
-    
+
     // Função para formatar valores monetários
     const formatCurrency = (value) => {
         return value.toLocaleString("pt-MZ", {

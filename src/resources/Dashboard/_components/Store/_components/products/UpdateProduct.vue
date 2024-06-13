@@ -277,6 +277,7 @@
     import { ref, onMounted, computed, } from "vue";
     import Editor from "@tinymce/tinymce-vue";
     import { useRoute } from "vue-router";
+    import { Button } from "@/components/ui/button";
 
     const availabilityStatus = [
         { statusName: "Visível", statusValue: true },

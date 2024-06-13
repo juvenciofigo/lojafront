@@ -20,6 +20,7 @@
     import { useStore } from "vuex";
     import { ref } from "vue";
     import { useRoute } from "vue-router";
+    import { Button } from "@/components/ui/button";
     
     const store = useStore();
     const route = useRoute();
