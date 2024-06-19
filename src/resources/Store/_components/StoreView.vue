@@ -3,8 +3,8 @@
         <div class="banner max-h-[430px] p-2 bg-slate-100 flex flex-row gap-24">
             <div
                 v-if="categories && categories.length > 0"
-                class="hidden lg:text-base lg:inline-flex flex-col w-72 rounded-lg ml-10 bg-white pb-1">
-                <p class="bg-yellow-300 p-2 rounded-t-lg font-semibold">Categorias</p>
+                class="categories-card hidden lg:text-base lg:inline-flex flex-col w-72 rounded-lg ml-5 bg-white pb-1">
+                <p class="bg-yellow-300 p-2 rounded-t-lg font-semibold ">Categorias</p>
 
                 <div class="categories-list indent-4 overflow-auto">
                     <ul class="list-none">
@@ -67,6 +67,8 @@
                     </ul>
                 </div>
             </div>
+
+            <!-- end categories-card -->
 
             <div
                 v-if="banners && banners.length > 0"
@@ -131,6 +133,6 @@
     }
 
     onMounted(() => {
-        store.dispatch("getProducts");
+        store.dispatch("getAllProducts");
     });
 </script>

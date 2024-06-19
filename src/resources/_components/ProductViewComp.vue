@@ -1,10 +1,10 @@
 <template>
-    <div class="products grid grid-cols-1 sm:grid-cols-2 md:flex-wrap md:flex gap-4 p-4 w-full justify-center justify-items-center">
+    <div class="products grid grid-cols-1 sm:grid-cols-2 md:flex-wrap md:flex gap-4 p-4 w-full justify-center justify-items-center ">
         <router-link
             v-for="product in products"
             :key="product._id"
             :to="{ name: RouterName, params: { id: `${product._id}` } }"
-            class="border h-[180px] max-w-[387px] md:w-[250px] md:h-[360px] w-full flex md:!flex-col flex-row">
+            class="shadow-md rounded-md duration-200 hover:-translate-x-1 hover:-translate-y-1 h-[180px] max-w-[387px] md:w-[250px] md:h-[360px] w-full flex md:!flex-col flex-row bg-white p-2">
             <div class="image flex justify-center w-full">
                 <v-img
                     v-if="product.productImage && product.productImage.length > 0"

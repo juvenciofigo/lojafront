@@ -17,7 +17,7 @@ function headers() {
 
 const user = JSON.parse(localStorage.getItem("userData"));
 
-async function sendAxio(method, url, data = null, headers = null) {
+async function sendAxio(method, url, data = null, headers = null, params = null) {
     try {
         const res = await axios.request({
             method: method,
@@ -25,6 +25,7 @@ async function sendAxio(method, url, data = null, headers = null) {
             url: url,
             data: data,
             headers: headers,
+            params: params,
         });
 
         return res;
@@ -38,10 +39,12 @@ export default createStore({
     namespaced: true,
     state: {
         /// Loja
-        storeName: "Shop",
+        storeName: process.env.VUE_APP_STORE_NAME,
         // users
+        userDetails: null,
         tring: 0,
         dashboard: "dashboard",
+
         /// products
         product: {},
         products: [],
@@ -81,10 +84,13 @@ export default createStore({
         payment: false,
         loginOverlay: false,
         registerOverlay: false,
+        // statistic
+        dataStatistic: {},
     },
 
     getters: {
         ///user
+        userDetails: (state) => state.userDetails,
         isAuthenticated: () => (cookieName) => {
             return cookieExists(cookieName);
         },
@@ -121,6 +127,10 @@ export default createStore({
     },
 
     mutations: {
+        // users
+        DETAILS_USER(state, data) {
+            state.userDetails = data;
+        },
         updateSnackbar(state, payload) {
             state.snackbar = payload.show;
             state.snackbarText = payload.text;
@@ -229,6 +239,10 @@ export default createStore({
         // categories
         SET_CATEGORIES(state, payload) {
             state.categories = payload;
+        },
+        // statistic
+        SET_DATA_STATISTIC(state, data) {
+            state.dataStatistic = data;
         },
     },
 
@@ -455,10 +469,9 @@ export default createStore({
                     method: "get",
                     baseURL: config.apiURL,
                     url: "/orders/admin",
-                    params: { offset: payload },
+                    params: { offset: payload.offset },
                     headers: headers(),
                 });
-                console.log(res);
                 const orders = res.data.orders;
                 commit("SET_ORDERS", { ...orders });
             } catch (error) {
@@ -505,6 +518,40 @@ export default createStore({
                 errorMessage(error);
             }
         },
+
+        /**
+         Estatistica
+         */
+        async estatistic({ commit }) {
+            try {
+                const res = await sendAxio("get", `/estatistic`, null, headers());
+                if (res.status === 200) return res.data;
+                commit();
+            } catch (error) {
+                errorMessage(error);
+            }
+        },
+
+        async recentOrders({ commit }) {
+            try {
+                const res = await sendAxio("get", `/orders/admin`, null, headers(), { sortType: "createAt-descending", limit: 10 });
+                if (res.status === 200) return res.data.orders.docs;
+                commit();
+            } catch (error) {
+                errorMessage(error);
+            }
+        },
+
+        async DataByMonth({ commit }) {
+            try {
+                const res = await sendAxio("get", `/DataByMonth`, null, headers());
+                if (res.status === 200) commit("SET_DATA_STATISTIC", res.data);
+                return;
+            } catch (error) {
+                errorMessage(error);
+            }
+        },
+
         /////////////////////////////////////////////////////////////////////////////////////////////////////
 
         /*/////////////////// Cliente /////////////////////*/
@@ -534,9 +581,7 @@ export default createStore({
                     method: "get",
                     baseURL: config.apiURL,
                     url: "products",
-                    params: {
-                        ...payload,
-                    },
+                    params: { ...payload },
                 });
 
                 if (res.data) {
@@ -548,7 +593,8 @@ export default createStore({
             }
         },
 
-        async getProducts({ commit }, payload) {
+        async searchProducts({ commit }, payload) {
+            console.log(payload);
             try {
                 const res = await axios.request({
                     method: "get",
@@ -880,6 +926,7 @@ export default createStore({
                         lastName: auth.lastName,
                         email: auth.email,
                         id: auth._id,
+                        profilePhoto: auth.profilePhoto,
                     })
                 );
 
@@ -921,19 +968,28 @@ export default createStore({
                 commit("updateSnackbar", { show: false, text: "", color: "" });
 
                 window.location.reload();
+                return;
             } catch (error) {
                 errorMessage(error);
             }
         },
 
-        async getUser({ commit }, payload) {
+        async mySelfUserDetails({ commit }, payload) {
             try {
                 const res = await sendAxio("get", `user/${payload}`, null, headers());
-                if (res.status === 200) commit("updateSnackbar", { show: false, text: "", color: "" });
+
+                if (res.status === 200) {
+                    commit("DETAILS_USER", res.data);
+                    return;
+                }
             } catch (error) {
                 errorMessage(error);
             }
         },
+
+        /*
+        /// addresses
+        */
 
         async addresses({ commit }) {
             const user = JSON.parse(localStorage.getItem("userData"));
@@ -943,6 +999,7 @@ export default createStore({
 
                 if (res.status === 200) {
                     commit("SET_ADDRESSES", res.data);
+                    return;
                 }
             } catch (error) {
                 errorMessage(error);
@@ -967,7 +1024,7 @@ export default createStore({
         },
 
         /*
-          Payment Cliente
+         Cliente
         */
 
         async mpesapay({ commit, state }, payload) {

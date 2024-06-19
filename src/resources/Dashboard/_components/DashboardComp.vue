@@ -1,56 +1,70 @@
 <template lang="">
-    <div class="flex flex-row justify-center flex-wrap gap-3">
-        <div class="h-[60px] min-w-[120px] max-w-[190px] rounded-md p-4 flex flex-1 bg-white">
-            <div class="flex-1">
-                <p class="text-xs">USUÁRIOS</p>
-                <p>Valor</p>
+    <div class="flex flex-col">
+        <div class="flex flex-col md:flex-row w-full justify-center md:flex-nowrap gap-4">
+            <div class="flex flex-col lg:ml-7 justify-around">
+                <CardDashboard
+                    class="Usuários "
+                    :nameCard="`Usuários`"
+                    :result="results.usersCount"
+                    :percent="`10%`">
+                    <template #icon>
+                        <Users class="w-[40px] h-[40px] text-blue-400" />
+                    </template>
+                </CardDashboard>
+                <!--end Users -->
+                <CardDashboard
+                    class="Ordes"
+                    :nameCard="`Pedidos`"
+                    :result="results.ordersCount"
+                    :link="`allOrders`"
+                    :percent="`10%`">
+                    <template #icon>
+                        <HandCoins class="w-[40px] h-[40px] text-blue-400" />
+                    </template>
+                </CardDashboard>
+                <!--end Orders -->
+                <CardDashboard
+                    class="Customers"
+                    :nameCard="`Clientes`"
+                    :result="results.customersCount"
+                    :link="`allCustomers`"
+                    :percent="`10%`">
+                    <template #icon>
+                        <HandCoins class="w-[40px] h-[40px] text-blue-400" />
+                    </template>
+                </CardDashboard>
+                <!--end Customers -->
             </div>
-            <div class="flex items-center">
-                <Users class="w-[40px] h-[40px] text-slate-300" />
+            <div class="flex-1 bg-white p-2 rounded-md">
+                <ChartComp />
             </div>
         </div>
-        <div class="h-[60px] min-w-[120px] max-w-[190px] rounded-md p-4 flex flex-1 bg-white">
-            <div class="flex-1">
-                <p class="text-xs">VALOR</p>
-                <p>Valor</p>
-            </div>
-            <div class="flex items-center">
-                <HandCoins class="w-[40px] h-[40px] text-slate-300" />
-            </div>
-        </div>
-        <div class="h-[60px] min-w-[120px] max-w-[190px] rounded-md p-4 flex flex-1 bg-white">
-            <div class="flex-1">
-                <p class="text-xs">PEDIDOS</p>
-                <p>Valor</p>
-            </div>
-            <div class="flex items-center">
-                <TrendingUp class="w-[40px] h-[40px] text-slate-300" />
-            </div>
-        </div>
-        <div class="h-[60px] min-w-[120px] max-w-[190px] rounded-md p-4 flex flex-1 bg-white">
-            <div class="flex-1">
-                <p class="text-xs">TICKETS</p>
-                <p>Valor</p>
-            </div>
-            <div class="flex items-center">
-                <Ticket class="w-[40px] h-[40px] text-slate-300" />
-            </div>
-        </div>
+        <!-- end Chart -->
+
+        <!-- end Recent Orders -->
     </div>
 </template>
-<script>
-    import { HandCoins } from "lucide-vue-next";
-    import { TrendingUp } from "lucide-vue-next";
-    import { Ticket } from "lucide-vue-next";
-    import { Users } from "lucide-vue-next";
+<script setup>
+    import { ref, onBeforeMount } from "vue";
+    import { useStore } from "vuex";
+    import { Users, HandCoins } from "lucide-vue-next";
+    import CardDashboard from "@/resources/Dashboard/_components/Store/_components/_partials/CardDashboard.vue";
+    import ChartComp from "@/resources/Dashboard/_components/Store/_components/_partials/ChartComp.vue";
 
-    export default {
-        components: {
-            Users,
-            HandCoins,
-            TrendingUp,
-            Ticket,
-        },
-    };
+    const store = useStore();
+    const results = ref({});
+    const recentOrders = ref([]);
+
+    store.dispatch("estatistic").then((data) => {
+        results.value = data;
+    });
+
+    store.dispatch("recentOrders").then((data) => {
+        recentOrders.value = data;
+    });
+    onBeforeMount(async () => {
+        await store.dispatch("DataByMonth");
+    });
 </script>
-<style lang=""></style>
+
+<style scoped></style>

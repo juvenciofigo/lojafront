@@ -1,9 +1,8 @@
 <template>
   <div class="flex flex-col h-full">
           <HeaderPart />
-          <hr />
           <router-view ></router-view>
-          <SignaturePart class="p-6 text-start md:text-end" />
+          <SignaturePart class="p-2" />
   </div>
 </template>
 

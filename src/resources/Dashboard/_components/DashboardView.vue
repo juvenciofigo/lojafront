@@ -1,75 +1,61 @@
 <template lang="">
-    <div class="flex flex-row h-full">
-        <div class="lg:hidden">
+    <div class="flex flex-row h-full gap-2 bg-slate-100 p-2 lg:pl-3 lg:pt-2">
+        <div class="navigation lg:hidden">
             <v-navigation-drawer
                 v-model="drawer"
                 temporary
                 touchless>
-                <v-divider></v-divider>
-                <v-list
-                    v-for="(item, index) in items"
-                    :key="index">
-                    <div class="pl-4">
-                        <router-link
-                            active-class=" pl-4"
-                            class="h-[35px] flex flex-row items-center"
-                            :to="{ name: item.link }">
-                            <span>{{ item.name }}</span>
-                        </router-link>
-                    </div>
-                </v-list>
-                <hr />
-                <v-divider></v-divider>
+                <div class="flex flex-col px-2 gap-2 mt-2">
+                    <router-link
+                        exact-active-class="bg-yellow-300 pl-5"
+                        class="pl-3 hover:bg-yellow-300 duration-200"
+                        v-for="(item, index) in items"
+                        :key="index"
+                        :to="{ name: item.link }">
+                        <span class="whitespace-nowrap">{{ item.name }}</span>
+                    </router-link>
+                </div>
             </v-navigation-drawer>
         </div>
+        <!-- end navigation -->
 
-        <div class="w-64 flex-col hidden lg:flex">
-            <LogoPart />
+        <div class="menu w-64 flex-col hidden lg:flex gap-2 rounded-md">
+            <div class="bg-white py-4 rounded-md">
+                <LogoPart class="" />
+            </div>
 
-            <Separator class="mt-7" />
-            <div class="flex flex-col px-3 mt-2">
-                <p class="text-xs">Menu</p>
-                <div class="flex flex-col px-3 gap-2 mt-2">
+            <div class="flex flex-col px-3 mt-2 flex-1 bg-white">
+                <p class="text-xs text-muted-foreground">Menu</p>
+                <div class="flex flex-col px-2 gap-2 mt-2">
                     <router-link
-                        exact-active-class="border-2"
-                        :to="{ name: `dashboard` }"
-                        class="flex flex-row items-center">
-                        <LayoutDashboard class="w-4 h-4 mr-2" />
-                        Dahsboard
+                        exact-active-class="bg-yellow-300 pl-5"
+                        class="pl-3 hover:bg-yellow-300 duration-200"
+                        v-for="(item, index) in items"
+                        :key="index"
+                        :to="{ name: item.link }">
+                        <span class="whitespace-nowrap">{{ item.name }}</span>
                     </router-link>
-                    <hr />
-                    <div class="flex flex-col">
-                        <div class="flex mb-4 flex-row items-center">
-                            <FolderKanban class="w-4 h-4 mr-2" />
-                            <span>Loja</span>
-                        </div>
-
-                        <div class="ml-2 flex flex-col gap-3">
-                            <router-link
-                                active-class=" pl-4"
-                                v-for="(item, index) in items"
-                                :key="index"
-                                :to="{ name: item.link }">
-                                <span>{{ item.name }}</span>
-                            </router-link>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
+        <!-- end menu -->
 
-        <Separator
-            orientation="vertical"
-            class="mt-7 w-[2px] self-end" />
+        <div class="view flex-1 flex flex-col gap-2">
+            <div class="header h-[50px] rounded-md bg-white flex-row flex justify-between items-center px-4">
+                <div class="flex flex-col lg:items-center lg:justify-center">
+                    <Menu
+                        class="h-7.5 w-7.5 lg:hidden"
+                        @click.stop="drawer = !drawer" />
 
-        <div class="flex-1 flex flex-col gap-[2px] bg-slate-100">
-            <div class="h-[50px] bg-white flex-row flex justify-between items-center px-4">
-                <div
-                    @click.stop="drawer = !drawer"
-                    class="">
-                    <Menu class="h-7.5 w-7.5" />
-                    <div></div>
+                    <div class="route flex items-center lg:px-5 text-xs lg:text-sm text-muted-foreground">
+                        <template
+                            v-for="(route, index) in breadcrumb"
+                            :key="index">
+                            <span class="capitalize"> {{ route }} > </span>
+                        </template>
+                    </div>
                 </div>
+
                 <div class="flex flex-row items-end gap-1">
                     <p>{{ user.firstName.split(" ")[0] }}</p>
                     <Avatar>
@@ -86,17 +72,11 @@
                     </button>
                 </div>
             </div>
-
-            <div class="route h-[47px] pb-2 flex items-center px-5 bg-white">
-                <template
-                    v-for="(route, index) in breadcrumb"
-                    :key="index">
-                    <span class="text-blue-500 capitalize"> {{ route }} > </span>
-                </template>
-            </div>
-
+            <!-- end header -->
             <router-view></router-view>
+            
         </div>
+        <!-- end view -->
     </div>
 </template>
 
@@ -110,7 +90,6 @@
     import { Menu } from "lucide-vue-next";
     import { LogOut } from "lucide-vue-next";
     import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-    import { Separator } from "@/components/ui/separator";
 
     const store = useStore();
     const router = useRouter();
@@ -118,6 +97,7 @@
     const drawer = ref(false);
 
     const items = [
+        { name: "Dahsboard", link: "dashboard" },
         { name: "Produtos", link: "produtos" },
         { name: "Pedidos", link: "allOrders" },
         { name: "Clientes", link: "allCustomers" },

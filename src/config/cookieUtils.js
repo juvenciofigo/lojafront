@@ -36,6 +36,7 @@ const cookieExists = (name) => {
 };
 
 function errorMessage(error) {
+    console.log(error);
     if (error.message === "Network Error") {
         store.commit("updateSnackbar", { show: true, text: "Servidor fora do ar!", color: "red" });
         console.error(error);

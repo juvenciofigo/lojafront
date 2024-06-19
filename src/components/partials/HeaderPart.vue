@@ -1,87 +1,85 @@
 <template lang="">
-    <div class="lg:px-8">
-        <div class="h-[50px] flex flex-row justify-between items-center border-b-[1px]">
-            <div>
-                <p class="text-xs text-center hidden lg:block">Bem-vindo ao {{ storeName }}.</p>
-                <div class="lg:hidden flex flex-row">
-                    <Button
-                        @click.stop="drawer = !drawer"
-                        variant="gost">
-                        <Menu class="h-7.5 w-7.5" />
-                    </Button>
-                    <LogoPart />
-                </div>
+    <div class="flex flex-col">
+        <v-navigation-drawer
+            v-model="drawer"
+            temporary
+            touchless>
+            <v-divider></v-divider>
+
+            <v-list>
+                <v-list-item
+                    class="login/logout cursor-pointer"
+                    v-if="isAuthenticated === false"
+                    @click="login()">
+                    <div class="flex flex-row items-center gap-2 h-max">
+                        <LogIn class="w-4 h-4" />
+                        <span class="lg:inline text-[15px] font-normal">Entrar</span>
+                    </div>
+                </v-list-item>
+
+                <v-list-item
+                    class="login/logout"
+                    v-else>
+                    <v-list class="flex flex-col gap-2 h-max">
+                        <router-link
+                            v-if="user"
+                            class="cursor-pointer"
+                            :to="{ name: `profile`, params: { user: user.id } }">
+                            <div class="flex flex-row justify-between">
+                                <span>{{ user.firstName.split(" ")[0] }} {{ user.lastName.split(" ")[0] }} </span>
+                                <span class="text-muted-foreground text-xs">Ver perfil</span>
+                            </div>
+                        </router-link>
+                        <p
+                            class="flex flex-row items-center h-3 text-red-400 cursor-pointer"
+                            @click="store.dispatch('logout', router)">
+                            <span class="block text-[px] font-normal">Sair</span>
+                            <LogOut class="h-full" />
+                        </p>
+                    </v-list>
+                </v-list-item>
+
+                <v-list-item
+                    class="orders cursor-pointer"
+                    v-if="isAuthenticated === true">
+                    <router-link to="/">Meus pedidos</router-link>
+                </v-list-item>
+            </v-list>
+            <hr />
+            <v-list-item title="Categorias"></v-list-item>
+
+            <v-divider></v-divider>
+
+            <v-list density="compact">
+                <v-list-item
+                    @click="filterProduct()"
+                    title="Todos Produtos">
+                </v-list-item>
+                <v-list-item
+                    v-for="category in categories"
+                    :key="category._id"
+                    @click="filterProduct(category._id)"
+                    :title="category.categoryName"
+                    :value="category._id">
+                </v-list-item>
+            </v-list>
+        </v-navigation-drawer>
+
+        <div class="header-1 h-[50px] flex flex-row justify-between items-center p-1 lg:p-7 bg-white">
+            <p class="text-xs text-center hidden lg:block">Bem-vindo ao {{ storeName }}.</p>
+            <div class="lg:hidden flex flex-row">
+                <Button
+                    @click.stop="drawer = !drawer"
+                    variant="gost">
+                    <Menu class="h-7.5 w-7.5" />
+                </Button>
+                <LogoPart />
             </div>
-
-            <v-navigation-drawer
-                v-model="drawer"
-                temporary
-                touchless>
-                <v-divider></v-divider>
-
-                <v-list>
-                    <v-list-item
-                        class="login/logout cursor-pointer"
-                        v-if="isAuthenticated === false"
-                        @click="login()">
-                        <div class="flex flex-row items-center gap-2 h-max">
-                            <LogIn class="w-4 h-4" />
-                            <span class="lg:inline text-[15px] font-normal">Entrar</span>
-                        </div>
-                    </v-list-item>
-
-                    <v-list-item
-                        class="login/logout"
-                        v-else>
-                        <v-list class="flex flex-col gap-2 h-max">
-                            <router-link
-                                v-if="user"
-                                class="cursor-pointer"
-                                :to="{ name: `profile`, params: { user: user.id } }">
-                                <div class="flex flex-row justify-between">
-                                    <span>{{ user.firstName.split(" ")[0] }} {{ user.lastName.split(" ")[0] }} </span>
-                                    <span class="text-muted-foreground text-xs">Ver perfil</span>
-                                </div>
-                            </router-link>
-                            <p
-                                class="flex flex-row items-center h-3 text-red-400 cursor-pointer"
-                                @click="store.dispatch('logout', router)">
-                                <span class="block text-[px] font-normal">Sair</span>
-                                <LogOut class="h-full" />
-                            </p>
-                        </v-list>
-                    </v-list-item>
-
-                    <v-list-item
-                        class="orders cursor-pointer"
-                        v-if="isAuthenticated === true">
-                        <router-link to="/">Meus pedidos</router-link>
-                    </v-list-item>
-                </v-list>
-                <hr />
-                <v-list-item title="Categorias"></v-list-item>
-
-                <v-divider></v-divider>
-
-                <v-list density="compact">
-                    <v-list-item
-                        @click="filterProduct()"
-                        title="Todos Produtos">
-                    </v-list-item>
-                    <v-list-item
-                        v-for="category in categories"
-                        :key="category._id"
-                        @click="filterProduct(category._id)"
-                        :title="category.categoryName"
-                        :value="category._id">
-                    </v-list-item>
-                </v-list>
-            </v-navigation-drawer>
 
             <div class="items-center flex flex-row">
                 <router-link
                     to="/carrinho"
-                    class="flex flex-row items-center gap-2 h-max w-max mx-[15px]">
+                    class="hover:after:bg-red-500 flex flex-row items-center gap-2 h-max w-max mx-[15px]">
                     <span class="text-xs md:text-base">{{ formatCurrency(priceTotal) }} </span>
                     <Button
                         variant="Ghost"
@@ -92,20 +90,6 @@
                             style="width: 25px; height: 25px">
                         </lord-icon>
                     </Button>
-
-                    <span class="hidden lg:inline text-[15px] font-normal">Carrinho</span>
-                </router-link>
-
-                <Separator
-                    orientation="vertical"
-                    class="h-[25px]"
-                    decotarive />
-                <router-link
-                    to=""
-                    class="flex flex-row items-center gap-2 h-max w-max mx-[15px]">
-                    <Book class="w-4 h-4" />
-
-                    <span class="hidden lg:inline text-[15px] font-normal">Sobre nós</span>
                 </router-link>
 
                 <div class="flex">
@@ -116,12 +100,12 @@
                             <button
                                 color="indigo"
                                 v-bind="props">
-                                <div class="hidden lg:flex flex-row justify-center items-end gap-1 cursor-pointer">
+                                <div class="hidden group lg:flex flex-row justify-center items-end gap-1 cursor-pointer">
                                     <User />
                                     <p v-if="isAuthenticated === true">
                                         <span>{{ user.firstName.split(" ")[0] }} {{ user.lastName.split(" ")[0] }}</span>
                                     </p>
-                                    <ChevronDown class="hover:rotate-180 duration-300" />
+                                    <ChevronDown class="group-hover:rotate-180 duration-300" />
                                 </div>
                             </button>
                         </template>
@@ -170,10 +154,15 @@
                 </div>
             </div>
         </div>
-
-        <div class="lg:h-[100px] h-[50px] flex flex-row gap-4 items-center">
-            <div class="px-3 h-max lg:flex flex-row items-center hidden">
-                <LogoPart />
+        <!-- end header-1 -->
+        <Separator
+            orientation="horizontal"
+            class="bg-yellow-300"
+            decotarive />
+        <!-- star header-2 -->
+        <div class="header-2 lg:h-[100px] h-[50px] flex flex-row gap-4 items-center bg-white">
+            <div class="py-2 px-3 lg:block rounded-md hidden">
+                <LogoPart class="" />
             </div>
 
             <div class="search flex-1 flex flex-row md:gap-[10%] justify-end">
@@ -239,6 +228,11 @@
                 </div>
             </div>
         </div>
+        <Separator
+            orientation="horizontal"
+            class="bg-yellow-300"
+            decotarive />
+        <!-- end header-2 -->
     </div>
 </template>
 <script setup>
@@ -246,11 +240,11 @@
     import { useStore } from "vuex";
     import { useRouter } from "vue-router";
 
-    import { Search, Check, LogIn, Book, LogOut, ChevronDown, ChevronUp, Menu, User } from "lucide-vue-next";
+    import { Search, Check, LogIn, LogOut, ChevronDown, ChevronUp, Menu, User } from "lucide-vue-next";
+    import { Separator } from "@/components/ui/separator";
     import { Button } from "@/components/ui/button";
 
     import { Input } from "@/components/ui/input";
-    import { Separator } from "@/components/ui/separator";
 
     const drawer = ref(false);
 
@@ -307,7 +301,6 @@
     };
 
     const user = computed(() => JSON.parse(localStorage.getItem("userData")));
-    console.log(process.env.VUE_APP_API_URL);
     onMounted(async () => {
         await store.dispatch("displayTempCartPrices", isAuthenticated.value);
         await store.dispatch("getAllCategory");

@@ -18,7 +18,11 @@
             </div>
         </div>
         <div class="text-center mb-2">
-            <v-btn @click="confirmePayment">Pagar</v-btn>
+            <v-btn
+                :loading="loading"
+                @click="confirmePayment"
+                >Pagar</v-btn
+            >
         </div>
         <v-dialog
             v-model="errorDialog"
@@ -29,7 +33,7 @@
                 <v-card-actions>
                     <v-btn
                         color="primary"
-                        @click="errorDialog = false"
+                        @click="(errorDialog = false), (loading = false)"
                         >OK</v-btn
                     >
                 </v-card-actions>
@@ -46,8 +50,9 @@
     const total = computed(() => store.getters.amoutPayment);
     const errorDialog = ref(false);
     const errorMessage = ref("");
-
+    const loading = ref(false);
     async function confirmePayment() {
+        loading.value = true;
         if (!number.value) {
             errorMessage.value = "Por favor, digite o número Mpesa.";
             errorDialog.value = true;
@@ -59,7 +64,8 @@
             return;
         }
 
-        await store.dispatch("mpesapay", { client_number: `258${number.value}` });
+        const res = await store.dispatch("mpesapay", { client_number: `258${number.value}` });
+        if (res === false) loading.value = false;
     }
 
     const formatCurrency = (value) => {

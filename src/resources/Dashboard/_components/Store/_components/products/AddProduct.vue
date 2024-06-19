@@ -7,21 +7,22 @@
 
         <div>
             <form @submit.prevent="addProduct">
-                <div class="flex flex-row gap-8">
-                    <div class="Right flex-[2] flex flex-col gap-8">
+                <div class="flex flex-col md:flex-row gap-8">
+                    <div class="Left flex-[2] flex flex-col gap-8 bg-blue-500 p-2 md:p-4 rounded-md">
                         <div class="TIT_Desc">
                             <div class="Tit-Des flex flex-col gap-4">
                                 <div class="flex flex-col gap-2">
                                     <Label><span class="text-red-500">*</span> Título:</Label>
                                     <v-text-field
                                         type="text"
+                                        color="primary"
                                         placeholder="Digite o título do produto"
-                                        v-model="productName"
                                         density="compact"
                                         flat
                                         clearable
                                         hint="Digite o título do produto"
-                                        variant="outlined"></v-text-field>
+                                        variant="outlined">
+                                    </v-text-field>
                                 </div>
                                 <div class="descr">
                                     <Label><span class="text-red-500">*</span> Descriçao:</Label>
@@ -35,13 +36,14 @@
                                                 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat',
                                         }"
                                         placeholder="Faça uma descrição do produto"
-                                        v-model="productDescription" />
+                                        v-model="productDescription"
+                                        value="productDescription" />
                                 </div>
                             </div>
                         </div>
                         <div class="images flex flex-col gap-4">
                             <Label><span class="text-red-500">* </span>Adicione imagens do produto:</Label>
-                            <!-- <v-file-input
+                            <v-file-input
                                 @change="previewImages"
                                 :clearable="false"
                                 prepend-icon=""
@@ -49,7 +51,8 @@
                                 multiple
                                 :v-model="productImage"
                                 label="Clique ou arraste as imagens para aqui"
-                                variant="solo-filled"></v-file-input> -->
+                                variant="solo-filled">
+                            </v-file-input>
 
                             <div
                                 v-if="productImage && productImage.length > 0"
@@ -131,7 +134,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="Left flex-1">
+                    <div class="Right flex-1 bg-blue-500 p-2 md:p-4 rounded-md">
                         <div class="Pub-Cat">
                             <div class="flex flex-col gap-2">
                                 <Label><span class="text-red-500">* </span>Publicar</Label>
@@ -427,39 +430,60 @@
     const categories = computed(() => store.state.categories);
 
     // Função para pré-visualizar as imagens
-    // function previewImages(event) {
-    //     const files = event.target.files;
-    //     for (let i = 0; i < files.length; i++) {
-    //         const reader = new FileReader();
 
-    //         reader.onload = (e) => {
-    //             productImage.value.push({
-    //                 url: e.target.result,
-    //                 file: files[i],
-    //             });
-    //         };
-    //         reader.readAsDataURL(files[i]);
-    //     }
-    // }
+    function previewImages(event) {
+        const files = event.target.files;
+        for (let i = 0; i < files.length; i++) {
+            const reader = new FileReader();
+
+            reader.onload = (e) => {
+                productImage.value.push({
+                    url: e.target.result,
+                    file: files[i],
+                });
+            };
+            reader.readAsDataURL(files[i]);
+        }
+    }
 
     // Função para remover uma imagem da pré-visualização
     function removeImage(index) {
         productImage.value.splice(index, 1);
     }
     async function addProduct() {
-        if (
-            !productName.value ||
-            !productDescription.value ||
-            !productAvailability.value ||
-            !productPrice.value ||
-            !productStock.value ||
-            productCategory.value <= 0 ||
-            !sku.value ||
-            !productVendor.value
-        ) {
-            store.commit("updateSnackbar", { show: true, text: "Preencha todos os campos", color: "red" });
+        if (!productDescription.value) {
+            store.commit("updateSnackbar", { show: true, text: "Preencha todos o campo descrição!", color: "red" });
             return;
         }
+        if (!productVendor.value) {
+            store.commit("updateSnackbar", { show: true, text: "Preencha todos o campo fornecedor!", color: "red" });
+            return;
+        }
+        if (!productName.value) {
+            store.commit("updateSnackbar", { show: true, text: "Preencha todos o campo título!", color: "red" });
+            return;
+        }
+        if (!productAvailability.value) {
+            store.commit("updateSnackbar", { show: true, text: "Preencha todos o disponibilidade!", color: "red" });
+            return;
+        }
+        if (!productPrice.value) {
+            store.commit("updateSnackbar", { show: true, text: "Preencha todos o preço!", color: "red" });
+            return;
+        }
+        if (!productStock.value) {
+            store.commit("updateSnackbar", { show: true, text: "Preencha todos o caampo stock!", color: "red" });
+            return;
+        }
+        if (productCategory.value <= 0) {
+            store.commit("updateSnackbar", { show: true, text: "Preencha todos o campo categoria", color: "red" });
+            return;
+        }
+        if (!sku.value) {
+            store.commit("updateSnackbar", { show: true, text: "Preencha todos o campo sku!", color: "red" });
+            return;
+        }
+
         try {
             await store.dispatch("addProduct", {
                 productName: productName.value,
@@ -488,3 +512,9 @@
         store.dispatch("getAllCategoryAdmin");
     });
 </script>
+<style>
+    .v-input__control {
+        background-color: white;
+        border-radius: 4px;
+    }
+</style>

@@ -3,21 +3,15 @@ import store from "@/store/index";
 
 const routes = [
     {
-        path: "/home",
-        name: "homepage",
-        redirect: { name: "home" },
-    },
-    {
         path: "/",
         name: "home",
+        redirect: { name: "store" },
         component: () => import("../views/HomeView.vue"),
         children: [
-            /*
-                STORE
-                        */
+            //////// STORE ///////////
             {
                 path: "",
-                name: "home",
+                name: "store",
                 component: () => import("@/resources/Store/_components/StoreView.vue"),
             },
             /*
@@ -31,17 +25,16 @@ const routes = [
             },
             {
                 // all products
-                path: "/produtos",
+                path: "produtos",
                 name: "allProductsClient",
                 component: () => import("@/resources/Store/_components/Store/_components/products/AllProducts.vue"),
             },
-            /*
 
             /*
             Pedidos
             */
             {
-                path: "/pedido",
+                path: "pedido",
                 name: "makeOrder",
                 component: () => import("@/resources/Store/_components/Store/_components/orders/MakeOrder.vue"),
                 meta: { requiresLogin: true },
@@ -51,7 +44,7 @@ const routes = [
             Carrinhos
             */
             {
-                path: "/carrinho",
+                path: "carrinho",
                 name: "cart",
                 component: () => import("@/resources/Store/_components/Store/_components/carts/CartProducts.vue"),
             },
@@ -62,13 +55,14 @@ const routes = [
         path: "/perfil/:user",
         name: "profile",
         redirect: { name: "myProfile" },
-        component: () => import("@/resources/_components/ProfileComp.vue"),
+        component: () => import("@/resources/_components/profile/ProfileComp.vue"),
         meta: { requiresLogin: true },
+        props: { defaultProp: "defaultValue" },
         children: [
             {
                 path: "",
                 name: "myProfile",
-                component: () => import("@/resources/_components/MyProfile.vue"),
+                component: () => import("@/resources/_components/profile/MyProfile.vue"),
             },
             /*
              Compras
@@ -153,17 +147,11 @@ const routes = [
             /*
             Pedidos
             */
+
             {
                 path: "pedidos",
-                name: "pedidos",
-                component: () => import("@/resources/Dashboard/_components/Store/_components/OrdersComp.vue"),
-                children: [
-                    {
-                        path: "",
-                        name: "allOrders",
-                        component: () => import("@/resources/Dashboard/_components/Store/_components/orders/AllOrders.vue"),
-                    },
-                ],
+                name: "allOrders",
+                component: () => import("@/resources/Dashboard/_components/Store/_components/orders/AllOrders.vue"),
             },
 
             /*
@@ -172,48 +160,28 @@ const routes = [
 
             {
                 path: "clientes",
-                name: "clientes",
-                component: () => import("@/resources/Dashboard/_components/Store/_components/CustomersComp.vue"),
-                children: [
-                    {
-                        path: "",
-                        name: "allCustomers",
-                        component: () => import("@/resources/Dashboard/_components/Store/_components/customers/AllCustomers.vue"),
-                    },
-                ],
+                name: "allCustomers",
+                component: () => import("@/resources/Dashboard/_components/Store/_components/customers/AllCustomers.vue"),
             },
 
             /*
             Carrinhos
             */
+
             {
                 path: "carrinhos",
-                name: "carrinhos",
-                redirect: { name: "carts" },
-                component: () => import("@/resources/Dashboard/_components/Store/_components/CartsComp.vue"),
-                children: [
-                    {
-                        path: "",
-                        name: "carts",
-                        component: () => import("@/resources/Dashboard/_components/Store/_components/CartsComp.vue"),
-                    },
-                ],
+                name: "carts",
+                component: () => import("@/resources/Dashboard/_components/Store/_components/carts/CartsComp.vue"),
             },
 
             /*
             Compras
             */
+
             {
                 path: "compras",
-                name: "compras",
-                component: () => import("@/resources/Dashboard/_components/Store/_components/ShopsComp.vue"),
-                children: [
-                    {
-                        path: "",
-                        name: "sellers",
-                        component: () => import("@/resources/Dashboard/_components/Store/_components/ShopsComp.vue"),
-                    },
-                ],
+                name: "sellers",
+                component: () => import("@/resources/Dashboard/_components/Store/_components/shopping/ShoppingComp.vue"),
             },
         ],
     },

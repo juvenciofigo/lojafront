@@ -68,7 +68,11 @@
                                                 </button>
                                             </v-card-actions>
                                             <v-card-text class="bg-[#f3f3f9] 0 p-1 overflow-x-hidden">
-                                                <OrdersDetails :order="order" />
+                                                <OrdersDetails :order="order">
+                                                    <template #doPay>
+                                                        <slot name="doPay"></slot>
+                                                    </template>
+                                                </OrdersDetails>
                                             </v-card-text>
                                         </v-card>
                                     </template>
@@ -111,13 +115,13 @@
     import { Pen, Eye, Trash2, X } from "lucide-vue-next";
     import { Input } from "@/components/ui/input";
 
-    import OrdersDetails from "@/resources/Dashboard/_components/Store/_components/orders/OrdersDetails.vue";
+    import OrdersDetails from "@/resources/_components/OrdersDetails.vue";
 
     const store = useStore();
     const route = useRoute();
     const router = useRouter();
     const props = defineProps({
-        mutation: String,
+        storeaction: String,
         route: String,
     });
     const orders = computed(() => store.state.orders);
@@ -129,12 +133,12 @@
     onBeforeUnmount(() => {
         store.commit("CLEAR_ORDERS");
     });
-    function pageEvent(e) {
-        router.push({ name: `${props.route}`, query: { offset: `${e}` } });
+    function pageEvent(pageNumber) {
+        router.push({ name: `${props.route}`, query: { offset: `${pageNumber}` } });
     }
 
     const fetchOrders = () => {
-        store.dispatch(`${props.mutation}`, { offset: offset.value, user: route.params.user });
+        store.dispatch(`${props.storeaction}`, { offset: offset.value, user: route.params.user });
     };
 
     function formatDate(date) {

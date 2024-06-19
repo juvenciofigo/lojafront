@@ -1,5 +1,5 @@
 <template>
-    <v-app>
+    <v-app class="bg-blue-100 gradient-to-t">
         <v-main>
             <v-snackbar
                 v-model="snackbar"

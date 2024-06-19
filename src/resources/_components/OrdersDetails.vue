@@ -86,6 +86,10 @@
                                 @click="makePayment(order.payment.status, order._id, order.payment.amount)">
                                 Fazer pagamento
                             </button>
+                            <slot
+                                name="doPay"
+                                v-if="order.payment.status !== `Pago`"
+                                @click="makePayment(order.payment.status, order._id, order.payment.amount)" />
                             <button class="bg-blue-100 text-blue-500 active:text-blue-100 duration-500 active:bg-blue-500 text-xs p-1 rounded-md w-max">Mudar Endereço</button>
 
                             <button
@@ -115,6 +119,22 @@
                                         <strong class="me-4">Pedido realizado</strong>
                                         <div>
                                             <div class="text-caption mb-2">{{ formatDate(order.orderRegistration.createdAt) }}</div>
+                                        </div>
+                                    </div>
+                                </v-timeline-item>
+
+                                <v-timeline-item
+                                    hide-opposite
+                                    :dot-color="order.payment.paymentDate === `Pago` ? `teal-lighten-3` : `teal-black`"
+                                    size="small">
+                                    <div class="d-flex">
+                                        <strong class="me-4">Pagamento realizado em realizado</strong>
+                                        <div>
+                                            <div
+                                                class="text-caption mb-2"
+                                                v-if="order.payment.paymentMethod">
+                                                {{ formatDate(order.payment.createdAt) }}
+                                            </div>
                                         </div>
                                     </div>
                                 </v-timeline-item>
@@ -362,6 +382,16 @@
                         <div class=" ">
                             <h6 class="">
                                 <span v-if="order.payment.paymentMethod">{{ order.payment.number }}</span> <span v-else>{{ order.payment.status }}</span>
+                            </h6>
+                        </div>
+                    </div>
+                    <div class="flex flex-row gap-1">
+                        <div class="text-muted-foreground">
+                            <p class=" ">Referência da trasação:</p>
+                        </div>
+                        <div class=" ">
+                            <h6 class="">
+                                <span v-if="order.payment.paymentMethod">{{ order.payment.transactionId }}</span> <span v-else>{{ order.payment.status }}</span>
                             </h6>
                         </div>
                     </div>

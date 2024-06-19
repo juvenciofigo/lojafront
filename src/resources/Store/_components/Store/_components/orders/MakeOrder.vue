@@ -165,11 +165,12 @@
 
         const res = await store.dispatch("sendOrder", { selectAddress: { ...selectAddress.value }, prices: toRaw(confirmationData.value), cart: cartProducts.value, reference: gerReferenceNumeber() });
 
+        const user = JSON.parse(localStorage.getItem("userData"));
+
         if (res !== false) {
             loading.value = false;
         } else {
-            loading.value = true;
-            
+            router.push({ name: "selfOrders", params: { user: `${user.id}` } });
         }
     }
 </script>

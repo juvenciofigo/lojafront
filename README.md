@@ -24,4 +24,5 @@ npm run lint
 See [Configuration Reference](https://cli.vuejs.org/config/).
 
 *** O carrinho em um pedido, nao deve salvar os dados(produtos) antes do mesmo ser pago;
-*** Antes do pedido ser feito, verificar se na colecao de pedidos nao tem um pedido com referenceOrder idêntico;
+
+*** Resolcer o slot Fazer pagamento no compotente "OrderDetails";

@@ -1,5 +1,5 @@
 <template lang="">
-    <div class="flex flex-col h-full">
+    <div class="flex flex-col h-full bg-slate-100">
         <v-navigation-drawer
             v-model="drawer"
             temporary
@@ -7,8 +7,8 @@
             <v-list>
                 <v-list-item class="login/logout">
                     <v-list class="flex flex-col gap-2 h-max">
-                        <p v-if="user">
-                            <span class="whitespace-nowrap">{{ user.firstName.split(" ")[0] }} {{ user.lastName.split(" ")[0] }} </span>
+                        <p v-if="userDetails">
+                            <span class="whitespace-nowrap">{{ userDetails.firstName.split(" ")[0] }} {{ userDetails.lastName.split(" ")[0] }} </span>
                         </p>
                         <p
                             class="flex flex-row items-center h-3 text-red-400 cursor-pointer"
@@ -37,7 +37,7 @@
             <v-divider></v-divider>
         </v-navigation-drawer>
 
-        <div class="header h-[50px] flex flex-row justify-between items-center border-b-[1px] p-1 lg:p-7">
+        <div class="header h-[50px] flex flex-row justify-between items-center p-1 lg:p-7 bg-white">
             <p class="text-xs text-center hidden lg:block">Bem-vindo ao {{ storeName }}.</p>
             <div class="lg:hidden flex flex-row">
                 <Button
@@ -64,11 +64,6 @@
                     </Button>
                 </router-link>
 
-                <Separator
-                    orientation="vertical"
-                    class="h-[25px]"
-                    decotarive />
-
                 <div class="profile menu items-center flex">
                     <v-menu
                         compact
@@ -78,12 +73,12 @@
                             <button
                                 color="indigo"
                                 v-bind="props">
-                                <div class="hidden lg:flex flex-row justify-center items-end gap-1 cursor-pointer">
+                                <div class="hidden group lg:flex flex-row justify-center items-end gap-1 cursor-pointer">
                                     <User />
                                     <p v-if="isAuthenticated === true">
-                                        <span class="whitespace-nowrap">{{ user.firstName.split(" ")[0] }} {{ user.lastName.split(" ")[0] }}</span>
+                                        <span class="whitespace-nowrap">{{ user.firstName }} {{ user.lastName }}</span>
                                     </p>
-                                    <ChevronDown />
+                                    <ChevronDown class="group-hover:rotate-180 duration-300" />
                                 </div>
                             </button>
                         </template>
@@ -97,7 +92,7 @@
                                         <p
                                             class="lg:hidden"
                                             v-if="user">
-                                            {{ user.lastName.split(" ")[0] }}
+                                            {{ user.lastName }}
                                         </p>
                                         <span class="hidden lg:inline text-[15px] font-normal">Sair</span>
                                         <LogOut class="w-4 h-4" />
@@ -109,21 +104,23 @@
 
                     <div class="flex lg:hidden gap-1">
                         <User />
-                        <p v-if="isAuthenticated === true">
-                            <span>{{ user.firstName.split(" ")[0] }}</span> <span class="hidden md:inline">{{ user.lastName.split(" ")[0] }}</span>
+                        <p v-if="userDetails">
+                            <span>{{ userDetails.firstName }}</span> <span class="hidden md:inline">{{ userDetails.lastName }}</span>
                         </p>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- header top -->
-        <div class="menu/view flex flex-row flex-nowrap flex-1">
-            <div class="menu w-64 flex-col hidden lg:flex">
-                <LogoPart />
-                <Separator class="mt-7" />
+        <!--end header top -->
 
-                <div class="flex flex-col px-3 mt-2">
+        <div class="menu/view flex flex-row flex-nowrap flex-1 gap-4 m-4">
+            <div class="menu w-64 flex-col hidden lg:flex gap-2 rounded-md">
+                <div class="bg-white py-2 rounded-md">
+                    <LogoPart class="" />
+                </div>
+
+                <div class="flex flex-col px-3 mt-2 flex-1 bg-white">
                     <p class="text-xs text-muted-foreground">Menu</p>
                     <div class="flex flex-col px-2 gap-2 mt-2">
                         <router-link
@@ -137,17 +134,13 @@
                     </div>
                 </div>
             </div>
-            <Separator
-                orientation="vertical"
-                class="mt-7 w-[2px] self-end" />
 
-            <router-view class="w-full"></router-view>
+            <router-view class="flex-1 bg-white rounded-md"></router-view>
         </div>
         <SignaturePart />
     </div>
 </template>
 <script setup>
-    // import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
     import { LogOut, ChevronDown, Menu, User } from "lucide-vue-next";
     import SignaturePart from "@/components/partials/SignaturePart.vue";
     import { Separator } from "@/components/ui/separator";
@@ -165,6 +158,7 @@
     const drawer = ref(false);
     const isAuthenticated = computed(() => store.getters.isAuthenticated("authToken"));
     const user = computed(() => JSON.parse(localStorage.getItem("userData")));
+    const userDetails = computed(() => store.getters.userDetails);
 
     const items = [
         { name: "Visão geral", link: "profile" },
@@ -173,11 +167,11 @@
         { name: "Endereço de entrega", link: "selfAddresses" },
     ];
 
-    onBeforeMount(async () => {
+    onBeforeMount(() => {
         if (user.value.id !== route.params.user) {
             router.push({ name: `myProfile`, params: { user: user.value.id } });
         }
-        await store.dispatch("getUser", route.params.user);
+        store.dispatch("mySelfUserDetails", route.params.user);
     });
 
     const calculatePriceTotal = (cartPrices) => {

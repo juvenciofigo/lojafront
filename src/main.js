@@ -18,8 +18,6 @@ loadFonts();
 
 // icones import
 // import { UserRound,  LayoutDashboard, FolderKanban, ShoppingBasket, ListOrdered, PersonStanding, ShoppingCart, Shirt, Search, Undo2,  } from "lucide-vue-next";
-// import { LayoutDashboard } from "lucide-vue-next";
-// import { FolderKanban } from "lucide-vue-next";
 // import { ShoppingBasket } from "lucide-vue-next";
 // import { ListOrdered } from "lucide-vue-next";
 // import { PersonStanding } from "lucide-vue-next";
