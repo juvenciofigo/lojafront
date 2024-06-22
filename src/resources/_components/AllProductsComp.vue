@@ -1,6 +1,6 @@
 <template>
     <div class="flex flex-row flex-1 gap-1 m-2 rounded-md">
-        <div class="bg-white w-[274px] hidden lg:block">fdfsdf</div>
+        <div class="bg-white w-[274px] hidden xl:block">fdfsdf</div>
 
         <div class="flex-1 flex flex-col h-full">
             <div class="h-[50px] p-2 sticky bg-white justify-between flex flex-row">

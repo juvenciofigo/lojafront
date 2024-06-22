@@ -1,6 +1,6 @@
 <template>
-    <v-app class="bg-blue-100 gradient-to-t">
-        <v-main>
+    <v-app class="bg-blue-200 overflow-hidden">
+        <v-main class="overflow-hidden">
             <v-snackbar
                 v-model="snackbar"
                 :color="snackbarColor">

@@ -61,7 +61,7 @@
                                         </tr>
                                         <tr>
                                             <td>Iva</td>
-                                            <td class="">$44.99</td>
+                                            <td class="text-sm text-muted-foreground">incluso</td>
                                         </tr>
                                         <tr>
                                             <th>Total :</th>

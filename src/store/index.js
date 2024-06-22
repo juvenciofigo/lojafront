@@ -333,6 +333,25 @@ export default createStore({
             }
         },
 
+        async addVariation({ commit }, payload) {
+            try {
+                const res = await axios.request({
+                    method: "post",
+                    baseURL: config.apiURL,
+                    url: `/variation/${payload.product}`,
+                    data: payload.variation,
+                    headers: headers(),
+                });
+
+                if (res.status === 200) {
+                    return true;
+                }
+                commit;
+            } catch (error) {
+                errorMessage(error);
+            }
+        },
+
         async getAllProductsAdmin({ commit }, payload) {
             try {
                 const res = await axios.request({
@@ -360,9 +379,9 @@ export default createStore({
                     url: `/product/admin/${produtoId}`,
                     headers: headers(),
                 });
-
+                console.log(res);
                 const productDetails = res.data.product;
-                commit("productDetails", { ...productDetails });
+                commit("productDetails", productDetails);
                 return;
             } catch (error) {
                 errorMessage(error);

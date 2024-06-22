@@ -1,9 +1,9 @@
 <template lang="">
     <div class="flex flex-col">
         <div class="flex flex-col md:flex-row w-full justify-center md:flex-nowrap gap-4">
-            <div class="flex flex-col lg:ml-7 justify-around">
+            <div class="flex flex-col xl:ml-7 justify-around">
                 <CardDashboard
-                    class="Usuários "
+                    class="Usuários"
                     :nameCard="`Usuários`"
                     :result="results.usersCount"
                     :percent="`10%`">

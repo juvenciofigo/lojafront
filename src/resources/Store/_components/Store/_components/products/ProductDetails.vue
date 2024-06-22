@@ -2,8 +2,10 @@
     <ProductDetailsComp
         :firstButton="addToCart"
         :titleFirst="`Adicionar ao carinho`"
+        :styl_firstbutton="`bg-blue-400 hover:bg-blue-200 text-sm p-1 rounded-md duration-300`"
         :secondButton="buyNow"
         :titleSecond="`Comprar Agora`"
+        :styl_secondbutton="`bg-green-400 hover:bg-green-200 p-1 rounded-md duration-300`"
         @value-updated="handleValueUpdate" />
 </template>
 <script setup>

@@ -126,6 +126,12 @@ const routes = [
                 component: () => import("@/resources/Dashboard/_components/Store/_components/products/AddProduct.vue"),
             },
             {
+                // update product
+                path: "produto/:id/variacoes",
+                name: "addVariation",
+                component: () => import("@/resources/Dashboard/_components/Store/_components/products/AddVariation3.vue"),
+            },
+            {
                 // Add image
                 path: "produto/:id/fotos",
                 name: "addImage",

@@ -3,8 +3,8 @@
         <div class="banner max-h-[430px] p-2 bg-slate-100 flex flex-row gap-24">
             <div
                 v-if="categories && categories.length > 0"
-                class="categories-card hidden lg:text-base lg:inline-flex flex-col w-72 rounded-lg ml-5 bg-white pb-1">
-                <p class="bg-yellow-300 p-2 rounded-t-lg font-semibold ">Categorias</p>
+                class="categories-card hidden xl:text-base xl:inline-flex flex-col w-72 rounded-lg ml-5 bg-white pb-1">
+                <p class="bg-yellow-300 p-2 rounded-t-lg font-semibold">Categorias</p>
 
                 <div class="categories-list indent-4 overflow-auto">
                     <ul class="list-none">
@@ -78,7 +78,7 @@
                     :key="index">
                     <div class="flex flex-col flex-1 justify-center gap-2">
                         <p class="">{{ banner.title }}</p>
-                        <p class="text-lg lg:text-2xl">{{ banner.text }}</p>
+                        <p class="text-lg xl:text-2xl">{{ banner.text }}</p>
                     </div>
 
                     <div class="flex justify-center items-center min-w-[180px] max-w-[410px] flex-grow">

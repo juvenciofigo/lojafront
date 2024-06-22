@@ -1,6 +1,6 @@
 <template lang="">
-    <div class="flex flex-row h-full gap-2 bg-slate-100 p-2 lg:pl-3 lg:pt-2">
-        <div class="navigation lg:hidden">
+    <div class="flex flex-row h-full gap-2 xl:p-2">
+        <div class="navigation xl:hidden">
             <v-navigation-drawer
                 v-model="drawer"
                 temporary
@@ -19,12 +19,12 @@
         </div>
         <!-- end navigation -->
 
-        <div class="menu w-64 flex-col hidden lg:flex gap-2 rounded-md">
+        <div class="menu w-64 flex-col hidden xl:flex gap-1 rounded-md">
             <div class="bg-white py-4 rounded-md">
                 <LogoPart class="" />
             </div>
 
-            <div class="flex flex-col px-3 mt-2 flex-1 bg-white">
+            <div class="flex flex-col p-3 flex-1 bg-white rounded-md">
                 <p class="text-xs text-muted-foreground">Menu</p>
                 <div class="flex flex-col px-2 gap-2 mt-2">
                     <router-link
@@ -42,12 +42,12 @@
 
         <div class="view flex-1 flex flex-col gap-2">
             <div class="header h-[50px] rounded-md bg-white flex-row flex justify-between items-center px-4">
-                <div class="flex flex-col lg:items-center lg:justify-center">
+                <div class="flex flex-col xl:items-center xl:justify-center">
                     <Menu
-                        class="h-7.5 w-7.5 lg:hidden"
+                        class="h-7.5 w-7.5 xl:hidden"
                         @click.stop="drawer = !drawer" />
 
-                    <div class="route flex items-center lg:px-5 text-xs lg:text-sm text-muted-foreground">
+                    <div class="route flex items-center xl:px-5 text-xs xl:text-sm text-muted-foreground">
                         <template
                             v-for="(route, index) in breadcrumb"
                             :key="index">
@@ -73,8 +73,7 @@
                 </div>
             </div>
             <!-- end header -->
-            <router-view></router-view>
-            
+            <router-view class="xl:max-h-[calc(100vh-74px)] overflow-auto"></router-view>
         </div>
         <!-- end view -->
     </div>

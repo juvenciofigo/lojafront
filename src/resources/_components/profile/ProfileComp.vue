@@ -37,9 +37,9 @@
             <v-divider></v-divider>
         </v-navigation-drawer>
 
-        <div class="header h-[50px] flex flex-row justify-between items-center p-1 lg:p-7 bg-white">
-            <p class="text-xs text-center hidden lg:block">Bem-vindo ao {{ storeName }}.</p>
-            <div class="lg:hidden flex flex-row">
+        <div class="header h-[50px] flex flex-row justify-between items-center p-1 xl:p-7 bg-white">
+            <p class="text-xs text-center hidden xl:block">Bem-vindo ao {{ storeName }}.</p>
+            <div class="xl:hidden flex flex-row">
                 <Button
                     @click.stop="drawer = !drawer"
                     variant="gost">
@@ -73,7 +73,7 @@
                             <button
                                 color="indigo"
                                 v-bind="props">
-                                <div class="hidden group lg:flex flex-row justify-center items-end gap-1 cursor-pointer">
+                                <div class="hidden group xl:flex flex-row justify-center items-end gap-1 cursor-pointer">
                                     <User />
                                     <p v-if="isAuthenticated === true">
                                         <span class="whitespace-nowrap">{{ user.firstName }} {{ user.lastName }}</span>
@@ -90,11 +90,11 @@
                                     @click="store.dispatch('logout', router)">
                                     <div class="flex flex-row items-center gap-2 h-max mx-[15px]">
                                         <p
-                                            class="lg:hidden"
+                                            class="xl:hidden"
                                             v-if="user">
                                             {{ user.lastName }}
                                         </p>
-                                        <span class="hidden lg:inline text-[15px] font-normal">Sair</span>
+                                        <span class="hidden xl:inline text-[15px] font-normal">Sair</span>
                                         <LogOut class="w-4 h-4" />
                                     </div>
                                 </v-list-item>
@@ -102,7 +102,7 @@
                         </v-card>
                     </v-menu>
 
-                    <div class="flex lg:hidden gap-1">
+                    <div class="flex xl:hidden gap-1">
                         <User />
                         <p v-if="userDetails">
                             <span>{{ userDetails.firstName }}</span> <span class="hidden md:inline">{{ userDetails.lastName }}</span>
@@ -115,7 +115,7 @@
         <!--end header top -->
 
         <div class="menu/view flex flex-row flex-nowrap flex-1 gap-4 m-4">
-            <div class="menu w-64 flex-col hidden lg:flex gap-2 rounded-md">
+            <div class="menu w-64 flex-col hidden xl:flex gap-2 rounded-md">
                 <div class="bg-white py-2 rounded-md">
                     <LogoPart class="" />
                 </div>
