@@ -23,6 +23,7 @@
         @confirmar="handleConfirm" />
 </template>
 <script setup>
+
     import ProductDetailsComp from "@/resources/_components/ProductDetailsComp.vue";
     import { onBeforeMount, onBeforeUnmount, ref } from "vue";
     import { useStore } from "vuex";

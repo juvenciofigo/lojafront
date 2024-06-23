@@ -5,7 +5,7 @@
                 :cartProducts="cartProducts"
                 :TableRowHeight="'h-40'" />
         </div>
-        <div class="shadow-md py-4 border-t-4 rounded-md mt-4 text-center w-full max-w-[410px] xl:w-[410px] flex flex-col gap-6">
+        <div class="shadow-md p-4 rounded-md mt-4 text-center w-full max-w-[410px] xl:w-[410px] flex flex-col gap-6 bg-white">
             <h1>Resumo do pedido</h1>
 
             <Table>
@@ -13,19 +13,19 @@
                     <TableRow>
                         <TableCell class="h-10 items-center flex flex-row justify-between">
                             <div>Total de produtos:</div>
-                            <div>{{ formatCurrency(priceTotal) }}</div>
+                            <!-- <div>{{ formatCurrency(priceTotal) }}</div> -->
                         </TableCell>
                     </TableRow>
                     <TableRow>
                         <TableCell class="items-center h-10 flex flex-row justify-between">
-                            <div>Taxa de envio</div>
-                            <div>{{ formatCurrency(taxaEnvio) }}</div>
+                            <div>Taxa dpererre envio</div>
+                            <!-- <div>{{ formatCurrency(taxaEnvio) }}</div> -->
                         </TableCell>
                     </TableRow>
                     <TableRow>
                         <TableCell class="items-center h-10 flex flex-row justify-between">
                             <div>Total</div>
-                            <div>{{ formatCurrency(totalPedido) }}</div>
+                            <!-- <div>{{ formatCurrency(totalPedido) }}</div> -->
                         </TableCell>
                     </TableRow>
                 </TableBody>
@@ -38,6 +38,7 @@
             </Button>
         </div>
     </div>
+    <v-btn @click="console.log(cartProducts)">ver</v-btn>
 </template>
 
 <script setup>
@@ -57,9 +58,9 @@
         router.push({ name: "makeOrder", query: { productsFrom: "cartProducts" } });
     }
 
-    const calculatePriceTotal = (cartProducts) => {
-        return cartProducts.reduce((total, product) => total + product.subtotal, 0);
-    };
+    // const calculatePriceTotal = (cartProducts) => {
+    //     return cartProducts.reduce((total, product) => total + product.subtotal, 0);
+    // };
 
     const formatCurrency = (value) => {
         return value.toLocaleString("pt-MZ", {
@@ -68,7 +69,7 @@
         });
     };
 
-    const priceTotal = computed(() => calculatePriceTotal(store.getters.cartProducts));
+    const priceTotal = computed(() => store.getters.cartProducts.total);
     const taxaEnvio = ref(10);
     const totalPedido = computed(() => priceTotal.value + taxaEnvio.value);
 

@@ -68,7 +68,7 @@ export default createStore({
         customers: {},
 
         ///carts
-        cartProducts: [],
+        cartProducts: {},
         cartPrice: [],
 
         /// snackbar
@@ -344,11 +344,12 @@ export default createStore({
                 });
 
                 if (res.status === 200) {
+                    commit("updateSnackbar", { show: true, text: "Variçãao criada", color: "green" });
                     return true;
                 }
-                commit;
             } catch (error) {
                 errorMessage(error);
+                return false;
             }
         },
 
@@ -379,7 +380,6 @@ export default createStore({
                     url: `/product/admin/${produtoId}`,
                     headers: headers(),
                 });
-                console.log(res);
                 const productDetails = res.data.product;
                 commit("productDetails", productDetails);
                 return;
@@ -531,8 +531,7 @@ export default createStore({
                     url: "/carts/admin",
                     headers: headers(),
                 });
-                console.log(res);
-                return;
+                return res;
             } catch (error) {
                 errorMessage(error);
             }
@@ -613,7 +612,6 @@ export default createStore({
         },
 
         async searchProducts({ commit }, payload) {
-            console.log(payload);
             try {
                 const res = await axios.request({
                     method: "get",
@@ -696,7 +694,7 @@ export default createStore({
                 commit("updateSnackbar", { show: false, text: "Produto adicionado ao carrinho ", color: "green" });
                 return;
             } else {
-                const res = await sendAxio("delete", `/cart/${user.id}/remove/${payload.product}`, null, headers());
+                const res = await sendAxio("delete", `/cart/${user.id}/remove/${payload.item}`, null, headers());
 
                 commit("updateSnackbar", { show: true, text: `${res.data.message}`, color: "green" });
                 return;
@@ -745,13 +743,14 @@ export default createStore({
         async displayTempCartProducts({ commit }, isAuthenticated) {
             const tempCart = JSON.parse(getCookie("tempCart"));
             const user = JSON.parse(localStorage.getItem("userData"));
-            let cartProducts = [];
+            let cartProducts = {};
 
             try {
                 if (isAuthenticated === true) {
                     const res = await sendAxio("post", `/cart/${user.id}/products`, null, headers());
 
                     cartProducts = res.data;
+                    console.log(cartProducts);
                     commit("SET_CARTPRODUCTS", cartProducts);
                     return;
                 } else if (tempCart) {
@@ -763,6 +762,7 @@ export default createStore({
                     const res = await sendAxio("post", `/cart/${userId}/products`, tempCart, headers());
 
                     cartProducts = res.data;
+                    console.log(res.data);
                     commit("SET_CARTPRODUCTS", cartProducts);
                     return;
                 }
@@ -774,6 +774,7 @@ export default createStore({
         },
 
         async updateProductQuantity({ commit }, payload) {
+            console.log(payload);
             const user = JSON.parse(localStorage.getItem("userData"));
 
             if (!payload.isAuthenticated) {
@@ -796,7 +797,7 @@ export default createStore({
                 commit("updateSnackbar", { show: false, text: "Produto adicionado ao carrinho ", color: "green" });
                 return;
             } else {
-                const res = await sendAxio("put", `/cart/${user.id}/update/${payload.productId}/${Number(payload.quantity)}`, null, headers());
+                const res = await sendAxio("put", `/cart/${user.id}/update/${payload.item}/${Number(payload.quantity)}`, null, headers());
 
                 commit("updateSnackbar", { show: false, text: `${res.data.msg}`, color: "green" });
                 return;
@@ -808,7 +809,6 @@ export default createStore({
        */
 
         async sendOrder({ commit, state }, payload) {
-            console.log(payload);
             const user = JSON.parse(localStorage.getItem("userData"));
 
             async function sendOrderRequest(data) {
@@ -817,7 +817,6 @@ export default createStore({
                 const delivery = { address, reference };
 
                 const res = await sendAxio("post", `/order`, { cart, payment, delivery }, headers());
-                console.log(res);
                 if (res.status === 200) {
                     const order = res.data.order;
                     commit("updateSnackbar", { show: true, text: "Pedido enviado", color: "green" });
@@ -872,7 +871,6 @@ export default createStore({
                 }
             } catch (error) {
                 errorMessage(error);
-                console.log(error);
                 return false;
             }
         },
@@ -1037,7 +1035,6 @@ export default createStore({
                     return;
                 }
             } catch (error) {
-                console.log("errrrrr", error);
                 errorMessage(error);
             }
         },
@@ -1049,8 +1046,6 @@ export default createStore({
         async mpesapay({ commit, state }, payload) {
             try {
                 const res = await sendAxio("post", `/mpesaPay`, { ...payload, orderId: state.orderPaymentId }, headers());
-
-                console.log(res);
 
                 if (res.status === 200 || res.status === 201) {
                     commit("updateSnackbar", { show: true, text: res.data.message, color: "green" });

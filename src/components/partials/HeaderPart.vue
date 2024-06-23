@@ -80,7 +80,7 @@
                 <router-link
                     to="/carrinho"
                     class="hover:after:bg-red-500 flex flex-row items-center gap-2 h-max w-max mx-[15px]">
-                    <span class="text-xs md:text-base">{{ formatCurrency(priceTotal) }} </span>
+                    <!-- <span class="text-xs md:text-base">{{ formatCurrency(priceTotal) }} </span> -->
                     <Button
                         variant="Ghost"
                         class="flex gap-2 h-max">
@@ -269,15 +269,16 @@
 
     const categories = computed(() => store.state.categories);
     const category = ref();
-    const formatCurrency = (value) => {
-        return value.toLocaleString("pt-MZ", {
-            style: "currency",
-            currency: "MZN",
-        });
-    };
+    
+    // const formatCurrency = (value) => {
+    //     return value.toLocaleString("pt-MZ", {
+    //         style: "currency",
+    //         currency: "MZN",
+    //     });
+    // };
 
     const priceTotal = computed(() => {
-        return calculatePriceTotal(store.getters.cartPrice);
+        // return calculatePriceTotal(store.getters.cartPrice);
     });
     function login() {
         store.commit("SET_LOGIN_OVERLAY", true);
@@ -297,7 +298,7 @@
     }
     // Função para calcular o preço total de produtos
     const calculatePriceTotal = (cartPrices) => {
-        return cartPrices.reduce((total, product) => total + product, 0);
+        // return cartPrices.reduce((total, product) => total + product, 0);
     };
 
     const user = computed(() => JSON.parse(localStorage.getItem("userData")));

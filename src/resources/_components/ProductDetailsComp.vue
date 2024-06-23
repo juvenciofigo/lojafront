@@ -10,8 +10,9 @@
                         alt="Imagem do Produto" />
                 </div>
             </div>
-
-            <div class="changeImage flex flex-row p-1 justify-center gap-2">
+            <div
+                class="changeImage flex flex-row p-1 justify-center gap-2"
+                v-if="product.productImage && product.productImage.length > 1">
                 <template
                     v-for="(image, index) in product.productImage"
                     :key="index">
@@ -27,10 +28,10 @@
             </div>
         </div>
 
-        <div class="flex flex-col flex-1 gap-2 xl:overflow-auto">
-            <div class="Descriptions flex-1 flex flex-col gap-4 bg-white rounded-md p-2 md:p-4">
+        <div class="flex flex-col flex-1 gap-2 xl:overflow-auto xl:max-h-[calc(100vh-82px)]">
+            <div class="Descriptions flex-1 flex flex-col gap-1 bg-white rounded-md p-2 md:p-4">
                 <div>
-                    <h1>{{ product.productName }}</h1>
+                    <h1 class="text-2xl">{{ product.productName }}</h1>
                 </div>
                 <div>
                     <v-rating
@@ -44,39 +45,110 @@
                 <div class="text-lg">
                     <p v-if="product.productPromotion">
                         <span class="font-medium text-sm">Preço: </span>
-                        {{ product.productPromotion }}
-                        <span class="text-xs">MZN</span>
+                        <span>{{ formatCurrency(product.productPromotion) }}</span>
                     </p>
                     <p v-else>
                         <span class="font-medium text-base">Preço: </span>
-                        {{ product.productPrice }}
-                        <span class="text-xs">MZN</span>
+                        <span>{{ formatCurrency(product.productPrice) }}</span>
                     </p>
                 </div>
-                <div class="button flex flex-wrap flex-row justify-center gap-4">
-                    <button
-                        :class="styl_firstbutton"
-                        @click="firstButton">
-                        {{ titleFirst }}
-                    </button>
 
-                    <button
-                        :class="styl_secondbutton"
-                        @click="secondButton">
-                        {{ titleSecond }}
-                    </button>
-
-                    <button
-                        :class="styl_thirdbutton"
-                        @click="thirdButton">
-                        {{ titleThird }}
-                    </button>
-
-                    <button
-                        :class="styl_fourthbutton"
-                        @click="fourthButton">
-                        {{ titleFourth }}
-                    </button>
+                <div class="button flex flex-col gap-3">
+                    <div class="color">
+                        Cores:
+                        <div>
+                            <v-item-group
+                                mandatory
+                                class="flex flex-row gap-2"
+                                @update:model-value="colorValue">
+                                <v-item
+                                    v-for="(item, index) in colors.value"
+                                    :key="index"
+                                    v-slot="{ isSelected, toggle }">
+                                    <button
+                                        :class="isSelected ? 'bg-primary' : undefined"
+                                        class="rounded-lg px-2 py-1 shadow-md duration-300"
+                                        rounded
+                                        @click="toggle">
+                                        {{ item.variationValue }}
+                                    </button>
+                                </v-item>
+                            </v-item-group>
+                        </div>
+                    </div>
+                    <div class="sizes">
+                        Tamanhos:
+                        <div
+                            class=" "
+                            v-if="colors">
+                            <v-item-group
+                                mandatory
+                                @update:model-value="sizesValue"
+                                class="flex flex-row gap-2">
+                                <v-item
+                                    v-for="(item, index) in sizes.value"
+                                    :key="index"
+                                    v-slot="{ isSelected, toggle }">
+                                    <button
+                                        :class="isSelected ? 'bg-primary' : undefined"
+                                        class="rounded-lg px-2 py-1 shadow-md duration-300"
+                                        rounded
+                                        @click="toggle">
+                                        {{ item.variationValue }}
+                                    </button>
+                                </v-item>
+                            </v-item-group>
+                        </div>
+                    </div>
+                    <div class="model">
+                        Modelos:
+                        <div
+                            class=" "
+                            v-if="colors">
+                            <v-item-group
+                                @update:model-value="modelValue"
+                                mandatory
+                                class="flex flex-row gap-2">
+                                <v-item
+                                    v-for="(item, index) in models.value"
+                                    :key="index"
+                                    v-slot="{ isSelected, toggle }">
+                                    <button
+                                        :class="isSelected ? 'bg-primary' : undefined"
+                                        class="rounded-lg px-2 py-1 shadow-md duration-300"
+                                        rounded
+                                        @click="toggle">
+                                        {{ item.variationValue }}
+                                    </button>
+                                </v-item>
+                            </v-item-group>
+                        </div>
+                    </div>
+                    <div class="materials">
+                        Materiais:
+                        <div
+                            class=" "
+                            v-if="colors">
+                            <v-item-group
+                                mandatory
+                                class="flex flex-row gap-2"
+                                @update:model-value="materialValue">
+                                <v-item
+                                    v-for="(item, index) in materials.value"
+                                    :key="index"
+                                    v-slot="{ isSelected, toggle }"
+                                    :value="item._id">
+                                    <button
+                                        :class="isSelected ? 'bg-primary' : undefined"
+                                        class="rounded-lg px-2 py-1 shadow-md duration-300"
+                                        rounded
+                                        @click="toggle">
+                                        {{ item.variationValue }}
+                                    </button>
+                                </v-item>
+                            </v-item-group>
+                        </div>
+                    </div>
 
                     <div class="flex flex-row gap-3">
                         <label for="quant">Quantidade:</label>
@@ -88,10 +160,32 @@
                             @change="quantityValue"
                             v-model="quantity" />
                     </div>
+
+                    <div class="flex-row gap-2 flex">
+                        <button
+                            :class="styl_firstbutton"
+                            @click="firstButton">
+                            {{ titleFirst }}
+                        </button>
+                        <button
+                            :class="styl_secondbutton"
+                            @click="secondButton">
+                            {{ titleSecond }}
+                        </button>
+                        <button
+                            :class="styl_thirdbutton"
+                            @click="thirdButton">
+                            {{ titleThird }}
+                        </button>
+                        <button
+                            :class="styl_fourthbutton"
+                            @click="fourthButton">
+                            {{ titleFourth }}
+                        </button>
+                    </div>
                 </div>
                 <div>
                     <p class="mb-1 font-semibold text-lg underline decoration-slate-300 line underline-offset-3">Descrição:</p>
-
                     <p
                         v-html="product.productDescription"
                         class="font-normal text"></p>
@@ -99,7 +193,7 @@
             </div>
 
             <div class="Especificatios bg-white rounded-md p-2 md:p-4">
-                <h2 class="mb-4 font-semibold text-lg underline decoration-slate-300 line underline-offset-3">Especificaçõoes:</h2>
+                <h2 class="mb-4 font-semibold text-lg underline decoration-slate-300 line underline-offset-3">Especificações:</h2>
                 <div>
                     <v-table
                         density="compact"
@@ -113,7 +207,7 @@
                             </tr>
                         </tbody>
                     </v-table>
-                    <p v-else>Sem Especificacoes!!!</p>
+                    <p v-else>Sem Especificações!!!</p>
                 </div>
             </div>
 
@@ -129,7 +223,6 @@
                                     <p class="font-medium">{{ rating.ratingName }} :</p>
                                     <p class="pl-3">{{ rating.ratingText }}</p>
                                 </div>
-
                                 <div class="flex flex-row justify-between px-5">
                                     <div>
                                         <p>{{ convertScoreToStars(rating.ratingScore) }}</p>
@@ -154,7 +247,7 @@
 <script setup>
     import { format, differenceInHours } from "date-fns";
     import { useStore } from "vuex";
-    import { ref, defineProps, computed, watch, defineEmits } from "vue";
+    import { ref, defineProps, computed, watch, defineEmits, watchEffect } from "vue";
 
     defineProps({
         firstButton: { type: Function, required: true },
@@ -170,47 +263,66 @@
         styl_fourthbutton: String,
         styl_secondbutton: String,
     });
-    const emits = defineEmits(["value-updated"]);
+
+    const colors = ref([]);
+    const sizes = ref([]);
+    const models = ref([]);
+    const materials = ref([]);
+
+    const emits = defineEmits(["value-updated material-Value sizes-Value color-Value model-Value"]);
     const quantity = ref(1);
 
     const store = useStore();
-
     const product = computed(() => store.state.product);
     const imageLink = ref(null);
 
+    function update() {
+        colors.value = computed(() => product.value.productVariations.filter((item) => item.variationType === "Cor"));
+        sizes.value = computed(() => product.value.productVariations.filter((item) => item.variationType === "Tamanho"));
+        models.value = computed(() => product.value.productVariations.filter((item) => item.variationType === "Modelo"));
+        materials.value = computed(() => product.value.productVariations.filter((item) => item.variationType === "Material"));
+    }
+
+    watchEffect(() => {
+        if (product.value.productVariations) {
+            update();
+        }
+    });
+
     function quantityValue(e) {
         emits("value-updated", e.target.value);
+    }
+    function materialValue(e) {
+        emits("material-Value", materials.value.value[e]._id);
+    }
+    function sizesValue(e) {
+        emits("sizes-Value", sizes.value.value[e]._id);
+    }
+    function colorValue(e) {
+        emits("color-Value", colors.value.value[e]._id);
+    }
+    function modelValue(e) {
+        emits("model-Value", models.value.value[e]._id);
     }
 
     function updateImageLink(index) {
         imageLink.value = product.value.productImage[index];
     }
+
     function formatDate(date) {
         return format(new Date(date), "dd/MM/yyyy");
     }
 
     function convertScoreToStars(score) {
-        switch (score) {
-            case 1:
-                return "★";
-            case 2:
-                return "★★";
-            case 3:
-                return "★★★";
-            case 4:
-                return "★★★★";
-            case 5:
-                return "★★★★★";
-            default:
-                return 0;
-        }
+        const stars = "★".repeat(score) + "☆".repeat(5 - score);
+        return stars;
     }
 
     const timeShow = (date) => {
         const diferencaHoras = differenceInHours(new Date(), new Date(date));
-        if (diferencaHoras < 2) `${diferencaHoras} hora atrás`;
-        if (diferencaHoras < 24) `${diferencaHoras} horas atrás`;
-        return null;
+        if (diferencaHoras < 2) return `${diferencaHoras} hora atrás`;
+        if (diferencaHoras < 24) return `${diferencaHoras} horas atrás`;
+        return formatDate(date);
     };
 
     watch(
@@ -220,27 +332,27 @@
         }
     );
 
-    // media de avaliacoes
+    const formatCurrency = (value) => {
+        if (typeof value !== "number") {
+            return "Valor inválido";
+        }
+        return value.toLocaleString("pt-MZ", {
+            style: "currency",
+            currency: "MZN",
+        });
+    };
 
     function calcularMediaRating(scores) {
         if (!scores || scores.length === 0) {
             return 0;
         }
-
         const somaScores = scores.reduce((total, rating) => total + rating.ratingScore, 0);
-
         const media = somaScores / scores.length;
-
         return media;
     }
 
-    function determinarClassificacaoGeral(product) {
-        const mediaRating = calcularMediaRating(product.productRatings);
-
-        if (mediaRating) {
-            return mediaRating;
-        }
-    }
-
-    const classificacaoGeral = computed(() => determinarClassificacaoGeral(product.value));
+    const classificacaoGeral = computed(() => {
+        const mediaRating = calcularMediaRating(product.value.productRatings);
+        return mediaRating;
+    });
 </script>

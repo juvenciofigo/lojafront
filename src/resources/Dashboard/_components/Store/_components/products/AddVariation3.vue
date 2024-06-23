@@ -1,16 +1,19 @@
 <template>
     <div class="bg-white shadow-md rounded p-6 flex flex-col">
-        <div class="rounded-md self-center p-2 border-2 border-slate-600 flex flex-col items-center">
-            <p class="font-semibold text-slate-500">{{ product.productName }}</p>
+        <div class="rounded-md self-center p-2 border-2 border-slate-600 flex flex-col gap-2 items-center">
             <div class="w-24 h-24">
                 <v-img
                     v-if="product.productImage && product.productImage.length > 0"
                     :src="product.productImage[0]"></v-img>
             </div>
+            <div class="text-center">
+                <p class="font-semibold text-slate-500">{{ product.productName }}</p>
+                <p class="font-semibold text-slate-500 text-sm">{{ formatCurrency(product.productPrice) }}</p>
+            </div>
         </div>
         <form @submit.prevent="submitVariation">
             <div class="mb-4">
-                <label
+                <!-- <label
                     class="block text-gray-700 text-sm font-bold mb-2"
                     for="variationType"
                     >Tipo da Variação:</label
@@ -19,7 +22,26 @@
                     v-model="variation.variationType"
                     class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                     type="text"
-                    placeholder="Tipo da Variação" />
+                    placeholder="Tipo da Variação" /> -->
+                <div class="flex flex-col gap-2">
+                    <label
+                        class="block text-gray-700 text-sm font-bold mb-2"
+                        for="variationType">
+                        Tipo da Variação:
+                    </label>
+                    <v-select
+                        placeholder="Selecione o modelo"
+                        :bg-color="`#FFFFFF`"
+                        :hide-details="true"
+                        clearable
+                        flat
+                        density="compact"
+                        variant="solo-filled"
+                        v-model="variation.variationType"
+                        :items="[`Modelo`, `Cor`, `Tamanho`, `Material`]"
+                        item-title="statusName"
+                        item-value="statusValue"></v-select>
+                </div>
             </div>
 
             <div class="mb-4">
@@ -142,30 +164,39 @@
             </div>
 
             <div class="flex items-center justify-between">
-                <button
+                <v-btn
+                    :loading="loading"
                     class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                     type="submit">
                     Criar Variação
-                </button>
+                </v-btn>
             </div>
         </form>
     </div>
 </template>
 
 <script setup>
-    import { ref, onMounted, computed, onBeforeMount } from "vue";
+    import { ref, computed, onBeforeMount } from "vue";
     import { useRoute } from "vue-router";
     import { useStore } from "vuex";
 
     const route = useRoute();
     const store = useStore();
     const product = computed(() => store.state.product);
+    const loading = ref(false);
+
+    const formatCurrency = (value) => {
+        return Number(value).toLocaleString("pt-MZ", {
+            style: "currency",
+            currency: "MZN",
+        });
+    };
 
     const variation = ref({
-        variationProduct: "", // Substitua isso pelo ID do produto correto
-        variationType: "",
-        variationValue: "",
-        sku: "",
+        variationProduct: route.params.id,
+        variationType: null,
+        variationValue: null,
+        sku: null,
         variationStock: true,
         variationPrice: 0,
         variationPromotion: 0,
@@ -182,16 +213,30 @@
     });
 
     async function submitVariation() {
+
+        if (!variation.value.variationType) {
+            store.commit("updateSnackbar", { show: true, text: "Preencha correctamente o campo Tipo da variação!", color: "red" });
+            return;
+        }
+        if (!variation.value.variationValue) {
+            store.commit("updateSnackbar", { show: true, text: "Preencha correctamente o campo Valor da Variação!", color: "red" });
+            return;
+        }
+        if (!variation.value.sku) {
+            store.commit("updateSnackbar", { show: true, text: "Preencha correctamente o campo SKU", color: "red" });
+            return;
+        }
+
         const response = await store.dispatch("addVariation", { product: route.params.id, variation: variation.value });
         if (response === true) {
             clearForm();
         }
+        loading.value = false;
         return;
     }
 
     function clearForm() {
         variation.value = {
-            variationProduct: "",
             variationType: "",
             variationValue: "",
             sku: "",
@@ -210,10 +255,6 @@
             },
         };
     }
-
-    onMounted(() => {
-        variation.value.variationProduct = route.params.id;
-    });
 
     onBeforeMount(() => {
         store.dispatch("detailsProductAdmin", route.params.id);

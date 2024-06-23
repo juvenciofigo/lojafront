@@ -194,6 +194,7 @@
         image: "",
     });
 
+    
     function addColor() {
         if (newColor.value && !variation.value.colors.includes(newColor.value)) {
             variation.value.colors.push(newColor.value);

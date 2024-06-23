@@ -44,7 +44,7 @@
 </template>
 
 <script setup>
-    import { computed, ref } from "vue";
+    import { computed, } from "vue";
     import { useStore } from "vuex";
     import LoadPage from "./components/partials/LoadPage.vue";
     import PaymentDialog from "@/resources/Store/_components/Store/_components/payment/PaymentDialog.vue";
@@ -56,8 +56,8 @@
     const snackbar = computed(() => store.getters.snackbar);
     const snackbarText = computed(() => store.getters.snackbarText);
     const snackbarColor = computed(() => store.getters.snackbarColor);
-    const loginOverlay = ref(computed(() => store.getters.loginOverlay));
-    const registerOverlay = ref(computed(() => store.getters.registerOverlay));
+    const loginOverlay = computed(() => store.getters.loginOverlay);
+    const registerOverlay = computed(() => store.getters.registerOverlay);
 
     function dialogLogClose() {
         store.commit("SET_LOGIN_OVERLAY", false);
