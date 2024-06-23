@@ -13,7 +13,7 @@
                     <TableRow>
                         <TableCell class="h-10 items-center flex flex-row justify-between">
                             <div>Total de produtos:</div>
-                            <!-- <div>{{ formatCurrency(priceTotal) }}</div> -->
+                            <div>{{ formatCurrency(priceTotal) }}</div>
                         </TableCell>
                     </TableRow>
                     <TableRow>
@@ -38,7 +38,7 @@
             </Button>
         </div>
     </div>
-    <v-btn @click="console.log(cartProducts)">ver</v-btn>
+    <v-btn @click="console.log(cartProducts.totalProducts)">ver</v-btn>
 </template>
 
 <script setup>
@@ -69,7 +69,7 @@
         });
     };
 
-    const priceTotal = computed(() => store.getters.cartProducts.total);
+    const priceTotal = computed(() => store.getters.cartProducts.totalProducts);
     const taxaEnvio = ref(10);
     const totalPedido = computed(() => priceTotal.value + taxaEnvio.value);
 
