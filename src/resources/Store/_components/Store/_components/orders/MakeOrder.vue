@@ -43,7 +43,7 @@
                 :disabled="buttonStatus"
                 :loading="loading"
                 class="self-end w-max"
-                @click="sendOrder(), (loading = true)">
+                @click="sendOrder()">
                 Finalizar Pedido
             </v-btn>
         </div>
@@ -83,40 +83,41 @@
         store.commit("CLEAR_ADDRESS");
         store.commit("CLEAR_PROVIDE_ADDRESS");
     });
-    const cartProducts = ref(computed(() => toRaw(store.getters.cartProducts)));
+    const cart = ref(computed(() => toRaw(store.getters.cart)));
 
     // on Mount
     onBeforeMount(async () => {
         const from = route.query.productsFrom;
+        if (from) {
+            if (from === "cartProducts") {
+                await store.dispatch("displayCartProducts", isAuthenticated.value);
 
-        async function userDara() {
-            await store.dispatch("addresses");
+                if (!cart.value.items || cart.value.items.length <= 0) {
+                    router.push({ name: "home" });
+                    window.location.href = "/";
+                }
+                if (isAuthenticated.value === true) {
+                    userData();
+                }
+                return;
+            }
+
+            if (from === "payNow") {
+                await store.dispatch("buyNow", { product: { id: route.query.product, quantity: route.query.quantity } });
+
+                if (isAuthenticated.value === true) {
+                    userData();
+                }
+                return;
+            }
         }
 
-        if (from === "cartProducts") {
-            await store.dispatch("displayTempCartProducts", isAuthenticated.value);
-
-            if (!cartProducts.value || cartProducts.value.length <= 0) {
-                router.push({ name: "homepage" });
-                window.location.href = "/";
-            }
-            if (isAuthenticated.value === true) {
-                userDara();
-            }
-            return;
-        }
-
-        if (from === "payNow") {
-            await store.dispatch("buyNow", { product: { id: route.query.product, quantity: route.query.quantity } });
-
-            if (isAuthenticated.value === true) {
-                userDara();
-            }
-            return;
-        }
-
-        router.push({ name: "homepage" });
+        router.push({ name: "home" });
     });
+
+    async function userData() {
+        await store.dispatch("addresses");
+    }
 
     function gerReferenceNumeber() {
         const caracteres = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
@@ -124,16 +125,16 @@
         const tamanhoMinimo = 6;
         const tamanhoMaximo = 20;
 
-        // Gera um timestamp único
+        // Gerar um timestamp único
         const timestamp = new Date().getTime().toString();
 
-        // Gera um número aleatório de caracteres
+        // Gerar um número aleatório de caracteres
         const numeroAleatorio = Array.from({ length: tamanhoMaximo }, () => caracteres.charAt(Math.floor(Math.random() * caracteresLength))).join("");
 
         // Calcula o tamanho do número de referência
         const tamanho = Math.floor(Math.random() * (tamanhoMaximo - tamanhoMinimo + 1)) + tamanhoMinimo;
 
-        // Combina o timestamp e o número aleatório para formar o número de referência
+        // Combinar o timestamp e o número aleatório para formar o número de referência
         const numeroReferencia = `${timestamp}${numeroAleatorio}`.slice(0, tamanho);
 
         return numeroReferencia;
@@ -153,24 +154,35 @@
 
     async function sendOrder() {
         loading.value = true;
+
         if (!selectAddress.value) {
+            store.commit("updateSnackbar", {
+                show: true,
+                text: "Preencha o campo com as informações de envio",
+                color: "red",
+            });
             loading.value = false;
-            store.commit("updateSnackbar", { show: true, text: "Preencha o campo com as informações de envio", color: "red" });
             return;
         }
+
         if (!confirmationData.value) {
             window.location.reload();
             return;
         }
 
-        const res = await store.dispatch("sendOrder", { selectAddress: { ...selectAddress.value }, prices: toRaw(confirmationData.value), cart: cartProducts.value, reference: gerReferenceNumeber() });
+        const res = await store.dispatch("sendOrder", {
+            selectAddress: toRaw(selectAddress.value),
+            cart: cart.value.cartId,
+            reference: gerReferenceNumeber(),
+        });
 
         const user = JSON.parse(localStorage.getItem("userData"));
 
-        if (res !== false) {
-            loading.value = false;
+        if (res === false) {
+            loading.value = true;
         } else {
             router.push({ name: "selfOrders", params: { user: `${user.id}` } });
         }
+        return;
     }
 </script>

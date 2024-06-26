@@ -1,11 +1,15 @@
 <template lang="">
     <ProductDetailsComp
+        :styl_thirdbutton="`hidden`"
+        :styl_fourthbutton="`hidden`"
         :firstButton="addToCart"
         :titleFirst="`Adicionar ao carinho`"
-        :styl_firstbutton="`bg-blue-400 hover:bg-blue-200 text-sm p-1 rounded-md duration-300`"
+        :styl_firstbutton="`bg-blue-400 hover:bg-blue-200`"
         :secondButton="buyNow"
         :titleSecond="`Comprar Agora`"
-        :styl_secondbutton="`bg-green-400 hover:bg-green-200 p-1 rounded-md duration-300`"
+        :styl_secondbutton="`bg-green-400 hover:bg-green-200 `"
+        :loading_firstbutton="loading_firstbutton"
+        :loading_secondbutton="loading_secondbutton"
         @value-updated="handleValueUpdate"
         @material-Value="materialValue"
         @sizes-Value="sizesValue"
@@ -25,6 +29,8 @@
     const isAuthenticated = ref(computed(() => store.getters.isAuthenticated("authToken")));
     const quantity = ref(1);
     const product = computed(() => store.state.product);
+    const loading_firstbutton = ref(false);
+    const loading_secondbutton = ref(false);
 
     function handleValueUpdate(value) {
         quantity.value = value;
@@ -65,14 +71,19 @@
     };
 
     async function addToCart() {
+        loading_firstbutton.value = true;
         const res = await verifyVaraiations();
 
         if (res) {
             store.commit("updateSnackbar", { show: true, text: res.error, color: "red" });
+            loading_firstbutton.value = false;
             return;
         }
+
         await store.dispatch("addToCart", { isAuthenticated: isAuthenticated.value, item: { productId: route.params.id, variation: toRaw(variation.value), quantity: quantity.value || 1 } });
-        await store.dispatch("displayTempCartPrices", isAuthenticated.value);
+        
+        await store.dispatch("displayCartPrices", isAuthenticated.value);
+        loading_firstbutton.value = false;
     }
 
     async function buyNow() {

@@ -78,8 +78,12 @@
                                     </template>
                                 </v-dialog>
 
-                                <button class="p-[3px] rounded-md"><Pen size="18" /></button>
                                 <button class="p-[3px] rounded-md">
+                                    <Pen size="18" />
+                                </button>
+                                <button
+                                    class="p-[3px] rounded-md"
+                                    @click="confirmDelete(order._id, order.payment.status)">
                                     <Trash2
                                         color="red"
                                         size="18" />
@@ -105,10 +109,19 @@
             class="text-center">
             <p>Sem pedidos</p>
         </div>
+
+        <DialogConfirmation
+            :dialog="showDialog"
+            tileConfirmation="Deleção de Pedido"
+            textConfirmation="Você tem certeza de que deseja deletar este pedido?"
+            positiveConfirmation="Deletar"
+            @update:dialog="showDialog = $event"
+            @cancelar="handleCancel"
+            @confirmar="handleConfirm" />
     </div>
 </template>
 <script setup>
-    import { computed, watchEffect, ref, onBeforeUnmount, defineProps } from "vue";
+    import { computed, watchEffect, ref, onBeforeUnmount, defineProps, defineEmits } from "vue";
     import { useStore } from "vuex";
     import { useRoute, useRouter } from "vue-router";
     import { format } from "date-fns";
@@ -116,6 +129,7 @@
     import { Input } from "@/components/ui/input";
 
     import OrdersDetails from "@/resources/_components/OrdersDetails.vue";
+    import DialogConfirmation from "@/components/partials/DialogConfirmation.vue";
 
     const store = useStore();
     const route = useRoute();
@@ -136,7 +150,25 @@
     function pageEvent(pageNumber) {
         router.push({ name: `${props.route}`, query: { offset: `${pageNumber}` } });
     }
+    const emits = defineEmits(["deleteButton"]);
 
+    const id = ref("");
+    const status = ref("");
+    const showDialog = ref(false);
+
+    function confirmDelete(idd, statuss) {
+        showDialog.value = true;
+        id.value = idd;
+        status.value = statuss;
+    }
+
+    const handleConfirm = () => {
+        emits("deleteButton", { id: id.value, status: status.value });
+        showDialog.value = false;
+    };
+    const handleCancel = () => {
+        showDialog.value = false;
+    };
     const fetchOrders = () => {
         store.dispatch(`${props.storeaction}`, { offset: offset.value, user: route.params.user });
     };
@@ -150,6 +182,9 @@
     });
 
     const formatCurrency = (value) => {
+        if (typeof value !== "number" || isNaN(value)) {
+            return "MZN 0.00";
+        }
         return value.toLocaleString("pt-MZ", {
             style: "currency",
             currency: "MZN",

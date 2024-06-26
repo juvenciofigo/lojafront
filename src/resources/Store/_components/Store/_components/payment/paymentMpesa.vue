@@ -69,6 +69,9 @@
     }
 
     const formatCurrency = (value) => {
+        if (typeof value !== "number" || isNaN(value)) {
+            return "MZN 0.00";
+        }
         return value.toLocaleString("pt-MZ", {
             style: "currency",
             currency: "MZN",

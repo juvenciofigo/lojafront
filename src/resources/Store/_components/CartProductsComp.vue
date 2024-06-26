@@ -1,6 +1,6 @@
 <template lang="">
     <div
-        v-if="cartProducts.cartProducts && cartProducts.cartProducts.length > 0"
+        v-if="cart.items && cart.items.length > 0"
         class="bg-white m-3 rounded-md p-3">
         <Table>
             <TableHeader>
@@ -18,7 +18,7 @@
                 </TableRow>
             </TableHeader>
             <TableBody
-                v-for="item in cartProducts.cartProducts"
+                v-for="item in cart.items"
                 :key="item.productId">
                 <TableRow :class="tableRowHeight">
                     <TableCell class="text-center">
@@ -36,8 +36,9 @@
                     <TableCell class="text-center">{{ formatCurrency(item.productPrice) }}</TableCell>
                     <TableCell class="text-center">
                         <input
-                            class="text-center"
+                            class="text-center border"
                             type="number"
+                            placeholder="Digite a quantidade"
                             v-model.number="item.quantity"
                             @change="updateQuantity(item.item, item.quantity)"
                             min="1" />
@@ -101,7 +102,7 @@
     const store = useStore();
 
     defineProps({
-        cartProducts: Object,
+        cart: Object,
         image: String,
         tableRowHeight: String,
         actionButton: String,
@@ -114,8 +115,9 @@
     const isAuthenticated = ref(computed(() => store.getters.isAuthenticated("authToken")));
 
     async function update() {
-        await store.dispatch("displayTempCartPrices", isAuthenticated.value);
-        await store.dispatch("displayTempCartProducts", isAuthenticated.value);
+        console.log(false);
+        await store.dispatch("displayCartPrices", isAuthenticated.value);
+        await store.dispatch("displayCartProducts", isAuthenticated.value);
     }
 
     async function removeProduct(item) {
@@ -130,6 +132,9 @@
 
     // Função para formatar valores monetários
     const formatCurrency = (value) => {
+        if (typeof value !== "number" || isNaN(value)) { 
+            return "MZN 0.00";
+        }
         return value.toLocaleString("pt-MZ", {
             style: "currency",
             currency: "MZN",

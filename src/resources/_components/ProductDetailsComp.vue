@@ -162,26 +162,42 @@
                     </div>
 
                     <div class="flex-row gap-2 flex">
-                        <button
+                        <v-btn
+                            class="p-1 text-sm duration-300"
+                            size="small"
+                            variant="elevated"
+                            :loading="loading_firstbutton"
                             :class="styl_firstbutton"
                             @click="firstButton">
                             {{ titleFirst }}
-                        </button>
-                        <button
+                        </v-btn>
+                        <v-btn
+                            class="p-1 text-sm duration-300"
+                            size="small"
+                            variant="elevated"
+                            :loading="loading_secondbutton"
                             :class="styl_secondbutton"
                             @click="secondButton">
                             {{ titleSecond }}
-                        </button>
-                        <button
+                        </v-btn>
+                        <v-btn
+                            size="small"
+                            class="p-1 text-sm duration-300"
+                            variant="elevated"
+                            :loading="loading_thirdbutton"
                             :class="styl_thirdbutton"
                             @click="thirdButton">
                             {{ titleThird }}
-                        </button>
-                        <button
+                        </v-btn>
+                        <v-btn
+                            size="small"
+                            class="p-1 text-sm duration-300"
+                            variant="elevated"
+                            :loading="loading_fourthbutton"
                             :class="styl_fourthbutton"
                             @click="fourthButton">
                             {{ titleFourth }}
-                        </button>
+                        </v-btn>
                     </div>
                 </div>
                 <div>
@@ -262,8 +278,11 @@
         styl_thirdbutton: String,
         styl_fourthbutton: String,
         styl_secondbutton: String,
+        loading_firstbutton: Boolean,
+        loading_secondbutton: Boolean,
+        loading_thirdbutton: Boolean,
+        loading_fourthbutton: Boolean,
     });
-
     const colors = ref([]);
     const sizes = ref([]);
     const models = ref([]);
@@ -333,8 +352,8 @@
     );
 
     const formatCurrency = (value) => {
-        if (typeof value !== "number") {
-            return "Valor inválido";
+        if (typeof value !== "number" || isNaN(value)) {
+            return "MZN 0.00";
         }
         return value.toLocaleString("pt-MZ", {
             style: "currency",
