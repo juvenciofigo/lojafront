@@ -1,5 +1,6 @@
 <template>
     <div class="flex flex-col xl:flex-row p-1 gap-1 flex-1 h-max">
+        <!-- Seção de imagens do produto -->
         <div class="images bg-white rounded-md w-full p-2 xl:w-[360px] flex flex-col gap-3 items-center">
             <div class="image self-center max-w-[450px] xl:w-full">
                 <div class="bg-slate-100 rounded-md">
@@ -28,6 +29,7 @@
             </div>
         </div>
 
+        <!-- Seção de detalhes do produto -->
         <div class="flex flex-col flex-1 gap-2 xl:overflow-auto xl:max-h-[calc(100vh-82px)]">
             <div class="Descriptions flex-1 flex flex-col gap-1 bg-white rounded-md p-2 md:p-4">
                 <div>
@@ -45,111 +47,82 @@
                 <div class="text-lg">
                     <p v-if="product.productPromotion">
                         <span class="font-medium text-sm">Preço: </span>
-                        <span>{{ formatCurrency(product.productPromotion) }}</span>
+                        <span>{{ formatCurrency(finalPrice) }}</span>
                     </p>
                     <p v-else>
                         <span class="font-medium text-base">Preço: </span>
-                        <span>{{ formatCurrency(product.productPrice) }}</span>
+                        <span>{{ formatCurrency(finalPrice) }}</span>
                     </p>
                 </div>
 
+                <!-- Seção de seleção de variações -->
                 <div class="button flex flex-col gap-3">
                     <div class="color">
                         Cores:
                         <div>
-                            <v-item-group
-                                mandatory
-                                class="flex flex-row gap-2"
-                                @update:model-value="colorValue">
-                                <v-item
+                            <v-chip-group
+                                selected-class="bg-primary"
+                                @update:model-value="colorValue"
+                                mandatory>
+                                <v-chip
                                     v-for="(item, index) in colors.value"
                                     :key="index"
-                                    v-slot="{ isSelected, toggle }">
-                                    <button
-                                        :class="isSelected ? 'bg-primary' : undefined"
-                                        class="rounded-lg px-2 py-1 shadow-md duration-300"
-                                        rounded
-                                        @click="toggle">
-                                        {{ item.variationValue }}
-                                    </button>
-                                </v-item>
-                            </v-item-group>
+                                    :value="item._id"
+                                    :text="item.variationValue"></v-chip>
+                            </v-chip-group>
                         </div>
                     </div>
                     <div class="sizes">
                         Tamanhos:
                         <div
                             class=" "
-                            v-if="colors">
-                            <v-item-group
-                                mandatory
+                            v-if="sizes">
+                            <v-chip-group
+                                selected-class="bg-primary"
                                 @update:model-value="sizesValue"
-                                class="flex flex-row gap-2">
-                                <v-item
+                                mandatory>
+                                <v-chip
                                     v-for="(item, index) in sizes.value"
                                     :key="index"
-                                    v-slot="{ isSelected, toggle }">
-                                    <button
-                                        :class="isSelected ? 'bg-primary' : undefined"
-                                        class="rounded-lg px-2 py-1 shadow-md duration-300"
-                                        rounded
-                                        @click="toggle">
-                                        {{ item.variationValue }}
-                                    </button>
-                                </v-item>
-                            </v-item-group>
+                                    :value="item._id"
+                                    :text="item.variationValue"></v-chip>
+                            </v-chip-group>
                         </div>
                     </div>
                     <div class="model">
                         Modelos:
-                        <div
-                            class=" "
-                            v-if="colors">
-                            <v-item-group
+                        <div v-if="models">
+                            <v-chip-group
+                                selected-class="bg-primary"
                                 @update:model-value="modelValue"
-                                mandatory
-                                class="flex flex-row gap-2">
-                                <v-item
+                                mandatory>
+                                <v-chip
                                     v-for="(item, index) in models.value"
                                     :key="index"
-                                    v-slot="{ isSelected, toggle }">
-                                    <button
-                                        :class="isSelected ? 'bg-primary' : undefined"
-                                        class="rounded-lg px-2 py-1 shadow-md duration-300"
-                                        rounded
-                                        @click="toggle">
-                                        {{ item.variationValue }}
-                                    </button>
-                                </v-item>
-                            </v-item-group>
+                                    :value="item._id"
+                                    :text="item.variationValue"></v-chip>
+                            </v-chip-group>
                         </div>
                     </div>
                     <div class="materials">
                         Materiais:
                         <div
                             class=" "
-                            v-if="colors">
-                            <v-item-group
-                                mandatory
-                                class="flex flex-row gap-2"
-                                @update:model-value="materialValue">
-                                <v-item
+                            v-if="materials">
+                            <v-chip-group
+                                selected-class="bg-primary"
+                                @update:model-value="materialValue"
+                                mandatory>
+                                <v-chip
                                     v-for="(item, index) in materials.value"
                                     :key="index"
-                                    v-slot="{ isSelected, toggle }"
-                                    :value="item._id">
-                                    <button
-                                        :class="isSelected ? 'bg-primary' : undefined"
-                                        class="rounded-lg px-2 py-1 shadow-md duration-300"
-                                        rounded
-                                        @click="toggle">
-                                        {{ item.variationValue }}
-                                    </button>
-                                </v-item>
-                            </v-item-group>
+                                    :value="item._id"
+                                    :text="item.variationValue"></v-chip>
+                            </v-chip-group>
                         </div>
                     </div>
 
+                    <!-- Input para quantidade -->
                     <div class="flex flex-row gap-3">
                         <label for="quant">Quantidade:</label>
                         <input
@@ -161,6 +134,7 @@
                             v-model="quantity" />
                     </div>
 
+                    <!-- Botões de ação -->
                     <div class="flex-row gap-2 flex">
                         <v-btn
                             class="p-1 text-sm duration-300"
@@ -200,6 +174,9 @@
                         </v-btn>
                     </div>
                 </div>
+                <!-- Fim da seção de seleção de variações -->
+
+                <!-- Descrição do produto -->
                 <div>
                     <p class="mb-1 font-semibold text-lg underline decoration-slate-300 line underline-offset-3">Descrição:</p>
                     <p
@@ -208,6 +185,7 @@
                 </div>
             </div>
 
+            <!-- Especificações do produto -->
             <div class="Especificatios bg-white rounded-md p-2 md:p-4">
                 <h2 class="mb-4 font-semibold text-lg underline decoration-slate-300 line underline-offset-3">Especificações:</h2>
                 <div>
@@ -227,6 +205,7 @@
                 </div>
             </div>
 
+            <!-- Avaliações do produto -->
             <div class="Avaliations bg-white rounded-md p-2 md:p-4">
                 <h2 class="mb-4 font-semibold text-lg underline decoration-slate-300 line underline-offset-3">Avaliações:</h2>
                 <div class="flex flex-col gap-4">
@@ -283,14 +262,20 @@
         loading_thirdbutton: Boolean,
         loading_fourthbutton: Boolean,
     });
+
     const colors = ref([]);
     const sizes = ref([]);
     const models = ref([]);
     const materials = ref([]);
 
-    const emits = defineEmits(["value-updated material-Value sizes-Value color-Value model-Value"]);
-    const quantity = ref(1);
+    const selectedColor = ref(null);
+    const selectedSize = ref(null);
+    const selectedModel = ref(null);
+    const selectedMaterial = ref(null);
 
+    const emits = defineEmits(["value-updated", "material-Value", "sizes-Value", "color-Value", "model-Value"]);
+
+    const quantity = ref(1);
     const store = useStore();
     const product = computed(() => store.state.product);
     const imageLink = ref(null);
@@ -311,17 +296,25 @@
     function quantityValue(e) {
         emits("value-updated", e.target.value);
     }
-    function materialValue(e) {
-        emits("material-Value", materials.value.value[e]._id);
+
+    function materialValue(id) {
+        emits("material-Value", id);
+        selectedMaterial.value = materials.value.value.find(item => item._id === id);
     }
-    function sizesValue(e) {
-        emits("sizes-Value", sizes.value.value[e]._id);
+
+    function sizesValue(id) {
+        emits("sizes-Value", id);
+        selectedSize.value = sizes.value.find(item => item._id === id);
     }
-    function colorValue(e) {
-        emits("color-Value", colors.value.value[e]._id);
+
+    function colorValue(id) {
+        emits("color-Value", id);
+        selectedColor.value = colors.value.value.find(item => item._id === id);
     }
-    function modelValue(e) {
-        emits("model-Value", models.value.value[e]._id);
+
+    function modelValue(id) {
+        emits("model-Value", id);
+        selectedModel.value = models.value.value.find(item => item._id === id);
     }
 
     function updateImageLink(index) {
@@ -373,5 +366,22 @@
     const classificacaoGeral = computed(() => {
         const mediaRating = calcularMediaRating(product.value.productRatings);
         return mediaRating;
+    });
+
+    const finalPrice = computed(() => {
+        let basePrice = product.value.productPrice;
+        if (selectedColor.value) {
+            basePrice += selectedColor.value.variationPrice || 0;
+        }
+        if (selectedSize.value) {
+            basePrice += selectedSize.value.variationPrice || 0;
+        }
+        if (selectedModel.value) {
+            basePrice += selectedModel.value.variationPromotion || selectedModel.value.variationPrice;
+        }
+        if (selectedMaterial.value) {
+            basePrice += selectedMaterial.value.variationPrice || 0;
+        }
+        return basePrice;
     });
 </script>

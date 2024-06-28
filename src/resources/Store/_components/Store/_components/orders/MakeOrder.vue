@@ -175,14 +175,10 @@
             cart: cart.value.cartId,
             reference: gerReferenceNumeber(),
         });
+        console.log(res);
 
-        const user = JSON.parse(localStorage.getItem("userData"));
-
-        if (res === false) {
-            loading.value = true;
-        } else {
-            router.push({ name: "selfOrders", params: { user: `${user.id}` } });
+        if (!res || res === false) {
+            loading.value = false;
         }
-        return;
     }
 </script>

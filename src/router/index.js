@@ -126,10 +126,27 @@ const routes = [
                 component: () => import("@/resources/Dashboard/_components/Store/_components/products/AddProduct.vue"),
             },
             {
-                // update product
-                path: "produto/:id/variacoes",
-                name: "addVariation",
-                component: () => import("@/resources/Dashboard/_components/Store/_components/products/AddVariation3.vue"),
+                // variations
+                path: "produto/:id",
+                name: "vatiations",
+                redirect: { name: "variations" },
+                children: [
+                    {
+                        path: "variacoes",
+                        name: "variations",
+                        component: () => import("@/resources/Dashboard/_components/Store/_components/products/AllVariations.vue"),
+                    },
+                    {
+                        path: "addVariacoes",
+                        name: "addVariation",
+                        component: () => import("@/resources/Dashboard/_components/Store/_components/products/AddVariation3.vue"),
+                    },
+                    {
+                        path: ":variation/modificar",
+                        name: "editVariation",
+                        component: () => import("@/resources/Dashboard/_components/Store/_components/products/AddVariation3.vue"),
+                    },
+                ],
             },
             {
                 // Add image

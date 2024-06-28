@@ -6,8 +6,8 @@
         :titleSecond="`Actualizar`"
         :thirdButton="addImage"
         :titleThird="`Fotos`"
-        :fourthButton="addVariation"
-        :titleFourth="`Adicionar variações `"
+        :fourthButton="variations"
+        :titleFourth="`Variações `"
         :styl_firstbutton="`bg-red-500 hover:bg-red-200 rounded-md text-sm duration-300 p-1 shadow-md font-semibold`"
         :styl_secondbutton="`bg-blue-500 hover:bg-blue-200 rounded-md text-sm duration-300 p-1 shadow-md font-semibold`"
         :styl_thirdbutton="`bg-green-500 hover:bg-green-200 rounded-md text-sm duration-300 p-1 shadow-md font-semibold`"
@@ -59,8 +59,8 @@
     function addImage() {
         router.push({ name: "addImage", params: { id: route.params.id } });
     }
-    function addVariation() {
-        router.push({ name: "addVariation", params: { id: route.params.id } });
+    function variations() {
+        router.push({ name: "variations", params: { id: route.params.id } });
     }
     onBeforeMount(() => {
         store.dispatch("detailsProductAdmin", route.params.id);

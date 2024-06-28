@@ -174,13 +174,13 @@
         store.dispatch("mySelfUserDetails", route.params.user);
     });
 
-    const calculatePriceTotal = (cartPrices) => {
-        return cartPrices.reduce((total, product) => total + product, 0);
-    };
+    // const calculatePriceTotal = (cartPrices) => {
+    //     return cartPrices.reduce((total, product) => total + product, 0);
+    // };
 
-    const priceTotal = computed(() => {
-        return calculatePriceTotal(store.getters.cartPrice);
-    });
+    // const priceTotal = computed(() => {
+    //     return calculatePriceTotal(store.getters.cartPrice);
+    // });
 
     // Função para formatar valores monetários
     const formatCurrency = (value) => {

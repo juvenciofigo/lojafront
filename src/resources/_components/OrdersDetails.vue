@@ -7,29 +7,35 @@
                         <v-table class="">
                             <thead class="">
                                 <tr>
-                                    <th class="text-center">Producto</th>
+                                    <!-- <th class="text-center">Producto</th>
                                     <th class="text-center">Preço</th>
                                     <th class="text-center">Quantidate</th>
-                                    <th class="text-center">Valor Total</th>
+                                    <th class="text-center">Valor Total</th> -->
+
+                                    <th class="text-center flex-1">Producto</th>
+                                    <th class="text-center">Preço unit.</th>
+                                    <th class="text-center">Quant.</th>
+                                    <th class="text-center">Espec.</th>
+                                    <th class="text-center">Subtotal</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr
-                                    v-for="(product, index) in order.cart"
+                                    v-for="(item, index) in order.cartPayd.length > 0 ? order.cartPayd : order.cart"
                                     :key="index">
                                     <td class="">
                                         <div class="flex flex-row">
                                             <div class="w-16 h-16 p-1">
                                                 <img
-                                                    :src="product.picture"
+                                                    :src="item.picture"
                                                     alt=""
                                                     class="" />
                                             </div>
 
                                             <div class="flex flex-col gap-2">
                                                 <h5 class="">
-                                                    <router-link :to="{ name: `details`, params: { id: `${product.productId}` } }">
-                                                        <span class="whitespace-nowrap">{{ product.productName }}</span>
+                                                    <router-link :to="{ name: `details`, params: { id: `${item.productId}` } }">
+                                                        <span class="whitespace-nowrap">{{ item.productName }}</span>
                                                     </router-link>
                                                 </h5>
                                                 <div class="">
@@ -39,9 +45,35 @@
                                             </div>
                                         </div>
                                     </td>
-                                    <td class="text-center">{{ formatCurrency(product.productPrice) }}</td>
-                                    <td class="text-center">{{ product.quantity }}</td>
-                                    <td class="text-center">{{ formatCurrency(product.subtotal) }}</td>
+                                    <td class="text-center">{{ formatCurrency(item.productPrice) }}</td>
+                                    <td class="text-center">{{ item.quantity }}</td>
+                                    <td class="text-center">
+                                        <div
+                                            class="color whitespace-nowrap"
+                                            v-if="item.variation && item.variation.color">
+                                            <span>Cor: </span>
+                                            <span>{{ item.variation.color }}</span>
+                                        </div>
+                                        <div
+                                            class="model whitespace-nowrap"
+                                            v-if="item.variation && item.variation.model">
+                                            <span>Modelo: </span>
+                                            <span>{{ item.variation.model }}</span>
+                                        </div>
+                                        <div
+                                            class="size whitespace-nowrap"
+                                            v-if="item.variation && item.variation.size">
+                                            <span>Tamanho: </span>
+                                            <span>{{ item.variation.size }}</span>
+                                        </div>
+                                        <div
+                                            class="material whitespace-nowrap"
+                                            v-if="item.variation && item.variation.material">
+                                            <span>Material: </span>
+                                            <span>{{ item.variation.material }}</span>
+                                        </div>
+                                    </td>
+                                    <td class="text-center">{{ formatCurrency(item.subtotal) }}</td>
                                 </tr>
                             </tbody>
                         </v-table>
@@ -417,13 +449,13 @@
     import { useStore } from "vuex";
 
     const store = useStore();
-    defineProps({
+    const props = defineProps({
         order: {
             type: Object,
             required: true,
         },
     });
-
+    console.log(props.order);
     function makePayment(status, orderId, amount) {
         if (status === "Pago") return;
 
@@ -441,7 +473,7 @@
             currency: "MZN",
         });
     };
-    
+
     function formatDate(date) {
         return format(new Date(date), "dd/MM/yyyy HH:mm");
     }

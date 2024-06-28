@@ -38,7 +38,7 @@
     function materialValue(value) {
         variation.value.material = value;
     }
-    function sizesValue(value) {
+    function sizesValue(value) {  
         variation.value.size = value;
     }
     function colorValue(value) {

@@ -168,7 +168,10 @@
                     :loading="loading"
                     class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                     type="submit">
-                    Criar Variação
+                    <div>
+                        <span v-if="selectedVariation">Modificar</span>
+                        <span v-else>Criar Variação</span>
+                    </div>
                 </v-btn>
             </div>
         </form>
@@ -176,11 +179,12 @@
 </template>
 
 <script setup>
-    import { ref, computed, onBeforeMount } from "vue";
-    import { useRoute } from "vue-router";
+    import { ref, computed, onBeforeMount, toRaw } from "vue";
+    import { useRoute, useRouter } from "vue-router";
     import { useStore } from "vuex";
 
     const route = useRoute();
+    const router = useRouter();
     const store = useStore();
     const product = computed(() => store.state.product);
     const loading = ref(false);
@@ -192,6 +196,8 @@
         });
     };
 
+    const selectedVariation = route.params.variation;
+
     const variation = ref({
         variationProduct: route.params.id,
         variationType: null,
@@ -199,7 +205,7 @@
         sku: null,
         variationStock: true,
         variationPrice: 0,
-        variationPromotion: 0,
+        variationPromotion: null,
         variationImage: [],
         delivery: {
             dimensions: {
@@ -213,7 +219,6 @@
     });
 
     async function submitVariation() {
-
         if (!variation.value.variationType) {
             store.commit("updateSnackbar", { show: true, text: "Preencha correctamente o campo Tipo da variação!", color: "red" });
             return;
@@ -227,7 +232,15 @@
             return;
         }
 
-        const response = await store.dispatch("addVariation", { product: route.params.id, variation: variation.value });
+        let response = null;
+
+        if (selectedVariation) {
+            response = await store.dispatch("updateVariation", { id: route.params.variation, variation: toRaw(variation.value) });
+            router.go(0);
+            return;
+        } else {
+            response = await store.dispatch("addVariation", { product: route.params.id });
+        }
         if (response === true) {
             clearForm();
         }
@@ -256,7 +269,31 @@
         };
     }
 
-    onBeforeMount(() => {
-        store.dispatch("detailsProductAdmin", route.params.id);
+    onBeforeMount(async () => {
+        await store.dispatch("detailsProductAdmin", route.params.id);
+        if (selectedVariation) {
+            const res = await store.dispatch("detailsVariarion", { variation: selectedVariation, product: route.params.id });
+            variation.value = {
+                variationProduct: route.params.id,
+                variationType: res.variationType,
+                variationValue: res.variationValue,
+                sku: res.sku,
+                variationStock: res.variationStock,
+                variationPrice: res.variationPrice,
+                variationPromotion: res.variationPromotion,
+                variationImage: res.variationImage,
+                delivery: {
+                    dimensions: {
+                        heightCm: res.delivery.dimensions.heightCm,
+                        widthCm: res.delivery.dimensions.widthCm,
+                        depthCm: res.delivery.dimensions.depthCm,
+                    },
+                    weight: res.delivery.weight,
+                    shippingFree: res.delivery.shippingFree,
+                },
+            };
+        } else {
+            console.log(false);
+        }
     });
 </script>
