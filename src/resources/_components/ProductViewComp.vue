@@ -1,5 +1,5 @@
 <template>
-    <div class="products flex flex-row gap-2 p-1 flex-1 flex-wrap xl:justify-start xl:justify-start w-fit">
+    <div class="products flex flex-row gap-2 p-1 flex-1 flex-wrap xl:justify-start w-fit">
         <router-link
             v-for="product in products"
             :key="product._id"

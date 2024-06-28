@@ -10,7 +10,7 @@
             </div>
             <div class="absolute bottom-0 items-center top-[60px] left-0 flex-1 w-full max-w-[1400px] flex flex-col overflow-auto">
                 <v-table
-                    density="compact"
+                    density="comfortable "
                     fixed-header>
                     <thead>
                         <tr>

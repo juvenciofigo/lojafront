@@ -102,6 +102,7 @@
     const store = useStore();
     const router = useRouter();
     const categories = computed(() => store.state.categories);
+    const products = computed(() => store.state.products.products);
 
     const banners = [
         {
@@ -111,7 +112,6 @@
         },
     ];
 
-    const products = computed(() => store.state.products.products);
 
     function filterProduct(category, subCategory, sub_category) {
         const query = {

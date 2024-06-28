@@ -3,6 +3,7 @@ import axios from "axios";
 import config from "@/config/config";
 import { setCookie, getCookie, removeCookie, cookieExists, errorMessage } from "@/config/cookieUtils";
 import router from "@/router";
+import { setTimeout } from "core-js";
 
 let tempCart = getCookie("tempCart");
 function getAuthToken() {
@@ -649,9 +650,12 @@ export default createStore({
                     params: { ...payload },
                 });
 
-                if (res.data) {
+                if (res.status === 200) {
                     const products = res.data;
-                    commit("SET_PRODUCTS", products);
+                    setTimeout(() => {
+                        commit("SET_PRODUCTS", products);
+                        return;
+                    }, 5000);
                 }
             } catch (error) {
                 errorMessage(error);
@@ -881,6 +885,7 @@ export default createStore({
 
             async function sendOrderRequest(data) {
                 const { cart, address, reference } = data;
+
                 const delivery = { address, reference };
                 try {
                     const res = await sendAxio("post", `/order`, { cart, delivery }, headers());

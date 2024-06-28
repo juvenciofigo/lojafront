@@ -7,11 +7,6 @@
                         <v-table class="">
                             <thead class="">
                                 <tr>
-                                    <!-- <th class="text-center">Producto</th>
-                                    <th class="text-center">Preço</th>
-                                    <th class="text-center">Quantidate</th>
-                                    <th class="text-center">Valor Total</th> -->
-
                                     <th class="text-center flex-1">Producto</th>
                                     <th class="text-center">Preço unit.</th>
                                     <th class="text-center">Quant.</th>
@@ -52,25 +47,25 @@
                                             class="color whitespace-nowrap"
                                             v-if="item.variation && item.variation.color">
                                             <span>Cor: </span>
-                                            <span>{{ item.variation.color }}</span>
+                                            <span>{{ item.variation.color.variationValue }}</span>
                                         </div>
                                         <div
                                             class="model whitespace-nowrap"
                                             v-if="item.variation && item.variation.model">
                                             <span>Modelo: </span>
-                                            <span>{{ item.variation.model }}</span>
+                                            <span>{{ item.variation.model.variationValue }}</span>
                                         </div>
                                         <div
                                             class="size whitespace-nowrap"
                                             v-if="item.variation && item.variation.size">
                                             <span>Tamanho: </span>
-                                            <span>{{ item.variation.size }}</span>
+                                            <span>{{ item.variation.size.variationValue }}</span>
                                         </div>
                                         <div
                                             class="material whitespace-nowrap"
                                             v-if="item.variation && item.variation.material">
                                             <span>Material: </span>
-                                            <span>{{ item.variation.material }}</span>
+                                            <span>{{ item.variation.material.variationValue }}</span>
                                         </div>
                                     </td>
                                     <td class="text-center">{{ formatCurrency(item.subtotal) }}</td>
@@ -157,7 +152,7 @@
 
                                 <v-timeline-item
                                     hide-opposite
-                                    :dot-color="order.payment.paymentDate === `Pago` ? `teal-lighten-3` : `teal-black`"
+                                    :dot-color="order.payment.status === `Pago` ? `teal-lighten-3` : `teal-black`"
                                     size="small">
                                     <div class="d-flex">
                                         <strong class="me-4">Pagamento realizado em realizado</strong>
