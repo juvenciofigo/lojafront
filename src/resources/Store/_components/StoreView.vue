@@ -1,6 +1,6 @@
 <template lang="">
-    <div>
-        <div class="banner max-h-[430px] p-2 bg-slate-100 flex flex-row gap-24">
+    <div class="flex-1">
+        <div class="banner p-2 bg-slate-100 flex flex-row h-[450px]">
             <div
                 v-if="categories && categories.length > 0"
                 class="categories-card hidden xl:text-base xl:inline-flex flex-col w-72 rounded-lg ml-5 bg-white pb-1">
@@ -70,7 +70,7 @@
 
             <!-- end categories-card -->
 
-            <div
+            <!-- <div
                 v-if="banners && banners.length > 0"
                 class="flex flex-row flex-1 flex-wrap">
                 <template
@@ -85,34 +85,37 @@
                         <v-img :src="banner.src"></v-img>
                     </div>
                 </template>
-            </div>
+            </div> -->
+            <BannerComp />
         </div>
 
         <ProductViewComp
+            :skeleton="skeleton"
             :products="products"
             :RouterName="'detailsClient'" />
     </div>
 </template>
 <script setup>
     import { useStore } from "vuex";
-    import { onMounted, computed } from "vue";
+    import { onBeforeMount, computed, ref } from "vue";
     import { useRouter } from "vue-router";
     import ProductViewComp from "@/resources/_components/ProductViewComp.vue";
+    import BannerComp from "@/resources/Store/_components/Store/_components/banners/BannerComp.vue";
+    
+
+    // const banners = [
+    //     {
+    //         title: "Transforme sua experiência digital!",
+    //         text: "Explore nossa coleção de smartphones de última geração.",
+    //         src: "images/consal.png",
+    //     },
+    // ];
 
     const store = useStore();
     const router = useRouter();
     const categories = computed(() => store.state.categories);
     const products = computed(() => store.state.products.products);
-
-    const banners = [
-        {
-            title: "Transforme sua experiência digital!",
-            text: "Explore nossa coleção de smartphones de última geração.",
-            src: "images/consal.png",
-        },
-    ];
-
-
+    const skeleton = ref(true);
     function filterProduct(category, subCategory, sub_category) {
         const query = {
             category: category._id,
@@ -132,7 +135,8 @@
         });
     }
 
-    onMounted(() => {
-        store.dispatch("getAllProducts");
+    onBeforeMount(async () => {
+        await store.dispatch("getAllProducts");
+        skeleton.value = false;
     });
 </script>

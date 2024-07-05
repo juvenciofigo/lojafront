@@ -427,11 +427,14 @@ export default createStore({
                     url: `/product/admin/${produtoId}`,
                     headers: headers(),
                 });
-                const productDetails = res.data.product;
-                commit("productDetails", productDetails);
-                return;
+                if (res.status === 200) {
+                    console.log(res.data.product);
+                    commit("productDetails", res.data.product);
+                    return;
+                }
             } catch (error) {
                 errorMessage(error);
+                return true;
             }
         },
 
@@ -652,10 +655,8 @@ export default createStore({
 
                 if (res.status === 200) {
                     const products = res.data;
-                    setTimeout(() => {
-                        commit("SET_PRODUCTS", products);
-                        return;
-                    }, 5000);
+                    commit("SET_PRODUCTS", products);
+                    return;
                 }
             } catch (error) {
                 errorMessage(error);
@@ -683,6 +684,7 @@ export default createStore({
         async detailsProduct({ commit }, produtoId) {
             try {
                 const res = await axios.get(`${config.apiURL}/product/${produtoId}`);
+
                 const productDetails = res.data.product;
                 commit("productDetails", { ...productDetails });
                 return;
@@ -823,7 +825,6 @@ export default createStore({
                 if (isAuthenticated === true) {
                     const res = await sendAxio("post", `/cart/${user.id}/products`, null, headers());
                     if (res.status === 200) {
-                        console.log(res.data);
                         commit("SET_CARTPRODUCTS", { ...res.data });
                         return;
                     }

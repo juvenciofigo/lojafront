@@ -21,7 +21,6 @@ loadFonts();
 // import { ShoppingBasket } from "lucide-vue-next";
 // import { ListOrdered } from "lucide-vue-next";
 // import { PersonStanding } from "lucide-vue-next";
-// import { ShoppingCart } from "lucide-vue-next";
 // import { Undo2 } from "lucide-vue-next";
 
 // import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";

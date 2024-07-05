@@ -66,7 +66,7 @@
         </v-navigation-drawer>
 
         <div class="header-1 h-[50px] flex flex-row justify-between items-center p-1 xl:p-7 bg-white">
-            <p class="text-xs text-center hidden xl:block">Bem-vindo ao {{ storeName }}.</p>
+            <p class="text-xs text-center hidden xl:block">Bem-vindo ao {{ storeName }}</p>
             <div class="xl:hidden flex flex-row">
                 <Button
                     @click.stop="drawer = !drawer"
@@ -161,7 +161,7 @@
             decotarive />
         <!-- star header-2 -->
         <div class="header-2 xl:h-[100px] h-[50px] flex flex-row gap-4 items-center bg-white">
-            <div class="py-2 px-3 xl:block rounded-md hidden">
+            <div class="py-2 px-3 xl:block rounded-md hidden duration-700 hover:-translate-y-1">
                 <LogoPart class="" />
             </div>
 
@@ -274,7 +274,8 @@
     function login() {
         store.commit("SET_LOGIN_OVERLAY", true);
     }
-    const storeName = store.state.storeName;
+
+    const storeName = computed(() => store.state.storeName);
     const isAuthenticated = ref(computed(() => store.getters.isAuthenticated("authToken")));
 
     function filterProduct(category) {

@@ -1,6 +1,6 @@
 <template>
-    <div class="flex flex-row h-100">
-        <div class="max-w-[400px] w-screen flex flex-col justify-between bg-slate-300">
+    <div class="flex flex-row h-100 rounded-md">
+        <div class="max-w-[400px] w-screen flex flex-col justify-between bg-slate-300 rounded-md backdrop-blur-sm">
             <div class="flex flex-col flex-1">
                 <LogoPart />
 
@@ -54,13 +54,13 @@
                     <p class="px-2 mt-[25px]">
                         <span>Ainda não se tem uma conta? </span>
                         <span class="underline">
-                            <button @click="register"><span class="whitespace-nowrap"> Criar conta!</span></button>
+                            <button @click="register"><span class="whitespace-nowrap text-decoration-underline"> Criar conta!</span></button>
                         </span>
                     </p>
                 </div>
             </div>
 
-            <SignaturePart class="pb-2" />
+            <SignaturePart class="" />
         </div>
     </div>
 </template>

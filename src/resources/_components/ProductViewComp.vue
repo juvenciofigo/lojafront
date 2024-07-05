@@ -1,10 +1,17 @@
 <template>
-    <div class="products flex flex-row gap-2 p-1 flex-1 flex-wrap xl:justify-start w-fit">
+    <div class="products flex flex-col md:flex-row gap-2 p-1 flex-1 flex-wrap items-center xl:items-start">
+        <ProductSkeleton v-if="skeleton" />
+        <ProductSkeleton v-if="skeleton" />
+        <ProductSkeleton v-if="skeleton" />
+        <ProductSkeleton v-if="skeleton" />
+        <ProductSkeleton v-if="skeleton" />
+        <ProductSkeleton v-if="skeleton" />
+
         <router-link
             v-for="product in products"
             :key="product._id"
             :to="{ name: RouterName, params: { id: `${product._id}` } }"
-            class="shadow-md rounded-md duration-200 hover:-translate-x-1 mx-auto hover:-translate-y-1 h-[180px] max-w-[350px] md:w-[250px] md:h-[360px] w-full flex md:!flex-col flex-row bg-white p-2">
+            class="shadow-md rounded-md duration-200 hover:-translate-x-1 hover:-translate-y-1 h-[180px] max-w-[350px] md:w-[250px] md:h-[360px] w-full flex md:!flex-col flex-row bg-white p-2">
             <div class="image flex justify-center w-full">
                 <v-img
                     v-if="product.productImage && product.productImage.length > 0"
@@ -33,10 +40,13 @@
     </div>
 </template>
 <script setup>
+    import ProductSkeleton from "@/components/skeletons/ProductSkeleton.vue";
+
     import { defineProps } from "vue";
     defineProps({
         products: Object,
         RouterName: String,
+        skeleton: Boolean,
     });
 </script>
 <style lang=""></style>

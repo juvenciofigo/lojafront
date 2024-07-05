@@ -7,8 +7,16 @@
         </div>
         <div class="shadow-md p-4 rounded-md mt-4 text-center w-full max-w-[410px] xl:w-[410px] flex flex-col gap-6 bg-white">
             <h1>Resumo do pedido</h1>
+            <div
+                v-if="skeleton"
+                class="w-full mx-auto">
+                <v-skeleton-loader
+                    class="w-full"
+                    type="table,">
+                </v-skeleton-loader>
+            </div>
 
-            <Table>
+            <Table v-else>
                 <TableBody>
                     <TableRow>
                         <TableCell class="h-10 items-center flex flex-row justify-between">
@@ -57,9 +65,11 @@
     const shippingPrice = ref(10);
     const totalPedido = computed(() => priceTotal.value + shippingPrice.value);
     const buttonStatus = ref(true);
+    const skeleton = ref(true);
 
     onBeforeMount(async () => {
         await store.dispatch("displayCartProducts", isAuthenticated.value);
+        skeleton.value = false;
     });
 
     const formatCurrency = (value) => {

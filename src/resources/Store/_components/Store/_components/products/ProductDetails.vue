@@ -1,9 +1,11 @@
 <template lang="">
+    <ProductDetaislsSkeleton v-if="skeleton"></ProductDetaislsSkeleton>
     <ProductDetailsComp
+        v-else
         :styl_thirdbutton="`hidden`"
         :styl_fourthbutton="`hidden`"
         :firstButton="addToCart"
-        :titleFirst="`Adicionar ao carinho`"
+        :titleFirst="`Adicionar`"
         :styl_firstbutton="`bg-blue-400 hover:bg-blue-200`"
         :secondButton="buyNow"
         :titleSecond="`Comprar Agora`"
@@ -14,13 +16,20 @@
         @material-Value="materialValue"
         @sizes-Value="sizesValue"
         @color-Value="colorValue"
-        @model-Value="modelValue" />
+        @model-Value="modelValue">
+        <template #first-icon>
+            <ShoppingCart stroke-width="1" />
+        </template>
+    </ProductDetailsComp>
 </template>
 <script setup>
     import { onMounted, ref, computed, toRaw } from "vue";
     import { useStore } from "vuex";
     import { useRoute, useRouter } from "vue-router";
     import ProductDetailsComp from "@/resources/_components/ProductDetailsComp.vue";
+    import ProductDetaislsSkeleton from "@/components/skeletons/ProductDetaislsSkeleton.vue";
+    import { ShoppingCart } from "lucide-vue-next";
+    
 
     const store = useStore();
     const route = useRoute();
@@ -31,6 +40,7 @@
     const product = computed(() => store.state.product);
     const loading_firstbutton = ref(false);
     const loading_secondbutton = ref(false);
+    const skeleton = ref(true);
 
     function handleValueUpdate(value) {
         quantity.value = value;
@@ -38,7 +48,7 @@
     function materialValue(value) {
         variation.value.material = value;
     }
-    function sizesValue(value) {  
+    function sizesValue(value) {
         variation.value.size = value;
     }
     function colorValue(value) {
@@ -81,7 +91,7 @@
         }
 
         await store.dispatch("addToCart", { isAuthenticated: isAuthenticated.value, item: { productId: route.params.id, variation: toRaw(variation.value), quantity: quantity.value || 1 } });
-        
+
         await store.dispatch("displayCartPrices", isAuthenticated.value);
         loading_firstbutton.value = false;
     }
@@ -96,7 +106,8 @@
         router.push({ name: "makeOrder", query: { productsFrom: "payNow", product: route.params.id, quantity: quantity.value || 1, variation: toRaw(variation.value) } });
     }
 
-    onMounted(() => {
-        store.dispatch("detailsProduct", route.params.id);
+    onMounted(async () => {
+        await store.dispatch("detailsProduct", route.params.id);
+        skeleton.value = false;
     });
 </script>
