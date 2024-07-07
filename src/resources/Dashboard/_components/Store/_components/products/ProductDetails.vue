@@ -40,7 +40,7 @@
                 </div>
                 <div>
                     <h2>Fornecedor:</h2>
-                    <div>{{ product.productVendor }}</div>
+                    <p>{{ product.productVendor }}</p>
                 </div>
             </div>
         </template>
