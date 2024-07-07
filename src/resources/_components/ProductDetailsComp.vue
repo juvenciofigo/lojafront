@@ -40,7 +40,8 @@
                         item-aria-label="custom icon label text {0} of {1}"
                         size="small"
                         :length="5"
-                        :model-value="classificacaoGeral"
+                        half-increments
+                        :model-value="product.productStatistc.ratingAverage"
                         active-color="primary" />
 
                     <div class="text-lg">
@@ -234,33 +235,119 @@
             </div>
 
             <!-- Avaliações do produto -->
-            <div class="Avaliations bg-white rounded-md p-2 md:p-4">
-                <h2 class="mb-4 font-semibold text-lg underline decoration-slate-300 line underline-offset-3">Avaliações:</h2>
-                <div class="flex flex-col gap-4">
-                    <template v-if="product.productRatings && product.productRatings.length > 0">
-                        <template
-                            v-for="rating in product.productRatings"
-                            :key="rating.id">
-                            <div class="border-b-2 bg-slate-100 ml-2 p-2">
-                                <div class="ml-2 mb-3">
-                                    <p class="font-medium">{{ rating.ratingName }} :</p>
-                                    <p class="pl-3">{{ rating.ratingText }}</p>
+            <div class="Avaliations bg-white rounded-md p-2 md:p-4 flex flex-col">
+                <div
+                    class="d-flex flex-column self-center md:self-start p-4 md:w-[400px] shadow-md rounded-md"
+                    v-if="product.productRatings && product.productRatings.length > 0">
+                    <div class="d-flex justify-center md:self text-h5 mt-3">Resumo de avaliações:</div>
+
+                    <div class="d-flex align-center flex-column">
+                        <div class="text-h6 flex-row flex">
+                            <span>{{ product.productStatistc.ratingAverage.toFixed(1) }} de 5</span>
+                        </div>
+
+                        <v-rating
+                            :model-value="product.productStatistc.ratingAverage"
+                            color="yellow-darken-3"
+                            half-increments></v-rating>
+                        <div class="px-3">{{ product.productRatings.length }}</div>
+                    </div>
+
+                    <v-list
+                        class="d-flex flex-column"
+                        density="compact">
+                        <v-list-item
+                            v-for="(rating, i) in product.productStatistc.ratingStats"
+                            :key="i">
+                            <v-progress-linear
+                                :model-value="rating.percentage"
+                                class="mx-n5"
+                                color="yellow-darken-3"
+                                height="10"
+                                rounded></v-progress-linear>
+
+                            <template v-slot:prepend>
+                                <span>{{ rating.score }}</span>
+                                <v-icon
+                                    class="mx-3"
+                                    icon="mdi-star"></v-icon>
+                            </template>
+
+                            <template v-slot:append>
+                                <div class="rating-values">
+                                    <span class="d-flex justify-end"> {{ rating.count }} </span>
                                 </div>
-                                <div class="flex flex-row justify-between px-5">
-                                    <div>
-                                        <p>{{ convertScoreToStars(rating.ratingScore) }}</p>
+                            </template>
+                        </v-list-item>
+                    </v-list>
+                </div>
+                <div>
+                    <h2 class="mb-4 font-semibold text-lg flex flex-row flex-wrap justify-between">
+                        <span>Avaliações:</span>
+                        <v-btn
+                            @click="emits(`rating-dialog`)"
+                            size="x-small"
+                            v-if="product.canRate === true">
+                            Comentar
+                        </v-btn>
+                    </h2>
+
+                    <div class="flex flex-col gap-4">
+                        <template v-if="product.productRatings && product.productRatings.length > 0">
+                            <template
+                                v-for="rating in product.productRatings"
+                                :key="rating.id">
+                                <div
+                                    :class="rating.deleted === true ? 'bg-red-400' : 'bg-slate-100'"
+                                    class="border-b-2 ml-2 p-2 rounded-md flex flex-col">
+                                    <div class="flex flex-row">
+                                        <div class="ml-2 mb-3 flex-1">
+                                            <p class="font-medium">{{ `${rating.customer.firstName.split(" ")[0]} ${rating.customer.lastName.split(" ")[0]}` }} :</p>
+                                            <p class="pl-3">{{ rating.ratingText }}</p>
+                                            <div>
+                                                <p>{{ convertScoreToStars(rating.ratingScore) }}</p>
+                                            </div>
+                                        </div>
+                                        <div class="flex flex-col text-sm">
+                                            <div class="flex flex-row justify-end">
+                                                <v-btn
+                                                    size="small"
+                                                    class="text-sm duration-300"
+                                                    variant="tonal"
+                                                    :loading="loading_fifthbutton"
+                                                    :class="styl_fifthbutton"
+                                                    @click="fifthButton(rating._id)">
+                                                    <span>
+                                                        <slot name="fifth-icon" />
+                                                    </span>
+                                                    <span>{{ titleFifth }}</span>
+                                                </v-btn>
+                                            </div>
+                                            <div class="text-end">
+                                                <pre>{{ formatDate(rating.createdAt) }}</pre>
+                                                <pre>{{ timeShow(rating.createdAt) }}</pre>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="text-sm">
-                                        <p>{{ formatDate(rating.createdAt) }}</p>
-                                        <p>{{ timeShow(rating.createdAt) }}</p>
+
+                                    <div
+                                        v-if="rating.deleted === true"
+                                        class="flex flex-col text-center text-xs">
+                                        <p>Deleted by</p>
+                                        <p>
+                                            {{ rating.deletedby.firstName }}
+                                            {{ rating.deletedby.lastName }}
+                                        </p>
+                                        <p>{{ rating.deletedby.role.length > 1 ? `Admin` : `Client` }}</p>
                                     </div>
                                 </div>
-                            </div>
+                            </template>
                         </template>
-                    </template>
-                    <template v-else>
-                        <p>Sem avaliações</p>
-                    </template>
+
+                        <template v-else>
+                            <p>Sem avaliações</p>
+                        </template>
+                    </div>
                 </div>
             </div>
         </div>
@@ -292,6 +379,11 @@
         fourthButton: { type: Function },
         styl_fourthbutton: String,
         loading_fourthbutton: Boolean,
+
+        titleFifth: { type: String },
+        fifthButton: { type: Function },
+        styl_fifthbutton: String,
+        loading_fifthbutton: Boolean,
     });
 
     // Initialize refs and store
@@ -305,7 +397,7 @@
     const selectedColor = ref(null);
     const selectedSize = ref(null);
 
-    const emits = defineEmits(["value-updated", "material-Value", "sizes-Value", "color-Value", "model-Value"]);
+    const emits = defineEmits(["value-updated", "material-Value", "sizes-Value", "color-Value", "model-Value", "rating-dialog"]);
 
     const quantity = ref(1);
     const store = useStore();
@@ -353,23 +445,19 @@
         selectedModel.value = models.value.find((item) => item._id === id);
     }
 
-    // Update the image link based on the selected image index
     function updateImageLink(index) {
         imageLink.value = product.value.productImage[index];
     }
 
-    // Format the date to a readable string
     function formatDate(date) {
         return format(new Date(date), "dd/MM/yyyy");
     }
 
-    // Convert rating score to stars
     function convertScoreToStars(score) {
         const stars = "★".repeat(score) + "☆".repeat(5 - score);
         return stars;
     }
 
-    // Show the time difference in hours
     function timeShow(date) {
         const diferencaHoras = differenceInHours(new Date(), new Date(date));
         if (diferencaHoras < 2) return `${diferencaHoras} hora atrás`;
@@ -377,7 +465,6 @@
         return formatDate(date);
     }
 
-    // Watch for changes in the product images and update the image link
     watch(
         () => product.value.productImage,
         (newValue) => {
@@ -387,7 +474,6 @@
         }
     );
 
-    // Format currency to the specified locale
     function formatCurrency(value) {
         if (typeof value !== "number" || isNaN(value)) {
             return "MZN 0.00";
@@ -398,23 +484,6 @@
         });
     }
 
-    // Calculate the average rating
-    function calcularMediaRating(scores) {
-        if (!scores || scores.length === 0) {
-            return 0;
-        }
-        const somaScores = scores.reduce((total, rating) => total + rating.ratingScore, 0);
-        const media = somaScores / scores.length;
-        return media;
-    }
-
-    // Compute the general classification rating
-    const classificacaoGeral = computed(() => {
-        const mediaRating = calcularMediaRating(product.value.productRatings);
-        return mediaRating;
-    });
-
-    // Compute the final price based on selected variations
     const finalPrice = computed(() => {
         let basePrice = product.value.productPrice;
         if (selectedColor.value) {
@@ -432,8 +501,9 @@
         return basePrice;
     });
 
-    // Initialize the component
     onMounted(() => {
-        if (product.value.productImage.length > 0) updateImageLink(0);
+        if (product.value.productImage) {
+            if (product.value.productImage.length > 0) updateImageLink(0);
+        }
     });
 </script>

@@ -1,10 +1,11 @@
 <template>
     <v-dialog
         v-model="dialogView"
-        max-width="290"
+        close-on-back
+        transition="fab-transition"
         @update:modelValue="onDialogUpdate">
-        <v-card>
-            <v-card-title class="text-h5">Confirmar {{ tileConfirmation }}</v-card-title>
+        <v-card class="sm:max-w-[500px] sm:mx-auto">
+            <v-card-title class="text-h5"> {{ tileConfirmation }}</v-card-title>
             <v-card-text>{{ textConfirmation }}</v-card-text>
             <v-card-actions>
                 <v-spacer></v-spacer>
@@ -26,34 +27,37 @@
 </template>
 
 <script setup>
-import { defineProps, defineEmits, ref, watch } from "vue";
+    import { defineProps, defineEmits, ref, watch } from "vue";
 
-const props = defineProps({
-    dialog: Boolean,
-    tileConfirmation: String,
-    textConfirmation: String,
-    positiveConfirmation: String,
-});
+    const props = defineProps({
+        dialog: Boolean,
+        tileConfirmation: String,
+        textConfirmation: String,
+        positiveConfirmation: String,
+    });
 
-const emit = defineEmits(["cancelar", "confirmar"]);
+    const emit = defineEmits(["cancelar", "confirmar"]);
 
-const dialogView = ref(props.dialog);
+    const dialogView = ref(props.dialog);
 
-watch(() => props.dialog, (newVal) => {
-    dialogView.value = newVal;
-});
+    watch(
+        () => props.dialog,
+        (newVal) => {
+            dialogView.value = newVal;
+        }
+    );
 
-const onDialogUpdate = (value) => {
-    emit('update:dialog', value);
-};
+    const onDialogUpdate = (value) => {
+        emit("update:dialog", value);
+    };
 
-const onCancel = () => {
-    emit("cancelar");
-    dialogView.value = false;
-};
+    const onCancel = () => {
+        emit("cancelar");
+        dialogView.value = false;
+    };
 
-const onConfirm = () => {
-    emit("confirmar");
-    dialogView.value = false;
-};
+    const onConfirm = () => {
+        emit("confirmar");
+        dialogView.value = false;
+    };
 </script>

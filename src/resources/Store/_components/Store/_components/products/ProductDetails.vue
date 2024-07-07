@@ -4,6 +4,7 @@
         v-else
         :styl_thirdbutton="`hidden`"
         :styl_fourthbutton="`hidden`"
+        :styl_fifthbutton="`hidden`"
         :firstButton="addToCart"
         :titleFirst="`Adicionar`"
         :styl_firstbutton="`bg-blue-400 hover:bg-blue-200`"
@@ -16,11 +17,79 @@
         @material-Value="materialValue"
         @sizes-Value="sizesValue"
         @color-Value="colorValue"
+        @rating-dialog="ratingDialog = true"
         @model-Value="modelValue">
         <template #first-icon>
             <ShoppingCart stroke-width="1" />
         </template>
     </ProductDetailsComp>
+
+    <v-dialog
+        persistent
+        v-model="ratingDialog"
+        width="auto">
+        <div class="p-4 flex flex-col gap-4 border rounded-md bg-white sm:w-[400px]">
+            <div class="flex flex-row">
+                <h1 class="text-xl font-semibold">Avaliação:</h1>
+                <button
+                    class="ms-auto"
+                    @click="ratingDialog = false">
+                    <X color="red" />
+                </button>
+            </div>
+            <div class="">
+                <form @submit.prevent="submit">
+                    <div class="mb-7 mt-5 flex flex-col gap-4">
+                        <label>
+                            <h2 class="text-lg">Comentário:</h2>
+                        </label>
+                        <v-textarea
+                            v-model="ratingText.value.value"
+                            variant="outlined"
+                            placeholder="Digite seu comentario"
+                            density="compact"
+                            bg-color="amber-lighten-4"
+                            :error-messages="ratingText.errorMessage.value">
+                        </v-textarea>
+
+                        <div>
+                            <h2 class="text-lg">Coloque uma potuaçao:</h2>
+                            <br />
+                            <div class="text-center">
+                                <v-rating
+                                    density="compact"
+                                    v-model="ratingScore.value.value"
+                                    :error-messages="ratingScore.errorMessage.value"
+                                    hover>
+                                </v-rating>
+                                <pre>{{ ratingScore.value.value }}</pre>
+                                <div class="text-red-500 text-xs">{{ ratingScore.errorMessage.value }}</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex-row flex flex-wrap gap-2">
+                        <v-btn
+                            :loading="ratingButtonLoading"
+                            size="x-small"
+                            theme="primary"
+                            variant="tonal"
+                            color="#5865f2"
+                            type="submit"
+                            class="bg-[#5865f2] text-white">
+                            Submit
+                        </v-btn>
+                        <v-btn
+                            size="x-small"
+                            variant="tonal"
+                            @click="handleReset()"
+                            >Limpar</v-btn
+                        >
+                    </div>
+                </form>
+            </div>
+        </div>
+    </v-dialog>
 </template>
 <script setup>
     import { onMounted, ref, computed, toRaw } from "vue";
@@ -28,19 +97,23 @@
     import { useRoute, useRouter } from "vue-router";
     import ProductDetailsComp from "@/resources/_components/ProductDetailsComp.vue";
     import ProductDetaislsSkeleton from "@/components/skeletons/ProductDetaislsSkeleton.vue";
-    import { ShoppingCart } from "lucide-vue-next";
-    
+    import { ShoppingCart, X } from "lucide-vue-next";
+    import { useField, useForm } from "vee-validate";
+    import { toTypedSchema } from "@vee-validate/zod";
+    import * as z from "zod";
 
     const store = useStore();
     const route = useRoute();
     const router = useRouter();
-    const variation = ref({});
     const isAuthenticated = ref(computed(() => store.getters.isAuthenticated("authToken")));
-    const quantity = ref(1);
     const product = computed(() => store.state.product);
-    const loading_firstbutton = ref(false);
     const loading_secondbutton = ref(false);
+    const loading_firstbutton = ref(false);
+    const ratingButtonLoading = ref(false);
+    const ratingDialog = ref(false);
     const skeleton = ref(true);
+    const variation = ref({});
+    const quantity = ref(1);
 
     function handleValueUpdate(value) {
         quantity.value = value;
@@ -95,6 +168,26 @@
         await store.dispatch("displayCartPrices", isAuthenticated.value);
         loading_firstbutton.value = false;
     }
+
+    const { handleSubmit, handleReset } = useForm({
+        validationSchema: toTypedSchema(
+            z.object({
+                ratingText: z.string({ message: "Preencha esse campo" }),
+                ratingScore: z.number({ message: "Avalie pelas estrelas" }).min(1, { message: "O mínimo deve ser 1" }).max(5, { message: "O máximo deve ser 5" }),
+            })
+        ),
+    });
+
+    let ratingText = useField("ratingText"),
+        ratingScore = useField("ratingScore");
+
+    const submit = handleSubmit(async (values) => {
+        ratingButtonLoading.value = true;
+        await store.dispatch("sendRating", { ...values, productId: route.params.id });
+        handleReset();
+        ratingDialog.value = false;
+        ratingButtonLoading.value = false;
+    });
 
     async function buyNow() {
         const res = await verifyVaraiations();

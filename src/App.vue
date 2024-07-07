@@ -25,6 +25,7 @@
                 </button>
                 <RegisterView />
             </v-dialog>
+            
             <v-dialog
                 persistent
                 v-model="loginOverlay"

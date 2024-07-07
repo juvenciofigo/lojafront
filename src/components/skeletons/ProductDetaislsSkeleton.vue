@@ -58,42 +58,10 @@
 
                     <!-- Botões de ação -->
                     <div class="flex-row gap-2 flex">
-                        <v-btn
-                            class="p-1 text-sm duration-300"
-                            size="small"
-                            variant="elevated"
-                            :loading="loading_firstbutton"
-                            :class="styl_firstbutton"
-                            @click="firstButton">
-                            {{ titleFirst }}
-                        </v-btn>
-                        <v-btn
-                            class="p-1 text-sm duration-300"
-                            size="small"
-                            variant="elevated"
-                            :loading="loading_secondbutton"
-                            :class="styl_secondbutton"
-                            @click="secondButton">
-                            {{ titleSecond }}
-                        </v-btn>
-                        <v-btn
-                            size="small"
-                            class="p-1 text-sm duration-300"
-                            variant="elevated"
-                            :loading="loading_thirdbutton"
-                            :class="styl_thirdbutton"
-                            @click="thirdButton">
-                            {{ titleThird }}
-                        </v-btn>
-                        <v-btn
-                            size="small"
-                            class="p-1 text-sm duration-300"
-                            variant="elevated"
-                            :loading="loading_fourthbutton"
-                            :class="styl_fourthbutton"
-                            @click="fourthButton">
-                            {{ titleFourth }}
-                        </v-btn>
+                        <v-skeleton-loader type="button"> </v-skeleton-loader>
+                        <v-skeleton-loader type="button"> </v-skeleton-loader>
+                        <v-skeleton-loader type="button"> </v-skeleton-loader>
+                        <v-skeleton-loader type="button"> </v-skeleton-loader>
                     </div>
                 </div>
                 <!-- Fim da seção de seleção de variações -->

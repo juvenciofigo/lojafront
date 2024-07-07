@@ -439,6 +439,22 @@ export default createStore({
         },
 
         /*
+       Rating
+       */
+        async deleteRating({ commit }, payload) {
+            try {
+                const res = await sendAxio("patch", `/rating/${payload.rating}/delete`, null, headers(), null);
+                if (res.status === 200) {
+                    commit("updateSnackbar", { show: true, text: "Comentário apagado", color: "green" });
+                }
+                return;
+            } catch (error) {
+                errorMessage(error);
+                return;
+            }
+        },
+
+        /*
 
         Cataegories
 
@@ -683,13 +699,34 @@ export default createStore({
 
         async detailsProduct({ commit }, produtoId) {
             try {
-                const res = await axios.get(`${config.apiURL}/product/${produtoId}`);
-
-                const productDetails = res.data.product;
-                commit("productDetails", { ...productDetails });
+                const res = await sendAxio("get", `${config.apiURL}/product/${produtoId}`, null, headers(), null);
+                if (res.status === 200) {
+                    console.log(res.data.product);
+                    commit("productDetails", res.data.product);
+                }
                 return;
             } catch (error) {
                 errorMessage(error);
+            }
+        },
+
+        /*
+       Rating cliente
+       */
+        async sendRating({ commit }, payload) {
+            console.log(payload);
+            try {
+                const res = await sendAxio("post", `${config.apiURL}/rating/${payload.productId}`, { ratingScore: payload.ratingScore, ratingText: payload.ratingText }, headers(), null);
+
+                console.log(res);
+                if (res.status === 200) {
+                    commit("updateSnackbar", { show: true, text: "Avaliaçao adicionada!", color: "green" });
+                    window.location.reload();
+                }
+                return;
+            } catch (error) {
+                errorMessage(error);
+                return;
             }
         },
 
