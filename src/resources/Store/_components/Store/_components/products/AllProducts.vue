@@ -43,4 +43,3 @@
         fetchProducts();
     });
 </script>
-<style lang=""></style>

@@ -60,4 +60,4 @@
     import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
     const user = computed(() => JSON.parse(localStorage.getItem("userData")));
 </script>
-<style lang=""></style>
+

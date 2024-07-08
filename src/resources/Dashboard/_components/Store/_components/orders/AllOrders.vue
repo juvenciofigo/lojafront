@@ -9,4 +9,3 @@
 <script setup>
     import AllOldersComp from "@/resources/_components/AllOrdersComp.vue";
 </script>
-<style scoped></style>

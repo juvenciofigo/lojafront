@@ -79,4 +79,3 @@
         variations.value = await store.dispatch("AllvariationsAdmin", route.params.id);
     });
 </script>
-<style lang=""></style>

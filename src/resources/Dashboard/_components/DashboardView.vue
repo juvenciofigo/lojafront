@@ -108,5 +108,3 @@
         return paths.slice(0, 2);
     });
 </script>
-
-<style lang=""></style>

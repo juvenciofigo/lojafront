@@ -81,4 +81,3 @@
         updateChart();
     });
 </script>
-<style lang=""></style>

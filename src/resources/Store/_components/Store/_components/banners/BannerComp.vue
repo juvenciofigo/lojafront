@@ -94,8 +94,7 @@
         slider.value.addEventListener("mouseleave", startAutoSlide);
     });
 </script>
-<style></style>
-<style>
+<style scoped>
     /* carousel */
 
     .carousel .list .item {

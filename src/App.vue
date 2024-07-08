@@ -68,7 +68,7 @@
         store.commit("updateSnackbar", { show: false, text: "" });
     };
 </script>
-<style>
+<style scoped>
     .v-card-item,
     .v-card-actions {
         padding: 0 !important;

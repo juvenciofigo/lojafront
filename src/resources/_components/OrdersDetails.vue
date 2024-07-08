@@ -473,7 +473,7 @@
         return format(new Date(date), "dd/MM/yyyy HH:mm");
     }
 </script>
-<style>
+<style scoped>
     .card {
         background: white;
         border-radius: 10px;

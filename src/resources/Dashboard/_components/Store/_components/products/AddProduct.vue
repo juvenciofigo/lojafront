@@ -512,7 +512,7 @@
         store.dispatch("getAllCategoryAdmin");
     });
 </script>
-<style>
+<style scoped>
     .v-input__control {
         background-color: white;
         border-radius: 4px;

@@ -26,10 +26,8 @@
     onBeforeUnmount(() => {
         store.commit("CLEAR_CATEGORY");
     });
-    
 
     onBeforeMount(() => {
         fetchProducts();
     });
 </script>
-<style lang=""></style>

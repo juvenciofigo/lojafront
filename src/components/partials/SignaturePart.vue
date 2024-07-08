@@ -1,5 +1,5 @@
 <template>
-    <div class="flex flex-col text-center bg-yellow-300">
+    <div class="flex flex-col text-center bg-yellow-300 ">
         <p>© 2024 {{ storeName }} Criado por</p>
         <a
             target="_blank"
@@ -23,7 +23,3 @@
     const store = useStore();
     const storeName = computed(() => store.state.storeName);
 </script>
-
-<style scoped>
-    /* Seus estilos aqui, se necessário */
-</style>

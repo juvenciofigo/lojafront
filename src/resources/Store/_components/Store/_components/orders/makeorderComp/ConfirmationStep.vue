@@ -82,4 +82,3 @@
         sendData();
     });
 </script>
-<style lang=""></style>

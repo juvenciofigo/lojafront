@@ -191,4 +191,3 @@
         });
     };
 </script>
-<style scoped></style>
