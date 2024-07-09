@@ -57,7 +57,8 @@
     const snackbar = computed(() => store.getters.snackbar);
     const snackbarText = computed(() => store.getters.snackbarText);
     const snackbarColor = computed(() => store.getters.snackbarColor);
-    const loginOverlay = computed(() => store.getters.loginOverlay);
+    // const loginOverlay = computed(() => store.getters.loginOverlay);
+    const loginOverlay = true;
     const registerOverlay = computed(() => store.getters.registerOverlay);
 
     function dialogLogClose() {
@@ -68,7 +69,7 @@
         store.commit("updateSnackbar", { show: false, text: "" });
     };
 </script>
-<style scoped>
+<style>
     .v-card-item,
     .v-card-actions {
         padding: 0 !important;

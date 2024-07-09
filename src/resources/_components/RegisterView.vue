@@ -1,126 +1,125 @@
 <template>
-    <div class="flex flex-row h-100">
-        <div class="flex-1"></div>
+    <form @submit.prevent="submitSignUp">
+        <LogoPart class="mb-4" />
+        <h1 class="title">Criar uma conta</h1>
 
-        <div class="max-w-[400px] w-screen flex flex-col justify-between bg-slate-300">
-            <div class="flex flex-col flex-1">
-                <LogoPart />
-
-                <Separator
-                    orientation="horizontal"
-                    class="w-[85%] self-center my-4 mb-6"
-                    decotarive />
-
-                <p class="text-blue-600 text-2xl self-center">Bem-vindo!</p>
-
-                <div class="px-7 mt-10">
-                    <form @submit.prevent="submit">
-                        <div class="flex flex-col gap-3">
-                            <v-text-field
-                                v-model="firstName.value.value"
-                                variant="outlined"
-                                placeholder="Nome"
-                                density="compact"
-                                bg-color="white"
-                                :counter="40"
-                                :error-messages="firstName.errorMessage.value"
-                                label="Nome">
-                            </v-text-field>
-                            <v-text-field
-                                v-model="lastName.value.value"
-                                variant="outlined"
-                                placeholder="Apelido"
-                                density="compact"
-                                bg-color="white"
-                                :counter="40"
-                                :error-messages="lastName.errorMessage.value"
-                                label="Apelido">
-                            </v-text-field>
-                            <v-text-field
-                                v-model="password.value.value"
-                                autocomplete="new-password"
-                                variant="outlined"
-                                density="compact"
-                                bg-color="white"
-                                :counter="8"
-                                type="password"
-                                :error-messages="password.errorMessage.value"
-                                label="Senha">
-                            </v-text-field>
-                            <v-text-field
-                                v-model="email.value.value"
-                                autocomplete="email"
-                                variant="outlined"
-                                density="compact"
-                                bg-color="white"
-                                :error-messages="email.errorMessage.value"
-                                label="E-mail">
-                            </v-text-field>
-                        </div>
-
-                        <v-btn
-                            class="me-4"
-                            type="submit">
-                            Enviar
-                        </v-btn>
-
-                        <v-btn @click="handleReset"> Limpar </v-btn>
-                    </form>
-
-                    <p class="px-2 mt-[25px]">
-                        <span>Esqueceu a senha? </span>
-                        <span class="underline">
-                            <router-link to="#"><span class="whitespace-nowrap"> Recuperar senha!</span></router-link>
-                        </span>
-                    </p>
-
-                    <p class="px-2 mt-[25px]">
-                        <span>Ja tem uma conta? </span>
-                        <span class="underline">
-                            <button @click="login"><span class="whitespace-nowrap"> Entrar!</span></button>
-                        </span>
-                    </p>
-                </div>
-            </div>
-
-            <SignaturePart class="pb-2" />
+        <!-- First Name -->
+        <div class="w-full">
+            <input
+                type="text"
+                autocomplete="name"
+                v-model="firstName.value.value"
+                placeholder="Nome" />
+            <span class="error-message">{{ firstName.errorMessage.value }}</span>
         </div>
-    </div>
+
+        <!-- Last Name -->
+        <div class="w-full">
+            <input
+                type="text"
+                autocomplete="name"
+                v-model="lastName.value.value"
+                placeholder="Apelido" />
+            <span class="error-message">{{ lastName.errorMessage.value }}</span>
+        </div>
+
+        <!-- Email -->
+        <div class="w-full">
+            <input
+                v-model="email.value.value"
+                autocomplete="email"
+                type="email"
+                placeholder="Email" />
+            <span class="error-message">{{ email.errorMessage.value }}</span>
+        </div>
+
+        <!-- Password -->
+        <div class="w-full">
+            <input
+                v-model="password.value.value"
+                autocomplete="new-password"
+                type="password"
+                placeholder="Password" />
+            <span class="error-message">{{ password.errorMessage.value }}</span>
+        </div>
+
+        <div class="flex flex-row gap-3">
+            <v-btn
+                type="submit"
+                @click="(loadSignUpBtn = true), (toogleButtonLoad = true)"
+                :loading="loadSignUpBtn"
+                >Cadastrar</v-btn
+            >
+            <button
+                style="background-color: rgb(204, 15, 15)"
+                @click="handleReset">
+                Limpar
+            </button>
+        </div>
+        <div class="social-icons">
+            <div
+                href="#"
+                class="icon">
+                <i class="fa-brands fa-google-plus-g"></i>
+            </div>
+            <div
+                href="#"
+                class="icon">
+                <i class="fa-brands fa-facebook-f"></i>
+            </div>
+            <div
+                href="#"
+                class="icon">
+                <i class="fa-brands fa-github"></i>
+            </div>
+            <div
+                href="#"
+                class="icon">
+                <i class="fa-brands fa-linkedin-in"></i>
+            </div>
+        </div>
+    </form>
 </template>
+
 <script setup>
-    // Componentes
     import LogoPart from "@/components/partials/LogoPart.vue";
-    import SignaturePart from "@/components/partials/SignaturePart.vue";
     import { useStore } from "vuex";
+    import { ref } from "vue";
     import { useField, useForm } from "vee-validate";
     import { toTypedSchema } from "@vee-validate/zod";
     import * as z from "zod";
 
-    import { Separator } from "@/components/ui/separator";
-
     const store = useStore();
+
+    const loadSignUpBtn = ref(false);
+    const toogleButtonLoad = ref(false);
+
+    const onsubmit = async (values) => {
+        await store.dispatch("newUser", { values });
+        loadSignUpBtn.value = false;
+        toogleButtonLoad.value = false;
+    };
+
+    const handleError = () => {
+        loadSignUpBtn.value = false;
+        toogleButtonLoad.value = false;
+    };
 
     const { handleSubmit, handleReset } = useForm({
         validationSchema: toTypedSchema(
             z.object({
-                email: z.string().email({ message: "E-mail inválido" }),
+                email: z.string({ message: "Campo Email obrigatório" }).email({ message: "E-mail inválido" }),
                 // password
                 password: z
-                    .string()
+                    .string({ message: "Campo Password obrigatório" })
                     .min(8, { message: "A senha deve ter no mínimo 8 caracteres" })
                     .regex(/[a-z]/, { message: "A senha deve conter pelo menos uma letra minúscula" })
                     .regex(/[A-Z]/, { message: "A senha deve conter pelo menos uma letra maiúscula" })
                     .regex(/\d/, { message: "A senha deve conter pelo menos um número" }),
                 //firstName
-                firstName: z
-                    .string()
-                    .regex(/^[\p{L}\s'-]+$/u, { message: "O nome deve conter apenas letras, espaços, apóstrofos e hífens" })
-                    .min(4, { message: "O nome deve ter no mínimo 4 caracteres" }),
+                firstName: z.string({ message: "Campo Nome obrigatório" }).regex(/^[\p{L}\s'-]+$/u, { message: "O nome deve conter apenas letras, espaços, apóstrofos e hífens" }),
                 //lastName
-                lastName: z
-                    .string()
-                    .regex(/^[\p{L}\s'-]+$/u, { message: "O nome deve conter apenas letras, espaços, apóstrofos e hífens" })
-                    .min(4, { message: "O nome deve ter no mínimo 4 caracteres" }),
+                lastName: z.string({ message: "Campo Apelido obrigatório" }).regex(/^[\p{L}\s'-]+$/u, { message: "O nome deve conter apenas letras, espaços, apóstrofos e hífens" }),
             })
         ),
     });
@@ -130,12 +129,84 @@
     const email = useField("email");
     const password = useField("password");
 
-    const submit = handleSubmit(async (values) => {
-        await store.dispatch("newUser", { values });
-    });
-
-    function login() {
-        store.commit("SET_LOGIN_OVERLAY", true);
-        store.commit("SET_REGISTER_OVERLAY", false);
-    }
+    const submitSignUp = handleSubmit(onsubmit, handleError);
 </script>
+
+<style scoped>
+    .title {
+        font-size: 30px;
+        font-weight: 500;
+    }
+
+    .container p {
+        font-size: 14px;
+        line-height: 20px;
+        letter-spacing: 0.3px;
+        margin: 20px 0;
+    }
+    .error-message {
+        margin: 5px 0 0 0;
+        padding: 0 0 0 10px;
+        width: 100%;
+        height: 15px;
+        line-height: 13px;
+        color: red;
+        display: flex;
+        align-items: center;
+    }
+    .container span {
+        font-size: 12px;
+    }
+
+    .container a {
+        color: #333;
+        font-size: 13px;
+        text-decoration: none;
+        margin: 15px 0 10px;
+    }
+
+    .container button {
+        background-color: #512da8;
+        color: #fff;
+        font-size: 12px;
+        padding: 10px 45px;
+        border: 1px solid transparent;
+        border-radius: 8px;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+        margin-top: 10px;
+        cursor: pointer;
+    }
+
+    .container button.hidden {
+        background-color: transparent;
+        border-color: #fff;
+    }
+
+    input {
+        background-color: #eee;
+        border: none;
+        margin: 8px 0;
+        padding: 10px 15px;
+        font-size: 13px;
+        border-radius: 8px;
+        width: 100%;
+        outline: none;
+    }
+
+    .social-icons {
+        margin: 20px 0;
+    }
+
+    .social-icons a {
+        border: 1px solid #ccc;
+        border-radius: 20%;
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        margin: 0 3px;
+        width: 40px;
+        height: 40px;
+    }
+</style>
