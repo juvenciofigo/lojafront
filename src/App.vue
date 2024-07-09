@@ -1,51 +1,52 @@
 <template>
     <v-app class="bg-blue-200 overflow-hidden">
-        <v-main class="overflow-hidden">
-            <v-snackbar
-                v-model="snackbar"
-                :color="snackbarColor">
-                {{ snackbarText }}
-                <template v-slot:actions>
-                    <v-btn
-                        variant="text"
-                        @click="closeSnackbar">
-                        Fechar
-                    </v-btn>
-                </template>
-            </v-snackbar>
-
-            <v-dialog
-                persistent
-                v-model="registerOverlay"
-                width="auto">
-                <button
-                    class="ms-auto"
-                    @click="dialogLogClose">
-                    <X color="red" />
-                </button>
-                <RegisterView />
-            </v-dialog>
-            
-            <v-dialog
-                persistent
-                v-model="loginOverlay"
-                width="auto">
-                <button
-                    class="ms-auto"
-                    @click="dialogLogClose">
-                    <X color="red" />
-                </button>
-                <LoginView />
-            </v-dialog>
-            <LoadPage />
-            <PaymentDialog />
+        <!--  main -->
+        <v-main class="overflow-hidden h-full">
             <router-view />
         </v-main>
+
+        <!-- Dialog -->
+        <PaymentDialog />
+        <v-snackbar
+            v-model="snackbar"
+            :color="snackbarColor">
+            {{ snackbarText }}
+            <template v-slot:actions>
+                <v-btn
+                    variant="text"
+                    @click="closeSnackbar">
+                    Fechar
+                </v-btn>
+            </template>
+        </v-snackbar>
+        <v-dialog
+            persistent
+            v-model="registerOverlay"
+            width="auto">
+            <button
+                class="ms-auto"
+                @click="dialogLogClose">
+                <X color="red" />
+            </button>
+            <RegisterView />
+        </v-dialog>
+        <v-dialog
+            persistent
+            v-model="loginOverlay"
+            width="auto">
+            <button
+                class="ms-auto"
+                @click="dialogLogClose">
+                <X color="red" />
+            </button>
+            <LoginView />
+        </v-dialog>
+        <LoadPage />
     </v-app>
 </template>
 
 <script setup>
-    import { computed, } from "vue";
+    import { computed } from "vue";
     import { useStore } from "vuex";
     import LoadPage from "./components/partials/LoadPage.vue";
     import PaymentDialog from "@/resources/Store/_components/Store/_components/payment/PaymentDialog.vue";
@@ -57,8 +58,7 @@
     const snackbar = computed(() => store.getters.snackbar);
     const snackbarText = computed(() => store.getters.snackbarText);
     const snackbarColor = computed(() => store.getters.snackbarColor);
-    // const loginOverlay = computed(() => store.getters.loginOverlay);
-    const loginOverlay = true;
+    const loginOverlay = computed(() => store.getters.loginOverlay);
     const registerOverlay = computed(() => store.getters.registerOverlay);
 
     function dialogLogClose() {

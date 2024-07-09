@@ -46,7 +46,6 @@
             </v-btn>
         </div>
     </div>
-    <v-btn @click="console.log(cart)">ver</v-btn>
 </template>
 
 <script setup>

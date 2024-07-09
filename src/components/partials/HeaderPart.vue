@@ -65,7 +65,7 @@
             </v-list>
         </v-navigation-drawer>
 
-        <div class="header-1 h-[50px] flex flex-row justify-between items-center p-1 xl:p-7 bg-white">
+        <nav class="header-1 h-[50px] flex flex-row justify-between items-center p-1 xl:p-7 bg-white">
             <p class="text-xs text-center hidden xl:block">Bem-vindo ao {{ storeName }}</p>
             <div class="xl:hidden flex flex-row">
                 <Button
@@ -153,14 +153,14 @@
                     </v-menu>
                 </div>
             </div>
-        </div>
+        </nav>
         <!-- end header-1 -->
         <Separator
             orientation="horizontal"
             class="bg-yellow-300"
             decotarive />
         <!-- star header-2 -->
-        <div class="header-2 xl:h-[100px] h-[50px] flex flex-row gap-4 items-center bg-white">
+        <nav class="header-2 xl:h-[100px] h-[50px] flex flex-row gap-4 items-center bg-white">
             <div class="py-2 px-3 xl:block rounded-md hidden duration-700 hover:-translate-y-1">
                 <LogoPart class="" />
             </div>
@@ -227,7 +227,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </nav>
         <Separator
             orientation="horizontal"
             class="bg-yellow-300"

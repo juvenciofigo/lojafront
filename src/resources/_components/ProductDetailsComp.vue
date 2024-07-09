@@ -324,7 +324,6 @@
                                                 </v-btn>
                                             </div>
                                             <div class="text-end">
-                                                <pre>{{ formatDate(rating.createdAt) }}</pre>
                                                 <pre>{{ timeShow(rating.createdAt) }}</pre>
                                             </div>
                                         </div>

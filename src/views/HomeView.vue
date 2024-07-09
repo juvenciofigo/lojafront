@@ -1,7 +1,9 @@
-<template>
-    <HeaderPart />
-    <router-view></router-view>
-    <SignaturePart />
+<template >
+    <div class="flex flex-col h-full">
+        <HeaderPart class="header"/>
+        <router-view class="flex-1"></router-view>
+        <SignaturePart class="footer"/>
+    </div>
 </template>
 
 <script setup>

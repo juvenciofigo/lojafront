@@ -85,7 +85,6 @@ export default createStore({
         // dialog
         payment: false,
         loginOverlay: false,
-        registerOverlay: false,
         // statistic
         dataStatistic: {},
     },
@@ -122,7 +121,6 @@ export default createStore({
         overlay: (state) => state.overlay,
         payment: (state) => state.payment,
         loginOverlay: (state) => state.loginOverlay,
-        registerOverlay: (state) => state.registerOverlay,
         snackbar: (state) => state.snackbar,
         snackbarText: (state) => state.snackbarText,
         snackbarColor: (state) => state.snackbarColor,
@@ -145,9 +143,6 @@ export default createStore({
         // loginOverlay
         SET_LOGIN_OVERLAY(state, status) {
             state.loginOverlay = status;
-        },
-        SET_REGISTER_OVERLAY(state, status) {
-            state.registerOverlay = status;
         },
         setRedirectTo(state, route) {
             state.redirectTo = route;
@@ -884,18 +879,14 @@ export default createStore({
         },
 
         async updateProductQuantity({ commit }, payload) {
-            console.log(payload);
             const user = JSON.parse(localStorage.getItem("userData"));
 
-            if (!payload.isAuthenticated) {
-                let tempCart = getCookie("tempCart");
-
+            if (payload.isAuthenticated === false) {
                 if (!tempCart) {
                     return;
                 } else {
                     let tempCart = JSON.parse(getCookie("tempCart"));
-
-                    const existingProductIndex = tempCart.findIndex((product) => payload.productId === product.productId);
+                    const existingProductIndex = tempCart.findIndex((product) => payload.item === product.item);
 
                     if (existingProductIndex !== -1) {
                         tempCart[existingProductIndex].quantity = Number(payload.quantity);
@@ -1058,34 +1049,37 @@ export default createStore({
             try {
                 const res = await sendAxio("post", `/login`, payload.values, null);
 
-                if (!res.status === 200) {
-                    commit("updateSnackbar", { show: true, text: "Dados errados", color: "red" });
-                }
-                const auth = res.data.user;
+                if (res.status === 200) {
+                    const auth = res.data.user;
 
-                // Definir o tempo de expiração do cookie baseado no papel do usuário
-                if (auth.role.includes("admin")) {
-                    setCookie("authToken", auth.token, 1);
-                    setCookie("poRO", auth.role[1], 1);
+                    // Definir o tempo de expiração do cookie baseado no papel do usuário
+                    if (auth.role.includes("admin")) {
+                        setCookie("authToken", auth.token, 1);
+                        setCookie("poRO", auth.role[1], 1);
+                    } else {
+                        setCookie("authToken", auth.token, 4);
+                    }
+
+                    // Armazenar dados do usuário no localStorage
+                    localStorage.setItem(
+                        "userData", // name //
+                        JSON.stringify({
+                            firstName: auth.firstName,
+                            lastName: auth.lastName,
+                            email: auth.email,
+                            id: auth._id,
+                            profilePhoto: auth.profilePhoto,
+                        })
+                    );
                 } else {
-                    setCookie("authToken", auth.token, 4);
+                    commit("updateSnackbar", { show: true, text: "Dados errados", color: "red" });
+                    return;
                 }
-
-                // Armazenar dados do usuário no localStorage
-                localStorage.setItem(
-                    "userData",
-                    JSON.stringify({
-                        firstName: auth.firstName,
-                        lastName: auth.lastName,
-                        email: auth.email,
-                        id: auth._id,
-                        profilePhoto: auth.profilePhoto,
-                    })
-                );
 
                 const user = JSON.parse(localStorage.getItem("userData"));
                 // Se houver um carrinho temporário, enviá-lo para o banco de dados
                 if (tempCart) {
+                    console.log(tempCart);
                     const res = await sendAxio("post", `/cart/${user.id}/addProduct`, JSON.parse(tempCart), headers());
                     console.log(res);
                     if (res.status === 200) {

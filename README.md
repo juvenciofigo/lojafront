@@ -26,3 +26,7 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 *** O carrinho em um pedido, nao deve salvar os dados(produtos) antes do mesmo ser pago;
 
 *** Resolcer o slot Fazer pagamento no compotente "OrderDetails";
+
+# skeleton 
+Banner categories
+adresses on makeOrder 

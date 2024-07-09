@@ -115,7 +115,6 @@
     const isAuthenticated = ref(computed(() => store.getters.isAuthenticated("authToken")));
 
     async function update() {
-        console.log(false);
         await store.dispatch("displayCartPrices", isAuthenticated.value);
         await store.dispatch("displayCartProducts", isAuthenticated.value);
     }
@@ -132,7 +131,7 @@
 
     // Função para formatar valores monetários
     const formatCurrency = (value) => {
-        if (typeof value !== "number" || isNaN(value)) { 
+        if (typeof value !== "number" || isNaN(value)) {
             return "MZN 0.00";
         }
         return value.toLocaleString("pt-MZ", {
@@ -141,3 +140,9 @@
         });
     };
 </script>
+<style>
+    input::-webkit-inner-spin-button,
+    input::-webkit-outer-spin-button {
+        appearance: none;
+    }
+</style>
