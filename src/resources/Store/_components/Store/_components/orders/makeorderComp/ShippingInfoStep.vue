@@ -2,14 +2,22 @@
     <v-stepper-window-item :value="1">
         <h3 class="text-2xl">Informações de envio</h3>
         <br />
-        <div v-if="addresses && addresses.length > 0">
+
+        <div class="flex flex-col">
             <h2>Selecione o Endereço</h2>
-            <v-item-group selected-class="bg-primary">
-                <div class="flex flex-row flex-wrap gap-4">
-                    <template
-                        v-for="(address, index) in addresses"
-                        :key="index">
-                        <v-item v-slot="{ selectedClass, toggle }">
+
+            <div v-if="addressSkeleton === false">
+                <AddressCompSkeleton />
+            </div>
+            <template v-else>
+                <v-item-group
+                    selected-class="bg-primary"
+                    v-if="addresses && addresses.length > 0">
+                    <div class="flex flex-col md:flex-row flex-wrap gap-4 w-max">
+                        <v-item
+                            v-for="(address, index) in addresses"
+                            :key="index"
+                            v-slot="{ selectedClass, toggle }">
                             <div
                                 :class="[
                                     selectedClass,
@@ -22,29 +30,12 @@
                                         select(index);
                                     }
                                 ">
-                                <div class="flex flex-col gap-2">
-                                    <div>{{ address.firstName }}</div>
-                                    <div class="text-muted-foreground text-center">
-                                        <div>{{ address.neighborhood }}</div>
-                                        <div>{{ address.city }}</div>
-                                        <div>{{ address.province }}</div>
-                                        <div>{{ address.country }}</div>
-                                    </div>
-                                </div>
-                                <div class="text-end">
-                                    <button
-                                        @click.stop="confirmDelete(address._id)"
-                                        class="p-[3px] rounded-md shadow-[#969191] shadow-sm">
-                                        <Trash2
-                                            color="red"
-                                            size="20" />
-                                    </button>
-                                </div>
+                                <AddressComp :address="address" />
                             </div>
                         </v-item>
-                    </template>
-                </div>
-            </v-item-group>
+                    </div>
+                </v-item-group>
+            </template>
         </div>
         <br />
 
@@ -53,7 +44,7 @@
                 <h3 class="text-xl">Novo Endereço</h3>
                 <!-- Nome -->
                 <v-text-field
-                    :disabled="disabledTextarea"
+                    :disabled="disabledTextarea || addressSkeleton == false"
                     @change="submit"
                     v-model="firstName.value.value"
                     variant="outlined"
@@ -66,7 +57,7 @@
 
                 <!-- Apelido -->
                 <v-text-field
-                    :disabled="disabledTextarea"
+                    :disabled="disabledTextarea || addressSkeleton == false"
                     @change="submit"
                     v-model="lastName.value.value"
                     variant="outlined"
@@ -79,7 +70,7 @@
 
                 <!-- Email -->
                 <v-text-field
-                    :disabled="disabledTextarea"
+                    :disabled="disabledTextarea || addressSkeleton == false"
                     @change="submit"
                     v-model="email.value.value"
                     autocomplete="email"
@@ -91,7 +82,7 @@
 
                 <!-- Número de Celular -->
                 <v-text-field
-                    :disabled="disabledTextarea"
+                    :disabled="disabledTextarea || addressSkeleton == false"
                     @change="submit"
                     v-model="cellNumber.value.value"
                     autocomplete="tel"
@@ -103,7 +94,7 @@
 
                 <!-- Bairro -->
                 <v-text-field
-                    :disabled="disabledTextarea"
+                    :disabled="disabledTextarea || addressSkeleton == false"
                     v-model="neighborhood.value.value"
                     @change="submit"
                     variant="outlined"
@@ -115,7 +106,7 @@
 
                 <!-- Endereço completo -->
                 <v-text-field
-                    :disabled="disabledTextarea"
+                    :disabled="disabledTextarea || addressSkeleton == false"
                     @change="submit"
                     v-model="complete.value.value"
                     variant="outlined"
@@ -127,7 +118,7 @@
 
                 <!-- Província -->
                 <v-text-field
-                    :disabled="disabledTextarea"
+                    :disabled="disabledTextarea || addressSkeleton == false"
                     @change="submit"
                     v-model="province.value.value"
                     variant="outlined"
@@ -139,7 +130,7 @@
 
                 <!-- Cidade -->
                 <v-text-field
-                    :disabled="disabledTextarea"
+                    :disabled="disabledTextarea || addressSkeleton == false"
                     v-model="city.value.value"
                     @change="submit"
                     variant="outlined"
@@ -151,7 +142,7 @@
 
                 <!-- Postal -->
                 <v-text-field
-                    :disabled="disabledTextarea"
+                    :disabled="disabledTextarea || addressSkeleton == false"
                     v-model="postalCode.value.value"
                     @change="submit"
                     variant="outlined"
@@ -163,7 +154,7 @@
 
                 <!-- País -->
                 <v-text-field
-                    :disabled="disabledTextarea"
+                    :disabled="disabledTextarea || addressSkeleton == false"
                     @change="submit"
                     v-model="country.value.value"
                     variant="outlined"
@@ -175,7 +166,7 @@
 
                 <!-- Referencia -->
                 <v-text-field
-                    :disabled="disabledTextarea"
+                    :disabled="disabledTextarea || addressSkeleton == false"
                     v-model="reference.value.value"
                     @change="submit"
                     variant="outlined"
@@ -188,6 +179,7 @@
                 <!-- Nota -->
                 <v-textarea
                     @change="submit"
+                    :disabled="disabledTextarea || addressSkeleton == false"
                     v-model="note.value.value"
                     variant="outlined"
                     placeholder="Nota"
@@ -207,25 +199,29 @@
             <v-btn @click="handleReset(), enableTextarea()">Limpar</v-btn>
         </form>
     </v-stepper-window-item>
-
-    <DialogConfirmation
-        :dialog="showDialog"
-        tileConfirmation="Deleção de Endereço"
-        textConfirmation="Você tem certeza de que deseja deletar este endereço?"
-        positiveConfirmation="Deletar"
-        @update:dialog="showDialog = $event"
-        @cancelar="handleCancel"
-        @confirmar="handleConfirm" />
 </template>
 
 <script setup>
-    import { defineEmits, ref, computed, watch, toRaw } from "vue";
+    import { defineEmits, defineProps, ref, computed, watch, toRaw } from "vue";
     import { useStore } from "vuex";
-    const store = useStore();
-    import DialogConfirmation from "@/components/partials/DialogConfirmation.vue";
+    import AddressComp from "@/resources/_components/_partials/AddressComp.vue";
+    import AddressCompSkeleton from "@/components/skeletons/AddressCompSkeleton.vue";
     import { useField, useForm } from "vee-validate";
     import { toTypedSchema } from "@vee-validate/zod";
     import * as z from "zod";
+
+    const store = useStore();
+
+    const selectAddress = ref(computed(() => store.getters.selectAddress));
+    const addresses = ref(computed(() => store.getters.addresses));
+    const disabledTextarea = ref(false);
+    const emit = defineEmits(["address"]);
+
+    defineProps({
+        addressSkeleton: {
+            type: Boolean,
+        },
+    });
 
     const { handleSubmit, handleReset } = useForm({
         validationSchema: toTypedSchema(
@@ -267,14 +263,6 @@
         note = useField("note"),
         addressId = useField("addressId");
 
-    const selectAddress = ref(computed(() => store.getters.selectAddress));
-    const addresses = ref(computed(() => store.getters.addresses));
-    const disabledTextarea = ref(false);
-
-    import { Trash2 } from "lucide-vue-next";
-
-    const emit = defineEmits(["address"]);
-
     const submit = handleSubmit(async (values) => {
         emit("address", { ...values });
     });
@@ -289,31 +277,6 @@
         disabledTextarea.value = false;
         store.commit("SET_PROVIDE_ADDRESS", false);
     }
-
-    const showDialog = ref(false);
-    const deleteIndex = ref(null);
-
-    function confirmDelete(index) {
-        deleteIndex.value = index;
-        showDialog.value = true;
-    }
-
-    async function deleteAddress() {
-        if (deleteIndex.value !== null) {
-            enableTextarea();
-            await store.dispatch("deleteAddress", deleteIndex.value);
-            await store.dispatch("addresses");
-            showDialog.value = false;
-            deleteIndex.value = null;
-        }
-    }
-    const handleCancel = () => {
-        showDialog.value = false;
-    };
-
-    const handleConfirm = () => {
-        deleteAddress();
-    };
 
     watch(selectAddress, async () => {
         if (selectAddress.value !== false) {

@@ -24,6 +24,8 @@
         "clsx": "^2.1.0",
         "core-js": "^3.8.3",
         "date-fns": "^3.6.0",
+        "lord-icon-element": "^4.1.2",
+        "lottie-web": "^5.12.2",
         "lucide-vue-next": "^0.363.0",
         "postcss": "^8",
         "radix-vue": "^1.5.3",

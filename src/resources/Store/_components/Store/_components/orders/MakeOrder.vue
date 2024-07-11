@@ -23,6 +23,7 @@
                 <v-stepper-window>
                     <ShippingInfoStep
                         :currentStep="currentStep"
+                        :addressSkeleton="addressRes"
                         @next="nextStep"
                         @address="handleDeliveryData" />
                     <ConfirmationStep
@@ -64,6 +65,7 @@
     const steps = ref(["Informações de Envio", "Confirmação"]);
     const currentStep = ref(1);
     const isAuthenticated = ref(computed(() => store.getters.isAuthenticated("authToken")));
+    const addressRes = ref(false);
 
     const nextStep = () => {
         currentStep.value++;
@@ -97,7 +99,7 @@
                     window.location.href = "/";
                 }
                 if (isAuthenticated.value === true) {
-                    userData();
+                    userAddresses();
                 }
                 return;
             }
@@ -106,7 +108,7 @@
                 await store.dispatch("buyNow", { product: { id: route.query.product, quantity: route.query.quantity } });
 
                 if (isAuthenticated.value === true) {
-                    userData();
+                    userAddresses();
                 }
                 return;
             }
@@ -115,8 +117,9 @@
         router.push({ name: "home" });
     });
 
-    async function userData() {
+    async function userAddresses() {
         await store.dispatch("addresses");
+        addressRes.value = true;
     }
 
     function gerReferenceNumeber() {

@@ -3,7 +3,6 @@ import axios from "axios";
 import config from "@/config/config";
 import { setCookie, getCookie, removeCookie, cookieExists, errorMessage } from "@/config/cookieUtils";
 import router from "@/router";
-import { setTimeout } from "core-js";
 
 let tempCart = getCookie("tempCart");
 function getAuthToken() {
@@ -59,7 +58,7 @@ export default createStore({
 
         /// orders:
         orders: {},
-        addresses: null,
+        addresses: [],
         selectAddress: null,
         selected: false,
         /// payment
@@ -1147,7 +1146,7 @@ export default createStore({
 
                 if (res.status === 200) {
                     commit("SET_ADDRESSES", res.data);
-                    return;
+                    return true;
                 }
             } catch (error) {
                 errorMessage(error);
