@@ -57,12 +57,12 @@
                 </div>
 
                 <div class="flex flex-row items-end gap-1">
-                    <p>{{ user.firstName.split(" ")[0] }}</p>
+                    <p>{{ user.firstName.split(" ").at(0) }}</p>
                     <Avatar>
                         <AvatarImage
                             src="https://github.com/radix-vue.png"
                             alt="@radix-vue" />
-                        <AvatarFallback>{{ user.firstName.split(" ")[0] }}</AvatarFallback>
+                        <AvatarFallback>{{ user.firstName.split(" ").at(0) }}</AvatarFallback>
                     </Avatar>
                     <button
                         @click="store.dispatch('logout', router)"

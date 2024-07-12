@@ -1,16 +1,22 @@
 <template lang="">
-    <div class="flex flex-col gap-2">
-        <div>{{ address.firstName }}</div>
-        <div class="text-muted-foreground text-center">
+    <div class="flex flex-col gap-2 text-center">
+        <div>{{ address.firstName.split(" ").at(0) }} {{ address.lastName.split(" ").at(-1) }}</div>
+        <div>
             <div>{{ address.neighborhood }}</div>
             <div>{{ address.city }}</div>
             <div>{{ address.province }}</div>
             <div>{{ address.country }}</div>
         </div>
     </div>
-    <div class="text-end">
+    <div class="flex flex-row gap-3">
         <button
             @click.stop="confirmDelete(address._id)"
+            class="p-[3px] rounded-md shadow-[#969191] shadow-sm">
+            <PencilLine
+                color="geen"
+                size="20" />
+        </button>
+        <button
             class="p-[3px] rounded-md shadow-[#969191] shadow-sm">
             <Trash2
                 color="red"
@@ -31,7 +37,7 @@
     import { defineProps, ref } from "vue";
     import { useStore } from "vuex";
 
-    import { Trash2 } from "lucide-vue-next";
+    import { Trash2, PencilLine } from "lucide-vue-next";
     import DialogConfirmation from "@/components/partials/DialogConfirmation.vue";
 
     defineProps({

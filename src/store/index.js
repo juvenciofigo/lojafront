@@ -1002,7 +1002,7 @@ export default createStore({
 
         async deleteOrderClient({ commit }, payload) {
             try {
-                const res = await sendAxio("delete", `/order/${payload}`, null, headers());
+                const res = await sendAxio("patch", `/order/${payload}`, null, headers());
 
                 if (res.status === 200) {
                     commit("updateSnackbar", { show: true, text: "Pedido apagado", color: "green" });

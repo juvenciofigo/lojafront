@@ -15,8 +15,6 @@
     const store = useStore();
 
     async function handleDeleteButton(payload) {
-        if (payload.status === "Esperando") {
-            store.dispatch("deleteOrderClient", payload.id);
-        }
+        store.dispatch("deleteOrderClient", payload.id);
     }
 </script>

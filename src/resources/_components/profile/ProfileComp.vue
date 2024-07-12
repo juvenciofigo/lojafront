@@ -8,7 +8,7 @@
                 <v-list-item class="login/logout">
                     <v-list class="flex flex-col gap-2 h-max">
                         <p v-if="userDetails">
-                            <span class="whitespace-nowrap">{{ userDetails.firstName.split(" ")[0] }} {{ userDetails.lastName.split(" ")[0] }} </span>
+                            <span class="whitespace-nowrap">{{ userDetails.firstName.split(" ").at(0) }} {{ userDetails.lastName.split(" ").at(-1) }} </span>
                         </p>
                         <p
                             class="flex flex-row items-center h-3 text-red-400 cursor-pointer"

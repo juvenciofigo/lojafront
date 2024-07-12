@@ -26,7 +26,7 @@
                             class="cursor-pointer"
                             :to="{ name: `profile`, params: { user: user.id } }">
                             <div class="flex flex-row justify-between">
-                                <span>{{ user.firstName.split(" ")[0] }} {{ user.lastName.split(" ")[0] }} </span>
+                                <span>{{ user.firstName.split(" ").at(0) }} {{ user.lastName.split(" ").at(-1) }} </span>
                                 <span class="text-muted-foreground text-xs">Ver perfil</span>
                             </div>
                         </router-link>
@@ -103,7 +103,7 @@
                                 <div class="hidden group xl:flex flex-row justify-center items-end gap-1 cursor-pointer">
                                     <User />
                                     <p v-if="isAuthenticated === true">
-                                        <span>{{ user.firstName.split(" ")[0] }} {{ user.lastName.split(" ")[0] }}</span>
+                                        <span>{{ user.firstName.split(" ").at(0) }} {{ user.lastName.split(" ").at(-1) }}</span>
                                     </p>
                                     <ChevronDown class="group-hover:rotate-180 duration-300" />
                                 </div>
@@ -142,7 +142,7 @@
                                         <p
                                             class="xl:hidden"
                                             v-if="user">
-                                            {{ user.lastName.split(" ")[0] }}
+                                            {{ user.lastName.split(" ").at(-1) }}
                                         </p>
                                         <span class="hidden xl:inline text-[15px] font-normal">Sair</span>
                                         <LogOut class="w-4 h-4" />

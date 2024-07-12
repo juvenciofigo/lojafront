@@ -10,42 +10,29 @@
                 <AddressCompSkeleton />
             </div>
             <template v-else>
-                <v-item-group
-                    selected-class="bg-primary"
-                    v-if="addresses && addresses.length > 0">
-                    <div class="flex flex-col md:flex-row flex-wrap gap-4 w-max">
-                        <v-item
-                            v-for="(address, index) in addresses"
-                            :key="index"
-                            v-slot="{ selectedClass, toggle }">
-                            <div
-                                :class="[
-                                    selectedClass,
-                                    'cursor-pointer rounded-md border-[1px] p-2',
-                                    { 'hover:border-[#f0d4d4] hover:-translate-y-0.5 hover:bg-yellow-300 duration-500 border-[#d6d3d35b]': true },
-                                ]"
-                                @click="
-                                    () => {
-                                        toggle();
-                                        select(index);
-                                    }
-                                ">
-                                <AddressComp :address="address" />
-                            </div>
-                        </v-item>
-                    </div>
-                </v-item-group>
+                <ul
+                    v-if="addresses && addresses.length > 0"
+                    class="flex flex-col md:flex-row gap-4">
+                    <template
+                        v-for="(address, index) in addresses"
+                        :key="index">
+                        <li
+                            :value="address._id"
+                            @click="select(index)"
+                            class="flex address min-w-60 hover:-translate-y-0.5 flex-col flex-wrap gap-4 w-max rounded-md cursor-pointer border-[1px] p-2 hover:border-[#f0d4d4] duration-500 border-[#d6d3d35b">
+                            <AddressComp :address="address" />
+                        </li>
+                    </template>
+                </ul>
             </template>
         </div>
         <br />
-
-        <form>
+        <form @submit.stop>
             <div class="flex flex-col gap-3">
                 <h3 class="text-xl">Novo Endereço</h3>
                 <!-- Nome -->
                 <v-text-field
                     :disabled="disabledTextarea || addressSkeleton == false"
-                    @change="submit"
                     v-model="firstName.value.value"
                     variant="outlined"
                     placeholder="Nome"
@@ -58,7 +45,6 @@
                 <!-- Apelido -->
                 <v-text-field
                     :disabled="disabledTextarea || addressSkeleton == false"
-                    @change="submit"
                     v-model="lastName.value.value"
                     variant="outlined"
                     placeholder="Nome"
@@ -71,7 +57,6 @@
                 <!-- Email -->
                 <v-text-field
                     :disabled="disabledTextarea || addressSkeleton == false"
-                    @change="submit"
                     v-model="email.value.value"
                     autocomplete="email"
                     variant="outlined"
@@ -83,7 +68,6 @@
                 <!-- Número de Celular -->
                 <v-text-field
                     :disabled="disabledTextarea || addressSkeleton == false"
-                    @change="submit"
                     v-model="cellNumber.value.value"
                     autocomplete="tel"
                     variant="outlined"
@@ -96,7 +80,6 @@
                 <v-text-field
                     :disabled="disabledTextarea || addressSkeleton == false"
                     v-model="neighborhood.value.value"
-                    @change="submit"
                     variant="outlined"
                     placeholder="Cidade"
                     density="compact"
@@ -107,7 +90,6 @@
                 <!-- Endereço completo -->
                 <v-text-field
                     :disabled="disabledTextarea || addressSkeleton == false"
-                    @change="submit"
                     v-model="complete.value.value"
                     variant="outlined"
                     placeholder="Endereço"
@@ -119,7 +101,6 @@
                 <!-- Província -->
                 <v-text-field
                     :disabled="disabledTextarea || addressSkeleton == false"
-                    @change="submit"
                     v-model="province.value.value"
                     variant="outlined"
                     placeholder="Província"
@@ -132,7 +113,6 @@
                 <v-text-field
                     :disabled="disabledTextarea || addressSkeleton == false"
                     v-model="city.value.value"
-                    @change="submit"
                     variant="outlined"
                     placeholder="Cidade"
                     density="compact"
@@ -144,7 +124,6 @@
                 <v-text-field
                     :disabled="disabledTextarea || addressSkeleton == false"
                     v-model="postalCode.value.value"
-                    @change="submit"
                     variant="outlined"
                     placeholder="Cidade"
                     density="compact"
@@ -155,7 +134,6 @@
                 <!-- País -->
                 <v-text-field
                     :disabled="disabledTextarea || addressSkeleton == false"
-                    @change="submit"
                     v-model="country.value.value"
                     variant="outlined"
                     placeholder="País"
@@ -168,7 +146,6 @@
                 <v-text-field
                     :disabled="disabledTextarea || addressSkeleton == false"
                     v-model="reference.value.value"
-                    @change="submit"
                     variant="outlined"
                     placeholder="Referência"
                     density="compact"
@@ -178,7 +155,6 @@
 
                 <!-- Nota -->
                 <v-textarea
-                    @change="submit"
                     :disabled="disabledTextarea || addressSkeleton == false"
                     v-model="note.value.value"
                     variant="outlined"
@@ -196,7 +172,19 @@
             </div>
 
             <!-- Botões -->
-            <v-btn @click="handleReset(), enableTextarea()">Limpar</v-btn>
+            <div class="flex flex-row gap-3">
+                <v-btn
+                    :disabled="disabledTextarea"
+                    type="button"
+                    @click="submit()"
+                    >Entrar</v-btn
+                >
+                <v-btn
+                    style="background-color: rgb(204, 15, 15)"
+                    @click="handleReset(), enableTextarea()">
+                    Limpar
+                </v-btn>
+            </div>
         </form>
     </v-stepper-window-item>
 </template>
@@ -216,7 +204,7 @@
     const addresses = ref(computed(() => store.getters.addresses));
     const disabledTextarea = ref(false);
     const emit = defineEmits(["address"]);
-
+    const divAddres = ref([]);
     defineProps({
         addressSkeleton: {
             type: Boolean,
@@ -267,19 +255,53 @@
         emit("address", { ...values });
     });
 
-    function select(index) {
-        disabledTextarea.value = true;
-        store.commit("SET_ADDRESS", toRaw(addresses.value[index]));
-        store.commit("SET_PROVIDE_ADDRESS", true);
-    }
-
     function enableTextarea() {
         disabledTextarea.value = false;
         store.commit("SET_PROVIDE_ADDRESS", false);
+
+        divAddres.value.forEach((item) => {
+            item.classList.remove("bg-primary");
+        });
+
+        emit("address", null);
+    }
+
+    function select(index) {
+        divAddres.value = Array.from(document.querySelectorAll(".address"));
+        emit("address", null);
+
+        function update() {
+            disabledTextarea.value = true;
+            store.commit("SET_PROVIDE_ADDRESS", true);
+            store.commit("SET_ADDRESS", toRaw(addresses.value[index]));
+            submit();
+        }
+
+        divAddres.value.forEach((item, idx) => {
+            let contai = item.classList.contains("bg-primary");
+
+            if (contai === true && index === idx) {
+                // se o elemento clicado contem a class e se é igual a item iterrado
+                item.classList.remove("bg-primary");
+                store.commit("CLEAR_ADDRESS");
+                store.commit("CLEAR_PROVIDE_ADDRESS");
+                handleReset();
+                enableTextarea();
+                store.commit("SET_PROVIDE_ADDRESS", false);
+            } else if (contai === true) {
+                // troca para o outro
+                item.classList.remove("bg-primary");
+                update();
+            } else if (index === idx) {
+                // se nenhum tiver, adicona
+                divAddres.value[index].classList.add("bg-primary");
+                update();
+            }
+        });
     }
 
     watch(selectAddress, async () => {
-        if (selectAddress.value !== false) {
+        if (selectAddress.value !== null) {
             const address = toRaw(selectAddress.value);
 
             firstName.value.value = address.firstName;
@@ -299,7 +321,21 @@
             if (address._id) {
                 addressId.value.value = address._id;
             }
-            submit();
         }
     });
 </script>
+<style scoped>
+    button {
+        background-color: #2da848;
+        color: #fff;
+        font-size: 12px;
+        padding: 10px 45px;
+        border: 1px solid transparent;
+        border-radius: 8px;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+        margin-top: 10px;
+        cursor: pointer;
+    }
+</style>

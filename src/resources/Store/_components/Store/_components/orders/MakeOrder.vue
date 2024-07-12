@@ -1,6 +1,10 @@
 <template>
     <div class="flex-1">
-        <v-stepper v-model="currentStep">
+        <v-stepper
+            prev-text="Anterior"
+            next-text="Próximo"
+            editable
+            v-model="currentStep">
             <template v-slot:default="{ prev, next }">
                 <v-stepper-header>
                     <template
@@ -9,7 +13,6 @@
                         <v-stepper-item
                             :complete="currentStep > index"
                             :value="index + 1"
-                            editable
                             :title="step">
                         </v-stepper-item>
 
@@ -43,7 +46,7 @@
             <v-btn
                 :disabled="buttonStatus"
                 :loading="loading"
-                class="self-end w-max"
+                class="self-end button"
                 @click="sendOrder()">
                 Finalizar Pedido
             </v-btn>
@@ -156,8 +159,6 @@
     const loading = ref(false);
 
     async function sendOrder() {
-        loading.value = true;
-
         if (!selectAddress.value) {
             store.commit("updateSnackbar", {
                 show: true,
@@ -165,6 +166,7 @@
                 color: "red",
             });
             loading.value = false;
+            prevStep();
             return;
         }
 
@@ -178,10 +180,24 @@
             cart: cart.value.cartId,
             reference: gerReferenceNumeber(),
         });
-        console.log(res);
 
         if (!res || res === false) {
             loading.value = false;
         }
     }
 </script>
+<style scoped>
+    .button {
+        background-color: #2da848;
+        color: #fff;
+        font-size: 12px;
+        padding: 10px 45px;
+        border: 1px solid transparent;
+        border-radius: 8px;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+        margin-top: 10px;
+        cursor: pointer;
+    }
+</style>

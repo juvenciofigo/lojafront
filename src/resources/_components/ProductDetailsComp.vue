@@ -302,7 +302,7 @@
                                     class="border-b-2 ml-2 p-2 rounded-md flex flex-col">
                                     <div class="flex flex-row">
                                         <div class="ml-2 mb-3 flex-1">
-                                            <p class="font-medium">{{ `${rating.customer.firstName.split(" ")[0]} ${rating.customer.lastName.split(" ")[0]}` }} :</p>
+                                            <p class="font-medium">{{ `${rating.customer.firstName.split(" ").at(0)} ${rating.customer.lastName.split(" ").at(-1)}` }} :</p>
                                             <p class="pl-3">{{ rating.ratingText }}</p>
                                             <div>
                                                 <p>{{ convertScoreToStars(rating.ratingScore) }}</p>

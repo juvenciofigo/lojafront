@@ -6,10 +6,10 @@
                     <AvatarImage
                         src="https://github.com/radix-vue.png"
                         alt="foto de perfil" />
-                    <AvatarFallback>{{ user.firstName.split(" ")[0] }}</AvatarFallback>
+                    <AvatarFallback>{{ user.firstName.split(" ").at(0) }}</AvatarFallback>
                 </Avatar>
                 <div class="name text-3xl text-muted-foreground font-semibold">
-                    <span>{{ user.firstName.split(" ")[0] }} </span> <span>{{ user.lastName.split(" ")[0] }}</span>
+                    <span>{{ user.firstName.split(" ").at(0) }} </span> <span>{{ user.lastName.split(" ").at(-1) }}</span>
                 </div>
             </div>
             <!-- end name/photo -->
@@ -60,4 +60,3 @@
     import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
     const user = computed(() => JSON.parse(localStorage.getItem("userData")));
 </script>
-
