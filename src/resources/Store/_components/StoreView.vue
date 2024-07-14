@@ -1,5 +1,5 @@
 <template lang="">
-    <div class="flex-1">
+    <div class="flex-1 ">
         <div class="banner p-2 bg-slate-100 flex flex-row h-[450px]">
             <div
                 v-if="categories && categories.length > 0"
@@ -88,7 +88,6 @@
             </div> -->
             <BannerComp />
         </div>
-
         <ProductViewComp
             :skeleton="skeleton"
             :products="products"
@@ -101,15 +100,6 @@
     import { useRouter } from "vue-router";
     import ProductViewComp from "@/resources/_components/ProductViewComp.vue";
     import BannerComp from "@/resources/Store/_components/Store/_components/banners/BannerComp.vue";
-    
-
-    // const banners = [
-    //     {
-    //         title: "Transforme sua experiência digital!",
-    //         text: "Explore nossa coleção de smartphones de última geração.",
-    //         src: "images/consal.png",
-    //     },
-    // ];
 
     const store = useStore();
     const router = useRouter();

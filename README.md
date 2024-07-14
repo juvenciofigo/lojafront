@@ -29,4 +29,3 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 
 # skeleton 
 Banner categories
-adresses on makeOrder 

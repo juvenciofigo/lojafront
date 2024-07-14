@@ -6,7 +6,10 @@
         </v-main>
 
         <!-- Dialog -->
+
+        <!-- Paymnet -->
         <PaymentDialog />
+
         <v-snackbar
             v-model="snackbar"
             :color="snackbarColor">
@@ -19,28 +22,21 @@
                 </v-btn>
             </template>
         </v-snackbar>
-        <v-dialog
-            persistent
-            v-model="registerOverlay"
-            width="auto">
-            <button
-                class="ms-auto"
-                @click="dialogLogClose">
-                <X color="red" />
-            </button>
-            <RegisterView />
-        </v-dialog>
-        <v-dialog
-            persistent
+
+        <!-- Auth -->
+        <el-dialog
+            :close-on-press-escape="false"
+            :lock-scroll="true"
             v-model="loginOverlay"
-            width="auto">
-            <button
-                class="ms-auto"
-                @click="dialogLogClose">
-                <X color="red" />
-            </button>
-            <LoginView />
-        </v-dialog>
+            width="100%"
+            class="bg-transparent"
+            :show-close="false"
+            align-center>
+            <LoginView
+                @dialogLogClose="dialogLogClose"
+                class="w-full" />
+        </el-dialog>
+
         <LoadPage />
     </v-app>
 </template>
@@ -50,20 +46,15 @@
     import { useStore } from "vuex";
     import LoadPage from "./components/partials/LoadPage.vue";
     import PaymentDialog from "@/resources/Store/_components/Store/_components/payment/PaymentDialog.vue";
-    import RegisterView from "./resources/_components/RegisterView.vue";
     import LoginView from "./resources/_components/LoginView.vue";
-    import { X } from "lucide-vue-next";
-
     const store = useStore();
     const snackbar = computed(() => store.getters.snackbar);
     const snackbarText = computed(() => store.getters.snackbarText);
     const snackbarColor = computed(() => store.getters.snackbarColor);
     const loginOverlay = computed(() => store.getters.loginOverlay);
-    const registerOverlay = computed(() => store.getters.registerOverlay);
 
     function dialogLogClose() {
         store.commit("SET_LOGIN_OVERLAY", false);
-        store.commit("SET_REGISTER_OVERLAY", false);
     }
     const closeSnackbar = () => {
         store.commit("updateSnackbar", { show: false, text: "" });
