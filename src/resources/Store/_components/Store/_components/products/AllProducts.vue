@@ -1,45 +1,62 @@
-<template lang="">
+<template>
     <AllProductsComp
         :nameRoute="`detailsClient`"
         :inputShow="`hidden`"
-        :category="categorySelected.categoryName || 'Todos Produtos'"
-        :buttonShow="`hidden`" />
+        :category="categorySelected || 'Todos Produtos'"
+        :buttonShow="`hidden`"
+        :skeleton="skeleton" />
 </template>
+
 <script setup>
     import AllProductsComp from "@/resources/_components/AllProductsComp.vue";
-
-    import { computed, onMounted, onBeforeUnmount, watch } from "vue";
+    import { onBeforeUnmount, onBeforeMount, watch, ref } from "vue";
     import { useStore } from "vuex";
-    import { useRouter, useRoute } from "vue-router";
+    import { useRoute, useRouter } from "vue-router";
 
     const router = useRouter();
     const route = useRoute();
-
     const store = useStore();
-    const categorySelected = computed(() => store.state.category);
+    const skeleton = ref(true);
+
+    const categorySelected = route.query.category;
 
     const offset = route.query.offset || 1;
-    const category = route.query.category;
+    const category = route.query._id;
     const subcategory = route.query.subcategory;
     const sub_category = route.query.sub_category;
 
-    const fetchProducts = async () => {
-        const payload = { offset, category, subcategory, sub_category };
+    const payload = { offset, category, subcategory, sub_category };
+
+    async function fetchProducts(value) {
+        skeleton.value = true;
+
         if (category) {
-            await store.dispatch("detailsCategory", category);
+            await store.dispatch("getAllProducts", value);
+            skeleton.value = false;
+            return;
         }
-        await store.dispatch("getAllProducts", payload);
-    };
+        await store.dispatch("getAllProducts");
+        skeleton.value = false;
+    }
+
+    watch(
+        () => router.currentRoute.value,
+        async (newRoute) => {
+            const offset = newRoute.query.offset || 1;
+            const category = newRoute.query._id;
+            const subcategory = newRoute.query.subcategory;
+            const sub_category = newRoute.query.sub_category;
+            const payload = { offset, category, subcategory, sub_category };
+            fetchProducts(payload);
+        }
+    );
+
     onBeforeUnmount(() => {
         store.commit("CLEAR_CATEGORY");
     });
-    watch(
-        () => router.currentRoute.value,
-        () => {
-            window.location.reload();
-        }
-    );
-    onMounted(() => {
-        fetchProducts();
+
+    onBeforeMount(() => {
+        
+        fetchProducts(payload);
     });
 </script>

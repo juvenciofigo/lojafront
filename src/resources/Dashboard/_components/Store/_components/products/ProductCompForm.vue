@@ -5,7 +5,8 @@
             <p class="text-xs indent-2">Preencha as informações abaixo</p>
         </div>
         <div>
-            <form enctype="multipart/form-data" @submit.prevent="updateProduct">
+            <form
+                @submit.prevent="updateProduct">
                 <div class="flex flex-row gap-8">
                     <div class="Right flex-[2] flex flex-col gap-8">
                         <div class="TIT_Desc">
@@ -51,14 +52,25 @@
                                 variant="solo-filled">
                             </v-file-input>
 
-                            <div v-if="productImage && productImage.length > 0" class="flex flex-col gap-3">
+                            <div
+                                v-if="productImage && productImage.length > 0"
+                                class="flex flex-col gap-3">
                                 <h3>Pré-visualização de Imagens</h3>
 
                                 <div class="flex flex-row flex-wrap gap-2">
-                                    <template v-for="(preview, index) in productImage" :key="index">
+                                    <template
+                                        v-for="(preview, index) in productImage"
+                                        :key="index">
                                         <div class="flex flex-col gap-2 items-center">
-                                            <img :src="preview" :alt="'Pré-visualização da Imagem ' + index" class="object-cover h-[45px] w-[45px] border-[2px]" />
-                                            <button type="button" class="p-[2px] bg-red-500 rounded-md" @click="removeImage(index)">Remover</button>
+                                            <img
+                                                :src="preview"
+                                                :alt="'Pré-visualização da Imagem ' + index"
+                                                class="object-cover h-[45px] w-[45px] border-[2px]" />
+                                            <button
+                                                class="p-[2px] bg-red-500 rounded-md"
+                                                @click="removeImage(index)">
+                                                Remover
+                                            </button>
                                             <!-- <img :src="preview" :alt="'Pré-visualização da Imagem ' + index" class="object-cover h-[45px] w-[45px] border-[2px]" />
                                             <button type="button" class="p-[2px] bg-red-500 rounded-md" @click="removeImage(index)">Remover</button> -->
                                         </div>
@@ -153,7 +165,11 @@
                                 <Dialog>
                                     <div class="flex justify-end">
                                         <DialogTrigger as-child>
-                                            <Button class="w-max" variant="outline">Nova categoria</Button>
+                                            <Button
+                                                class="w-max"
+                                                variant="outline"
+                                                >Nova categoria</Button
+                                            >
                                         </DialogTrigger>
                                     </div>
 
@@ -177,7 +193,12 @@
                                         </div>
                                         <DialogFooter>
                                             <DialogTrigger as-child>
-                                                <Button @click="createCategory" class="w-max" type="button" variant="outline">Criar</Button>
+                                                <el-button
+                                                    @click="createCategory"
+                                                    class="w-max"
+                                                    variant="outline"
+                                                    >Criar</el-button
+                                                >
                                             </DialogTrigger>
                                         </DialogFooter>
                                     </DialogContent>
@@ -200,7 +221,15 @@
                         </div>
                         <div class="flex flex-col gap-2">
                             <Label><span class="text-red-500">* </span>Preço do produto:</Label>
-                            <v-text-field type="number" placeholder="Qual é o preço" hint="Qual é o preço?" v-model="productPrice" density="compact" flat clearable variant="outlined"></v-text-field>
+                            <v-text-field
+                                type="number"
+                                placeholder="Qual é o preço"
+                                hint="Qual é o preço?"
+                                v-model="productPrice"
+                                density="compact"
+                                flat
+                                clearable
+                                variant="outlined"></v-text-field>
                         </div>
                         <div class="flex flex-col gap-2">
                             <Label>Preço promocional do produto:</Label>
@@ -216,11 +245,23 @@
                         </div>
                         <div class="flex flex-col gap-2">
                             <Label><span class="text-red-500">* </span>Código/SKU:</Label>
-                            <v-text-field type="text" hint="Codigo sku." placeholder="Digite um códido para o produto" v-model="sku" density="compact" flat clearable variant="outlined"></v-text-field>
+                            <v-text-field
+                                type="text"
+                                hint="Codigo sku."
+                                placeholder="Digite um códido para o produto"
+                                v-model="sku"
+                                density="compact"
+                                flat
+                                clearable
+                                variant="outlined"></v-text-field>
                         </div>
                     </div>
                 </div>
-                <Button type="submit" class="mt-7">Submit</Button>
+                <el-button
+                    type="submit"
+                    class="mt-7"
+                    >Submit</el-button
+                >
             </form>
         </div>
     </div>
@@ -228,7 +269,7 @@
 
 <script setup>
     import { useStore } from "vuex";
-    import { ref, onMounted, computed,  } from "vue";
+    import { ref, onMounted, computed } from "vue";
     import Editor from "@tinymce/tinymce-vue";
     import { useForm } from "vee-validate";
     import { toTypedSchema } from "@vee-validate/zod";
@@ -265,8 +306,6 @@
     const productModel = ref("");
     const productSize = ref("");
     const productBrand = ref("");
-
-
 
     // Computação da lista de categorias
     const categories = computed(() => store.state.categories);

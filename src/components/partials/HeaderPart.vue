@@ -4,8 +4,10 @@
             v-model="drawer"
             temporary
             touchless>
-            <v-divider></v-divider>
-
+            <div class="flex-col flex justify-center items-center">
+                <LogoPart />
+                <p class="text-xs text-center">Bem-vindo</p>
+            </div>
             <v-list>
                 <v-list-item
                     class="login/logout cursor-pointer"
@@ -20,42 +22,37 @@
                 <v-list-item
                     class="login/logout"
                     v-else>
-                    <v-list class="flex flex-col gap-2 h-max">
+                    <v-list class="flex flex-row justify-between gap-2 h-max">
                         <router-link
                             v-if="user"
                             class="cursor-pointer"
                             :to="{ name: `profile`, params: { user: user.id } }">
-                            <div class="flex flex-row justify-between">
+                            <div class="flex flex-col justify-between text-sm whitespace-nowrap">
                                 <span>{{ user.firstName.split(" ").at(0) }} {{ user.lastName.split(" ").at(-1) }} </span>
                                 <span class="text-muted-foreground text-xs">Ver perfil</span>
                             </div>
                         </router-link>
                         <p
-                            class="flex flex-row items-center h-3 text-red-400 cursor-pointer"
+                            class="flex flex-row items-center h-3 text-red-400 cursor-pointer text-start"
                             @click="store.dispatch('logout', router)">
-                            <span class="block text-[px] font-normal">Sair</span>
+                            <span class="block text-sm font-normal">Sair</span>
                             <LogOut class="h-full" />
                         </p>
                     </v-list>
                 </v-list-item>
-
-                <v-list-item
-                    class="orders cursor-pointer"
-                    v-if="isAuthenticated === true">
-                    <router-link to="/">Meus pedidos</router-link>
-                </v-list-item>
             </v-list>
             <hr />
-            <v-list-item title="Categorias"></v-list-item>
-
-            <v-divider></v-divider>
+            <!-- <v-list-item title="Categorias"></v-list-item> -->
+            <p class="text-sm text-muted-foreground">Categorias</p>
 
             <v-list density="compact">
                 <v-list-item
+                    nav
                     @click="filterProduct()"
                     title="Todos Produtos">
                 </v-list-item>
                 <v-list-item
+                    nav
                     v-for="category in categories"
                     :key="category._id"
                     @click="filterProduct(category._id)"
@@ -157,16 +154,16 @@
         <!-- end header-1 -->
         <Separator
             orientation="horizontal"
-            class="bg-yellow-300"
+            class="bg-[#2196F3]"
             decotarive />
         <!-- star header-2 -->
         <nav class="header-2 xl:h-[100px] h-[50px] flex flex-row gap-4 items-center bg-white">
             <div class="py-2 px-3 xl:block rounded-md hidden duration-700 hover:-translate-y-1">
-                <LogoPart class="" />
+                <LogoPart />
             </div>
 
             <div class="search flex-1 flex flex-row md:gap-[10%] justify-end">
-                <div class="border-2 ml-3 w-full md:m-0 border-yellow-300 flex flex-1 max-w-[700px] flex-row rounded-[50px]">
+                <div class="border-2 ml-3 w-full md:m-0 border-[#2196F3] flex flex-1 max-w-[700px] flex-row rounded-[50px]">
                     <Input
                         class="flex-1 w-full rounded-l-[50px]"
                         autocomplete="off"
@@ -220,8 +217,7 @@
 
                         <Button
                             variant="ghost"
-                            type="button"
-                            class="w-max bg-yellow-300 rounded-r-[50px] flex gap-2 h-full px-[15px]">
+                            class="w-max bg-[#2196F3] rounded-r-[50px] flex gap-2 h-full px-[15px]">
                             <Search
                         /></Button>
                     </div>
@@ -230,7 +226,7 @@
         </nav>
         <Separator
             orientation="horizontal"
-            class="bg-yellow-300"
+            class="bg-[#2196F3]"
             decotarive />
         <!-- end header-2 -->
     </div>
@@ -247,6 +243,12 @@
     import { Input } from "@/components/ui/input";
 
     const drawer = ref(false);
+
+    window.addEventListener("resize", () => {
+        if (window.innerWidth > 1279) {
+            drawer.value = false;
+        }
+    });
 
     import {
         SelectContent,

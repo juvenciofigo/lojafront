@@ -15,7 +15,6 @@
                 <Button
                     @click="createCategory"
                     class="w-max"
-                    type="button"
                     variant="outline"
                     >Criar</Button
                 >
@@ -82,7 +81,6 @@
                 <Button
                     @click="createSubCategory"
                     class="w-max"
-                    type="button"
                     variant="outline"
                     >Criar</Button
                 >
@@ -150,7 +148,6 @@
                 <Button
                     @click="createSub_category"
                     class="w-max"
-                    type="button"
                     variant="outline"
                     >Criar</Button
                 >

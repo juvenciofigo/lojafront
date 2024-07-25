@@ -11,9 +11,10 @@
                         alt="Imagem do Produto" />
                 </div>
             </div>
+
             <div
                 class="changeImage flex flex-row p-1 justify-center gap-2"
-                v-if="product.productImage && product.productImage.length > 1">
+                v-if="product.productImage && product.productImage.length > 0">
                 <template
                     v-for="(image, index) in product.productImage"
                     :key="index">

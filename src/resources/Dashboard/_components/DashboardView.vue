@@ -5,6 +5,45 @@
                 v-model="drawer"
                 temporary
                 touchless>
+                <div class="flex-col flex justify-center items-center">
+                    <LogoPart />
+                    <p class="text-xs text-center">Bem-vindo</p>
+                </div>
+                <v-list>
+                    <v-list-item
+                        class="login/logout cursor-pointer"
+                        v-if="isAuthenticated === false"
+                        @click="login()">
+                        <div class="flex flex-row items-center gap-2 h-max">
+                            <LogIn class="w-4 h-4" />
+                            <span class="xl:inline text-[15px] font-normal">Entrar</span>
+                        </div>
+                    </v-list-item>
+
+                    <v-list-item
+                        class="login/logout"
+                        v-else>
+                        <v-list class="flex flex-row justify-between gap-2 h-max">
+                            <router-link
+                                v-if="user"
+                                class="cursor-pointer"
+                                :to="{ name: `profile`, params: { user: user.id } }">
+                                <div class="flex flex-col justify-between text-sm whitespace-nowrap">
+                                    <span>{{ user.firstName.split(" ").at(0) }} {{ user.lastName.split(" ").at(-1) }} </span>
+                                    <span class="text-muted-foreground text-xs">Ver perfil</span>
+                                </div>
+                            </router-link>
+                            <p
+                                class="flex flex-row items-center h-3 text-red-400 cursor-pointer text-start"
+                                @click="store.dispatch('logout', router)">
+                                <span class="block text-sm font-normal">Sair</span>
+                                <LogOut class="h-full" />
+                            </p>
+                        </v-list>
+                    </v-list-item>
+                </v-list>
+                <hr />
+
                 <div class="flex flex-col px-2 gap-2 mt-2">
                     <router-link
                         exact-active-class="bg-yellow-300 pl-5"
@@ -25,7 +64,7 @@
             </div>
 
             <div class="flex flex-col p-3 flex-1 bg-white rounded-md">
-                <p class="text-xs text-muted-foreground">Menu</p>
+                <p class="text-sm text-muted-foreground">Menu</p>
                 <div class="flex flex-col px-2 gap-2 mt-2">
                     <router-link
                         exact-active-class="bg-yellow-300 pl-5"
@@ -85,19 +124,18 @@
     import { useRouter } from "vue-router";
 
     import LogoPart from "@/components/partials/LogoPart.vue";
-
-    import { Menu } from "lucide-vue-next";
-    import { LogOut } from "lucide-vue-next";
+    import { Menu, LogOut, LogIn } from "lucide-vue-next";
     import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
     const store = useStore();
     const router = useRouter();
     const user = computed(() => JSON.parse(localStorage.getItem("userData")));
+    const isAuthenticated = ref(computed(() => store.getters.isAuthenticated("authToken")));
     const drawer = ref(false);
 
     const items = [
         { name: "Dahsboard", link: "dashboard" },
-        { name: "Produtos", link: "produtos" },
+        { name: "Produtos", link: "productsAdmin" },
         { name: "Pedidos", link: "allOrders" },
         { name: "Clientes", link: "allCustomers" },
         { name: "Carrinhos", link: "carts" },
@@ -106,5 +144,11 @@
     const breadcrumb = computed(() => {
         const paths = router.currentRoute.value.path.split("/").filter((path) => path !== "");
         return paths.slice(0, 2);
+    });
+
+    window.addEventListener("resize", () => {
+        if (window.innerWidth > 1279) {
+            drawer.value = false;
+        }
     });
 </script>

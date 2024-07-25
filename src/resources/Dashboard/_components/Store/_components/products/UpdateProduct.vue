@@ -71,12 +71,11 @@
                                                 :src="preview"
                                                 :alt="'Pré-visualização da Imagem ' + index"
                                                 class="object-cover h-[45px] w-[45px] border-[2px]" />
-                                            <button
-                                                type="button"
+                                            <el-button
                                                 class="p-[2px] bg-red-500 rounded-md"
                                                 @click="removeImage(index)">
                                                 Remover
-                                            </button>
+                                            </el-button>
                                         </div>
                                     </template>
                                 </div>
@@ -197,12 +196,11 @@
                                         </div>
                                         <DialogFooter>
                                             <DialogTrigger as-child>
-                                                <Button
+                                                <el-button
                                                     @click="createCategory"
                                                     class="w-max"
-                                                    type="button"
                                                     variant="outline"
-                                                    >Criar</Button
+                                                    >Criar</el-button
                                                 >
                                             </DialogTrigger>
                                         </DialogFooter>

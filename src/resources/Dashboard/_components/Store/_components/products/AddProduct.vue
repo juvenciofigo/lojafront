@@ -1,32 +1,41 @@
 <template lang="">
-    <div class="absolute bottom-0 top-[4px] p-4 right-0 flex-1 w-full flex flex-col overflow-auto bg-white gap-2 flex-nowrap">
+    <div class="bottom-0 top-[4px] p-4 right-0 flex-1 w-full flex flex-col overflow-auto bg-white gap-2 flex-nowrap">
         <div>
             <h1 class="text-lg font-semibold">Informações Básicas</h1>
             <p class="text-xs indent-2">Preencha as informações abaixo</p>
         </div>
 
-        <div>
-            <form @submit.prevent="addProduct">
-                <div class="flex flex-col md:flex-row gap-8">
-                    <div class="Left flex-[2] flex flex-col gap-8 bg-blue-500 p-2 md:p-4 rounded-md">
-                        <div class="TIT_Desc">
-                            <div class="Tit-Des flex flex-col gap-4">
-                                <div class="flex flex-col gap-2">
-                                    <Label><span class="text-red-500">*</span> Título:</Label>
-                                    <v-text-field
-                                        type="text"
-                                        color="primary"
-                                        placeholder="Digite o título do produto"
-                                        density="compact"
-                                        flat
-                                        clearable
-                                        hint="Digite o título do produto"
-                                        variant="outlined">
-                                    </v-text-field>
-                                </div>
-                                <div class="descr">
-                                    <Label><span class="text-red-500">*</span> Descriçao:</Label>
-                                    <Editor
+        <form @submit.prevent="submit">
+            <div class="flex flex-col md:flex-row gap-8">
+                <div class="Left flex-[2] flex flex-col gap-8 bg-blue-500 p-2 md:p-4 rounded-md">
+                    <div class="TIT_Desc">
+                        <div class="Tit-Des flex flex-col gap-4">
+                            <!-- Title Product -->
+                            <div class="input-field">
+                                <Label><span class="text-red-500">*</span> Título do produto:</Label>
+                                <el-input
+                                    v-model="productName.value.value"
+                                    :disabled="textAreaDisabled"
+                                    autocomplete="off"
+                                    type="text"
+                                    placeholder="Título do produto"
+                                    aria-label="Título do produto" />
+                                <span class="error-message">{{ productName.errorMessage.value }}</span>
+                            </div>
+
+                            <!-- Description -->
+                            <div class="input-field descr">
+                                <Label><span class="text-red-500">*</span> Descriçao:</Label>
+                                <el-input
+                                    v-model="productDescription.value.value"
+                                    :disabled="textAreaDisabled"
+                                    style="width: 100%"
+                                    :rows="5"
+                                    autocomplete="off"
+                                    type="textarea"
+                                    placeholder="Descrição do produto!" />
+                                <span class="error-message">{{ productName.errorMessage.value }}</span>
+                                <!-- <Editor
                                         api-key="ssfrraviw37cj9z3wax894wog697jdzmxq9dist4pmo51054"
                                         :init="{
                                             toolbar_mode: 'sliding',
@@ -37,11 +46,11 @@
                                         }"
                                         placeholder="Faça uma descrição do produto"
                                         v-model="productDescription"
-                                        value="productDescription" />
-                                </div>
+                                        value="productDescription" /> -->
                             </div>
                         </div>
-                        <div class="images flex flex-col gap-4">
+                    </div>
+                    <!-- <div class="images flex flex-col gap-4">
                             <Label><span class="text-red-500">* </span>Adicione imagens do produto:</Label>
                             <v-file-input
                                 @change="previewImages"
@@ -69,7 +78,6 @@
                                                 :alt="'Pré-visualização da Imagem ' + index"
                                                 class="object-cover h-[45px] w-[45px] border-[2px]" />
                                             <button
-                                                type="button"
                                                 class="p-[2px] bg-red-500 rounded-md"
                                                 @click="removeImage(index)">
                                                 Remover
@@ -78,325 +86,328 @@
                                     </template>
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
 
-                        <div class="espc">
-                            <div class="flex flex-row gap-3">
-                                <div class="flex flex-1 flex-col gap-2">
-                                    <Label>Marca:</Label>
-                                    <v-text-field
-                                        type="text"
-                                        hint="Qual é a marca do produto?"
-                                        v-model="productBrand"
-                                        placeholder="Qual é a marca do produto?"
-                                        density="compact"
-                                        flat
-                                        clearable
-                                        variant="outlined"></v-text-field>
-                                </div>
-
-                                <div class="flex flex-1 flex-col gap-2">
-                                    <Label>Modelos:</Label>
-                                    <v-text-field
-                                        type="text"
-                                        placeholder="Escreva o modelo do produto (opcional)"
-                                        v-model="productModel"
-                                        density="compact"
-                                        flat
-                                        clearable
-                                        hint="Escreva o modelo do produto"
-                                        variant="outlined"></v-text-field>
-                                </div>
-                            </div>
-                            <div class="flex flex-col gap-2">
-                                <Label>Tamanhos:</Label>
-                                <v-text-field
+                    <div class="espc">
+                        <div class="flex flex-col sm:flex-row sm:gap-2">
+                            <!-- Brand -->
+                            <div class="input-field">
+                                <Label>Marca:</Label>
+                                <el-input
+                                    v-model="productBrand.value.value"
+                                    :disabled="textAreaDisabled"
+                                    autocomplete="off"
                                     type="text"
-                                    hint="Tamanhos"
-                                    placeholder="Escrevas os tamanhos (opcional)"
-                                    density="compact"
-                                    v-model="productSize"
-                                    flat
-                                    clearable
-                                    variant="outlined"></v-text-field>
+                                    placeholder="Marca do produto"
+                                    aria-label="Marca do produto" />
+                                <span class="error-message">{{ productBrand.errorMessage.value }}</span>
                             </div>
-                            <div class="flex flex-col gap-2">
-                                <Label><span class="text-red-500">* </span>Fornecedor:</Label>
-                                <v-text-field
-                                    type="text "
-                                    hint="Escreva o endereço do  fornecedor"
-                                    placeholder="Endereço do  fornecedo"
-                                    density="compact"
-                                    v-model="productVendor"
-                                    flat
-                                    clearable
-                                    variant="outlined"></v-text-field>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="Right flex-1 bg-blue-500 p-2 md:p-4 rounded-md">
-                        <div class="Pub-Cat">
-                            <div class="flex flex-col gap-2">
-                                <Label><span class="text-red-500">* </span>Publicar</Label>
-                                <v-select
-                                    clearable
-                                    flat
-                                    density="compact"
-                                    variant="solo-filled"
-                                    v-model="productAvailability"
-                                    :items="availabilityStatus"
-                                    item-title="statusName"
-                                    item-value="statusValue"></v-select>
-                            </div>
-                            <div class="flex flex-col gap-2">
-                                <Label><span class="text-red-500">* </span>Stock</Label>
-                                <v-select
-                                    clearable
-                                    flat
-                                    density="compact"
-                                    variant="solo-filled"
-                                    v-model="productStock"
-                                    :items="stockStatus"
-                                    item-title="stockStatus"
-                                    item-value="stockValue"></v-select>
-                            </div>
-                            <div class="flex flex-col gap-2">
-                                <Label>Categoria:</Label>
 
-                                <Dialog>
-                                    <DialogTrigger as-child>
-                                        <Button
-                                            variant="outline"
-                                            class="w-max self-end">
-                                            Criar categoria
-                                        </Button>
-                                    </DialogTrigger>
-                                    <DialogContent class="sm:max-w-[425px] grid-rows-[auto_minmax(0,1fr)_auto] p-0 max-h-[90dvh]">
-                                        <DialogHeader class="p-6 pb-0">
-                                            <DialogTitle>Criar categoria </DialogTitle>
-                                            <DialogDescription> Aqui pode criar categoria, subCategoria da categoria e subCategoria da subCategoria! </DialogDescription>
-                                        </DialogHeader>
-                                        <div class="grid gap-4 py-4 overflow-y-auto px-6">
-                                            <CreateCategoryVue />
-                                        </div>
-                                        <DialogFooter class="p-6 pt-0"> </DialogFooter>
-                                    </DialogContent>
-                                </Dialog>
-
+                            <!-- Model -->
+                            <div class="input-field">
+                                <Label>Model:</Label>
+                                <el-input
+                                    v-model="productModel.value.value"
+                                    :disabled="textAreaDisabled"
+                                    autocomplete="off"
+                                    type="text"
+                                    placeholder="Modelo do produto"
+                                    aria-label="Modelo do produto" />
+                                <span class="error-message">{{ productModel.errorMessage.value }}</span>
+                            </div>
+                            <!-- Weight -->
+                            <div class="input-field">
+                                <Label><span class="text-red-500">* </span>Peso:</Label>
                                 <div>
-                                    <div>
-                                        <p class="text-sm"><span class="text-red-500">* </span>Selecione a/as categoria/as</p>
-                                        <v-select
-                                            multiple
-                                            clearabl
-                                            flat
-                                            density="compact"
-                                            v-model="productCategory"
-                                            variant="solo-filled"
-                                            :items="categories"
-                                            hint="Selecione a/as categoria/as"
-                                            item-title="categoryName"
-                                            item-value="_id"></v-select>
-                                    </div>
-
-                                    <div class="mb-4">
-                                        <Label>Seleciona a SubCategoria</Label>
-                                        <X
-                                            v-if="productSubcategory.length > 0"
-                                            @click="productSubcategory = ''"
-                                            class="h-3.5 w-3.5 cursor-pointer" />
-
-                                        <SelectRoot
-                                            class="bg-black"
-                                            v-model="productSubcategory">
-                                            <SelectTrigger
-                                                class="flex border bg-zinc-100 px-2 py-1 items-center justify-between w-full gap-[5px]"
-                                                aria-label="Customise options">
-                                                <SelectValue placeholder="" />
-                                                <ChevronDown class="h-3.5 w-3.5" />
-                                            </SelectTrigger>
-
-                                            <SelectPortal>
-                                                <SelectContent
-                                                    class="bg-white rounded shadow-[0px_10px_38px_-10px_rgba(22,_23,_24,_0.35),_0px_10px_20px_-15px_rgba(22,_23,_24,_0.2)] z-[100]"
-                                                    :side-offset="5">
-                                                    <SelectScrollUpButton class="flex items-center justify-center h-[25px] bg-white text-violet11 cursor-default">
-                                                        <ChevronUp class="h-3.5 w-3.5" />
-                                                    </SelectScrollUpButton>
-
-                                                    <SelectViewport class="p-[5px]">
-                                                        <template
-                                                            v-for="(category, index) in categories"
-                                                            :key="index">
-                                                            <SelectLabel class="text-slate-500">{{ category.categoryName }}</SelectLabel>
-                                                            <hr />
-                                                            <SelectGroup>
-                                                                <SelectItem
-                                                                    v-for="(subCategory, subIndex) in category.subCategories"
-                                                                    :key="subIndex"
-                                                                    :value="subCategory._id"
-                                                                    class="indent-2">
-                                                                    <SelectItemText class="cursor-pointer">{{ subCategory.subCategoryName }}</SelectItemText>
-                                                                </SelectItem>
-                                                            </SelectGroup>
-                                                        </template>
-                                                    </SelectViewport>
-
-                                                    <SelectScrollDownButton class="flex items-center justify-center h-[25px] bg-white text-violet11 cursor-default">
-                                                        <ChevronDown class="h-3.5 w-3.5" />
-                                                    </SelectScrollDownButton>
-                                                </SelectContent>
-                                            </SelectPortal>
-                                        </SelectRoot>
-                                    </div>
-
-                                    <div class="mb-4">
-                                        <Label>Seleciona a Sub_categoria</Label>
-                                        <X
-                                            v-if="productSub_category.length > 0"
-                                            @click="productSub_category = ''"
-                                            class="h-3.5 w-3.5 cursor-pointer" />
-                                        <SelectRoot
-                                            class="bg-black"
-                                            v-model="productSub_category">
-                                            <SelectTrigger
-                                                class="flex border bg-zinc-100 px-2 py-1 items-center justify-between w-full gap-[5px]"
-                                                aria-label="Customise options">
-                                                <SelectValue placeholder="" />
-                                                <ChevronDown class="h-3.5 w-3.5" />
-                                            </SelectTrigger>
-
-                                            <SelectPortal>
-                                                <SelectContent
-                                                    class="bg-white rounded shadow-[0px_10px_38px_-10px_rgba(22,_23,_24,_0.35),_0px_10px_20px_-15px_rgba(22,_23,_24,_0.2)] z-[100]"
-                                                    :side-offset="5">
-                                                    <SelectScrollUpButton class="flex items-center justify-center h-[25px] bg-white text-violet11 cursor-default">
-                                                        <ChevronUp class="h-3.5 w-3.5" />
-                                                    </SelectScrollUpButton>
-
-                                                    <SelectPortal>
-                                                        <SelectContent
-                                                            class="bg-white rounded shadow-[0px_10px_38px_-10px_rgba(22,_23,_24,_0.35),_0px_10px_20px_-15px_rgba(22,_23,_24,_0.2)] z-[100]"
-                                                            :side-offset="5">
-                                                            <SelectScrollUpButton class="flex items-center justify-center h-[25px] bg-white text-violet11 cursor-default">
-                                                                <ChevronUp class="h-3.5 w-3.5" />
-                                                            </SelectScrollUpButton>
-
-                                                            <SelectViewport class="p-[5px]">
-                                                                <template
-                                                                    v-for="(category, index) in categories"
-                                                                    :key="index">
-                                                                    <div class="p-2 mb-1 border">
-                                                                        <SelectLabel class="text-slate-500"> <span class="font-semibold">Cat:</span> {{ category.categoryName }}</SelectLabel>
-                                                                        <hr />
-                                                                        <template
-                                                                            v-for="(subCategory, index) in category.subCategories"
-                                                                            :key="index">
-                                                                            <div class="p-2">
-                                                                                <SelectLabel class="text-slate-500"> Sub {{ subCategory.subCategoryName }}</SelectLabel>
-                                                                                <hr />
-                                                                                <SelectGroup>
-                                                                                    <SelectItem
-                                                                                        v-for="(sub_category, subIndex) in subCategory.sub_categories"
-                                                                                        :key="subIndex"
-                                                                                        :value="sub_category._id"
-                                                                                        class="p-2">
-                                                                                        <SelectItemText class="cursor-pointer h-max"> {{ sub_category.sub_categoryName }}</SelectItemText>
-                                                                                    </SelectItem>
-                                                                                </SelectGroup>
-                                                                            </div>
-                                                                        </template>
-                                                                    </div>
-                                                                </template>
-                                                            </SelectViewport>
-
-                                                            <SelectScrollDownButton class="flex items-center justify-center h-[25px] bg-white text-violet11 cursor-default">
-                                                                <ChevronDown class="h-3.5 w-3.5" />
-                                                            </SelectScrollDownButton>
-                                                        </SelectContent>
-                                                    </SelectPortal>
-                                                    <SelectScrollDownButton class="flex items-center justify-center h-[25px] bg-white text-violet11 cursor-default">
-                                                        <ChevronDown class="h-3.5 w-3.5" />
-                                                    </SelectScrollDownButton>
-                                                </SelectContent>
-                                            </SelectPortal>
-                                        </SelectRoot>
-                                    </div>
+                                    <el-input-number
+                                        v-model="productWeight.value.value"
+                                        :disabled="textAreaDisabled"
+                                        autocomplete="off"
+                                        placeholder="Peso do produto"
+                                        aria-label="Peso do produto" />
                                 </div>
+                                <span class="error-message">{{ productWeight.errorMessage.value }}</span>
                             </div>
                         </div>
-                        <div class="flex flex-col gap-2">
-                            <Label><span class="text-red-500">* </span>Preço do produto:</Label>
-                            <v-text-field
-                                type="number"
-                                placeholder="Qual é o preço"
-                                hint="Qual é o preço?"
-                                v-model="productPrice"
-                                density="compact"
-                                flat
-                                clearable
-                                variant="outlined"></v-text-field>
+
+                        <div class="flex flex-col sm:flex-row sm:gap-2">
+                            <!-- Length -->
+                            <div class="input-field">
+                                <Label>Comprimento:</Label>
+                                <div>
+                                    <el-input-number
+                                        v-model="productLength.value.value"
+                                        :disabled="textAreaDisabled"
+                                        autocomplete="off"
+                                        placeholder="Cumprimento do produto"
+                                        aria-label="Cumprimento do produto" />
+                                </div>
+                                <span class="error-message">{{ productLength.errorMessage.value }}</span>
+                            </div>
+
+                            <!-- Width -->
+                            <div class="input-field">
+                                <Label>Largura:</Label>
+                                <div>
+                                    <el-input-number
+                                        v-model="productWidth.value.value"
+                                        :disabled="textAreaDisabled"
+                                        autocomplete="off"
+                                        placeholder="Largura do produto"
+                                        aria-label="Largura do produto" />
+                                </div>
+                                <span class="error-message">{{ productWidth.errorMessage.value }}</span>
+                            </div>
+
+                            <!-- Height -->
+                            <div class="input-field">
+                                <Label>Altura:</Label>
+                                <div>
+                                    <el-input-number
+                                        v-model="productHeight.value.value"
+                                        :disabled="textAreaDisabled"
+                                        autocomplete="off"
+                                        placeholder="Altura do produto"
+                                        aria-label="Altura do produto" />
+                                </div>
+                                <span class="error-message">{{ productHeight.errorMessage.value }}</span>
+                            </div>
                         </div>
-                        <div class="flex flex-col gap-2">
-                            <Label>Preço promocional do produto:</Label>
-                            <v-text-field
-                                type="number"
-                                placeholder="Qual é o preço promocional?"
-                                hint="Qual é o preço promocional?"
-                                v-model="productPromotion"
-                                density="compact"
-                                flat
-                                clearable
-                                variant="outlined"></v-text-field>
-                        </div>
-                        <div class="flex flex-col gap-2">
-                            <Label><span class="text-red-500">* </span>Código/SKU:</Label>
-                            <v-text-field
+
+                        <!-- Vendor -->
+                        <div class="input-field">
+                            <Label><span class="text-red-500">* </span>Fornecedor:</Label>
+                            <el-input
+                                v-model="productVendor.value.value"
+                                :disabled="textAreaDisabled"
+                                autocomplete="off"
                                 type="text"
-                                hint="Codigo sku."
-                                placeholder="Digite um códido para o produto"
-                                v-model="sku"
-                                density="compact"
-                                flat
-                                clearable
-                                variant="outlined"></v-text-field>
+                                placeholder="Endereço do  fornecedo" />
+                            <span class="error-message">{{ productVendor.errorMessage.value }}</span>
                         </div>
                     </div>
                 </div>
-                <Button
-                    type="submit"
-                    class="mt-7"
-                    >Submit</Button
+
+                <div class="Right flex-1 bg-blue-500 p-2 md:p-4 rounded-md">
+                    <div class="Pub-Cat">
+                        <!-- Available -->
+                        <div class="input-field">
+                            <Label><span class="text-red-500">* </span>Publicar</Label>
+                            <el-select
+                                v-model="productAvailability.value.value"
+                                :disabled="textAreaDisabled"
+                                filterable
+                                placeholder="Selecione">
+                                <el-option
+                                    v-for="(item, index) in availabilityStatus"
+                                    :key="index"
+                                    :label="item.statusName"
+                                    :value="item.statusValue" />
+                            </el-select>
+                            <span class="error-message">{{ productAvailability.errorMessage.value }}</span>
+                        </div>
+
+                        <!-- Stock -->
+                        <div class="input-field">
+                            <Label><span class="text-red-500">* </span>Stock</Label>
+                            <el-select
+                                v-model="productStock.value.value"
+                                :disabled="textAreaDisabled"
+                                filterable
+                                clearable
+                                :collapse-tags="true"
+                                :collapse-tags-tooltip="true"
+                                placeholder="Selecione">
+                                <el-option
+                                    v-for="(item, index) in stockStatus"
+                                    :key="index"
+                                    :label="item.stockStatus"
+                                    :value="item.stockValue" />
+                            </el-select>
+                            <span class="error-message">{{ productStock.errorMessage.value }}</span>
+                        </div>
+
+                        <!-- Categories -->
+                        <div>
+                            <Label>Categoria:</Label>
+
+                            <!-- Create Categories -->
+                            <Dialog>
+                                <DialogTrigger as-child>
+                                    <el-button> Criar categoria </el-button>
+                                </DialogTrigger>
+                                <DialogContent class="sm:max-w-[425px] grid-rows-[auto_minmax(0,1fr)_auto] p-0 max-h-[90dvh]">
+                                    <DialogHeader class="p-6 pb-0">
+                                        <DialogTitle>Criar categoria </DialogTitle>
+                                        <DialogDescription> Aqui pode criar categoria, subCategoria da categoria e subCategoria da subCategoria! </DialogDescription>
+                                    </DialogHeader>
+                                    <div class="grid gap-4 py-4 overflow-y-auto px-6">
+                                        <CreateCategoryVue />
+                                    </div>
+                                    <DialogFooter class="p-6 pt-0"> </DialogFooter>
+                                </DialogContent>
+                            </Dialog>
+
+                            <div>
+                                <!-- Category -->
+                                <div class="input-field">
+                                    <Label class="text-sm"><span class="text-red-500">* </span>Selecione a/as categoria/as</Label>
+                                    <el-select
+                                        v-model="productCategory.value.value"
+                                        :disabled="textAreaDisabled"
+                                        filterable
+                                        clearable
+                                        multiple
+                                        collapse-tags
+                                        collapse-tags-tooltip
+                                        placeholder="Selecione a categoria">
+                                        <el-option
+                                            v-for="(item, index) in categories"
+                                            :key="index"
+                                            :label="item.categoryName"
+                                            :value="item._id" />
+                                    </el-select>
+                                    <span class="error-message">{{ productCategory.errorMessage.value }}</span>
+                                </div>
+
+                                <!-- SubCategory -->
+                                <div class="mb-4">
+                                    <Label>Seleciona a SubCategoria</Label>
+                                    <el-select
+                                        multiple
+                                        filterable
+                                        collapse-tags
+                                        collapse-tags-tooltip
+                                        clearable
+                                        v-model="productSubcategory.value.value"
+                                        :disabled="textAreaDisabled"
+                                        placeholder="Selecione a SubCategoria">
+                                        <el-option-group
+                                            v-for="(category, index1) in categories"
+                                            :key="index1"
+                                            :label="category.categoryName"
+                                            class="text-red-500 el-select-dropdown__group__wrap">
+                                            <el-option
+                                                v-for="(subCategory, index2) in category.subCategories"
+                                                :key="index2"
+                                                class="text-yellow-200 el-select-dropdown__item"
+                                                :label="subCategory.subCategoryName"
+                                                :value="subCategory._id" />
+                                        </el-option-group>
+                                    </el-select>
+                                </div>
+
+                                <!-- Sub_Category -->
+                                <div class="mb-4">
+                                    <Label>Seleciona a Sub_categoria</Label>
+
+                                    <el-select
+                                        multiple
+                                        filterable
+                                        collapse-tags
+                                        collapse-tags-tooltip
+                                        v-model="productSub_category.value.value"
+                                        :disabled="textAreaDisabled"
+                                        placeholder="Selecione a Sub_categoria">
+                                        <el-option-group
+                                            v-for="(category, index1) in categories"
+                                            :key="index1">
+                                            <span class="text-red-400 text-lg">{{ category.categoryName }}</span>
+                                            <el-option-group
+                                                v-for="(subCategory, index2) in category.subCategories"
+                                                :key="index2">
+                                                <span class="text-red-700 pl-1 text-sm">{{ subCategory.subCategoryName }}</span>
+                                                <el-option
+                                                    v-for="(sub_category, index3) in subCategory.sub_categories"
+                                                    :key="index3"
+                                                    :label="sub_category.sub_categoryName"
+                                                    :value="sub_category._id" />
+                                            </el-option-group>
+                                        </el-option-group>
+                                    </el-select>
+                                    <span class="error-message">{{ productSub_category.errorMessage.value }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Price -->
+                    <div class="input-field">
+                        <Label><span class="text-red-500">* </span>Preço do produto:</Label>
+                        <div>
+                            <el-input-number
+                                v-model="productPrice.value.value"
+                                :disabled="textAreaDisabled"
+                                autocomplete="off"
+                                placeholder="Qual é o preço?"
+                                aria-label="Qual é o preço?" />
+                        </div>
+                        <span class="error-message">{{ productPrice.errorMessage.value }}</span>
+                    </div>
+
+                    <!-- Promotional Price -->
+                    <Label>Preço promocional do produto:</Label>
+                    <div class="input-field">
+                        <div>
+                            <el-input-number
+                                v-model="productPromotion.value.value"
+                                :disabled="textAreaDisabled"
+                                autocomplete="off"
+                                placeholder="Qual é o preço promocional?"
+                                aria-label="Qual é o preço promocional?" />
+                        </div>
+                        <span class="error-message">{{ productPromotion.errorMessage.value }}</span>
+                    </div>
+
+                    <!-- SKU code -->
+                    <div class="input-field">
+                        <Label><span class="text-red-500">* </span>Código/SKU:</Label>
+                        <el-input
+                            v-model="sku.value.value"
+                            :disabled="textAreaDisabled"
+                            autocomplete="off"
+                            type="text"
+                            placeholder="Digite um códido SKU para o produto"
+                            aria-label="Digite um códido SKU para o produto" />
+                        <span class="error-message">{{ sku.errorMessage.value }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottons -->
+            <div class="mt-2">
+                <el-button
+                    @click="
+                        () => {
+                            submit();
+                            loadSubmitButton = true;
+                            textAreaDisabled = true;
+                        }
+                    "
+                    >Submit</el-button
                 >
-            </form>
-        </div>
+                <el-button
+                    @click="
+                        () => {
+                            handleReset();
+                        }
+                    "
+                    >Limpar</el-button
+                >
+            </div>
+        </form>
     </div>
 </template>
 <script setup>
     import { useStore } from "vuex";
     import { ref, onMounted, computed } from "vue";
-    import Editor from "@tinymce/tinymce-vue";
+    // import Editor from "@tinymce/tinymce-vue";
+    import { useField, useForm } from "vee-validate";
+    import { toTypedSchema } from "@vee-validate/zod";
+    import * as z from "zod";
 
     import { Label } from "@/components/ui/label";
     import CreateCategoryVue from "../_partials/CreateCategory.vue";
-    import { Button } from "@/components/ui/button";
-    import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-
-    import { ChevronDown, ChevronUp, X } from "lucide-vue-next";
-    import {
-        SelectContent,
-        SelectGroup,
-        SelectItem,
-        SelectItemText,
-        SelectLabel,
-        SelectPortal,
-        SelectRoot,
-        SelectScrollDownButton,
-        SelectScrollUpButton,
-        SelectTrigger,
-        SelectValue,
-        SelectViewport,
-    } from "radix-vue";
 
     const availabilityStatus = [
         { statusName: "Visível", statusValue: true },
@@ -407,114 +418,191 @@
         { stockStatus: "Sem estoque", stockValue: false },
     ];
 
-    // Declaração dos dados reativos
     const store = useStore();
-    // Novo produto
-    const productName = ref(undefined);
-    const productDescription = ref(undefined);
-    const productAvailability = ref(true);
-    const productPrice = ref(0);
-    const productStock = ref(true);
-    const productImage = ref([]);
-    const productCategory = ref([]);
-    const productSubcategory = ref("");
-    const productSub_category = ref("");
-    const productPromotion = ref(0);
-    const sku = ref(null);
-    const productVendor = ref(undefined);
-    const productModel = ref(undefined);
-    const productSize = ref(undefined);
-    const productBrand = ref(undefined);
 
-    // Computação da lista de categorias
     const categories = computed(() => store.state.categories);
+    const textAreaDisabled = ref(false);
+    const loadSubmitButton = ref(false);
 
-    // Função para pré-visualizar as imagens
+    // // Função para pré-visualizar as imagens
 
-    function previewImages(event) {
-        const files = event.target.files;
-        for (let i = 0; i < files.length; i++) {
-            const reader = new FileReader();
+    // function previewImages(event) {
+    //     const files = event.target.files;
+    //     for (let i = 0; i < files.length; i++) {
+    //         const reader = new FileReader();
 
-            reader.onload = (e) => {
-                productImage.value.push({
-                    url: e.target.result,
-                    file: files[i],
-                });
-            };
-            reader.readAsDataURL(files[i]);
-        }
-    }
+    //         reader.onload = (e) => {
+    //             productImage.value.push({
+    //                 url: e.target.result,
+    //                 file: files[i],
+    //             });
+    //         };
+    //         reader.readAsDataURL(files[i]);
+    //     }
+    // }
 
-    // Função para remover uma imagem da pré-visualização
-    function removeImage(index) {
-        productImage.value.splice(index, 1);
-    }
-    async function addProduct() {
-        if (!productDescription.value) {
-            store.commit("updateSnackbar", { show: true, text: "Preencha todos o campo descrição!", color: "red" });
-            return;
-        }
-        if (!productVendor.value) {
-            store.commit("updateSnackbar", { show: true, text: "Preencha todos o campo fornecedor!", color: "red" });
-            return;
-        }
-        if (!productName.value) {
-            store.commit("updateSnackbar", { show: true, text: "Preencha todos o campo título!", color: "red" });
-            return;
-        }
-        if (!productAvailability.value) {
-            store.commit("updateSnackbar", { show: true, text: "Preencha todos o disponibilidade!", color: "red" });
-            return;
-        }
-        if (!productPrice.value) {
-            store.commit("updateSnackbar", { show: true, text: "Preencha todos o preço!", color: "red" });
-            return;
-        }
-        if (!productStock.value) {
-            store.commit("updateSnackbar", { show: true, text: "Preencha todos o caampo stock!", color: "red" });
-            return;
-        }
-        if (productCategory.value <= 0) {
-            store.commit("updateSnackbar", { show: true, text: "Preencha todos o campo categoria", color: "red" });
-            return;
-        }
-        if (!sku.value) {
-            store.commit("updateSnackbar", { show: true, text: "Preencha todos o campo sku!", color: "red" });
-            return;
-        }
+    // // Função para remover uma imagem da pré-visualização
+    // function removeImage(index) {
+    //     productImage.value.splice(index, 1);
+    // }
 
-        try {
-            await store.dispatch("addProduct", {
-                productName: productName.value,
-                productDescription: productDescription.value,
-                productAvailability: productAvailability.value,
-                productPrice: productPrice.value,
-                productStock: productStock.value,
-                productImage: productImage.value,
-                productCategory: productCategory.value,
-                productSubcategory: productSubcategory.value,
-                productSub_category: productSub_category.value,
-                productPromotion: productPromotion.value,
-                sku: sku.value,
-                productVendor: productVendor.value,
-                productSize: productSize.value,
-                productModel: productModel.value,
-                productBrand: productBrand.value,
-            });
-        } catch (error) {
-            console.error(error);
-        }
-    }
+    // async function addProduct() {
+    //     if (!productDescription.value) {
+    //         store.commit("updateSnackbar", { show: true, text: "Preencha todos o campo descrição!", color: "red" });
+    //         return;
+    //     }
+    //     if (!productVendor.value) {
+    //         store.commit("updateSnackbar", { show: true, text: "Preencha todos o campo fornecedor!", color: "red" });
+    //         return;
+    //     }
+    //     if (!productName.value) {
+    //         store.commit("updateSnackbar", { show: true, text: "Preencha todos o campo título!", color: "red" });
+    //         return;
+    //     }
+    //     if (!productAvailability.value) {
+    //         store.commit("updateSnackbar", { show: true, text: "Preencha todos o disponibilidade!", color: "red" });
+    //         return;
+    //     }
+    //     if (!productPrice.value) {
+    //         store.commit("updateSnackbar", { show: true, text: "Preencha todos o preço!", color: "red" });
+    //         return;
+    //     }
+    //     if (!productStock.value) {
+    //         store.commit("updateSnackbar", { show: true, text: "Preencha todos o caampo stock!", color: "red" });
+    //         return;
+    //     }
+    //     if (productCategory.value <= 0) {
+    //         store.commit("updateSnackbar", { show: true, text: "Preencha todos o campo categoria", color: "red" });
+    //         return;
+    //     }
+    //     if (!sku.value) {
+    //         store.commit("updateSnackbar", { show: true, text: "Preencha todos o campo sku!", color: "red" });
+    //         return;
+    //     }
 
+    //     try {
+    //         await store.dispatch("addProduct", {
+    //             productName: productName.value,
+    //             productDescription: productDescription.value,
+    //             productAvailability: productAvailability.value,
+    //             productPrice: productPrice.value,
+    //             productStock: productStock.value,
+    //             productImage: productImage.value,
+    //             productCategory: productCategory.value,
+    //             productSubcategory: productSubcategory.value,
+    //             productSub_category: productSub_category.value,
+    //             productPromotion: productPromotion.value,
+    //             sku: sku.value,
+    //             productVendor: productVendor.value,
+    //             productSize: productSize.value,
+    //             productModel: productModel.value,
+    //             productBrand: productBrand.value,
+    //         });
+    //     } catch (error) {
+    //         console.error(error);
+    //     }
+    // }
+
+    // ///////////////////////////////////////////////////////////////
+
+    const { handleSubmit, handleReset } = useForm({
+        validationSchema: toTypedSchema(
+            z.object({
+                productName: z.string({ message: "Campo obrigatório" }),
+                productDescription: z.string({ message: "Campo obrigatório" }),
+                productAvailability: z.boolean({ message: "Campo obrigatório" }),
+                productPrice: z.number({ message: "Campo obrigatório" }),
+                productStock: z.boolean({ message: "Campo obrigatório" }),
+                // productImage: z.string({ message: "Campo obrigatório" }).array(),
+                productCategory: z.string({ message: "Campo obrigatório" }).array(),
+                productSubcategory: z.string().array().optional(),
+                productSub_category: z.string().array().optional(),
+                productPromotion: z.number().optional(),
+                sku: z.string({ message: "Campo obrigatório" }),
+                productVendor: z.string({ message: "Campo obrigatório" }),
+                productBrand: z.string().optional(),
+                productWeight: z.number({ message: "Campo obrigatório" }),
+                productModel: z.string().optional(),
+                productLength: z.number().optional(),
+                productWidth: z.number().optional(),
+                productHeight: z.number().optional(),
+            })
+        ),
+    });
+
+    const productName = useField("productName");
+    const productDescription = useField("productDescription");
+    const productAvailability = useField("productAvailability");
+    const productPrice = useField("productPrice");
+    const productStock = useField("productStock");
+    // const productImage = useField("productImage");
+    const productCategory = useField("productCategory");
+    const productSubcategory = useField("productSubcategory");
+    const productSub_category = useField("productSub_category");
+    const productPromotion = useField("productPromotion");
+    const sku = useField("sku");
+    const productVendor = useField("productVendor");
+    const productBrand = useField("productBrand");
+    const productWeight = useField("productWeight");
+    const productModel = useField("productModel");
+    const productLength = useField("productLength");
+    const productWidth = useField("productWidth");
+    const productHeight = useField("productHeight");
+
+    const submit = handleSubmit(
+        async (values) => {
+            console.log(values);
+            const result = await store.dispatch("addProduct", values);
+            if (result === true) {
+                handleReset();
+            }
+            loadSubmitButton.value = false;
+            textAreaDisabled.value = false;
+        },
+        () => {
+            loadSubmitButton.value = false;
+            textAreaDisabled.value = false;
+        }
+    );
+
+    // const handleReset = () => {
+    //     handleSignInReset();
+    //     handleSignUpReset();
+    // };
+
+    //////////////////////////////////////////////////////////////////
     // Carregar categorias ao montar o componente
     onMounted(() => {
         store.dispatch("getAllCategoryAdmin");
     });
 </script>
 <style scoped>
+    .input-field {
+        width: 100%;
+        margin: 5px 0;
+    }
+
+    .input-field input {
+        width: 100%;
+        border: none;
+        font-size: 13px;
+        border-radius: 8px;
+        width: 100%;
+        outline: none;
+    }
     .v-input__control {
         background-color: white;
         border-radius: 4px;
+    }
+    .error-message {
+        margin: 5px 0 0 0;
+        padding: 0 0 0 10px;
+        width: 100%;
+        height: 15px;
+        font-size: x-small;
+        line-height: 13px;
+        color: red;
+        display: flex;
+        align-items: center;
     }
 </style>

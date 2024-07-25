@@ -16,6 +16,10 @@ module.exports = {
             },
         },
         extend: {
+            screens: {
+                x: "420px",
+            },
+
             colors: {
                 border: "hsl(var(--border))",
                 input: "hsl(var(--input))",
@@ -82,6 +86,9 @@ module.exports = {
             },
             fontFamily: {
                 poppins: ["Poppins"],
+            },
+            gridTemplateColumns: {
+                13: "repeat(auto-fit, minmax(1fr, 300px))",
             },
         },
     },

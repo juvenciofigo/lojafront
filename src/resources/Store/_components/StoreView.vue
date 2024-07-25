@@ -1,5 +1,5 @@
 <template lang="">
-    <div class="flex-1 ">
+    <div class="flex-1">
         <div class="banner p-2 bg-slate-100 flex flex-row h-[450px]">
             <div
                 v-if="categories && categories.length > 0"
@@ -68,28 +68,13 @@
                 </div>
             </div>
 
-            <!-- end categories-card -->
-
-            <!-- <div
-                v-if="banners && banners.length > 0"
-                class="flex flex-row flex-1 flex-wrap">
-                <template
-                    v-for="(banner, index) in banners"
-                    :key="index">
-                    <div class="flex flex-col flex-1 justify-center gap-2">
-                        <p class="">{{ banner.title }}</p>
-                        <p class="text-lg xl:text-2xl">{{ banner.text }}</p>
-                    </div>
-
-                    <div class="flex justify-center items-center min-w-[180px] max-w-[410px] flex-grow">
-                        <v-img :src="banner.src"></v-img>
-                    </div>
-                </template>
-            </div> -->
             <BannerComp />
         </div>
+
+        <ProductSkeleton v-if="skeleton" />
+
         <ProductViewComp
-            :skeleton="skeleton"
+            v-else
             :products="products"
             :RouterName="'detailsClient'" />
     </div>
@@ -100,15 +85,18 @@
     import { useRouter } from "vue-router";
     import ProductViewComp from "@/resources/_components/ProductViewComp.vue";
     import BannerComp from "@/resources/Store/_components/Store/_components/banners/BannerComp.vue";
+    import ProductSkeleton from "@/components/skeletons/ProductSkeleton.vue";
 
     const store = useStore();
     const router = useRouter();
     const categories = computed(() => store.state.categories);
-    const products = computed(() => store.state.products.products);
+    const products = computed(() => store.getters.products.docs);
     const skeleton = ref(true);
+
     function filterProduct(category, subCategory, sub_category) {
         const query = {
-            category: category._id,
+            _id: category._id,
+            category: category.categoryName,
         };
 
         if (subCategory) {

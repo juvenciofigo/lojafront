@@ -116,7 +116,7 @@ const routes = [
             {
                 // all product
                 path: "produtos",
-                name: "produtos",
+                name: "productsAdmin",
                 component: () => import("@/resources/Dashboard/_components/Store/_components/products/AllProducts.vue"),
             },
             {

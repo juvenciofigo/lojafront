@@ -89,6 +89,9 @@ export default createStore({
     },
 
     getters: {
+        // producs
+        products: (state) => state.products,
+
         ///user
         userDetails: (state) => state.userDetails,
         isAuthenticated: () => (cookieName) => {
@@ -252,13 +255,7 @@ export default createStore({
         //////////// add
         async addProduct({ commit }, payload) {
             try {
-                const res = await axios.request({
-                    method: "post",
-                    baseURL: config.apiURL,
-                    url: `/product/`,
-                    headers: headers(),
-                    data: payload,
-                });
+                const res = sendAxio("post", `/product`, payload, headers());
 
                 if (res.status === 200) {
                     commit("updateSnackbar", { show: true, text: "Produto adicionado", color: "green" });
@@ -396,13 +393,7 @@ export default createStore({
 
         async getAllProductsAdmin({ commit }, payload) {
             try {
-                const res = await axios.request({
-                    method: "get",
-                    baseURL: config.apiURL,
-                    url: "/products/admin",
-                    params: { offset: payload },
-                    headers: headers(),
-                });
+                const res = await sendAxio("get", "/products/admin", null, headers(), payload);
 
                 if (res.data) {
                     const products = res.data;
@@ -422,7 +413,6 @@ export default createStore({
                     headers: headers(),
                 });
                 if (res.status === 200) {
-                    console.log(res.data.product);
                     commit("productDetails", res.data.product);
                     return;
                 }
@@ -659,10 +649,10 @@ export default createStore({
                 const res = await axios.request({
                     method: "get",
                     baseURL: config.apiURL,
-                    url: "products",
-                    params: { ...payload },
+                    url: "/products",
+                    params: payload,
                 });
-
+                console.log(res.data)
                 if (res.status === 200) {
                     const products = res.data;
                     commit("SET_PRODUCTS", products);
@@ -1031,12 +1021,18 @@ export default createStore({
         */
 
         async newUser({ commit }, payload) {
+            console.log(payload);
+            const values = {
+                email: payload.emailSignUp,
+                password: payload.passwordSignUp,
+                firstName: payload.firstNameSignUp,
+                lastName: payload.lastNameSignUp,
+            };
             try {
-                const res = await sendAxio("post", `/user`, payload.values, null);
+                const res = await sendAxio("post", `/user`, values, null);
                 if (res.status === 200) {
-                    commit("updateSnackbar", { show: true, text: "Conta criada", color: "green" });
+                    commit("updateSnackbar", { show: true, text: "Conta criada, faça o login", color: "green" });
                     commit("SET_LOGIN_OVERLAY", true);
-                    commit("SET_REGISTER_OVERLAY", false);
                 }
             } catch (error) {
                 errorMessage(error);

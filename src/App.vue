@@ -1,11 +1,9 @@
 <template>
-    <v-app class="bg-blue-200 overflow-hidden">
+    <v-app class="dark bg-white overflow-hidden">
         <!--  main -->
         <v-main class="overflow-hidden h-full">
             <router-view />
         </v-main>
-
-        <!-- Dialog -->
 
         <!-- Paymnet -->
         <PaymentDialog />

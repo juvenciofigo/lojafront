@@ -226,22 +226,15 @@
     const { handleSubmit: handleSignUpSubmit, handleReset: handleSignUpReset } = useForm({
         validationSchema: toTypedSchema(
             z.object({
-                emailSignUp: z.string({ message: "Campo obrigatório" }).email({ message: "E-mail inválido" }).nonempty({ message: "Campo Email obrigatório" }),
+                emailSignUp: z.string({ message: "Campo obrigatório" }).email({ message: "E-mail inválido" }),
                 passwordSignUp: z
                     .string({ message: "Campo obrigatório" })
                     .min(8, { message: "A senha deve ter no mínimo 8 caracteres" })
                     .regex(/[a-z]/, { message: "A senha deve conter pelo menos uma letra minúscula" })
                     .regex(/[A-Z]/, { message: "A senha deve conter pelo menos uma letra maiúscula" })
-                    .regex(/\d/, { message: "A senha deve conter pelo menos um número" })
-                    .nonempty({ message: "Campo Password obrigatório" }),
-                firstNameSignUp: z
-                    .string({ message: "Campo obrigatório" })
-                    .regex(/^[\p{L}\s'-]+$/u, { message: "O nome deve conter apenas letras, espaços, apóstrofos e hífens" })
-                    .nonempty({ message: "Campo Nome obrigatório" }),
-                lastNameSignUp: z
-                    .string({ message: "Campo obrigatório" })
-                    .regex(/^[\p{L}\s'-]+$/u, { message: "O nome deve conter apenas letras, espaços, apóstrofos e hífens" })
-                    .nonempty({ message: "Campo Apelido obrigatório" }),
+                    .regex(/\d/, { message: "A senha deve conter pelo menos um número" }),
+                firstNameSignUp: z.string({ message: "Campo obrigatório" }).regex(/^[\p{L}\s'-]+$/u, { message: "O nome deve conter apenas letras, espaços, apóstrofos e hífens" }),
+                lastNameSignUp: z.string({ message: "Campo obrigatório" }).regex(/^[\p{L}\s'-]+$/u, { message: "O nome deve conter apenas letras, espaços, apóstrofos e hífens" }),
             })
         ),
     });
@@ -253,7 +246,7 @@
 
     const submitSignUp = handleSignUpSubmit(
         async (values) => {
-            await store.dispatch("signup", { values, router });
+            await store.dispatch("newUser", values);
             loadSignUpBtn.value = false;
             toggleButtonLoad.value = false;
         },

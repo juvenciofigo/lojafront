@@ -173,17 +173,21 @@
 
             <!-- Botões -->
             <div class="flex flex-row gap-3">
-                <v-btn
+                <el-button
                     :disabled="disabledTextarea"
-                    type="button"
                     @click="submit()"
-                    >Entrar</v-btn
+                    >Entrar</el-button
                 >
-                <v-btn
+                <el-button
                     style="background-color: rgb(204, 15, 15)"
-                    @click="handleReset(), enableTextarea()">
+                    @click="
+                        () => {
+                            handleReset();
+                            enableTextarea();
+                        }
+                    ">
                     Limpar
-                </v-btn>
+                </el-button>
             </div>
         </form>
     </v-stepper-window-item>
