@@ -652,7 +652,6 @@ export default createStore({
                     url: "/products",
                     params: payload,
                 });
-                console.log(res.data)
                 if (res.status === 200) {
                     const products = res.data;
                     commit("SET_PRODUCTS", products);

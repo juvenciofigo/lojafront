@@ -151,7 +151,7 @@
                         class="p-2 text-sm duration-300 flex flex-row"
                         size="small"
                         variant="text"
-                        :loading="loading_firstbutton"
+                        :loading="loading_button"
                         :class="styl_firstbutton"
                         @click="firstButton">
                         <div class="flex-row flex gap-2 items-center">
@@ -165,7 +165,7 @@
                         class="p-1 text-sm duration-300"
                         size="small"
                         variant="text"
-                        :loading="loading_secondbutton"
+                        :loading="loading_button"
                         :class="styl_secondbutton"
                         @click="secondButton">
                         <div class="flex-row flex gap-2 items-center">
@@ -179,7 +179,7 @@
                         size="small"
                         class="p-1 text-sm duration-300"
                         variant="text"
-                        :loading="loading_thirdbutton"
+                        :loading="loading_button"
                         :class="styl_thirdbutton"
                         @click="thirdButton">
                         <div class="flex-row flex gap-2 items-center">
@@ -193,7 +193,7 @@
                         size="small"
                         class="p-1 text-sm duration-300"
                         variant="text"
-                        :loading="loading_fourthbutton"
+                        :loading="loading_button"
                         :class="styl_fourthbutton"
                         @click="fourthButton">
                         <div class="flex-row flex gap-2 items-center">
@@ -315,7 +315,7 @@
                                                     size="small"
                                                     class="text-sm duration-300"
                                                     variant="tonal"
-                                                    :loading="loading_fifthbutton"
+                                                    :loading="loading_button"
                                                     :class="styl_fifthbutton"
                                                     @click="fifthButton(rating._id)">
                                                     <span>
@@ -363,27 +363,23 @@
         firstButton: { type: Function, required: true },
         titleFirst: { type: String, required: true },
         styl_firstbutton: String,
-        loading_firstbutton: Boolean,
+        loading_button: Boolean,
 
         titleSecond: { type: String, required: true },
         secondButton: { type: Function, required: true },
         styl_secondbutton: String,
-        loading_secondbutton: Boolean,
 
         titleThird: { type: String },
         thirdButton: { type: Function },
         styl_thirdbutton: String,
-        loading_thirdbutton: Boolean,
 
         titleFourth: { type: String },
         fourthButton: { type: Function },
         styl_fourthbutton: String,
-        loading_fourthbutton: Boolean,
 
         titleFifth: { type: String },
         fifthButton: { type: Function },
         styl_fifthbutton: String,
-        loading_fifthbutton: Boolean,
     });
 
     // Initialize refs and store

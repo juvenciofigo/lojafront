@@ -2,17 +2,18 @@
     <ProductDetaislsSkeleton v-if="skeleton"></ProductDetaislsSkeleton>
     <ProductDetailsComp
         v-else
-        :styl_thirdbutton="`hidden`"
+        :titleFirst="`Adicionar`"
+        :firstButton="addToCart"
+        :styl_firstbutton="`bg-blue-400 hover:bg-blue-200`"
+        :titleSecond="`Comprar Agora`"
+        :secondButton="buyNow"
+        :styl_secondbutton="`bg-green-400 hover:bg-green-200 `"
+        :titleThird="`Whatsapp`"
+        :thirdButton="callWhatsapp"
+        :styl_thirdbutton="`bg-green-400 hover:bg-green-200 `"
         :styl_fourthbutton="`hidden`"
         :styl_fifthbutton="`hidden`"
-        :firstButton="addToCart"
-        :titleFirst="`Adicionar`"
-        :styl_firstbutton="`bg-blue-400 hover:bg-blue-200`"
-        :secondButton="buyNow"
-        :titleSecond="`Comprar Agora`"
-        :styl_secondbutton="`bg-green-400 hover:bg-green-200 `"
-        :loading_firstbutton="loading_firstbutton"
-        :loading_secondbutton="loading_secondbutton"
+        :loading_button="loading_button"
         @value-updated="handleValueUpdate"
         @material-Value="materialValue"
         @sizes-Value="sizesValue"
@@ -107,8 +108,7 @@
     const router = useRouter();
     const isAuthenticated = ref(computed(() => store.getters.isAuthenticated("authToken")));
     const product = computed(() => store.state.product);
-    const loading_secondbutton = ref(false);
-    const loading_firstbutton = ref(false);
+    const loading_button = ref(false);
     const ratingButtonLoading = ref(false);
     const ratingDialog = ref(false);
     const skeleton = ref(true);
@@ -154,19 +154,27 @@
     };
 
     async function addToCart() {
-        loading_firstbutton.value = true;
+        loading_button.value = true;
         const res = await verifyVaraiations();
 
         if (res) {
             store.commit("updateSnackbar", { show: true, text: res.error, color: "red" });
-            loading_firstbutton.value = false;
+            loading_button.value = false;
             return;
         }
 
         await store.dispatch("addToCart", { isAuthenticated: isAuthenticated.value, item: { productId: route.params.id, variation: toRaw(variation.value), quantity: quantity.value || 1 } });
 
         await store.dispatch("displayCartPrices", isAuthenticated.value);
-        loading_firstbutton.value = false;
+        loading_button.value = false;
+    }
+
+    async function callWhatsapp() {
+        const product = window.location.href;
+        const texto = `Olá, gostaria de mais informações sobre o produto: ${product}`;
+        const textoCodificado = encodeURIComponent(texto);
+        const url = `https://wa.me/258856957459?text=${textoCodificado}`;
+        window.open(url, "_blank");
     }
 
     const { handleSubmit, handleReset } = useForm({
