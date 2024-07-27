@@ -94,7 +94,6 @@
     const deleteIndex = ref(null);
 
     function delRating(index) {
-        console.log(index);
         deleteIndex.value = index;
         itemDelete.value = "Rating";
         text.value = "Avaliação";
@@ -102,7 +101,6 @@
     }
 
     function delProduct(index) {
-        console.log(index.target);
         deleteIndex.value = index;
         text.value = "Produto";
         itemDelete.value = "Product";

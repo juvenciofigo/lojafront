@@ -255,8 +255,9 @@ export default createStore({
         //////////// add
         async addProduct({ commit }, payload) {
             try {
-                const res = sendAxio("post", `/product`, payload, headers());
+                const res = await sendAxio("post", `/product`, payload, headers());
 
+                console.log(res);
                 if (res.status === 200) {
                     commit("updateSnackbar", { show: true, text: "Produto adicionado", color: "green" });
                     window.location.reload();

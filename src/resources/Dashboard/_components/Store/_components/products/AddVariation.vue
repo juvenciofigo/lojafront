@@ -244,7 +244,6 @@
             // Supondo que o ID do produto seja passado como uma propriedade (prop)
             const productId = route.params.productId; // ou passe como uma prop
             const response = await axios.post(`/api/products/${productId}/variations`, variation.value);
-            console.log("Variação criada com sucesso:", response.data);
             // Limpar o formulário após a submissão
             variation.value = {
                 colors: [],

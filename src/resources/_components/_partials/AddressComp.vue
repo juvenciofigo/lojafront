@@ -49,7 +49,6 @@
     const store = useStore();
 
     function confirmDelete(index) {
-        console.log(false);
         deleteIndex.value = index;
         showDialog.value = true;
     }
@@ -63,7 +62,6 @@
     };
 
     async function deleteAddress() {
-        console.log(false);
         if (deleteIndex.value !== null) {
             await store.dispatch("deleteAddress", deleteIndex.value);
             await store.dispatch("addresses");

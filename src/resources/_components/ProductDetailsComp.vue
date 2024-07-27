@@ -1,32 +1,33 @@
 <template>
     <div class="flex flex-col xl:flex-row p-1 gap-1 flex-1 h-max">
         <!-- Seção de imagens do produto -->
-        <div class="images bg-white rounded-md w-full p-2 xl:w-[360px] flex flex-col gap-3 items-center">
+        <div class="images bg-white rounded-md w-full p-2 xl:w-[460px] flex flex-col gap-3">
             <div class="image self-center max-w-[450px] xl:w-full">
-                <div class="bg-slate-100 rounded-md">
-                    <img
-                        v-if="product.productImage && product.productImage.length > 0"
-                        :src="imageLink"
-                        class="object-cover"
-                        alt="Imagem do Produto" />
-                </div>
+                <el-image
+                    :src="imageLink"
+                    hide-on-click-modal
+                    :zoom-rate="1.2"
+                    :max-scale="7"
+                    :min-scale="0.2"
+                    :preview-teleported="true"
+                    :preview-src-list="product.productImage"
+                    :initial-index="selectedImage"
+                    fit="cover" />
             </div>
 
             <div
-                class="changeImage flex flex-row p-1 justify-center gap-2"
+                class="changeImage flex flex-row mx-auto p-1 gap-2 overflow-auto w-full"
                 v-if="product.productImage && product.productImage.length > 0">
-                <template
+                <button
                     v-for="(image, index) in product.productImage"
-                    :key="index">
-                    <button
-                        @click="updateImageLink(index)"
-                        class="rounded-md bg-slate-200 w-[70px] h-[70px]">
-                        <img
-                            :src="image"
-                            alt="Imagem do Produto"
-                            class="rounded-sm" />
-                    </button>
-                </template>
+                    :key="index"
+                    @click="updateImageLink(index)"
+                    class="select rounded-md w-[100px] h-[70px] flex-shrink-0">
+                    <img
+                        :src="image"
+                        alt="Imagem do Produto"
+                        class="image rounded-sm w-full h-full object-cover" />
+                </button>
             </div>
         </div>
 
@@ -354,6 +355,7 @@
     </div>
 </template>
 <script setup>
+    // const url = "https://fuss10.elemecdn.com/a/3f/3302e58f9a181d2509f3dc0fa68b0jpeg.jpeg";
     import { format, differenceInHours } from "date-fns";
     import { useStore } from "vuex";
     import { ref, defineProps, computed, watch, defineEmits, watchEffect, onMounted } from "vue";
@@ -399,6 +401,7 @@
     const store = useStore();
     const product = computed(() => store.state.product);
     const imageLink = ref(null);
+    const selectedImage = ref(null);
 
     // Update the variations based on the product data
     function updateVariations() {
@@ -442,6 +445,7 @@
     }
 
     function updateImageLink(index) {
+        selectedImage.value = index;
         imageLink.value = product.value.productImage[index];
     }
 
@@ -498,8 +502,20 @@
     });
 
     onMounted(() => {
-        if (product.value.productImage) {
-            if (product.value.productImage.length > 0) updateImageLink(0);
+        if (product.value.productImage && product.value.productImage.length > 0) {
+            updateImageLink(0);
         }
     });
 </script>
+<style scoped>
+    /* .demo-image__error .image-slot {
+        font-size: 30px;
+    }
+    .demo-image__error .image-slot .el-icon {
+        font-size: 30px;
+    }
+    .demo-image__error .el-image {
+        width: 100%;
+        height: 200px;
+    } */
+</style>

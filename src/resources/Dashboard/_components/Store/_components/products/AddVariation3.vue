@@ -292,8 +292,6 @@
                     shippingFree: res.delivery.shippingFree,
                 },
             };
-        } else {
-            console.log(false);
         }
     });
 </script>

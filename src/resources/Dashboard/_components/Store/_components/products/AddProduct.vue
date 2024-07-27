@@ -34,7 +34,7 @@
                                     autocomplete="off"
                                     type="textarea"
                                     placeholder="Descrição do produto!" />
-                                <span class="error-message">{{ productName.errorMessage.value }}</span>
+                                <span class="error-message">{{ productDescription.errorMessage.value }}</span>
                                 <!-- <Editor
                                         api-key="ssfrraviw37cj9z3wax894wog697jdzmxq9dist4pmo51054"
                                         :init="{
@@ -379,9 +379,9 @@
                 <el-button
                     @click="
                         () => {
-                            submit();
                             loadSubmitButton = true;
                             textAreaDisabled = true;
+                            submit();
                         }
                     "
                     >Submit</el-button
@@ -446,65 +446,7 @@
     //     productImage.value.splice(index, 1);
     // }
 
-    // async function addProduct() {
-    //     if (!productDescription.value) {
-    //         store.commit("updateSnackbar", { show: true, text: "Preencha todos o campo descrição!", color: "red" });
-    //         return;
-    //     }
-    //     if (!productVendor.value) {
-    //         store.commit("updateSnackbar", { show: true, text: "Preencha todos o campo fornecedor!", color: "red" });
-    //         return;
-    //     }
-    //     if (!productName.value) {
-    //         store.commit("updateSnackbar", { show: true, text: "Preencha todos o campo título!", color: "red" });
-    //         return;
-    //     }
-    //     if (!productAvailability.value) {
-    //         store.commit("updateSnackbar", { show: true, text: "Preencha todos o disponibilidade!", color: "red" });
-    //         return;
-    //     }
-    //     if (!productPrice.value) {
-    //         store.commit("updateSnackbar", { show: true, text: "Preencha todos o preço!", color: "red" });
-    //         return;
-    //     }
-    //     if (!productStock.value) {
-    //         store.commit("updateSnackbar", { show: true, text: "Preencha todos o caampo stock!", color: "red" });
-    //         return;
-    //     }
-    //     if (productCategory.value <= 0) {
-    //         store.commit("updateSnackbar", { show: true, text: "Preencha todos o campo categoria", color: "red" });
-    //         return;
-    //     }
-    //     if (!sku.value) {
-    //         store.commit("updateSnackbar", { show: true, text: "Preencha todos o campo sku!", color: "red" });
-    //         return;
-    //     }
-
-    //     try {
-    //         await store.dispatch("addProduct", {
-    //             productName: productName.value,
-    //             productDescription: productDescription.value,
-    //             productAvailability: productAvailability.value,
-    //             productPrice: productPrice.value,
-    //             productStock: productStock.value,
-    //             productImage: productImage.value,
-    //             productCategory: productCategory.value,
-    //             productSubcategory: productSubcategory.value,
-    //             productSub_category: productSub_category.value,
-    //             productPromotion: productPromotion.value,
-    //             sku: sku.value,
-    //             productVendor: productVendor.value,
-    //             productSize: productSize.value,
-    //             productModel: productModel.value,
-    //             productBrand: productBrand.value,
-    //         });
-    //     } catch (error) {
-    //         console.error(error);
-    //     }
-    // }
-
-    // ///////////////////////////////////////////////////////////////
-
+   
     const { handleSubmit, handleReset } = useForm({
         validationSchema: toTypedSchema(
             z.object({
@@ -514,7 +456,7 @@
                 productPrice: z.number({ message: "Campo obrigatório" }),
                 productStock: z.boolean({ message: "Campo obrigatório" }),
                 // productImage: z.string({ message: "Campo obrigatório" }).array(),
-                productCategory: z.string({ message: "Campo obrigatório" }).array(),
+                productCategory: z.string().array().min(1, { message: "Campo obrigatório" }),
                 productSubcategory: z.string().array().optional(),
                 productSub_category: z.string().array().optional(),
                 productPromotion: z.number().optional(),
@@ -551,8 +493,8 @@
 
     const submit = handleSubmit(
         async (values) => {
-            console.log(values);
-            const result = await store.dispatch("addProduct", values);
+            let result;
+            result = await store.dispatch("addProduct", values);
             if (result === true) {
                 handleReset();
             }
