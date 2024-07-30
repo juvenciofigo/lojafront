@@ -333,8 +333,8 @@ export default createStore({
                     method: "post",
                     baseURL: config.apiURL,
                     url: `/variation/${payload.product}`,
-                    data: payload.variation,
-                    headers: headers(),
+                    data: payload.formData,
+                    headers: { "Content-Type": "multipart/form-data", ...headers() },
                 });
 
                 if (res.status === 200) {
@@ -354,8 +354,8 @@ export default createStore({
                     method: "put",
                     baseURL: config.apiURL,
                     url: `/variation/${payload.id}`,
-                    data: payload.variation,
-                    headers: headers(),
+                    data: payload.formData,
+                    headers: { "Content-Type": "multipart/form-data", ...headers() },
                 });
 
                 if (res.status === 200) {
@@ -368,7 +368,7 @@ export default createStore({
             }
         },
 
-        async detailsVariarion({ commit }, payload) {
+        async detailsVariation({ commit }, payload) {
             try {
                 const res = await sendAxio("get", `/variation/${payload.variation}`, null, headers(), { product: payload.product });
                 if (res.status === 200) {
@@ -1021,7 +1021,6 @@ export default createStore({
         */
 
         async newUser({ commit }, payload) {
-            console.log(payload);
             const values = {
                 email: payload.emailSignUp,
                 password: payload.passwordSignUp,

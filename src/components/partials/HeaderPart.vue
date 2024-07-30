@@ -1,66 +1,65 @@
 <template lang="">
     <div class="flex flex-col">
-        <v-navigation-drawer
-            v-model="drawer"
-            temporary
-            touchless>
-            <div class="flex-col flex justify-center items-center">
-                <LogoPart />
-                <p class="text-xs text-center">Bem-vindo</p>
-            </div>
-            <v-list>
-                <v-list-item
-                    class="login/logout cursor-pointer"
-                    v-if="isAuthenticated === false"
-                    @click="login()">
-                    <div class="flex flex-row items-center gap-2 h-max">
-                        <LogIn class="w-4 h-4" />
-                        <span class="xl:inline text-[15px] font-normal">Entrar</span>
-                    </div>
-                </v-list-item>
-
-                <v-list-item
-                    class="login/logout"
-                    v-else>
-                    <v-list class="flex flex-row justify-between gap-2 h-max">
-                        <router-link
-                            v-if="user"
-                            class="cursor-pointer"
-                            :to="{ name: `profile`, params: { user: user.id } }">
-                            <div class="flex flex-col justify-between text-sm whitespace-nowrap">
-                                <span>{{ user.firstName.split(" ").at(0) }} {{ user.lastName.split(" ").at(-1) }} </span>
-                                <span class="text-muted-foreground text-xs">Ver perfil</span>
-                            </div>
-                        </router-link>
-                        <p
-                            class="flex flex-row items-center h-3 text-red-400 cursor-pointer text-start"
-                            @click="store.dispatch('logout', router)">
-                            <span class="block text-sm font-normal">Sair</span>
-                            <LogOut class="h-full" />
-                        </p>
-                    </v-list>
-                </v-list-item>
-            </v-list>
-            <hr />
-            <!-- <v-list-item title="Categorias"></v-list-item> -->
-            <p class="text-sm text-muted-foreground">Categorias</p>
-
-            <v-list density="compact">
-                <v-list-item
-                    nav
-                    @click="filterProduct()"
-                    title="Todos Produtos">
-                </v-list-item>
-                <v-list-item
-                    nav
-                    v-for="category in categories"
-                    :key="category._id"
-                    @click="filterProduct(category._id)"
-                    :title="category.categoryName"
-                    :value="category._id">
-                </v-list-item>
-            </v-list>
-        </v-navigation-drawer>
+        <nav class="xl:hidden">
+            <v-navigation-drawer
+                v-model="drawer"
+                temporary
+                touchless>
+                <div class="flex-col flex justify-center items-center">
+                    <LogoPart />
+                    <p class="text-xs text-center">Bem-vindo</p>
+                </div>
+                <v-list>
+                    <v-list-item
+                        class="login/logout cursor-pointer"
+                        v-if="isAuthenticated === false"
+                        @click="login()">
+                        <div class="flex flex-row items-center gap-2 h-max">
+                            <LogIn class="w-4 h-4" />
+                            <span class="xl:inline text-[15px] font-normal">Entrar</span>
+                        </div>
+                    </v-list-item>
+                    <v-list-item
+                        class="login/logout"
+                        v-else>
+                        <v-list class="flex flex-row justify-between gap-2 h-max">
+                            <router-link
+                                v-if="user"
+                                class="cursor-pointer"
+                                :to="{ name: `profile`, params: { user: user.id } }">
+                                <div class="flex flex-col justify-between text-sm whitespace-nowrap">
+                                    <span>{{ user.firstName.split(" ").at(0) }} {{ user.lastName.split(" ").at(-1) }} </span>
+                                    <span class="text-muted-foreground text-xs">Ver perfil</span>
+                                </div>
+                            </router-link>
+                            <p
+                                class="flex flex-row items-center h-3 text-red-400 cursor-pointer text-start"
+                                @click="store.dispatch('logout', router)">
+                                <span class="block text-sm font-normal">Sair</span>
+                                <LogOut class="h-full" />
+                            </p>
+                        </v-list>
+                    </v-list-item>
+                </v-list>
+                <hr />
+                <p class="text-sm text-muted-foreground">Categorias</p>
+                <v-list density="compact">
+                    <v-list-item
+                        nav
+                        @click="filterProduct()"
+                        title="Todos Produtos">
+                    </v-list-item>
+                    <v-list-item
+                        nav
+                        v-for="category in categories"
+                        :key="category._id"
+                        @click="filterProduct(category._id)"
+                        :title="category.categoryName"
+                        :value="category._id">
+                    </v-list-item>
+                </v-list>
+            </v-navigation-drawer>
+        </nav>
 
         <nav class="header-1 h-[50px] flex flex-row justify-between items-center p-1 xl:p-7 bg-white">
             <p class="text-xs text-center hidden xl:block">Bem-vindo ao {{ storeName }}</p>

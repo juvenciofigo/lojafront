@@ -377,6 +377,7 @@
             <!-- Bottons -->
             <div class="mt-2">
                 <el-button
+                    :loading="loadSubmitButton"
                     @click="
                         () => {
                             loadSubmitButton = true;
@@ -384,9 +385,10 @@
                             submit();
                         }
                     "
-                    >Submit</el-button
+                    >Criar</el-button
                 >
                 <el-button
+                    :loading="loadSubmitButton"
                     @click="
                         () => {
                             handleReset();
@@ -446,7 +448,6 @@
     //     productImage.value.splice(index, 1);
     // }
 
-   
     const { handleSubmit, handleReset } = useForm({
         validationSchema: toTypedSchema(
             z.object({
@@ -455,7 +456,6 @@
                 productAvailability: z.boolean({ message: "Campo obrigatório" }),
                 productPrice: z.number({ message: "Campo obrigatório" }),
                 productStock: z.boolean({ message: "Campo obrigatório" }),
-                // productImage: z.string({ message: "Campo obrigatório" }).array(),
                 productCategory: z.string().array().min(1, { message: "Campo obrigatório" }),
                 productSubcategory: z.string().array().optional(),
                 productSub_category: z.string().array().optional(),
@@ -477,7 +477,6 @@
     const productAvailability = useField("productAvailability");
     const productPrice = useField("productPrice");
     const productStock = useField("productStock");
-    // const productImage = useField("productImage");
     const productCategory = useField("productCategory");
     const productSubcategory = useField("productSubcategory");
     const productSub_category = useField("productSub_category");
@@ -507,19 +506,15 @@
         }
     );
 
-    // const handleReset = () => {
-    //     handleSignInReset();
-    //     handleSignUpReset();
-    // };
-
-    //////////////////////////////////////////////////////////////////
-    // Carregar categorias ao montar o componente
     onMounted(() => {
         store.dispatch("getAllCategoryAdmin");
     });
 </script>
 <style scoped>
     .input-field {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
         width: 100%;
         margin: 5px 0;
     }

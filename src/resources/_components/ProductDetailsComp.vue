@@ -17,7 +17,7 @@
 
             <div
                 class="changeImage flex flex-row mx-auto p-1 gap-2 overflow-auto w-full"
-                v-if="product.productImage && product.productImage.length > 0">
+                v-if="product.productImage && product.productImage.length > 1">
                 <button
                     v-for="(image, index) in product.productImage"
                     :key="index"
@@ -355,7 +355,6 @@
     </div>
 </template>
 <script setup>
-    // const url = "https://fuss10.elemecdn.com/a/3f/3302e58f9a181d2509f3dc0fa68b0jpeg.jpeg";
     import { format, differenceInHours } from "date-fns";
     import { useStore } from "vuex";
     import { ref, defineProps, computed, watch, defineEmits, watchEffect, onMounted } from "vue";
@@ -508,14 +507,5 @@
     });
 </script>
 <style scoped>
-    /* .demo-image__error .image-slot {
-        font-size: 30px;
-    }
-    .demo-image__error .image-slot .el-icon {
-        font-size: 30px;
-    }
-    .demo-image__error .el-image {
-        width: 100%;
-        height: 200px;
-    } */
+
 </style>

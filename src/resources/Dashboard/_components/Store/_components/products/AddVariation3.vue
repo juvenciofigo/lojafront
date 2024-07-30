@@ -11,184 +11,247 @@
                 <p class="font-semibold text-slate-500 text-sm">{{ formatCurrency(product.productPrice) }}</p>
             </div>
         </div>
-        <form @submit.prevent="submitVariation">
-            <div class="mb-4">
-                <!-- <label
-                    class="block text-gray-700 text-sm font-bold mb-2"
-                    for="variationType"
-                    >Tipo da Variação:</label
-                >
-                <input
-                    v-model="variation.variationType"
-                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+        <form enctype="multipart/form-data">
+            <!-- ////////////Type//////////// -->
+            <div class="input-field">
+                <label><span class="text-red-500">*</span> Tipo da Variação:</label>
+                <el-select
+                    v-model="variationType.value.value"
+                    :disabled="textAreaDisabled"
+                    filterable
+                    placeholder="Selecione">
+                    <el-option
+                        v-for="(item, index) in options"
+                        :key="index"
+                        :label="item"
+                        :value="item" />
+                </el-select>
+                <span class="error-message">{{ variationType.errorMessage.value }}</span>
+            </div>
+            <!-- ///////////Value/////////// -->
+            <div class="input-field">
+                <label><span class="text-red-500">*</span> Valor da Variação:</label>
+                <el-input
+                    v-model="variationValue.value.value"
+                    :disabled="textAreaDisabled"
+                    autocomplete="off"
                     type="text"
-                    placeholder="Tipo da Variação" /> -->
-                <div class="flex flex-col gap-2">
-                    <label
-                        class="block text-gray-700 text-sm font-bold mb-2"
-                        for="variationType">
-                        Tipo da Variação:
-                    </label>
-                    <v-select
-                        placeholder="Selecione o modelo"
-                        :bg-color="`#FFFFFF`"
-                        :hide-details="true"
-                        clearable
-                        flat
-                        density="compact"
-                        variant="solo-filled"
-                        v-model="variation.variationType"
-                        :items="[`Modelo`, `Cor`, `Tamanho`, `Material`]"
-                        item-title="statusName"
-                        item-value="statusValue"></v-select>
+                    placeholder="Valor da Variação"
+                    aria-label="Valor da Variação" />
+                <span class="error-message">{{ variationValue.errorMessage.value }}</span>
+            </div>
+            <!-- /////////////SKU//////////// -->
+            <div class="input-field">
+                <label><span class="text-red-500">*</span> SKU:</label>
+                <el-input
+                    v-model="sku.value.value"
+                    :disabled="textAreaDisabled"
+                    autocomplete="off"
+                    type="text"
+                    placeholder="SKU"
+                    aria-label="SKU" />
+                <span class="error-message">{{ sku.errorMessage.value }}</span>
+            </div>
+            <!-- ///////////Price//////////// -->
+            <div class="input-field">
+                <label> Preço da Variação:</label>
+                <el-input-number
+                    :controls="false"
+                    v-model="variationPrice.value.value"
+                    :disabled="textAreaDisabled"
+                    autocomplete="off"
+                    type="number"
+                    placeholder="Preço da Variação"
+                    aria-label="Preço da Variação" />
+                <span class="error-message">{{ variationPrice.errorMessage.value }}</span>
+            </div>
+            <!-- ///////////Promotion Price/////////////// -->
+            <div class="input-field">
+                <label> Promoção da Variação:</label>
+                <el-input-number
+                    :controls="false"
+                    v-model="variationPromotion.value.value"
+                    :disabled="textAreaDisabled"
+                    autocomplete="off"
+                    placeholder="Preço da Promoção"
+                    aria-label="Preço da Promoção" />
+                <span class="error-message">{{ variationPromotion.errorMessage.value }}</span>
+            </div>
+            <!-- ///////// images/////////// -->
+            <div class="input-field mb-3">
+                <label> Imagens:</label>
+                <el-upload
+                    v-model:file-list="fileList"
+                    :auto-upload="false"
+                    multiple
+                    :disabled="textAreaDisabled"
+                    :limit="5"
+                    accept="image/*"
+                    list-type="picture-card"
+                    :on-preview="handlePictureCardPreview">
+                    <el-icon class="el-icon--upload"><Plus /></el-icon>
+                </el-upload>
+                <el-dialog v-model="dialogVisible">
+                    <img
+                        width="100%"
+                        :src="dialogImageUrl"
+                        alt="Preview Image" />
+                </el-dialog>
+            </div>
+
+            <div class="block h-max h-max">
+                <label> Imagens EXISTENTES:</label>
+
+                <div
+                    class="flex gap-"
+                    v-if="variationImage && variationImage.length > 0">
+                    <div
+                        @click="removeImage(index)"
+                        class="m-1 relative"
+                        v-for="(image, index) in variationImage"
+                        :key="index"
+                        :closable="true">
+                        <img
+                            class="w-20 h-20 object-cover"
+                            :src="image"
+                            alt="" />
+                    </div>
                 </div>
             </div>
-
+            <!-- /////////////////////////// -->
             <div class="mb-4">
-                <label
-                    class="block text-gray-700 text-sm font-bold mb-2"
-                    for="variationValue"
-                    >Valor da Variação:</label
-                >
-                <input
-                    v-model="variation.variationValue"
-                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    type="text"
-                    placeholder="Valor da Variação" />
-            </div>
-
-            <div class="mb-4">
-                <label
-                    class="block text-gray-700 text-sm font-bold mb-2"
-                    for="sku"
-                    >SKU:</label
-                >
-                <input
-                    v-model="variation.sku"
-                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    type="text"
-                    placeholder="SKU" />
-            </div>
-
-            <div class="mb-4">
-                <label
-                    class="block text-gray-700 text-sm font-bold mb-2"
-                    for="variationPrice"
-                    >Preço da Variação:</label
-                >
-                <input
-                    v-model.number="variation.variationPrice"
-                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    type="number"
-                    placeholder="Preço da Variação" />
-            </div>
-
-            <div class="mb-4">
-                <label
-                    class="block text-gray-700 text-sm font-bold mb-2"
-                    for="variationPromotion"
-                    >Promoção da Variação:</label
-                >
-                <input
-                    v-model.number="variation.variationPromotion"
-                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    type="number"
-                    placeholder="Promoção da Variação" />
-            </div>
-
-            <div class="mb-4">
-                <label
-                    class="block text-gray-700 text-sm font-bold mb-2"
-                    for="variationImage"
-                    >URLs das Imagens:</label
-                >
-                <input
-                    v-model="variation.variationImage"
-                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    type="text"
-                    placeholder="URLs das Imagens (separadas por vírgula)" />
-            </div>
-
-            <div class="mb-4">
-                <label class="block text-gray-700 text-sm font-bold mb-2">Detalhes de Entrega:</label>
+                <h2 class="block text-gray-700 text-sm font-bold mb-2">Detalhes de Entrega:</h2>
                 <div class="mb-2">
-                    <label class="block text-gray-700 text-sm font-bold mb-1">Dimensões (cm):</label>
+                    <h3 class="block text-gray-700 text-sm font-bold mb-1">Dimensões (cm):</h3>
                     <div class="flex items-center">
-                        <input
-                            v-model.number="variation.delivery.dimensions.heightCm"
-                            class="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mr-2"
-                            type="number"
-                            placeholder="Altura" />
-                        <input
-                            v-model.number="variation.delivery.dimensions.widthCm"
-                            class="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mr-2"
-                            type="number"
-                            placeholder="Largura" />
-                        <input
-                            v-model.number="variation.delivery.dimensions.depthCm"
-                            class="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mr-2"
-                            type="number"
-                            placeholder="Profundidade" />
+                        <!-- /////////Height/////////////// -->
+                        <div class="input-field">
+                            <label> Altura:</label>
+                            <el-input-number
+                                :controls="false"
+                                v-model="heightCm.value.value"
+                                :disabled="textAreaDisabled"
+                                autocomplete="off"
+                                placeholder="Altura"
+                                aria-label="Altura" />
+                            <span class="error-message">{{ heightCm.errorMessage.value }}</span>
+                        </div>
+                        <!-- /////////Width/////////////// -->
+                        <div class="input-field">
+                            <label> Largura:</label>
+                            <el-input-number
+                                :controls="false"
+                                v-model="widthCm.value.value"
+                                :disabled="textAreaDisabled"
+                                autocomplete="off"
+                                placeholder="Largura"
+                                aria-label="Largura" />
+                            <span class="error-message">{{ widthCm.errorMessage.value }}</span>
+                        </div>
+                        <!-- /////////////////////// -->
+                        <div class="input-field">
+                            <label> Comprimento:</label>
+                            <el-input-number
+                                :controls="false"
+                                v-model="depthCm.value.value"
+                                :disabled="textAreaDisabled"
+                                autocomplete="off"
+                                placeholder="Comprimento"
+                                aria-label="Comprimento" />
+                            <span class="error-message">{{ depthCm.errorMessage.value }}</span>
+                        </div>
+                        <!-- ///////////////// -->
                     </div>
                 </div>
-                <div class="mb-2">
-                    <label
-                        class="block text-gray-700 text-sm font-bold mb-1"
-                        for="weight"
-                        >Peso (kg):</label
-                    >
-                    <input
-                        v-model.number="variation.delivery.weight"
-                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                        type="number"
-                        placeholder="Peso" />
+                <div class="input-field">
+                    <label> Peso (g):</label>
+                    <el-input-number
+                        :controls="false"
+                        v-model="weight.value.value"
+                        :disabled="textAreaDisabled"
+                        autocomplete="off"
+                        placeholder="Peso (g)"
+                        aria-label="Peso (g)" />
+                    <span class="error-message">{{ weight.errorMessage.value }}</span>
                 </div>
-                <div class="mb-4 inline-block mr-4">
-                    <label class="flex items-center">
-                        <input
-                            v-model.number="variation.variationStock"
-                            class="mr-2 leading-tight"
-                            type="checkbox" />
-                        <span class="text-sm"> Disponível </span>
-                    </label>
-                </div>
-                <div class="mb-4 inline-block">
-                    <label class="flex items-center">
-                        <input
-                            v-model="variation.delivery.shippingFree"
-                            class="mr-2 leading-tight"
-                            type="checkbox" />
-                        <span class="text-sm"> Frete Grátis </span>
-                    </label>
-                </div>
+                <!-- /////////////// -->
+                <el-checkbox
+                    v-model="variationStock"
+                    label="Disponível"
+                    checked
+                    size="large" />
+                <!-- ///////////////// -->
+                <el-checkbox
+                    v-model="shippingFree"
+                    label="Frete Grátis"
+                    checked
+                    size="large" />
+                <!-- ///////////////// -->
             </div>
-
-            <div class="flex items-center justify-between">
-                <v-btn
-                    :loading="loading"
-                    class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                    type="submit">
-                    <div>
-                        <span v-if="selectedVariation">Modificar</span>
-                        <span v-else>Criar Variação</span>
-                    </div>
-                </v-btn>
+            <div class="mt-2">
+                <el-button
+                    :loading="loadSubmitButton"
+                    @click="
+                        () => {
+                            loadSubmitButton = true;
+                            textAreaDisabled = true;
+                            submit();
+                        }
+                    ">
+                    <span v-if="selectedVariation">Modificar</span>
+                    <span v-else>Criar Variação</span>
+                </el-button>
+                <el-button
+                    :loading="loadSubmitButton"
+                    @click="
+                        () => {
+                            handleReset();
+                        }
+                    "
+                    >Limpar</el-button
+                >
             </div>
         </form>
     </div>
 </template>
 
 <script setup>
-    import { ref, computed, onBeforeMount, toRaw } from "vue";
-    import { useRoute, useRouter } from "vue-router";
+    import { ref, computed, onBeforeMount } from "vue";
+    import { useRoute } from "vue-router";
     import { useStore } from "vuex";
 
+    import { useField, useForm } from "vee-validate";
+    import { toTypedSchema } from "@vee-validate/zod";
+    import * as z from "zod";
+
     const route = useRoute();
-    const router = useRouter();
     const store = useStore();
     const product = computed(() => store.state.product);
-    const loading = ref(false);
+    const selectedVariation = route.params.variation;
 
+    const loadSubmitButton = ref(true);
+    const textAreaDisabled = ref(true);
+    const options = [`Modelo`, `Cor`, `Tamanho`, `Material`];
+
+    ////////image/////////
+    import { Plus } from "@element-plus/icons-vue";
+    const fileList = ref([]);
+    const variationImage = ref([]);
+
+    const dialogImageUrl = ref("");
+    const dialogVisible = ref(false);
+
+    const handlePictureCardPreview = (uploadFile) => {
+        dialogImageUrl.value = uploadFile.url;
+        dialogVisible.value = true;
+    };
+
+    function removeImage(index) {
+        if (index > -1 && index < variationImage.value.length) {
+            variationImage.value.splice(index, 1);
+        }
+    }
+    // ///////////////
     const formatCurrency = (value) => {
         return Number(value).toLocaleString("pt-MZ", {
             style: "currency",
@@ -196,102 +259,147 @@
         });
     };
 
-    const selectedVariation = route.params.variation;
-
-    const variation = ref({
-        variationProduct: route.params.id,
-        variationType: null,
-        variationValue: null,
-        sku: null,
-        variationStock: true,
-        variationPrice: 0,
-        variationPromotion: null,
-        variationImage: [],
-        delivery: {
-            dimensions: {
-                heightCm: null,
-                widthCm: null,
-                depthCm: null,
-            },
-            weight: null,
-            shippingFree: true,
-        },
+    const { handleSubmit, handleReset } = useForm({
+        validationSchema: toTypedSchema(
+            z.object({
+                variationType: z.string({ message: "Campo obrigatório" }),
+                variationValue: z.string({ message: "Campo obrigatório" }),
+                sku: z.string({ message: "Campo obrigatório" }),
+                variationPrice: z.preprocess((val) => Number(val) || 0, z.number().optional()),
+                variationPromotion: z.preprocess((val) => Number(val) || 0, z.number().optional()),
+                heightCm: z.preprocess((val) => Number(val) || 0, z.number().optional()),
+                widthCm: z.preprocess((val) => Number(val) || 0, z.number().optional()),
+                depthCm: z.preprocess((val) => Number(val) || 0, z.number().optional()),
+                weight: z.preprocess((val) => Number(val) || 0, z.number().optional()),
+            })
+        ),
     });
 
-    async function submitVariation() {
-        if (!variation.value.variationType) {
-            store.commit("updateSnackbar", { show: true, text: "Preencha correctamente o campo Tipo da variação!", color: "red" });
-            return;
-        }
-        if (!variation.value.variationValue) {
-            store.commit("updateSnackbar", { show: true, text: "Preencha correctamente o campo Valor da Variação!", color: "red" });
-            return;
-        }
-        if (!variation.value.sku) {
-            store.commit("updateSnackbar", { show: true, text: "Preencha correctamente o campo SKU", color: "red" });
-            return;
-        }
+    const variationType = useField("variationType");
+    const variationValue = useField("variationValue");
+    const sku = useField("sku");
+    const variationPrice = useField("variationPrice");
+    const variationPromotion = useField("variationPromotion");
+    const heightCm = useField("heightCm");
+    const widthCm = useField("widthCm");
+    const depthCm = useField("depthCm");
+    const weight = useField("weight");
+    const shippingFree = ref(true);
+    const variationStock = ref(true);
 
-        let response = null;
+    const submit = handleSubmit(
+        async (values) => {
+            let response = null;
+            const formData = new FormData();
 
-        if (selectedVariation) {
-            response = await store.dispatch("updateVariation", { id: route.params.variation, variation: toRaw(variation.value) });
-            router.go(0);
-            return;
-        } else {
-            response = await store.dispatch("addVariation", { product: route.params.id });
-        }
-        if (response === true) {
-            clearForm();
-        }
-        loading.value = false;
-        return;
-    }
+            if (fileList.value && fileList.value.length > 0) {
+                fileList.value.forEach((file) => {
+                    formData.append("files", file.raw);
+                });
+            }
 
-    function clearForm() {
-        variation.value = {
-            variationType: "",
-            variationValue: "",
-            sku: "",
-            variationPrice: 0,
-            variationPromotion: 0,
-            variationStock: true,
-            variationImage: [],
-            delivery: {
-                dimensions: {
-                    heightCm: null,
-                    widthCm: null,
-                    depthCm: null,
-                },
-                weight: null,
-                shippingFree: false,
-            },
-        };
-    }
+            const variation = {
+                variationImage: variationImage.value,
+                variationType: values.variationType,
+                variationValue: values.variationValue,
+                sku: values.sku,
+                variationPrice: values.variationPrice,
+                variationPromotion: values.variationPromotion,
+                heightCm: values.heightCm,
+                widthCm: values.widthCm,
+                depthCm: values.depthCm,
+                weight: values.weight,
+                variationStock: variationStock.value,
+                shippingFree: shippingFree.value,
+            };
+
+            for (const key in variation) {
+                if (Object.prototype.hasOwnProperty.call(variation, key)) {
+                    if (Array.isArray(variation[key])) {
+                        variation[key].forEach((item) => {
+                            formData.append(`${key}[]`, item);
+                        });
+                    } else {
+                        formData.append(key, variation[key]);
+                    }
+                }
+            }
+
+            if (selectedVariation) {
+                response = await store.dispatch("updateVariation", { id: route.params.variation, formData });
+            } else {
+                response = await store.dispatch("addVariation", { product: route.params.id, formData });
+            }
+
+            if (response === true) {
+                handleReset();
+                fileList.value = [];
+                variationImage.value = [];
+            }
+            loadSubmitButton.value = false;
+            textAreaDisabled.value = false;
+        },
+        (values) => {
+            console.log(false);
+            console.log(values);
+            loadSubmitButton.value = false;
+            textAreaDisabled.value = false;
+        }
+    );
 
     onBeforeMount(async () => {
         await store.dispatch("detailsProductAdmin", route.params.id);
+
         if (selectedVariation) {
-            const res = await store.dispatch("detailsVariarion", { variation: selectedVariation, product: route.params.id });
-            variation.value = {
-                variationProduct: route.params.id,
-                variationType: res.variationType,
-                variationValue: res.variationValue,
-                sku: res.sku,
-                variationStock: res.variationStock,
-                variationPrice: res.variationPrice,
-                variationPromotion: res.variationPromotion,
-                variationImage: res.variationImage,
-                delivery: {
-                    dimensions: {
-                        heightCm: res.delivery.dimensions.heightCm,
-                        widthCm: res.delivery.dimensions.widthCm,
-                        depthCm: res.delivery.dimensions.depthCm,
-                    },
-                    weight: res.delivery.weight,
-                    shippingFree: res.delivery.shippingFree,
-                },
-            };
+            const res = await store.dispatch("detailsVariation", { variation: selectedVariation, product: route.params.id });
+
+            variationType.value.value = res.variationType;
+            variationValue.value.value = res.variationValue;
+            sku.value.value = res.sku;
+            variationImage.value = res.variationImage;
+            variationPrice.value.value = res.variationPrice;
+            variationPromotion.value.value = res.variationPromotion;
+            heightCm.value.value = res.delivery.dimensions.heightCm;
+            widthCm.value.value = res.delivery.dimensions.widthCm;
+            depthCm.value.value = res.delivery.dimensions.depthCm;
+            weight.value.value = res.delivery.weight;
+            variationStock.value = res.variationStock;
+            shippingFree.value = res.delivery.shippingFree;
         }
+
+        loadSubmitButton.value = false;
+        textAreaDisabled.value = false;
     });
 </script>
+<style scoped>
+    .input-field {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        width: 100%;
+        margin: 5px 0;
+    }
+    .v-input__control {
+        background-color: white;
+        border-radius: 4px;
+    }
+
+    .input-field input {
+        width: 100%;
+        border: none;
+        font-size: 13px;
+        border-radius: 8px;
+        outline: none;
+    }
+    .error-message {
+        margin: 5px 0 0 0;
+        padding: 0 0 0 10px;
+        width: 100%;
+        height: 15px;
+        font-size: x-small;
+        line-height: 13px;
+        color: red;
+        display: flex;
+        align-items: center;
+    }
+</style>
