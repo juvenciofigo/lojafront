@@ -85,8 +85,8 @@ module.exports = {
                 "collapsible-up": "collapsible-up 0.2s ease-in-out",
             },
             fontFamily: {
-                poppins: ["Poppins"],
-                Playfair_Display: ["Playfair_Display, sans-sarif"],
+                // poppins: ["Poppins"],
+                Playfair_Display: ["Playfair_Display"],
             },
             gridTemplateColumns: {
                 13: "repeat(auto-fit, minmax(1fr, 300px))",
