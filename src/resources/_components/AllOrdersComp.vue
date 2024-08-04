@@ -1,112 +1,99 @@
 <template lang="">
-    <div class="flex flex-col flex-1 gap-2">
-        <div
-            class="relative flex-1"
-            v-if="orderDocs && orderDocs.length > 0">
-            <div class="p-4">
-                <Input
-                    class="max-w-sm"
-                    placeholder="Filter emails..." />
-            </div>
-            <div class="absolute bottom-0 items-center top-[60px] left-0 flex-1 w-full max-w-[1400px] flex flex-col overflow-auto">
-                <v-table
-                    density="comfortable "
-                    fixed-header>
-                    <thead>
-                        <tr>
-                            <th class="text-center font-extrabold">#</th>
-                            <th class="text-center">Referência</th>
-                            <th class="text-center">Cliente</th>
-                            <th class="text-center">Data</th>
-                            <th class="text-center">Total</th>
-                            <th class="text-center whitespace-nowrap">Forma de pagamento</th>
-                            <th class="text-center whitespace-nowrap">Estado do pagamento</th>
-                            <th class="text-center whitespace-nowrap">Estado da entrega</th>
-                            <th class="text-center">Ações</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr
-                            class="cursor-pointer hover:bg-slate-200 duration-500"
-                            v-for="(order, index) in orderDocs"
-                            :key="order._id">
-                            <td class="text-center font-bold">{{ index + 1 }}</td>
-                            <td class="text-center whitespace-nowrap">
-                                <span v-if="order.referenceOrder">{{ order.referenceOrder }}</span>
-                                <span v-else>Sem Referência</span>
-                            </td>
-                            <td class="text-center whitespace-nowrap">
-                                <span>{{ order.customer.firstName }}</span> <span>{{ order.customer.lastName }}</span>
-                            </td>
-                            <td class="text-center whitespace-nowrap">{{ formatDate(order.createdAt) }}</td>
-                            <td class="text-center">{{ formatCurrency(order.payment.amount) }}</td>
-                            <td class="text-center">
-                                <span v-if="order.payment.paymentMethod">{{ order.payment.paymentMethod }}</span>
-                                <span v-else>{{ order.payment.status }}</span>
-                            </td>
-                            <td class="text-center">{{ order.payment.status }}</td>
-                            <td class="text-center">{{ order.delivery.status }}</td>
-                            <td class="flex flex-row gap-2">
-                                <v-dialog
-                                    class="w-full"
-                                    transition="dialog-bottom-transition">
-                                    <template v-slot:activator="{ props: activatorProps }">
-                                        <button
-                                            v-bind="activatorProps"
-                                            class="p-[3px] rounded-md">
-                                            <Eye size="20" />
-                                        </button>
-                                    </template>
-
-                                    <template v-slot:default="{ isActive }">
-                                        <v-card>
-                                            <v-card-actions class="flex flex-row justify-between text-end p-0">
-                                                <p class="ml-3 text-2xl font-bold">Pedido {{ order.referenceOrder }}</p>
-                                                <button
-                                                    class="text-red-500 bg-red-100 active:text-red-100 active:bg-red-500 duration-500 rounded-md mr-3"
-                                                    @click="isActive.value = false">
-                                                    <X />
-                                                </button>
-                                            </v-card-actions>
-                                            <v-card-text class="bg-[#f3f3f9] 0 p-1 overflow-x-hidden">
-                                                <OrdersDetails :order="order">
-                                                    <template #doPay>
-                                                        <slot name="doPay"></slot>
-                                                    </template>
-                                                </OrdersDetails>
-                                            </v-card-text>
-                                        </v-card>
-                                    </template>
-                                </v-dialog>
-
-                                <button
-                                    class="p-[3px] rounded-md"
-                                    @click="confirmDelete(order._id, order.payment.status)">
-                                    <Trash2
-                                        color="red"
-                                        size="20" />
-                                </button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </v-table>
-                <div class="flex items-center space-x-2 py-4">
-                    <v-pagination
-                        v-model="curentPage"
-                        @update:modelValue="pageEvent"
-                        :length="totalPages"
-                        :total-visible="4"
-                        density="compact"
-                        variant="flat">
-                    </v-pagination>
-                </div>
-            </div>
+    <div class="flex flex-col flex-1 gap-2 overflow-auto">
+        <div class="p-4">
+            <Input
+                class="max-w-sm"
+                placeholder="Filter emails..." />
         </div>
+
+        <el-table
+            v-if="orderDocs && orderDocs.length > 0"
+            :data="orderDocs"
+            :fit="true"
+            show-header
+            size="small">
+            <el-table-column
+                fixed
+                prop="referenceOrder"
+                label="Referência" />
+            <el-table-column
+                prop="customer.lastName"
+                label="Cliente" />
+            <el-table-column
+                prop="createdAt"
+                label="Data"
+                :formatter="formatDate" />
+            <el-table-column
+                prop="payment.amount"
+                label="Total"
+                :formatter="formatCurrency" />
+            <el-table-column
+                prop="payment.paymentMethod"
+                label="Forma de pagamento" />
+            <el-table-column
+                prop="payment.status"
+                label="Estado do pagamento" />
+            <el-table-column
+                prop="delivery.status"
+                label="Estado da entrega" />
+            <el-table-column
+                fixed="right"
+                label="Ações"
+                min-width="120">
+                <template #default="scope">
+                    <el-button
+                        link
+                        type="primary"
+                        size="small"
+                        @click="handleView(scope.row)">
+                        Ver
+                    </el-button>
+                    <el-button
+                        link
+                        type="danger"
+                        size="small"
+                        @click="confirmDelete(scope.row._id, scope.row.payment.status)">
+                        Apagar
+                    </el-button>
+                </template>
+            </el-table-column>
+        </el-table>
+
         <div
             v-else
             class="text-center">
             <p>Sem pedidos</p>
         </div>
+
+        <div class="flex items-center space-x-2 py-4">
+            <v-pagination
+                v-model="curentPage"
+                @update:modelValue="pageEvent"
+                :length="totalPages"
+                :total-visible="4"
+                density="compact"
+                variant="flat">
+            </v-pagination>
+        </div>
+        <el-dialog
+            v-model="dialogVisible"
+            :close="
+                () => {
+                    dialogVisible = false;
+                }
+            "
+            :title="`Detalhes do Pedido ${selectedOrder.referenceOrder}`"
+            :fullscreen="true">
+            <v-card>
+                <v-card-text class="bg-[#f3f3f9] p-1 overflow-x-hidden">
+                    <OrdersDetails :order="selectedOrder">
+                        <template #doPay>
+                            <slot name="doPay"></slot>
+                        </template>
+                    </OrdersDetails>
+                </v-card-text>
+            </v-card>
+        </el-dialog>
 
         <DialogConfirmation
             :dialog="showDialog"
@@ -123,7 +110,6 @@
     import { useStore } from "vuex";
     import { useRoute, useRouter } from "vue-router";
     import { format } from "date-fns";
-    import { Eye, Trash2, X } from "lucide-vue-next";
     import { Input } from "@/components/ui/input";
 
     import OrdersDetails from "@/resources/_components/OrdersDetails.vue";
@@ -141,6 +127,14 @@
     const curentPage = ref(Number(route.query.offset) || 1);
     const totalPages = ref(computed(() => orders.value.totalPages));
     const offset = ref(computed(() => route.query.offset || 1));
+
+    const dialogVisible = ref(false);
+    const selectedOrder = ref({});
+
+    const handleView = (row) => {
+        selectedOrder.value = row;
+        dialogVisible.value = true;
+    };
 
     onBeforeUnmount(() => {
         store.commit("CLEAR_ORDERS");
@@ -171,15 +165,15 @@
         store.dispatch(`${props.storeaction}`, { offset: offset.value, user: route.params.user });
     };
 
-    function formatDate(date) {
-        return format(new Date(date), "dd/MM/yyyy HH:mm");
-    }
-
     watchEffect(() => {
         fetchOrders();
     });
 
-    const formatCurrency = (value) => {
+    function formatDate(row) {
+        return row.createdAt ? format(new Date(row.createdAt), "dd/MM/yyyy HH:mm") : "";
+    }
+    const formatCurrency = (row) => {
+        const value = row.payment.amount;
         if (typeof value !== "number" || isNaN(value)) {
             return "MZN 0.00";
         }
@@ -189,3 +183,24 @@
         });
     };
 </script>
+<style>
+    .el-table .cell {
+        font-weight: bolder !important;
+        font-size: x-small;
+        padding: 0;
+        white-space: nowrap;
+        overflow: scroll;
+        text-overflow: clip;
+    }
+    @media screen and (min-width: 600px) {
+        .el-table .cell {
+            font-weight: 600;
+            font-size: unset;
+            text-align: center;
+            padding: 0;
+            white-space: wrap;
+            overflow: hidden;
+            text-overflow: clip;
+        }
+    }
+</style>

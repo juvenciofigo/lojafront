@@ -86,6 +86,7 @@ module.exports = {
             },
             fontFamily: {
                 poppins: ["Poppins"],
+                Playfair_Display: ["Playfair_Display, san-sarif"],
             },
             gridTemplateColumns: {
                 13: "repeat(auto-fit, minmax(1fr, 300px))",

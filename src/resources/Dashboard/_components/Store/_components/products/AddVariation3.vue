@@ -99,7 +99,7 @@
                 </el-dialog>
             </div>
 
-            <div class="block h-max h-max">
+            <div class="block h-max" v-if="selectedVariation && variationImage && variationImage.length > 0">
                 <label> Imagens EXISTENTES:</label>
 
                 <div

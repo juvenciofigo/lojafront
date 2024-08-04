@@ -162,9 +162,9 @@ const routes = [
             },
             {
                 // update product
-                path: "produto/:id/actualizar",
+                path: "produto/:productID/actualizar",
                 name: "update",
-                component: () => import("@/resources/Dashboard/_components/Store/_components/products/UpdateProduct.vue"),
+                component: () => import("@/resources/Dashboard/_components/Store/_components/products/AddProduct.vue"),
             },
 
             /*

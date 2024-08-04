@@ -5,7 +5,9 @@
             <p class="text-xs indent-2">Preencha as informações abaixo</p>
         </div>
 
-        <form @submit.prevent="submit">
+        <form
+            @submit.prevent="submit"
+            enctype="multipart/form-data">
             <div class="flex flex-col md:flex-row gap-8">
                 <div class="Left flex-[2] flex flex-col gap-8 bg-blue-500 p-2 md:p-4 rounded-md">
                     <div class="TIT_Desc">
@@ -50,43 +52,49 @@
                             </div>
                         </div>
                     </div>
-                    <!-- <div class="images flex flex-col gap-4">
-                            <Label><span class="text-red-500">* </span>Adicione imagens do produto:</Label>
-                            <v-file-input
-                                @change="previewImages"
-                                :clearable="false"
-                                prepend-icon=""
-                                density="compact"
-                                multiple
-                                :v-model="productImage"
-                                label="Clique ou arraste as imagens para aqui"
-                                variant="solo-filled">
-                            </v-file-input>
 
+                    <!-- ///////// images/////////// -->
+                    <div class="input-field mb-3">
+                        <label> Imagens:</label>
+                        <el-upload
+                            drag
+                            v-model:file-list="fileList"
+                            :auto-upload="false"
+                            multiple
+                            :disabled="textAreaDisabled"
+                            accept="image/*"
+                            list-type="picture-card"
+                            :on-preview="handlePictureCardPreview">
+                            <el-icon class="el-icon--upload"><Plus /></el-icon>
+                        </el-upload>
+                        <el-dialog v-model="dialogVisible">
+                            <img
+                                width="100%"
+                                :src="dialogImageUrl"
+                                alt="Preview Image" />
+                        </el-dialog>
+                    </div>
+
+                    <div
+                        class="block h-max"
+                        v-if="productImage && productImage.length > 0">
+                        <label> Imagens EXISTENTES:</label>
+
+                        <div class="flex gap-">
                             <div
-                                v-if="productImage && productImage.length > 0"
-                                class="flex flex-col gap-3">
-                                <h3>Pré-visualização de Imagens</h3>
-
-                                <div class="flex flex-row flex-wrap gap-2">
-                                    <template
-                                        v-for="(preview, index) in productImage"
-                                        :key="index">
-                                        <div class="flex flex-col gap-2 items-center">
-                                            <img
-                                                :src="preview.url"
-                                                :alt="'Pré-visualização da Imagem ' + index"
-                                                class="object-cover h-[45px] w-[45px] border-[2px]" />
-                                            <button
-                                                class="p-[2px] bg-red-500 rounded-md"
-                                                @click="removeImage(index)">
-                                                Remover
-                                            </button>
-                                        </div>
-                                    </template>
-                                </div>
+                                @click="removeImage(index)"
+                                class="m-1 relative"
+                                v-for="(image, index) in productImage"
+                                :key="index"
+                                :closable="true">
+                                <img
+                                    class="w-20 h-20 object-cover"
+                                    :src="image"
+                                    alt="" />
                             </div>
-                        </div> -->
+                        </div>
+                    </div>
+                    <!-- //////////// -->
 
                     <div class="espc">
                         <div class="flex flex-col sm:flex-row sm:gap-2">
@@ -195,6 +203,7 @@
                             <Label><span class="text-red-500">* </span>Publicar</Label>
                             <el-select
                                 v-model="productAvailability.value.value"
+                                :value="true"
                                 :disabled="textAreaDisabled"
                                 filterable
                                 placeholder="Selecione">
@@ -402,7 +411,8 @@
 </template>
 <script setup>
     import { useStore } from "vuex";
-    import { ref, onMounted, computed } from "vue";
+    import { useRoute } from "vue-router";
+    import { ref, onMounted, computed, toRaw } from "vue";
     // import Editor from "@tinymce/tinymce-vue";
     import { useField, useForm } from "vee-validate";
     import { toTypedSchema } from "@vee-validate/zod";
@@ -421,33 +431,34 @@
     ];
 
     const store = useStore();
+    const route = useRoute();
 
     const categories = computed(() => store.state.categories);
+    const productSeleted = route.params.productID;
+
     const textAreaDisabled = ref(false);
     const loadSubmitButton = ref(false);
 
-    // // Função para pré-visualizar as imagens
+    // Função para pré-visualizar as imagens
 
-    // function previewImages(event) {
-    //     const files = event.target.files;
-    //     for (let i = 0; i < files.length; i++) {
-    //         const reader = new FileReader();
+    import { Plus } from "@element-plus/icons-vue";
+    const fileList = ref([]);
+    const productImage = ref([]);
 
-    //         reader.onload = (e) => {
-    //             productImage.value.push({
-    //                 url: e.target.result,
-    //                 file: files[i],
-    //             });
-    //         };
-    //         reader.readAsDataURL(files[i]);
-    //     }
-    // }
+    const dialogImageUrl = ref("");
+    const dialogVisible = ref(false);
 
-    // // Função para remover uma imagem da pré-visualização
-    // function removeImage(index) {
-    //     productImage.value.splice(index, 1);
-    // }
+    const handlePictureCardPreview = (uploadFile) => {
+        dialogImageUrl.value = uploadFile.url;
+        dialogVisible.value = true;
+    };
 
+    function removeImage(index) {
+        if (index > -1 && index < productImage.value.length) {
+            productImage.value.splice(index, 1);
+        }
+    }
+    // ///////////////
     const { handleSubmit, handleReset } = useForm({
         validationSchema: toTypedSchema(
             z.object({
@@ -492,11 +503,40 @@
 
     const submit = handleSubmit(
         async (values) => {
-            let result;
-            result = await store.dispatch("addProduct", values);
-            if (result === true) {
-                handleReset();
+            if (Array.isArray(productImage.value) && productImage.value.length > 0) {
+                values.productImage = toRaw(productImage.value);
             }
+            // let response = null;
+            const formData = new FormData();
+
+            if (fileList.value && fileList.value.length > 0) {
+                fileList.value.forEach((file) => {
+                    formData.append("files", file.raw);
+                });
+            }
+
+            for (const key in values) {
+                if (Object.prototype.hasOwnProperty.call(values, key)) {
+                    if (Array.isArray(values[key])) {
+                        values[key].forEach((item) => {
+                            formData.append(`${key}[]`, item);
+                        });
+                    } else {
+                        formData.append(key, values[key]);
+                    }
+                }
+            }
+
+            if (productSeleted) {
+                await store.dispatch("updateProduct", { productSeleted, formData });
+            } else {
+                let result;
+                result = await store.dispatch("addProduct", formData);
+                if (result === true) {
+                    handleReset();
+                }
+            }
+
             loadSubmitButton.value = false;
             textAreaDisabled.value = false;
         },
@@ -506,8 +546,36 @@
         }
     );
 
-    onMounted(() => {
+    onMounted(async () => {
+        loadSubmitButton.value = true;
+        textAreaDisabled.value = true;
         store.dispatch("getAllCategoryAdmin");
+
+        if (productSeleted) {
+            await store.dispatch("detailsProductAdmin", productSeleted);
+            const productData = store.state.product;
+
+            productName.value.value = productData.productName;
+            productDescription.value.value = productData.productDescription;
+            productAvailability.value.value = productData.productAvailability;
+            productPrice.value.value = productData.productPrice;
+            productStock.value.value = productData.productStock;
+            productImage.value = productData.productImage;
+            productCategory.value.value = productData.productCategory;
+            productSubcategory.value.value = productData.productSubcategory;
+            productSub_category.value.value = productData.productSub_category;
+            productPromotion.value.value = productData.productPromotion;
+            sku.value.value = productData.sku;
+            productVendor.value.value = productData.productVendor;
+            productModel.value.value = productData.productModel;
+            productBrand.value.value = productData.productBrand;
+            productWeight.value.value = productData.productWeight;
+            productLength.value.value = productData.productLength;
+            productWidth.value.value = productData.productWidth;
+            productHeight.value.value = productData.productHeight;
+        }
+        loadSubmitButton.value = false;
+        textAreaDisabled.value = false;
     });
 </script>
 <style scoped>

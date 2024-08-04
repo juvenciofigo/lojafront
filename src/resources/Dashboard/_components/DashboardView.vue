@@ -1,16 +1,18 @@
 <template lang="">
     <div class="flex flex-row h-full gap-2 xl:p-2">
         <div class="navigation xl:hidden">
-            <v-navigation-drawer
+            <el-drawer
+                :size="300"
                 v-model="drawer"
-                temporary
-                touchless>
-                <div class="flex-col flex justify-center items-center">
-                    <LogoPart />
-                    <p class="text-xs text-center">Bem-vindo</p>
-                </div>
-                <v-list>
-                    <v-list-item
+                direction="ltr">
+                <template #header>
+                    <div class="flex-col flex justify-center items-center">
+                        <LogoPart />
+                    </div>
+                </template>
+
+                <div>
+                    <div
                         class="login/logout cursor-pointer"
                         v-if="isAuthenticated === false"
                         @click="login()">
@@ -18,12 +20,12 @@
                             <LogIn class="w-4 h-4" />
                             <span class="xl:inline text-[15px] font-normal">Entrar</span>
                         </div>
-                    </v-list-item>
+                    </div>
 
-                    <v-list-item
+                    <div
                         class="login/logout"
                         v-else>
-                        <v-list class="flex flex-row justify-between gap-2 h-max">
+                        <div class="flex flex-row justify-between gap-2 h-max">
                             <router-link
                                 v-if="user"
                                 class="cursor-pointer"
@@ -39,9 +41,9 @@
                                 <span class="block text-sm font-normal">Sair</span>
                                 <LogOut class="h-full" />
                             </p>
-                        </v-list>
-                    </v-list-item>
-                </v-list>
+                        </div>
+                    </div>
+                </div>
                 <hr />
 
                 <div class="flex flex-col px-2 gap-2 mt-2">
@@ -54,7 +56,7 @@
                         <span class="whitespace-nowrap">{{ item.name }}</span>
                     </router-link>
                 </div>
-            </v-navigation-drawer>
+            </el-drawer>
         </div>
         <!-- end navigation -->
 

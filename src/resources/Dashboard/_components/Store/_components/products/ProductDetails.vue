@@ -130,6 +130,7 @@
     };
 
     function navigateTo() {
+        
         router.push({ name: "update", params: { id: route.params.id } });
     }
     function addImage() {

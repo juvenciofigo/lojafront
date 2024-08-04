@@ -257,7 +257,6 @@ export default createStore({
             try {
                 const res = await sendAxio("post", `/product`, payload, headers());
 
-                console.log(res);
                 if (res.status === 200) {
                     commit("updateSnackbar", { show: true, text: "Produto adicionado", color: "green" });
                     window.location.reload();
@@ -268,14 +267,14 @@ export default createStore({
         },
 
         ///////////////// update
-        async updateProduct({ commit }, { productId, updatedProductData }) {
+        async updateProduct({ commit }, payload) {
             try {
                 const res = await axios.request({
                     method: "put",
                     baseURL: config.apiURL,
-                    url: `/product/${productId}`,
+                    url: `/product/${payload.productSeleted}`,
                     headers: headers(),
-                    data: { ...updatedProductData },
+                    data: payload.formData,
                 });
 
                 if (res.data) {

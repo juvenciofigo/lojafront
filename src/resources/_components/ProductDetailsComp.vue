@@ -85,8 +85,19 @@
                                 <v-chip
                                     v-for="(item, index) in colors"
                                     :key="index"
-                                    :value="item._id"
-                                    :text="item.variationValue"></v-chip>
+                                    :value="item._id">
+                                    <template v-slot:default>
+                                        <div v-if="item.variationImage && item.variationImage.length > 0">
+                                            <img
+                                                :src="item.variationImage[0]"
+                                                alt="Image"
+                                                class="chip-image object-contain" />
+                                        </div>
+                                        <div v-else>
+                                            {{ item.variationValue }}
+                                        </div>
+                                    </template>
+                                </v-chip>
                             </v-chip-group>
                         </div>
                     </div>
@@ -103,8 +114,19 @@
                                 <v-chip
                                     v-for="(item, index) in sizes"
                                     :key="index"
-                                    :value="item._id"
-                                    :text="item.variationValue"></v-chip>
+                                    :value="item._id">
+                                    <template v-slot:default>
+                                        <div v-if="item.variationImage && item.variationImage.length > 0">
+                                            <img
+                                                :src="item.variationImage[0]"
+                                                alt="Image"
+                                                class="chip-image object-contain" />
+                                        </div>
+                                        <div v-else>
+                                            {{ item.variationValue }}
+                                        </div>
+                                    </template>
+                                </v-chip>
                             </v-chip-group>
                         </div>
                     </div>
@@ -121,8 +143,19 @@
                                 <v-chip
                                     v-for="(item, index) in models"
                                     :key="index"
-                                    :value="item._id"
-                                    :text="item.variationValue"></v-chip>
+                                    :value="item._id">
+                                    <template v-slot:default>
+                                        <div v-if="item.variationImage && item.variationImage.length > 0">
+                                            <img
+                                                :src="item.variationImage[0]"
+                                                alt="Image"
+                                                class="chip-image object-contain" />
+                                        </div>
+                                        <div v-else>
+                                            {{ item.variationValue }}
+                                        </div>
+                                    </template>
+                                </v-chip>
                             </v-chip-group>
                         </div>
                     </div>
@@ -139,8 +172,19 @@
                                 <v-chip
                                     v-for="(item, index) in materials"
                                     :key="index"
-                                    :value="item._id"
-                                    :text="item.variationValue"></v-chip>
+                                    :value="item._id">
+                                    <template v-slot:default>
+                                        <div v-if="item.variationImage && item.variationImage.length > 0">
+                                            <img
+                                                :src="item.variationImage[0]"
+                                                alt="Image"
+                                                class="chip-image object-contain" />
+                                        </div>
+                                        <div v-else>
+                                            {{ item.variationValue }}
+                                        </div>
+                                    </template>
+                                </v-chip>
                             </v-chip-group>
                         </div>
                     </div>
@@ -359,7 +403,6 @@
     import { useStore } from "vuex";
     import { ref, defineProps, computed, watch, defineEmits, watchEffect, onMounted } from "vue";
 
-    // Define the props
     defineProps({
         firstButton: { type: Function, required: true },
         titleFirst: { type: String, required: true },
@@ -383,7 +426,6 @@
         styl_fifthbutton: String,
     });
 
-    // Initialize refs and store
     const materials = ref([]);
     const models = ref([]);
     const colors = ref([]);
@@ -402,27 +444,24 @@
     const imageLink = ref(null);
     const selectedImage = ref(null);
 
-    // Update the variations based on the product data
     function updateVariations() {
-        materials.value = product.value.productVariations.filter((item) => item.variationType === "Material");
+        materials.value = product.value.productVariations.filter((item) => item.variationType === "Material" && item.disabled !== true);
+        sizes.value = product.value.productVariations.filter((item) => item.variationType === "Tamanho");
         models.value = product.value.productVariations.filter((item) => item.variationType === "Modelo");
         colors.value = product.value.productVariations.filter((item) => item.variationType === "Cor");
-        sizes.value = product.value.productVariations.filter((item) => item.variationType === "Tamanho");
     }
 
-    // Watch for changes in product variations and update accordingly
     watchEffect(() => {
         if (product.value.productVariations) {
             updateVariations();
         }
+        console.log(product.value.productVariations);
     });
 
-    // Emit value updates for quantity
     function quantityValue(e) {
         emits("value-updated", e.target.value);
     }
 
-    // Emit value updates for selected variations
     function materialValue(id) {
         emits("material-Value", id);
         selectedMaterial.value = materials.value.find((item) => item._id === id);
@@ -507,5 +546,8 @@
     });
 </script>
 <style scoped>
-
+    .chip-image {
+        width: 50px;
+        height: 50px;
+    }
 </style>

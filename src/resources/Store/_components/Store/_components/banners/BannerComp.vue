@@ -11,7 +11,7 @@
                     :key="index">
                     <div class="item w-full h-full flex flex-row p-2">
                         <div class="absolute right-0 top-[20%] flex flex-col gap-10 mr-2 xl:mr-8 xl:flex content bg-y">
-                            <div class="title text-[2.5rem] text-orange-400">{{ item.title }}</div>
+                            <div class="title text-4xl text-orange-400">{{ item.title }}</div>
                             <div class="des text-xl">
                                 {{ item.des }}
                             </div>

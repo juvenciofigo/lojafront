@@ -73,11 +73,15 @@
         @apply border-border font-poppins;
     }
     body {
-        @apply bg-background text-foreground;
+        @apply bg-background text-foreground text-xs md:text-sm;
     }
 
     @font-face {
         font-family: "Poppins";
         src: url("./fonts/Poppins/Poppins-Regular.ttf") format("truetype");
+    }
+    @font-face {
+        font-family: "Playfair_Display";
+        src: url("./fonts/Playfair_Display/PlayfairDisplay-Regular.ttf") format("truetype");
     }
 }

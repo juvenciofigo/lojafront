@@ -1,41 +1,51 @@
 <template lang="">
     <div class="flex flex-col h-full bg-slate-100">
-        <v-navigation-drawer
+        <el-drawer
+            :size="300"
             v-model="drawer"
-            temporary
-            touchless>
-            <v-list>
-                <v-list-item class="login/logout">
-                    <v-list class="flex flex-col gap-2 h-max">
-                        <p v-if="userDetails">
-                            <span class="whitespace-nowrap">{{ userDetails.firstName.split(" ").at(0) }} {{ userDetails.lastName.split(" ").at(-1) }} </span>
-                        </p>
-                        <p
-                            class="flex flex-row items-center h-3 text-red-400 cursor-pointer"
-                            @click="store.dispatch('logout', router)">
-                            <span class="block text-[px] font-normal">Sair</span>
-                            <LogOut class="h-full" />
-                        </p>
-                    </v-list>
-                    <Separator />
+            direction="ltr">
+            <template #header>
+                <div class="flex-col flex justify-center items-center">
+                    <LogoPart />
+                </div>
+            </template>
 
-                    <div class="flex flex-col px-3 gap-2 mt-2">
-                        <div class="ml-2 flex flex-col gap-3">
-                            <router-link
-                                exact-active-class=" pl-4"
-                                v-for="(item, index) in items"
-                                :key="index"
-                                :to="{ name: item.link }">
-                                <span>{{ item.name }}</span>
-                            </router-link>
+            <div>
+                <div class="login/logout flex flex-row justify-between items-center">
+                    <router-link
+                        v-if="user"
+                        class="cursor-pointer"
+                        :to="{ name: `profile`, params: { user: user.id } }">
+                        <div class="flex flex-col justify-between text-sm whitespace-nowrap">
+                            <span>{{ user.firstName.split(" ").at(0) }} {{ user.lastName.split(" ").at(-1) }} </span>
+
+                            <span class="text-muted-foreground text-xs">Ver perfil</span>
                         </div>
-                    </div>
-                </v-list-item>
-            </v-list>
-            <hr />
+                    </router-link>
+                    <p
+                        class="flex flex-row items-center h-3 text-red-400 cursor-pointer text-start"
+                        @click="store.dispatch('logout', router)">
+                        <span class="block text-xs font-normal">Sair</span>
+                        <LogOut class="h-full" />
+                    </p>
+                </div>
+            </div>
+            <v-divider class="my-1"></v-divider>
 
-            <v-divider></v-divider>
-        </v-navigation-drawer>
+            <nav class="flex flex-col gap-1 w-full">
+                <router-link
+                    exact-active-class=" pl-4 w-full"
+                    v-for="(item, index) in items"
+                    :key="index"
+                    :to="{ name: item.link }">
+                    <el-tag
+                        class="cursor-pointer w-full"
+                        size="small">
+                        {{ item.name }}</el-tag
+                    >
+                </router-link>
+            </nav>
+        </el-drawer>
 
         <div class="header h-[50px] flex flex-row justify-between items-center p-1 xl:p-7 bg-white">
             <p class="text-xs text-center hidden xl:block">Bem-vindo ao {{ storeName }}.</p>
@@ -52,7 +62,7 @@
                 <router-link
                     to="/carrinho"
                     class="flex flex-row items-center gap-2 h-max w-max mx-[15px]">
-                    <span class="text-xs md:text-base">{{ formatCurrency(priceTotal) }} </span>
+                    <!-- <span class="text-xs md:text-base">{{ formatCurrency(priceTotal) }} </span> -->
                     <Button
                         variant="Ghost"
                         class="flex gap-2 h-max">
@@ -114,24 +124,29 @@
 
         <!--end header top -->
 
-        <div class="menu/view flex flex-row flex-nowrap flex-1 gap-4 m-4">
-            <div class="menu w-64 flex-col hidden xl:flex gap-2 rounded-md">
+        <div class="menu/view flex flex-row flex-nowrap flex-1 gap-1 m-1">
+            <div class="menu w-64 flex-col hidden xl:flex gap-1 rounded-md">
                 <div class="bg-white py-2 rounded-md">
                     <LogoPart class="" />
                 </div>
 
-                <div class="flex flex-col px-3 mt-2 flex-1 bg-white">
+                <div class="flex flex-col p-1 flex-1 bg-white">
                     <p class="text-xs text-muted-foreground">Menu</p>
-                    <div class="flex flex-col px-2 gap-2 mt-2">
+
+                    <nav class="flex flex-col gap-1 w-full">
                         <router-link
-                            exact-active-class="bg-yellow-300 pl-5"
-                            class="pl-3 hover:bg-yellow-300 duration-200"
+                            class="duration-300"
+                            exact-active-class=" px-4 w-full"
                             v-for="(item, index) in items"
                             :key="index"
                             :to="{ name: item.link }">
-                            <span class="whitespace-nowrap">{{ item.name }}</span>
+                            <el-tag
+                                class="cursor-pointer w-full"
+                                size="small">
+                                {{ item.name }}</el-tag
+                            >
                         </router-link>
-                    </div>
+                    </nav>
                 </div>
             </div>
 
@@ -143,7 +158,6 @@
 <script setup>
     import { LogOut, ChevronDown, Menu, User } from "lucide-vue-next";
     import SignaturePart from "@/components/partials/SignaturePart.vue";
-    import { Separator } from "@/components/ui/separator";
     import LogoPart from "@/components/partials/LogoPart.vue";
     import { Button } from "@/components/ui/button";
 
@@ -183,13 +197,13 @@
     // });
 
     // Função para formatar valores monetários
-    const formatCurrency = (value) => {
-        if (typeof value !== "number" || isNaN(value)) {
-            return "MZN 0.00";
-        }
-        return value.toLocaleString("pt-MZ", {
-            style: "currency",
-            currency: "MZN",
-        });
-    };
+    // const formatCurrency = (value) => {
+    //     if (typeof value !== "number" || isNaN(value)) {
+    //         return "MZN 0.00";
+    //     }
+    //     return value.toLocaleString("pt-MZ", {
+    //         style: "currency",
+    //         currency: "MZN",
+    //     });
+    // };
 </script>
