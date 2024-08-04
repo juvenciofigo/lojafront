@@ -70,7 +70,7 @@
 
 @layer base {
     * {
-        @apply border-border font-poppins;
+        @apply border-border font-Playfair_Display;
     }
     body {
         @apply bg-background text-foreground text-xs md:text-sm;
