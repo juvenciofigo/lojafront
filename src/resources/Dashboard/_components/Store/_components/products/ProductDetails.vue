@@ -1,21 +1,25 @@
 <template lang="">
     <ProductDetaislsSkeleton v-if="skeleton"></ProductDetaislsSkeleton>
 
+    <!-- prettier-ignore -->
     <ProductDetailsComp
         v-else
         :firstButton="delProduct"
-        :titleFirst="`Apagar`"
         :secondButton="navigateTo"
-        :titleSecond="`Actualizar`"
         :thirdButton="addImage"
-        :titleThird="`Fotos`"
         :fourthButton="variations"
-        :titleFourth="`Variações `"
         :fifthButton="delRating"
-        :styl_firstbutton="`bg-red-500 hover:bg-red-200 rounded-md text-sm duration-300 p-1 shadow-md font-semibold`"
-        :styl_secondbutton="`bg-blue-500 hover:bg-blue-200 rounded-md text-sm duration-300 p-1 shadow-md font-semibold`"
-        :styl_thirdbutton="`bg-green-500 hover:bg-green-200 rounded-md text-sm duration-300 p-1 shadow-md font-semibold`"
-        :styl_fourthbutton="`bg-sky-500 hover:bg-sky-200 rounded-md text-sm duration-300 p-1 shadow-md font-semibold`">
+
+        :titleFirst="`Apagar`"
+        :titleSecond="`Actualizar`"
+        :titleThird="`Fotos`"
+        :titleFourth="`Variações `"
+        
+        :styl_firstbutton="`danger`"
+        :styl_secondbutton="`primary`"
+        :styl_thirdbutton="`success`"
+        :styl_fourthbutton="`info`">
+
         <template #product-statistic>
             <div class="border border-slate-50 p-2 rounded-md">
                 <div class="flex flex-row flex-wrap gap-4 my-3">
@@ -44,11 +48,13 @@
                 </div>
             </div>
         </template>
+
         <template #fifth-icon>
             <Trash2
                 class="text-red-600"
                 stroke-width="1" />
         </template>
+
     </ProductDetailsComp>
 
     <DialogConfirmation
@@ -130,7 +136,6 @@
     };
 
     function navigateTo() {
-        
         router.push({ name: "update", params: { id: route.params.id } });
     }
     function addImage() {

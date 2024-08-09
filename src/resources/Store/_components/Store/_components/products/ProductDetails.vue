@@ -1,28 +1,34 @@
 <template lang="">
     <ProductDetaislsSkeleton v-if="skeleton"></ProductDetaislsSkeleton>
+    <!-- prettier-ignore -->
     <ProductDetailsComp
         v-else
-        :titleFirst="`Adicionar`"
         :firstButton="addToCart"
-        :styl_firstbutton="`bg-blue-400 hover:bg-blue-200`"
-        :titleSecond="`Comprar Agora`"
         :secondButton="buyNow"
-        :styl_secondbutton="`bg-green-400 hover:bg-green-200 `"
-        :titleThird="`Whatsapp`"
         :thirdButton="callWhatsapp"
-        :styl_thirdbutton="`bg-green-400 hover:bg-green-200 `"
+        :first-icon="`Delete`"
+
+        :titleFirst="`Adicionar`"
+        :titleSecond="`Comprar Agora`"
+        :titleThird="`Whatsapp`"
+
+        :styl_thirdbutton="`primary`"
+        :styl_firstbutton="`primary`"
+        :styl_secondbutton="`success`"
         :styl_fourthbutton="`hidden`"
         :styl_fifthbutton="`hidden`"
+
         :loading_button="loading_button"
+
         @value-updated="handleValueUpdate"
         @material-Value="materialValue"
         @sizes-Value="sizesValue"
         @color-Value="colorValue"
         @rating-dialog="ratingDialog = true"
         @model-Value="modelValue">
-        <template #first-icon>
-            <ShoppingCart stroke-width="1" />
-        </template>
+
+       >
+
     </ProductDetailsComp>
 
     <v-dialog
@@ -98,7 +104,7 @@
     import { useRoute, useRouter } from "vue-router";
     import ProductDetailsComp from "@/resources/_components/ProductDetailsComp.vue";
     import ProductDetaislsSkeleton from "@/components/skeletons/ProductDetaislsSkeleton.vue";
-    import { ShoppingCart, X } from "lucide-vue-next";
+    import { X } from "lucide-vue-next";
     import { useField, useForm } from "vee-validate";
     import { toTypedSchema } from "@vee-validate/zod";
     import * as z from "zod";

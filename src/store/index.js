@@ -347,7 +347,6 @@ export default createStore({
         },
 
         async updateVariation({ commit }, payload) {
-            console.log(payload);
             try {
                 const res = await axios.request({
                     method: "put",
@@ -684,7 +683,6 @@ export default createStore({
             try {
                 const res = await sendAxio("get", `${config.apiURL}/product/${produtoId}`, null, headers(), null);
                 if (res.status === 200) {
-                    console.log(res.data.product);
                     commit("productDetails", res.data.product);
                 }
                 return;
@@ -697,11 +695,9 @@ export default createStore({
        Rating cliente
        */
         async sendRating({ commit }, payload) {
-            console.log(payload);
             try {
                 const res = await sendAxio("post", `${config.apiURL}/rating/${payload.productId}`, { ratingScore: payload.ratingScore, ratingText: payload.ratingText }, headers(), null);
 
-                console.log(res);
                 if (res.status === 200) {
                     commit("updateSnackbar", { show: true, text: "Avaliaçao adicionada!", color: "green" });
                     window.location.reload();
@@ -1070,11 +1066,9 @@ export default createStore({
                 }
 
                 const user = JSON.parse(localStorage.getItem("userData"));
-                // Se houver um carrinho temporário, enviá-lo para o banco de dados
+
                 if (tempCart) {
-                    console.log(tempCart);
                     const res = await sendAxio("post", `/cart/${user.id}/addProduct`, JSON.parse(tempCart), headers());
-                    console.log(res);
                     if (res.status === 200) {
                         // Limpar o cookie do carrinho
                         removeCookie("tempCart");
@@ -1170,7 +1164,6 @@ export default createStore({
         async mpesapay({ commit, state }, payload) {
             try {
                 const res = await sendAxio("post", `/mpesaPay`, { ...payload, orderId: state.orderPaymentId }, headers());
-                console.log(res);
                 if (res.status === 200 || res.status === 201) {
                     commit("updateSnackbar", { show: true, text: res.data.message, color: "green" });
                     commit("SET_PAYMENT");

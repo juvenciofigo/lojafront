@@ -27,7 +27,7 @@
 
 <script setup>
     import { useStore } from "vuex";
-    import { ref, toRaw } from "vue";
+    import { ref } from "vue";
     import { useRoute } from "vue-router";
 
     const store = useStore();
@@ -46,8 +46,6 @@
     }
 
     async function updateImage() {
-        console.log(toRaw(images.value));
-        
         if (images.value.length === 0) {
             loading.value = false;
             return;

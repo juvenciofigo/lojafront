@@ -506,7 +506,7 @@
             if (Array.isArray(productImage.value) && productImage.value.length > 0) {
                 values.productImage = toRaw(productImage.value);
             }
-            // let response = null;
+
             const formData = new FormData();
 
             if (fileList.value && fileList.value.length > 0) {
@@ -519,10 +519,14 @@
                 if (Object.prototype.hasOwnProperty.call(values, key)) {
                     if (Array.isArray(values[key])) {
                         values[key].forEach((item) => {
-                            formData.append(`${key}[]`, item);
+                            if (item !== undefined && item !== null) {
+                                formData.append(`${key}[]`, item);
+                            }
                         });
                     } else {
-                        formData.append(key, values[key]);
+                        if (values[key] !== undefined && values[key] !== null) {
+                            formData.append(key, values[key]);
+                        }
                     }
                 }
             }

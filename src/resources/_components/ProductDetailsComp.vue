@@ -10,16 +10,16 @@
                     :max-scale="7"
                     :min-scale="0.2"
                     :preview-teleported="true"
-                    :preview-src-list="product.productImage"
+                    :preview-src-list="images"
                     :initial-index="selectedImage"
                     fit="cover" />
             </div>
 
             <div
                 class="changeImage flex flex-row mx-auto p-1 gap-2 overflow-auto w-full"
-                v-if="product.productImage && product.productImage.length > 1">
+                v-if="images && images.length > 1">
                 <button
-                    v-for="(image, index) in product.productImage"
+                    v-for="(image, index) in images"
                     :key="index"
                     @click="updateImageLink(index)"
                     class="select rounded-md w-[100px] h-[70px] flex-shrink-0">
@@ -46,9 +46,8 @@
                         :model-value="product.productStatistc.ratingAverage"
                         active-color="primary" />
 
-                    <div class="text-lg">
+                    <div class="text-lg font-semibold">
                         <p v-if="product.productPromotion">
-                            <span class="font-medium text-sm">Preço: </span>
                             <span>{{ formatCurrency(finalPrice) }}</span>
                         </p>
                         <p v-else>
@@ -74,9 +73,11 @@
                 <!-- Seção de seleção de variações -->
                 <div class="button flex flex-col xl:flex-row flex-wrap gap-3">
                     <div
-                        class="color border shadow-md border-slate-50 p-2 rounded-md"
+                        class="color chips_div"
                         v-if="colors.length > 0">
-                        Cores:
+                        <p>
+                            Cores: <span v-if="selectedColor">{{ selectedColor.variationValue }}</span>
+                        </p>
                         <div>
                             <v-chip-group
                                 selected-class="bg-primary"
@@ -87,15 +88,17 @@
                                     :key="index"
                                     :value="item._id">
                                     <template v-slot:default>
-                                        <div v-if="item.variationImage && item.variationImage.length > 0">
-                                            <img
-                                                :src="item.variationImage[0]"
-                                                alt="Image"
-                                                class="chip-image object-contain" />
-                                        </div>
-                                        <div v-else>
-                                            {{ item.variationValue }}
-                                        </div>
+                                        <el-tooltip :content="item.variationValue">
+                                            <div v-if="item.variationImage && item.variationImage.length > 0">
+                                                <img
+                                                    :src="item.variationImage[0]"
+                                                    alt="Image"
+                                                    class="chip-image object-contain" />
+                                            </div>
+                                            <div v-else>
+                                                {{ item.variationValue }}
+                                            </div>
+                                        </el-tooltip>
                                     </template>
                                 </v-chip>
                             </v-chip-group>
@@ -103,9 +106,11 @@
                     </div>
 
                     <div
-                        class="sizes border shadow-md border-slate-50 p-2 rounded-md"
+                        class="sizes chips_div"
                         v-if="sizes.length > 0">
-                        Tamanhos:
+                        <p>
+                            Tamanhos: <span v-if="selectedSize">{{ selectedSize.variationValue }}</span>
+                        </p>
                         <div class=" ">
                             <v-chip-group
                                 selected-class="bg-primary"
@@ -116,6 +121,7 @@
                                     :key="index"
                                     :value="item._id">
                                     <template v-slot:default>
+                                        <el-tooltip :content="item.variationValue"> </el-tooltip>
                                         <div v-if="item.variationImage && item.variationImage.length > 0">
                                             <img
                                                 :src="item.variationImage[0]"
@@ -125,6 +131,7 @@
                                         <div v-else>
                                             {{ item.variationValue }}
                                         </div>
+                                        <el-tooltip :content="item.variationValue"> </el-tooltip>
                                     </template>
                                 </v-chip>
                             </v-chip-group>
@@ -132,9 +139,11 @@
                     </div>
 
                     <div
-                        class="model border shadow-md border-slate-50 p-2 rounded-md"
+                        class="model chips_div"
                         v-if="models.length > 0">
-                        Modelos:
+                        <p>
+                            Modelos: <span v-if="selectedModel">{{ selectedModel.variationValue }}</span>
+                        </p>
                         <div>
                             <v-chip-group
                                 selected-class="bg-primary"
@@ -145,6 +154,7 @@
                                     :key="index"
                                     :value="item._id">
                                     <template v-slot:default>
+                                        <el-tooltip :content="item.variationValue"> </el-tooltip>
                                         <div v-if="item.variationImage && item.variationImage.length > 0">
                                             <img
                                                 :src="item.variationImage[0]"
@@ -154,6 +164,7 @@
                                         <div v-else>
                                             {{ item.variationValue }}
                                         </div>
+                                        <el-tooltip :content="item.variationValue"> </el-tooltip>
                                     </template>
                                 </v-chip>
                             </v-chip-group>
@@ -161,9 +172,11 @@
                     </div>
 
                     <div
-                        class="materials border shadow-md border-slate-50 p-2 rounded-md"
+                        class="materials chips_div"
                         v-if="materials.length > 0">
-                        Materiais:
+                        <p>
+                            Materiais: <span v-if="selectedMaterial">{{ selectedMaterial.variationValue }}</span>
+                        </p>
                         <div class=" ">
                             <v-chip-group
                                 selected-class="bg-primary"
@@ -174,6 +187,7 @@
                                     :key="index"
                                     :value="item._id">
                                     <template v-slot:default>
+                                        <el-tooltip :content="item.variationValue"> </el-tooltip>
                                         <div v-if="item.variationImage && item.variationImage.length > 0">
                                             <img
                                                 :src="item.variationImage[0]"
@@ -183,6 +197,7 @@
                                         <div v-else>
                                             {{ item.variationValue }}
                                         </div>
+                                        <el-tooltip :content="item.variationValue"> </el-tooltip>
                                     </template>
                                 </v-chip>
                             </v-chip-group>
@@ -192,62 +207,41 @@
 
                 <!-- Botões de ação -->
                 <div class="flex-row gap-2 flex flex-wrap">
-                    <v-btn
-                        class="p-2 text-sm duration-300 flex flex-row"
+                    <el-button
+                        ref="ref1"
                         size="small"
-                        variant="text"
+                        :icon="first_icon"
                         :loading="loading_button"
-                        :class="styl_firstbutton"
+                        :type="styl_firstbutton"
                         @click="firstButton">
-                        <div class="flex-row flex gap-2 items-center">
-                            <span>{{ titleFirst }}</span>
-                            <span>
-                                <slot name="first-icon" />
-                            </span>
-                        </div>
-                    </v-btn>
-                    <v-btn
-                        class="p-1 text-sm duration-300"
+                        {{ titleFirst }}
+                    </el-button>
+
+                    <el-button
+                        ref="ref2"
                         size="small"
-                        variant="text"
                         :loading="loading_button"
-                        :class="styl_secondbutton"
+                        :type="styl_secondbutton"
                         @click="secondButton">
-                        <div class="flex-row flex gap-2 items-center">
-                            <span>
-                                <slot name="second-icon" />
-                            </span>
-                            <span>{{ titleSecond }}</span>
-                        </div>
-                    </v-btn>
-                    <v-btn
+                        {{ titleSecond }}
+                    </el-button>
+
+                    <el-button
+                        ref="ref3"
                         size="small"
-                        class="p-1 text-sm duration-300"
-                        variant="text"
                         :loading="loading_button"
-                        :class="styl_thirdbutton"
+                        :type="styl_thirdbutton"
                         @click="thirdButton">
-                        <div class="flex-row flex gap-2 items-center">
-                            <span>
-                                <slot name="third-icon" />
-                            </span>
-                            <span>{{ titleThird }}</span>
-                        </div>
-                    </v-btn>
-                    <v-btn
+                        {{ titleThird }}
+                    </el-button>
+
+                    <el-button
                         size="small"
-                        class="p-1 text-sm duration-300"
-                        variant="text"
                         :loading="loading_button"
-                        :class="styl_fourthbutton"
+                        :type="styl_fourthbutton"
                         @click="fourthButton">
-                        <div class="flex-row flex gap-2 items-center">
-                            <span>
-                                <slot name="fourth-icon" />
-                            </span>
-                            <span>{{ titleFourth }}</span>
-                        </div>
-                    </v-btn>
+                        {{ titleFourth }}
+                    </el-button>
                 </div>
                 <!-- Fim da seção de seleção de variações -->
 
@@ -330,12 +324,12 @@
                 <div>
                     <h2 class="mb-4 font-semibold text-lg flex flex-row flex-wrap justify-between">
                         <span>Avaliações:</span>
-                        <v-btn
+                        <el-button
                             @click="emits(`rating-dialog`)"
                             size="x-small"
                             v-if="product.canRate === true">
                             Comentar
-                        </v-btn>
+                        </el-button>
                     </h2>
 
                     <div class="flex flex-col gap-4">
@@ -356,7 +350,7 @@
                                         </div>
                                         <div class="flex flex-col text-sm">
                                             <div class="flex flex-row justify-end">
-                                                <v-btn
+                                                <el-button
                                                     size="small"
                                                     class="text-sm duration-300"
                                                     variant="tonal"
@@ -367,7 +361,7 @@
                                                         <slot name="fifth-icon" />
                                                     </span>
                                                     <span>{{ titleFifth }}</span>
-                                                </v-btn>
+                                                </el-button>
                                             </div>
                                             <div class="text-end">
                                                 <pre>{{ timeShow(rating.createdAt) }}</pre>
@@ -397,6 +391,33 @@
             </div>
         </div>
     </div>
+
+    <el-tour
+        prev-text="Anterior"
+        type="primary"
+        v-model="open"
+        :mask="{
+            style: {
+                boxShadow: 'inset 0 0 15px #fff',
+            },
+            color: 'rgba(40, 0, 255, .4)',
+        }">
+        <el-tour-step
+            :target="ref1?.$el"
+            title="Adicionar ao carrinho"
+            description="Actualmente em fase experimental!">
+        </el-tour-step>
+
+        <el-tour-step
+            :target="ref2?.$el"
+            title="Comprar agora"
+            description="Actualmente em fase experimental!" />
+
+        <el-tour-step
+            :target="ref3?.$el"
+            title="Whatsapp"
+            description="Clique aqui para falar com o revendedor sobre o produto!" />
+    </el-tour>
 </template>
 <script setup>
     import { format, differenceInHours } from "date-fns";
@@ -408,18 +429,22 @@
         titleFirst: { type: String, required: true },
         styl_firstbutton: String,
         loading_button: Boolean,
+        first_icon: { type: String },
 
         titleSecond: { type: String, required: true },
         secondButton: { type: Function, required: true },
         styl_secondbutton: String,
+        second_icon: { type: String },
 
         titleThird: { type: String },
         thirdButton: { type: Function },
         styl_thirdbutton: String,
+        third_icon: { type: String },
 
         titleFourth: { type: String },
         fourthButton: { type: Function },
         styl_fourthbutton: String,
+        fourth_icon: { type: String },
 
         titleFifth: { type: String },
         fifthButton: { type: Function },
@@ -435,7 +460,14 @@
     const selectedModel = ref(null);
     const selectedColor = ref(null);
     const selectedSize = ref(null);
+    // ////////////////////////
 
+    const ref1 = ref(null);
+    const ref2 = ref(null);
+    const ref3 = ref(null);
+
+    const open = ref(false);
+    //////////////////////////
     const emits = defineEmits(["value-updated", "material-Value", "sizes-Value", "color-Value", "model-Value", "rating-dialog"]);
 
     const quantity = ref(1);
@@ -443,6 +475,7 @@
     const product = computed(() => store.state.product);
     const imageLink = ref(null);
     const selectedImage = ref(null);
+    const images = ref([]);
 
     function updateVariations() {
         materials.value = product.value.productVariations.filter((item) => item.variationType === "Material" && item.disabled !== true);
@@ -455,7 +488,6 @@
         if (product.value.productVariations) {
             updateVariations();
         }
-        console.log(product.value.productVariations);
     });
 
     function quantityValue(e) {
@@ -475,6 +507,8 @@
     function colorValue(id) {
         emits("color-Value", id);
         selectedColor.value = colors.value.find((item) => item._id === id);
+        images.value = selectedColor.value.variationImage;
+        updateImageLink();
     }
 
     function modelValue(id) {
@@ -482,9 +516,9 @@
         selectedModel.value = models.value.find((item) => item._id === id);
     }
 
-    function updateImageLink(index) {
+    function updateImageLink(index = 0) {
         selectedImage.value = index;
-        imageLink.value = product.value.productImage[index];
+        imageLink.value = images.value[index];
     }
 
     function formatDate(date) {
@@ -507,7 +541,7 @@
         () => product.value.productImage,
         (newValue) => {
             if (newValue.length > 0) {
-                updateImageLink(0);
+                updateImageLink();
             }
         }
     );
@@ -541,7 +575,12 @@
 
     onMounted(() => {
         if (product.value.productImage && product.value.productImage.length > 0) {
-            updateImageLink(0);
+            images.value = product.value.productImage;
+            updateImageLink();
+        }
+        if (!localStorage.getItem("tourShown")) {
+            open.value = true;
+            localStorage.setItem("tourShown", "true");
         }
     });
 </script>

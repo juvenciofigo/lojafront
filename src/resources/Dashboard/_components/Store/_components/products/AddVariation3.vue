@@ -99,7 +99,9 @@
                 </el-dialog>
             </div>
 
-            <div class="block h-max" v-if="selectedVariation && variationImage && variationImage.length > 0">
+            <div
+                class="block h-max"
+                v-if="selectedVariation && variationImage && variationImage.length > 0">
                 <label> Imagens EXISTENTES:</label>
 
                 <div
@@ -339,9 +341,7 @@
             loadSubmitButton.value = false;
             textAreaDisabled.value = false;
         },
-        (values) => {
-            console.log(false);
-            console.log(values);
+        () => {
             loadSubmitButton.value = false;
             textAreaDisabled.value = false;
         }
