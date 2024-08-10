@@ -1,41 +1,40 @@
 <script setup>
-import _objectWithoutProperties from "D:/PROJETOS DEV/LojaJVC/lojafront/node_modules/@babel/runtime/helpers/esm/objectWithoutProperties.js";
-var _excluded = ["class"];
-import { computed } from "vue";
-import { SelectIcon, SelectTrigger, useForwardProps } from "radix-vue";
-import { ChevronDown } from "lucide-vue-next";
-import { cn } from "@/lib/utils";
+    import _objectWithoutProperties from "@/../node_modules/@babel/runtime/helpers/esm/objectWithoutProperties.js";
+    var _excluded = ["class"];
+    import { computed } from "vue";
+    import { SelectIcon, SelectTrigger, useForwardProps } from "radix-vue";
+    import { ChevronDown } from "lucide-vue-next";
+    import { cn } from "@/lib/utils";
 
-var props = defineProps({
-  disabled: { type: Boolean, required: false },
-  asChild: { type: Boolean, required: false },
-  as: { type: null, required: false },
-  class: { type: null, required: false },
-});
+    var props = defineProps({
+        disabled: { type: Boolean, required: false },
+        asChild: { type: Boolean, required: false },
+        as: { type: null, required: false },
+        class: { type: null, required: false },
+    });
 
-var delegatedProps = computed(function () {
-  var _ = props["class"],
-    delegated = _objectWithoutProperties(props, _excluded);
+    var delegatedProps = computed(function () {
+        var _ = props["class"],
+            delegated = _objectWithoutProperties(props, _excluded);
 
-  return delegated;
-});
+        return delegated;
+    });
 
-var forwardedProps = useForwardProps(delegatedProps);
+    var forwardedProps = useForwardProps(delegatedProps);
 </script>
 
 <template>
-  <SelectTrigger
-    v-bind="forwardedProps"
-    :class="
-      cn(
-        'flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1',
-        props.class
-      )
-    "
-  >
-    <slot />
-    <SelectIcon as-child>
-      <ChevronDown class="w-4 h-4 opacity-50" />
-    </SelectIcon>
-  </SelectTrigger>
+    <SelectTrigger
+        v-bind="forwardedProps"
+        :class="
+            cn(
+                'flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1',
+                props.class
+            )
+        ">
+        <slot />
+        <SelectIcon as-child>
+            <ChevronDown class="w-4 h-4 opacity-50" />
+        </SelectIcon>
+    </SelectTrigger>
 </template>

@@ -1,5 +1,5 @@
 <script setup>
-import _objectWithoutProperties from "D:/PROJETOS DEV/LojaJVC/lojafront/node_modules/@babel/runtime/helpers/esm/objectWithoutProperties.js";
+import _objectWithoutProperties from "@/../node_modules/@babel/runtime/helpers/esm/objectWithoutProperties.js";
 var _excluded = ["class"];
 import { computed } from "vue";
 import { SelectGroup } from "radix-vue";
