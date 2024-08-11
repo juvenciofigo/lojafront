@@ -282,7 +282,7 @@
         store.commit("SET_LOGIN_OVERLAY", true);
     }
 
-    const storeName = computed(() => store.state.storeName);
+    const storeName =  store.state.storeName;
     const isAuthenticated = ref(computed(() => store.getters.isAuthenticated("authToken")));
 
     function filterProduct(category) {
