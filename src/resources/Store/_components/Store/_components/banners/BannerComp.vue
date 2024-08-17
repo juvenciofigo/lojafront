@@ -1,5 +1,5 @@
 <template>
-    <div class="flex-1 body2 w-full h-full overflow-hidden">
+    <div class="flex-1 w-full h-full overflow-hidden">
         <div
             class="carousel w-full h-full relative"
             v-if="items && items.length > 0">
@@ -9,8 +9,8 @@
                 <template
                     v-for="(item, index) in items"
                     :key="index">
-                    <div class="item w-full h-full flex flex-row p-2">
-                        <div class="absolute right-0 top-[20%] flex flex-col gap-10 mr-2 xl:mr-8 xl:flex content bg-y">
+                    <div class="item w-full h-full flex flex-row">
+                        <div class="absolute z-10 right-0 top-[20%] flex flex-col gap-10 mr-2 xl:mr-8 xl:flex content bg-y">
                             <div class="title text-4xl text-orange-400">{{ item.title }}</div>
                             <div class="des text-xl">
                                 {{ item.des }}
@@ -22,7 +22,7 @@
 
                         <img
                             :src="item.image"
-                            class="object-contain" />
+                            class="h-full object-contain" />
                     </div>
                 </template>
             </div>
@@ -54,9 +54,39 @@
 
     const items = [
         {
-            image: "images/consal.png",
+            image: "images/baners/consal.png",
             title: "Transforme sua experiência digital",
             des: "Explore nossa coleção de smartphones de última geração",
+        },
+        {
+            image: "images/baners/sapatos.png",
+            title: "Encontre o Par Perfeito",
+            des: "Descubra nossa linha de sapatos elegantes e confortáveis",
+        },
+        {
+            image: "images/baners/camisas.png",
+            title: "Estilo e Conforto",
+            des: "Explore nossa coleção de camisas para todas as ocasiões",
+        },
+        {
+            image: "images/baners/calcas.png",
+            title: "Conforto e Versatilidade",
+            des: "Escolha entre uma variedade de calças para seu estilo de vida",
+        },
+        {
+            image: "images/baners/acessorios.png",
+            title: "Complete Seu Look",
+            des: "Adicione os toques finais com nossos acessórios exclusivos",
+        },
+        {
+            image: "images/baners/relogios.png",
+            title: "Tempo de Elegância",
+            des: "Marque o tempo com nossos relógios sofisticados",
+        },
+        {
+            image: "images/baners/bolsas.png",
+            title: "Funcionalidade e Estilo",
+            des: "Descubra nossa coleção de bolsas práticas e modernas",
         },
     ];
 
@@ -111,13 +141,14 @@
 
     /* animation text in first item */
 
+    .carousel .list .item:nth-child(1) img,
     .carousel .list .item:nth-child(1) .content .title,
     .carousel .list .item:nth-child(1) .content .des,
     .carousel .list .item:nth-child(1) .content .buttons {
         transform: translateY(50px);
         filter: blur(20px);
         opacity: 0;
-        animation: showContent 0.5s 1s linear 1 forwards;
+        animation: showContent 0.5s 0s linear 1 forwards;
     }
 
     @keyframes showContent {
@@ -139,7 +170,7 @@
 
     /* create animation when next click */
 
-    .carousel.next .list .item:nth-child(1) img {
+    /* .carousel.next .list .item:nth-child(1) img {
         width: 150px;
         height: 220px;
         position: absolute;
@@ -177,11 +208,11 @@
         from {
             transform: translateX(150px);
         }
-    }
+    } */
 
     /* running time */
 
-    .carousel .time {
+    /* .carousel .time {
         position: absolute;
         z-index: 1000;
         width: 0%;
@@ -203,11 +234,11 @@
         to {
             width: 0;
         }
-    }
+    } */
 
     /* prev click */
 
-    .carousel.prev .list .item:nth-child(2) {
+    /* .carousel.prev .list .item:nth-child(2) {
         z-index: 2;
     }
 
@@ -250,5 +281,5 @@
             filter: blur(20px);
             opacity: 0;
         }
-    }
+    } */
 </style>

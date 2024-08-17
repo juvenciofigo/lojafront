@@ -206,7 +206,9 @@
                 </div>
 
                 <!-- Botões de ação -->
-                <div class="flex-row gap-2 flex flex-wrap">
+                <div
+                    ref="buttons"
+                    class="flex-row gap-2 flex flex-wrap">
                     <el-button
                         ref="ref1"
                         size="small"
@@ -393,15 +395,8 @@
     </div>
 
     <el-tour
-        prev-text="Anterior"
-        type="primary"
         v-model="open"
-        :mask="{
-            style: {
-                boxShadow: 'inset 0 0 15px #fff',
-            },
-            color: 'rgba(40, 0, 255, .4)',
-        }">
+        :scroll-into-view-options="false">
         <el-tour-step
             :target="ref1?.$el"
             title="Adicionar ao carrinho"
@@ -573,17 +568,33 @@
         return basePrice;
     });
 
+    const buttons = ref(null);
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+                if (product.value.productImage && product.value.productImage.length > 0) {
+                    if (!localStorage.getItem("tourShown")) {
+                        open.value = true;
+                        localStorage.setItem("tourShown", "true");
+                    console.log();
+                        document.body.style.overflow = "hidden";
+                    }
+                }
+            }
+        });
+    });
+
     onMounted(() => {
         if (product.value.productImage && product.value.productImage.length > 0) {
             images.value = product.value.productImage;
             updateImageLink();
         }
-        if (!localStorage.getItem("tourShown")) {
-            open.value = true;
-            localStorage.setItem("tourShown", "true");
+        if (buttons.value) {
+            observer.observe(buttons.value);
         }
     });
 </script>
+
 <style scoped>
     .chip-image {
         width: 50px;

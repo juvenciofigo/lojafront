@@ -1,9 +1,9 @@
 <template lang="">
     <div class="flex-1">
-        <div class="banner p-2 bg-slate-100 flex flex-row h-[450px]">
+        <div class="banner bg-slate-100 flex flex-row h-[450px]">
             <div
                 v-if="categories && categories.length > 0"
-                class="categories-card hidden xl:text-base xl:inline-flex flex-col w-72 rounded-lg ml-5 bg-white pb-1">
+                class="m-2 categories-card hidden xl:text-base xl:inline-flex flex-col w-72 rounded-lg ml-5 bg-white pb-1">
                 <p class="bg-yellow-300 p-2 rounded-t-lg font-semibold">Categorias</p>
 
                 <div class="categories-list indent-4 overflow-auto">
