@@ -1,6 +1,6 @@
 <template lang="">
-    <div class="flex-1">
-        <div class="banner bg-slate-100 flex flex-row h-[450px]">
+    <section class="flex-1 bg-slate-100">
+        <div class="mt-6 mx-4 flex flex-row">
             <div
                 v-if="categories && categories.length > 0"
                 class="m-2 categories-card hidden xl:text-base xl:inline-flex flex-col w-72 rounded-lg ml-5 bg-white pb-1">
@@ -71,27 +71,58 @@
             <BannerComp />
         </div>
 
-        <ProductSkeleton v-if="skeleton" />
+        <div class="w-full flex md:flex-row gap-3 p-2 flex-col-reverse">
+            <div class="overflow-hidden flex-1 flex flex-col">
+                <SelectdProducs
+                    :title="`Produtos Recentes`"
+                    :products="products"
+                    :link="`Ver`" />
 
-        <ProductViewComp
-            v-else
-            :products="products"
-            :RouterName="'detailsClient'" />
-    </div>
+                <SelectdProducs
+                    :title="`Top Produtos`"
+                    :products="products"
+                    :link="`Ver`" />
+            </div>
+            <div class="ads slider gap-2 md:self-center">
+                <template
+                    v-for="(item, index) in promos"
+                    :key="index">
+                    <div class="w-48 h-48 bg-slate-100">
+                        <img
+                            class="object-contain rounded-md h-full w-full"
+                            :src="item.image"
+                            alt="" />
+                    </div>
+                </template>
+            </div>
+        </div>
+    </section>
 </template>
 <script setup>
     import { useStore } from "vuex";
     import { onBeforeMount, computed, ref } from "vue";
     import { useRouter } from "vue-router";
-    import ProductViewComp from "@/resources/_components/ProductViewComp.vue";
+    // import ProductViewComp from "@/resources/_components/ProductViewComp.vue";
+    import SelectdProducs from "@/resources/_components/SelectdProducs.vue";
+    // import ProductSkeleton from "@/components/skeletons/ProductSkeleton.vue";
     import BannerComp from "@/resources/Store/_components/Store/_components/banners/BannerComp.vue";
-    import ProductSkeleton from "@/components/skeletons/ProductSkeleton.vue";
 
     const store = useStore();
     const router = useRouter();
     const categories = computed(() => store.state.categories);
     const products = computed(() => store.getters.products.docs);
     const skeleton = ref(true);
+    const promos = [
+        {
+            image: "images/promo/promo1.png",
+        },
+        {
+            image: "images/promo/promo2.png",
+        },
+        {
+            image: "images/promo/promo3.png",
+        },
+    ];
 
     function filterProduct(category, subCategory, sub_category) {
         const query = {
@@ -118,3 +149,14 @@
         skeleton.value = false;
     });
 </script>
+<style scoped>
+    .ads {
+        display: flex;
+        flex-direction: row;
+    }
+    @media (min-width: 768px) {
+        .ads {
+            flex-direction: column;
+        }
+    }
+</style>

@@ -1,8 +1,8 @@
 <template>
     <v-app class="dark bg-white overflow-hidden">
         <!--  main -->
-        <v-main class="overflow-hidden h-full">
-            <router-view />
+        <v-main class="main-vier overflow-hidden">
+            <router-view class="principal-viewr" />
         </v-main>
 
         <!-- Paymnet -->
@@ -58,9 +58,24 @@
         store.commit("updateSnackbar", { show: false, text: "" });
     };
 </script>
-<style>
+<style scoped>
     .v-card-item,
     .v-card-actions {
         padding: 0 !important;
+    }
+    .main-vier {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+    }
+    .principal-viewr {
+        width: 100%;
+    }
+    @media screen and (min-width: 1400px) {
+        .principal-viewr {
+            width: 1350px;
+        }
     }
 </style>
