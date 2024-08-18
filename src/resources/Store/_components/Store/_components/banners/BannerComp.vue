@@ -8,27 +8,26 @@
                 v-for="item in items"
                 :key="item"
                 class="h-auto">
-                <img
-                    v-if="imageLoaded"
-                    :src="item.image"
-                    @load="onImageLoad"
-                    class="object-contain w-full h-auto" />
-                <div
-                    v-else
-                    class="w-full h-auto bg-gray-200 animate-pulse"></div>
+                <el-image
+                    :src="item.url"
+                    lazy>
+                    <template #placeholder>
+                        <div class="w-full h-48 bg-gray-200 flex items-center justify-center">
+                            <i class="el-icon-loading"></i>
+                        </div>
+                    </template>
+                    <template #error>
+                        <div class="w-full h-48 bg-gray-200 flex items-center justify-center text-red-500">
+                            <i class="el-icon-picture-outline"></i>
+                            <span>Imagem não pôde ser carregada</span>
+                        </div>
+                    </template>
+                </el-image>
             </el-carousel-item>
         </el-carousel>
     </div>
 </template>
 
 <script setup>
-    import { ref } from "vue";
-
-    const items = [{ image: "images/baners/banner1.png" }, { image: "images/baners/banner2.png" }];
-
-    const imageLoaded = ref(false);
-
-    function onImageLoad() {
-        imageLoaded.value = true;
-    }
+    const items = [{ url: "images/baners/banner1.png" }, { url: "images/baners/banner2.png" }];
 </script>
