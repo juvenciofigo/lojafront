@@ -1,6 +1,6 @@
 <template lang="">
     <div class="flex flex-col">
-        <nav class="xl:hidden">
+        <nav class="lg:hidden">
             <el-drawer
                 :size="300"
                 v-model="drawer"
@@ -18,7 +18,7 @@
                         @click="login()">
                         <div class="flex flex-row items-center gap-2 h-max">
                             <LogIn class="w-4 h-4" />
-                            <span class="xl:inline font-normal">Entrar</span>
+                            <span class="lg:inline font-normal">Entrar</span>
                         </div>
                     </div>
 
@@ -67,9 +67,9 @@
             </el-drawer>
         </nav>
 
-        <nav class="header-1 h-[50px] flex flex-row justify-between items-center p-1 xl:p-7 bg-white">
-            <p class="text-xs text-center hidden xl:block">Bem-vindo ao {{ storeName }}</p>
-            <div class="xl:hidden flex flex-row">
+        <nav class="header-1 h-[50px] flex flex-row justify-between items-center p-1 lg:p-7 bg-white">
+            <p class="text-xs text-center hidden lg:block">Bem-vindo ao {{ storeName }}</p>
+            <div class="lg:hidden flex flex-row">
                 <Button
                     @click.stop="drawer = !drawer"
                     variant="gost">
@@ -102,7 +102,7 @@
                             <button
                                 color="indigo"
                                 v-bind="props">
-                                <div class="hidden group xl:flex flex-row justify-center items-end gap-1 cursor-pointer">
+                                <div class="hidden group lg:flex flex-row justify-center items-end gap-1 cursor-pointer">
                                     <User />
                                     <p v-if="isAuthenticated === true">
                                         <span>{{ user.firstName.split(" ").at(0) }} {{ user.lastName.split(" ").at(-1) }}</span>
@@ -132,7 +132,7 @@
                                     @click="login()">
                                     <div class="flex flex-row items-center gap-2 h-max mx-[15px]">
                                         <LogIn class="w-4 h-4" />
-                                        <span class="hidden xl:inline text-[15px] font-normal">Entrar</span>
+                                        <span class="hidden lg:inline text-[15px] font-normal">Entrar</span>
                                     </div>
                                 </v-list-item>
 
@@ -142,11 +142,11 @@
                                     v-else>
                                     <div class="flex flex-row items-center gap-2 h-max mx-[15px]">
                                         <p
-                                            class="xl:hidden"
+                                            class="lg:hidden"
                                             v-if="user">
                                             {{ user.lastName.split(" ").at(-1) }}
                                         </p>
-                                        <span class="hidden xl:inline text-[15px] font-normal">Sair</span>
+                                        <span class="hidden lg:inline text-[15px] font-normal">Sair</span>
                                         <LogOut class="w-4 h-4" />
                                     </div>
                                 </v-list-item>
@@ -162,8 +162,8 @@
             class="bg-[#2196F3]"
             decotarive />
         <!-- star header-2 -->
-        <nav class="header-2 xl:h-[100px] h-[50px] flex flex-row gap-4 items-center bg-white">
-            <div class="py-2 px-3 xl:block rounded-md hidden duration-700 hover:-translate-y-1">
+        <nav class="header-2 lg:h-[100px] h-[50px] flex flex-row gap-4 items-center bg-white">
+            <div class="py-2 px-3 lg:block rounded-md hidden duration-700 hover:-translate-y-1">
                 <LogoPart />
             </div>
 
@@ -282,7 +282,7 @@
         store.commit("SET_LOGIN_OVERLAY", true);
     }
 
-    const storeName =  store.state.storeName;
+    const storeName = store.state.storeName;
     const isAuthenticated = ref(computed(() => store.getters.isAuthenticated("authToken")));
 
     function filterProduct(category) {

@@ -1,8 +1,8 @@
 <template>
-    <div class="flex flex-col xl:flex-row p-1 gap-1 flex-1 h-max">
+    <div class="flex flex-col lg:flex-row p-1 gap-1 flex-1 h-max">
         <!-- Seção de imagens do produto -->
-        <div class="images bg-white rounded-md w-full p-2 xl:w-[460px] flex flex-col gap-3">
-            <div class="image self-center max-w-[450px] xl:w-full">
+        <div class="images bg-white rounded-md w-full p-2 lg:w-[460px] flex flex-col gap-3">
+            <div class="image self-center max-w-[450px] lg:w-full">
                 <el-image
                     :src="imageLink"
                     hide-on-click-modal
@@ -32,7 +32,7 @@
         </div>
 
         <!-- Seção de detalhes do produto -->
-        <div class="flex flex-col flex-1 gap-2 xl:overflow-auto xl:max-h-[calc(100vh-82px)]">
+        <div class="flex flex-col flex-1 gap-2 lg:overflow-auto lg:max-h-[calc(100vh-82px)]">
             <div class="Descriptions flex-1 flex flex-col gap-4 bg-white rounded-md p-2 md:p-4">
                 <div>
                     <h1 class="text-2xl">{{ product.productName }}</h1>
@@ -71,7 +71,7 @@
                 </div>
 
                 <!-- Seção de seleção de variações -->
-                <div class="button flex flex-col xl:flex-row flex-wrap gap-3">
+                <div class="button flex flex-col lg:flex-row flex-wrap gap-3">
                     <div
                         class="color chips_div"
                         v-if="colors.length > 0">
@@ -576,7 +576,7 @@
                     if (!localStorage.getItem("tourShown")) {
                         open.value = true;
                         localStorage.setItem("tourShown", "true");
-                    console.log();
+                        console.log();
                         document.body.style.overflow = "hidden";
                     }
                 }

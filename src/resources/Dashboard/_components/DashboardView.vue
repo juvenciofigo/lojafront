@@ -1,6 +1,6 @@
 <template lang="">
-    <div class="flex flex-row h-full gap-2 xl:p-2">
-        <div class="navigation xl:hidden">
+    <div class="flex flex-row h-full gap-2 lg:p-2">
+        <div class="navigation lg:hidden">
             <el-drawer
                 :size="300"
                 v-model="drawer"
@@ -18,7 +18,7 @@
                         @click="login()">
                         <div class="flex flex-row items-center gap-2 h-max">
                             <LogIn class="w-4 h-4" />
-                            <span class="xl:inline text-[15px] font-normal">Entrar</span>
+                            <span class="lg:inline text-[15px] font-normal">Entrar</span>
                         </div>
                     </div>
 
@@ -60,7 +60,7 @@
         </div>
         <!-- end navigation -->
 
-        <div class="menu w-64 flex-col hidden xl:flex gap-1 rounded-md">
+        <div class="menu w-64 flex-col hidden lg:flex gap-1 rounded-md">
             <div class="bg-white py-4 rounded-md">
                 <LogoPart class="" />
             </div>
@@ -83,12 +83,12 @@
 
         <div class="view flex-1 flex flex-col gap-2">
             <div class="header h-[50px] rounded-md bg-white flex-row flex justify-between items-center px-4">
-                <div class="flex flex-col xl:items-center xl:justify-center">
+                <div class="flex flex-col lg:items-center lg:justify-center">
                     <Menu
-                        class="h-7.5 w-7.5 xl:hidden"
+                        class="h-7.5 w-7.5 lg:hidden"
                         @click.stop="drawer = !drawer" />
 
-                    <div class="route flex items-center xl:px-5 text-xs xl:text-sm text-muted-foreground">
+                    <div class="route flex items-center lg:px-5 text-xs lg:text-sm text-muted-foreground">
                         <template
                             v-for="(route, index) in breadcrumb"
                             :key="index">
@@ -114,7 +114,7 @@
                 </div>
             </div>
             <!-- end header -->
-            <router-view class="xl:max-h-[calc(100vh-74px)] overflow-auto"></router-view>
+            <router-view class="lg:max-h-[calc(100vh-74px)] overflow-auto"></router-view>
         </div>
         <!-- end view -->
     </div>

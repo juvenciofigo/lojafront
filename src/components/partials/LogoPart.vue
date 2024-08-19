@@ -180,7 +180,7 @@
                 </defs>
             </svg>
         </span>
-        <span class="text-xl xl:text-4xl"></span>
+        <span class="text-xl lg:text-4xl"></span>
     </router-link>
 </template>
 <script setup>

@@ -1,8 +1,8 @@
 <template lang="">
-    <div class="flex flex-col xl:flex-row p-1 gap-1 flex-1 h-max">
+    <div class="flex flex-col lg:flex-row p-1 gap-1 flex-1 h-max">
         <!-- Seção de imagens do produto -->
-        <div class="images bg-white rounded-md w-full p-2 xl:w-[360px] flex flex-col gap-3 items-center">
-            <div class="image self-center max-w-[450px] xl:w-full">
+        <div class="images bg-white rounded-md w-full p-2 lg:w-[360px] flex flex-col gap-3 items-center">
+            <div class="image self-center max-w-[450px] lg:w-full">
                 <div class="bg-slate-100 rounded-md">
                     <v-skeleton-loader type="image"> </v-skeleton-loader>
                 </div>
@@ -13,7 +13,7 @@
         </div>
 
         <!-- Seção de detalhes do produto -->
-        <div class="flex flex-col flex-1 gap-2 xl:overflow-auto xl:max-h-[calc(100vh-82px)]">
+        <div class="flex flex-col flex-1 gap-2 lg:overflow-auto lg:max-h-[calc(100vh-82px)]">
             <div class="Descriptions flex-1 flex flex-col gap-1 bg-white rounded-md p-2 md:p-4">
                 <div>
                     <v-skeleton-loader type="subtitle"> </v-skeleton-loader>

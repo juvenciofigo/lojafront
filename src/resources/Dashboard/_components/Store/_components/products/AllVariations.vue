@@ -29,7 +29,7 @@
                                 </div>
                             </div>
 
-                            <div class="flex flex-row gap-5 xl:ml-6 bg-slate-100 p-3 rounded-md">
+                            <div class="flex flex-row gap-5 lg:ml-6 bg-slate-100 p-3 rounded-md">
                                 <div>
                                     <div><span class="font-medium">Sku:</span> {{ variation.sku }}</div>
                                     <div>

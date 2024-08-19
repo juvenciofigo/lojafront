@@ -1,20 +1,21 @@
 <template>
-    <div class="text-center w-full">
+    <div class="text-center min-h-[180px] lg:min-h-96 w-full">
         <el-carousel
             :height="'auto'"
             direction="vertical"
             motion-blur>
             <el-carousel-item
-                v-for="item in items"
-                :key="item"
+                v-for="(item, index) in items"
+                :key="index"
                 class="h-auto">
                 <el-image
                     :src="item.url"
+                    :alt="`Descrição do Banner ${index + 1}`"
                     lazy>
                     <template #placeholder>
-                        <div class="w-full h-48 bg-gray-200 flex items-center justify-center">
-                            <i class="el-icon-loading"></i>
-                        </div>
+                        <el-skeleton-item
+                            variant="image"
+                            style="width: 100%; height: 100%" />
                     </template>
                     <template #error>
                         <div class="w-full h-48 bg-gray-200 flex items-center justify-center text-red-500">
@@ -29,5 +30,5 @@
 </template>
 
 <script setup>
-    const items = [{ url: "images/baners/banner1.png" }, { url: "images/baners/banner2.png" }];
+    const items = [{ url: "images/baners/banner1.webp" }, { url: "images/baners/banner2.webp" }];
 </script>

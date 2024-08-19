@@ -1,6 +1,6 @@
 <template>
     <div class="flex flex-row flex-1 gap-1 m-2 rounded-md">
-        <div class="bg-white w-[274px] hidden xl:block">
+        <div class="bg-white w-[274px] hidden lg:block">
             <p class="bg-[#3a7ebe] p-2 font-semibold">Categorias</p>
 
             <div class="categories-list indent-4 overflow-auto">

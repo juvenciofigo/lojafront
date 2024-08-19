@@ -1,14 +1,17 @@
 <template lang="">
     <section class="flex-1 bg-slate-100">
         <div class="mt-6 mx-4 flex flex-row">
-            <div
-                v-if="categories && categories.length > 0"
-                class="m-2 categories-card hidden xl:text-base xl:inline-flex flex-col w-72 rounded-lg ml-5 bg-white pb-1">
+            <!-- Categorias -->
+            <div class="m-2 categories-card hidden lg:inline-flex flex-col w-72 rounded-lg ml-5 bg-white pb-1">
                 <p class="bg-yellow-300 p-2 rounded-t-lg font-semibold">Categorias</p>
 
-                <div class="categories-list indent-4 overflow-auto">
+                <div
+                    v-if="categories && categories.length > 0"
+                    class="categories-list indent-4 overflow-auto">
                     <ul class="list-none">
-                        <li class="whitespace-nowrap hover:text-[#0062bd]"><router-link :to="{ name: 'allProductsClient' }">Todos produtos</router-link></li>
+                        <li class="whitespace-nowrap hover:text-[#0062bd]">
+                            <router-link :to="{ name: 'allProductsClient' }">Todos produtos</router-link>
+                        </li>
                         <template
                             v-for="category in categories"
                             :key="category._id">
@@ -53,7 +56,9 @@
                                                             v-for="sub_category in subCategory.sub_categories"
                                                             :key="sub_category._id">
                                                             <li class="whitespace-nowrap hover:text-[#0062bd]">
-                                                                <button @click="filterProduct(category, subCategory, sub_category)">{{ sub_category.sub_categoryName }}</button>
+                                                                <button @click="filterProduct(category, subCategory, sub_category)">
+                                                                    {{ sub_category.sub_categoryName }}
+                                                                </button>
                                                             </li>
                                                         </ul>
                                                     </div>
@@ -66,13 +71,22 @@
                         </template>
                     </ul>
                 </div>
+
+                <div v-else>
+                    <el-skeleton
+                        style="width: 100%"
+                        :rows="6"
+                        animated />
+                </div>
             </div>
 
+            <!-- Banner -->
             <BannerComp />
         </div>
 
+        <!-- Produtos e Promoções -->
         <div class="w-full flex md:flex-row gap-3 p-2 flex-col-reverse">
-            <div class="overflow-hidden flex-1 flex flex-col">
+            <div class="overflow-hidden flex-1 gap-2 flex flex-col">
                 <SelectdProducs
                     :title="`Produtos Recentes`"
                     :products="products"
@@ -91,20 +105,19 @@
                         <img
                             class="object-contain rounded-md h-full w-full"
                             :src="item.image"
-                            alt="" />
+                            :alt="`Promoção ${index + 1}`" />
                     </div>
                 </template>
             </div>
         </div>
     </section>
 </template>
+
 <script setup>
     import { useStore } from "vuex";
     import { onBeforeMount, computed, ref } from "vue";
     import { useRouter } from "vue-router";
-    // import ProductViewComp from "@/resources/_components/ProductViewComp.vue";
     import SelectdProducs from "@/resources/_components/SelectdProducs.vue";
-    // import ProductSkeleton from "@/components/skeletons/ProductSkeleton.vue";
     import BannerComp from "@/resources/Store/_components/Store/_components/banners/BannerComp.vue";
 
     const store = useStore();
@@ -112,17 +125,7 @@
     const categories = computed(() => store.state.categories);
     const products = computed(() => store.getters.products.docs);
     const skeleton = ref(true);
-    const promos = [
-        {
-            image: "images/promo/promo1.png",
-        },
-        {
-            image: "images/promo/promo2.png",
-        },
-        {
-            image: "images/promo/promo3.png",
-        },
-    ];
+    const promos = [{ image: "images/promo/promo1.webp" }, { image: "images/promo/promo2.webp" }, { image: "images/promo/promo3.webp" }];
 
     function filterProduct(category, subCategory, sub_category) {
         const query = {
@@ -149,6 +152,7 @@
         skeleton.value = false;
     });
 </script>
+
 <style scoped>
     .ads {
         display: flex;

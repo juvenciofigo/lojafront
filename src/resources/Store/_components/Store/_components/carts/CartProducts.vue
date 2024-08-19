@@ -1,11 +1,11 @@
 <template lang="">
-    <div class="flex flex-col xl:items-start xl:flex-row xl:pr-5 flex-1 gap-4 flex-wrap">
+    <div class="flex flex-col lg:items-start lg:flex-row lg:pr-5 flex-1 gap-4 flex-wrap">
         <div class="flex-1">
             <CartProductsComp
                 :cart="cart"
                 :TableRowHeight="'h-40'" />
         </div>
-        <div class="shadow-md p-4 rounded-md mt-4 text-center w-full max-w-[410px] xl:w-[410px] flex flex-col gap-6 bg-white">
+        <div class="shadow-md p-4 rounded-md mt-4 text-center w-full max-w-[410px] lg:w-[410px] flex flex-col gap-6 bg-white">
             <h1>Resumo do pedido</h1>
             <div
                 v-if="skeleton"
@@ -41,7 +41,7 @@
             <v-btn
                 :disabled="buttonStatus"
                 @click="makeOrder()"
-                class="w-max xl:w-full self-end">
+                class="w-max lg:w-full self-end">
                 Fazer pedido
             </v-btn>
         </div>

@@ -2,7 +2,7 @@
     <div>
         <div class="profile/buttons p-4 flex flex-col gap-2">
             <div class="name/photo flex flex-row gap-4">
-                <Avatar class="photo w-20 xl:w-28 h-20 xl:h-28">
+                <Avatar class="photo w-20 lg:w-28 h-20 lg:h-28">
                     <AvatarImage
                         src="https://github.com/radix-vue.png"
                         alt="foto de perfil" />

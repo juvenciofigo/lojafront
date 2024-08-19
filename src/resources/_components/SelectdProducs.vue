@@ -1,10 +1,12 @@
 <template lang="">
-    <div class="flex flex-col">
-        <div class="flex flex-row justify-between p-2">
+    <div
+        v-if="productsAnswer"
+        class="flex flex-col">
+        <div class="bg-white rounded-[10px] flex flex-row justify-between p-2">
             <h1 class="text-xl">{{ title }}</h1>
             <el-button>{{ link }}</el-button>
         </div>
-        <div class="flex flex-row gap-8 overflow-x-auto scroll-container w-[calc(100%)] py-2">
+        <div class="flex flex-row gap-3 overflow-x-auto scroll-container w-[calc(100%)] py-2">
             <template
                 v-for="(product, index) in products"
                 :key="index">
@@ -12,11 +14,18 @@
                     :to="{ name: 'detailsClient', params: { id: `${product._id}` } }"
                     class="product-card">
                     <el-image
+                        class="flex-1"
                         v-if="product.productImage && product.productImage.length > 0"
                         :src="product.productImage[0]"
                         fit="contain">
+                        <template #placeholder>
+                            <el-skeleton-item
+                                animeted
+                                variant="image"
+                                style="width: 100%; height: 100%" />
+                        </template>
                         <template #error>
-                            <div class="image-slot h-full flex justify-center items-center w-full border">
+                            <div class="image-slot h-full flex justify-center items-center w-full">
                                 <el-icon><Picture /></el-icon>
                             </div>
                         </template>
@@ -39,15 +48,57 @@
             </template>
         </div>
     </div>
+
+    <div v-else>
+        <div class="bg-white rounded-[10px] flex flex-row justify-between p-2">
+            <el-skeleton
+                animated
+                style="width: 100px"
+                :rows="0"
+                variant="h1" />
+            <el-skeleton
+                animated
+                style="width: 70px"
+                :rows="0"
+                variant="button" />
+        </div>
+        <div class="flex flex-row gap-3 overflow-x-auto scroll-container w-[calc(100%)] py-2">
+            <template
+                v-for="(item, index) in 5"
+                :key="index">
+                <div class="product-card">
+                    <el-skeleton-item
+                        animated
+                        variant="image"
+                        style="width: 100%; height: 100%" />
+
+                    <div class="title-price self-end">
+                        <el-skeleton
+                            style="width: 100%"
+                            :rows="3"
+                            animated />
+                    </div>
+                </div>
+            </template>
+        </div>
+    </div>
 </template>
 <script setup>
-    import { defineProps } from "vue";
+    import { defineProps, watch, ref } from "vue";
     import { Picture } from "@element-plus/icons-vue";
-    defineProps({
+    const props = defineProps({
         title: String,
-        products: String,
+        products: Array,
         link: String,
     });
+
+    const productsAnswer = ref(false);
+    watch(
+        () => props.products,
+        () => {
+            productsAnswer.value = true;
+        }
+    );
 
     const formatCurrency = (value) => {
         if (typeof value !== "number" || isNaN(value)) {
