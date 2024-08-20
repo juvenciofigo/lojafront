@@ -6,17 +6,22 @@
             <h1 class="text-xl">{{ title }}</h1>
             <el-button>{{ link }}</el-button>
         </div>
-        <div class="flex flex-row gap-3 overflow-x-auto scroll-container w-[calc(100%)] py-2">
+
+        <div class="flex flex-row gap-1 overflow-x-auto scroll-container w-[calc(100%)] py-2">
             <template
                 v-for="(product, index) in products"
                 :key="index">
                 <router-link
                     :to="{ name: 'detailsClient', params: { id: `${product._id}` } }"
                     class="product-card">
+                    <div class="title">
+                        <p class="text-center md:group-hover:text-white duration-700 text-[#0062bd] truncate">{{ product.productName }}</p>
+                    </div>
                     <el-image
                         class="flex-1"
                         v-if="product.productImage && product.productImage.length > 0"
                         :src="product.productImage[0]"
+                        :alt="product.productName"
                         fit="contain">
                         <template #placeholder>
                             <el-skeleton-item
@@ -31,9 +36,6 @@
                         </template>
                     </el-image>
                     <div class="title-price self-end">
-                        <div class="title">
-                            <p class="text-center md:group-hover:text-white duration-700 text-[#0062bd] truncate">{{ product.productName }}</p>
-                        </div>
                         <div class="price text-center">
                             <span class="font-bold">{{ formatCurrency(product.productPrice) }}</span>
                         </div>
@@ -45,12 +47,15 @@
                         </el-button>
                     </div>
                 </router-link>
+                <ProductCard
+                    :product="product"
+                    :RouterName="RouterName" />
             </template>
         </div>
     </div>
 
     <div v-else>
-        <div class="bg-white rounded-[10px] flex flex-row justify-between p-2">
+        <div class="rounded-[10px] flex flex-row justify-between p-2">
             <el-skeleton
                 animated
                 style="width: 100px"
@@ -114,8 +119,8 @@
     .product-card {
         flex-shrink: 0;
         border-radius: 10px;
-        width: 200px;
-        height: 300px;
+        height: 200px;
+        width: 150px;
         box-shadow: 0 2px 2px 0 rgba(77, 77, 79, 0.08), 0 0 2px 0 rgba(77, 77, 79, 0.16);
         background-color: #fff;
         border-radius: 10px;
@@ -159,8 +164,9 @@
         background-color: #555;
     }
 
-    @media screen and (max-width: 768px) {
+    @media screen and (min-width: 768px) {
         .product-card {
+            width: 180px;
             height: 250px;
         }
     }

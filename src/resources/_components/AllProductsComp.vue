@@ -1,9 +1,9 @@
 <template>
-    <div class="flex flex-row flex-1 gap-1 m-2 rounded-md">
-        <div class="bg-white w-[274px] hidden lg:block">
-            <p class="bg-[#3a7ebe] p-2 font-semibold">Categorias</p>
+    <div class="flex flex-row flex-1 gap-1 m-2 rounded-md bg-slate-100">
+        <section class=" w-[274px] hidden lg:flex flex-col gap-4 p-2">
+            <div class="w-full p-3 bg-white  categories-list indent-4 overflow-auto">
+                <h2 class="bg-[#3a7ebe] p-2 font-semibold">Categorias</h2>
 
-            <div class="categories-list indent-4 overflow-auto">
                 <ul class="list-none">
                     <li class="whitespace-nowrap hover:text-[#0062bd] duration-500"><router-link :to="{ name: 'allProductsClient' }">Todos produtos</router-link></li>
                     <template
@@ -63,9 +63,36 @@
                     </template>
                 </ul>
             </div>
-        </div>
 
-        <div class="flex-1 flex flex-col h-full">
+            <div class="filter-container w-full bg-white">
+                <div class="price  p-3">
+                    <h2 class="p-2 font-semibold">Preço</h2>
+                    <div class="slider-demo-block">
+                        <p class="text-base font-serif">{{ priceValue }}</p>
+                        <el-slider
+                            v-model="priceValue"
+                            size="small"
+                            :step="5000"
+                            range
+                            :max="pricelimit" />
+                    </div>
+                </div>
+                <div class="marca ">
+                    <h2 class="p-2 font-semibold">Marca</h2>
+                    <div class="p-3"></div>
+                </div>
+                <div class="deal  p-3">
+                    <h2 class="p-2 font-semibold">Negócio</h2>
+                    <div class="p-3"></div>
+                </div>
+                <div class="rating p-3" >
+                    <h2 class="p-2 font-semibold">Preço</h2>
+                    <div class="p-3"></div>
+                </div>
+            </div>
+        </section>
+
+        <section class="flex-1 flex flex-col h-full">
             <div class="h-[50px] p-2 sticky bg-white justify-between flex flex-row">
                 <div class="flex flex-row justify-between">
                     <h2>{{ category }}</h2>
@@ -102,7 +129,7 @@
                     <p>Sem produtos para mostrar!!!</p>
                 </div>
             </div>
-        </div>
+        </section>
     </div>
 </template>
 
@@ -153,23 +180,36 @@
         await store.dispatch("getAllCategoryAdmin");
     });
 
-    function filterProduct(category, subCategory, sub_category) {
-        const query = {
-            _id: category._id,
-            category: category.categoryName,
-        };
+    const priceValue = ref(0);
+    const pricelimit = ref(200000)
+    // function filterProduct(category, subCategory, sub_category) {
+    //     const query = {
+    //         _id: category._id,
+    //         category: category.categoryName,
+    //     };
 
-        if (subCategory) {
-            query.subcategory = subCategory._id;
-        }
+    //     if (subCategory) {
+    //         query.subcategory = subCategory._id;
+    //     }
 
-        if (sub_category) {
-            query.sub_category = sub_category._id;
-        }
+    //     if (sub_category) {
+    //         query.sub_category = sub_category._id;
+    //     }
 
-        router.push({
-            name: props.fetchRouteName || "allProductsClient",
-            query: query,
-        });
-    }
+    //     router.push({
+    //         name: props.fetchRouteName || "allProductsClient",
+    //         query: query,
+    //     });
+    // }
 </script>
+<style scoped>
+    .slider-demo-block {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    .slider-demo-block .el-slider {
+        margin-top: 10px;
+        margin: 0 15px;
+    }
+</style>

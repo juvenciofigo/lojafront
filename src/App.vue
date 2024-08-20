@@ -73,9 +73,9 @@
     .principal-viewr {
         width: 100%;
     }
-    @media screen and (min-width: 1400px) {
+    @media screen and (min-width: 1500px) {
         .principal-viewr {
-            width: 1350px;
+            width: 1500px;
         }
     }
 </style>

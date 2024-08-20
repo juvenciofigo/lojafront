@@ -1,53 +1,64 @@
-<template lang="">
-    <div>
-        <router-link
-            :to="{ name: RouterName, params: { id: `${product._id}` } }"
-            v-for="product in products"
-            :key="product._id"
-            class="product rounded-md sm:mx-0 flex flex-col group md:hover:bg-blue-400 duration-700 p-1">
-            <div class="image block">
-                <el-image
-                    v-if="product.productImage && product.productImage.length > 0"
-                    :src="product.productImage[0]"
-                    fit="contain"
-                    class="">
-                    <template #error>
-                        <div class="image-slot">
-                            <el-icon><icon-picture /></el-icon>
+<template>
+    <router-link :to="{ name: RouterName, params: { id: `${product._id}` } }">
+        <el-tooltip :content="product.productName ">
+            <div class="h-full w-full product-card rounded-md group duration-700 bg-white">
+                <div class="p-3 h-full rounded-md duration-700 md:group-hover:bg-blue-400 flex flex-col justify-between">
+                    <div class="title w-full">
+                        <p class="text-center md:hover: md:group-hover:text-white duration-700 text-[#0062bd] truncate mb-2">{{ product.productName }}</p>
+                    </div>
+
+                    <el-image
+                        class="w-full"
+                        v-if="product.productImage && product.productImage.length > 0"
+                        :src="product.productImage[0]"
+                        :alt="product.productName"
+                        fit="contain">
+                        <template #placeholder>
+                            <el-skeleton-item
+                                animeted
+                                variant="image"
+                                style="width: 100%; height: 100%" />
+                        </template>
+                        <template #error>
+                            <div class="image-slot h-full flex justify-center items-center w-full">
+                                <el-icon><Picture /></el-icon>
+                            </div>
+                        </template>
+                    </el-image>
+
+                    <div class="price mt-1 w-full self-end">
+                        <div class="price text-center">
+                            <span class="font-bold">{{ formatCurrency(product.productPrice) }}</span>
                         </div>
-                    </template>
-                </el-image>
-
-                <div
-                    v-else
-                    class="el-image">
-                    Sem imagem
-                </div>
-            </div>
-
-            <div class="description grow p-2 flex flex-col justify-end">
-                <div class="flex flex-col gap-2">
-                    <p class="text-center md:group-hover:text-white duration-700 text-[#0062bd] truncate">{{ product.productName }}</p>
-                    <div class="flex flex-row justify-center">
-                        <span class="font-bold">{{ formatCurrency(product.productPrice) }}</span>
+                        <el-button
+                            size="small"
+                            class="w-full self-center"
+                            :to="{ name: 'detailsClient', params: { id: `${product._id}` } }">
+                            Detalhes
+                        </el-button>
                     </div>
                 </div>
-
-                <el-button
-                    size="small"
-                    class="w-full self-center"
-                    :to="{ name: RouterName, params: { id: `${product._id}` } }">
-                    Detalhes
-                </el-button>
             </div>
-        </router-link>
-    </div>
+        </el-tooltip>
+    </router-link>
 </template>
+
 <script setup>
     import { defineProps } from "vue";
+    import { Picture } from "@element-plus/icons-vue";
+
     defineProps({
-        products: Array,
+        product: Object,
         RouterName: String,
     });
+
+    const formatCurrency = (value) => {
+        if (typeof value !== "number" || isNaN(value)) {
+            return "MZN 0.00";
+        }
+        return value.toLocaleString("pt-MZ", {
+            style: "currency",
+            currency: "MZN",
+        });
+    };
 </script>
-<style scoped></style>

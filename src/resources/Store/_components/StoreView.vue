@@ -1,8 +1,8 @@
 <template lang="">
     <section class="flex-1 bg-slate-100">
-        <div class="mt-6 mx-4 flex flex-row">
+        <div class="mt-6 mx-2 flex flex-row">
             <!-- Categorias -->
-            <div class="m-2 categories-card hidden lg:inline-flex flex-col w-72 rounded-lg ml-5 bg-white pb-1">
+            <div class="m-2 categories-card hidden lg:block flex-col w-72 rounded-lg ml-5 bg-white pb-1">
                 <p class="bg-yellow-300 p-2 rounded-t-lg font-semibold">Categorias</p>
 
                 <div
@@ -85,7 +85,7 @@
         </div>
 
         <!-- Produtos e Promoções -->
-        <div class="w-full flex md:flex-row gap-3 p-2 flex-col-reverse">
+        <div class="w-full flex lg:flex-row gap-3 p-2 flex-col-reverse">
             <div class="overflow-hidden flex-1 gap-2 flex flex-col">
                 <SelectdProducs
                     :title="`Produtos Recentes`"
@@ -97,11 +97,11 @@
                     :products="products"
                     :link="`Ver`" />
             </div>
-            <div class="ads slider gap-2 md:self-center">
+            <div class="ads slider gap-2 self-center">
                 <template
                     v-for="(item, index) in promos"
                     :key="index">
-                    <div class="w-48 h-48 bg-slate-100">
+                    <div class="ads-content bg-slate-100">
                         <img
                             class="object-contain rounded-md h-full w-full"
                             :src="item.image"
@@ -125,7 +125,17 @@
     const categories = computed(() => store.state.categories);
     const products = computed(() => store.getters.products.docs);
     const skeleton = ref(true);
-    const promos = [{ image: "images/promo/promo1.webp" }, { image: "images/promo/promo2.webp" }, { image: "images/promo/promo3.webp" }];
+    const promos = [
+        {
+            image: "images/promo/promo1.webp",
+        },
+        {
+            image: "images/promo/promo2.webp",
+        },
+        {
+            image: "images/promo/promo3.webp",
+        },
+    ];
 
     function filterProduct(category, subCategory, sub_category) {
         const query = {
@@ -158,9 +168,14 @@
         display: flex;
         flex-direction: row;
     }
-    @media (min-width: 768px) {
+
+    @media (min-width: 1024px) {
         .ads {
             flex-direction: column;
+        }
+        .ads-content {
+            width: 220px;
+            height: 220px;
         }
     }
 </style>
