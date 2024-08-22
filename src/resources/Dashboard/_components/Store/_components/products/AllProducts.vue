@@ -5,7 +5,8 @@
         :category="categorySelected || 'Todos Produtos'"
         :skeleton="skeleton"
         :newProduct="`novoproduto`"
-        :fetchRouteName="fetchRouteName" />
+        :fetchRouteName="fetchRouteName"
+        :getCategories="'getAllCategoryAdmin'" />
 </template>
 
 <script setup>

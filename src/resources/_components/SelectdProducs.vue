@@ -141,29 +141,6 @@
         width: 100%;
     }
 
-    /* Estilizando a barra de rolagem */
-    .scroll-container::-webkit-scrollbar {
-        height: 8px; /* Altura da barra de rolagem */
-    }
-
-    /* Cor do track (fundo da barra de rolagem) */
-    .scroll-container::-webkit-scrollbar-track {
-        background: #f1f1f1;
-        border-radius: 10px;
-    }
-
-    /* Cor da thumb (a parte que se move da barra de rolagem) */
-    .scroll-container::-webkit-scrollbar-thumb {
-        background-color: #888;
-        border-radius: 10px;
-        border: 2px solid #f1f1f1; /* Espaçamento entre thumb e track */
-    }
-
-    /* Cor da thumb ao passar o mouse */
-    .scroll-container::-webkit-scrollbar-thumb:hover {
-        background-color: #555;
-    }
-
     @media screen and (min-width: 768px) {
         .product-card {
             width: 180px;

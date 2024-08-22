@@ -2,7 +2,6 @@
     <AllProductsComp
         :nameRoute="`detailsClient`"
         :inputShow="`hidden`"
-        :category="categorySelected || 'Todos Produtos'"
         :buttonShow="`hidden`"
         :skeleton="skeleton" />
 </template>
@@ -17,8 +16,6 @@
     const route = useRoute();
     const store = useStore();
     const skeleton = ref(true);
-
-    const categorySelected = route.query.category;
 
     const offset = route.query.offset || 1;
     const category = route.query._id;
@@ -56,7 +53,8 @@
     });
 
     onBeforeMount(() => {
-        
+        console.log(true);
+
         fetchProducts(payload);
     });
 </script>

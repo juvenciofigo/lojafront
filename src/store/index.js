@@ -51,7 +51,7 @@ export default createStore({
         products: [],
 
         /// categories
-        categories: [],
+        categories: null,
         category: {},
         subCategories: [],
         sub_categories: [],
@@ -232,13 +232,17 @@ export default createStore({
             state.cartPrice = price;
         },
         CLEAR_CARTPRICE(state) {
-            state.cartPrice = 0;
+            state.cartPrice = null;
         },
 
         // categories
         SET_CATEGORIES(state, payload) {
             state.categories = payload;
         },
+        CLEAR_CATEGORIES(state) {
+            state.categories = null;
+        },
+
         // statistic
         SET_DATA_STATISTIC(state, data) {
             state.dataStatistic = data;
@@ -648,7 +652,7 @@ export default createStore({
                 const res = await axios.request({
                     method: "get",
                     baseURL: config.apiURL,
-                    url: "/products",
+                    url: "/products/",
                     params: payload,
                 });
                 if (res.status === 200) {

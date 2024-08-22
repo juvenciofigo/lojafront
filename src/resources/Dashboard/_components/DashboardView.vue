@@ -60,7 +60,7 @@
         </div>
         <!-- end navigation -->
 
-        <div class="menu w-64 flex-col hidden lg:flex gap-1 rounded-md">
+        <div class="menu flex-col hidden lg:flex gap-1 rounded-md">
             <div class="bg-white py-4 rounded-md">
                 <LogoPart class="" />
             </div>
@@ -69,8 +69,8 @@
                 <p class="text-sm text-muted-foreground">Menu</p>
                 <div class="flex flex-col px-2 gap-2 mt-2">
                     <router-link
-                        exact-active-class="bg-yellow-300 pl-5"
-                        class="pl-3 hover:bg-yellow-300 duration-200"
+                        exact-active-class="bg-blue-400 pl-5"
+                        class="pl-3 hover:bg-blue-300 duration-500"
                         v-for="(item, index) in items"
                         :key="index"
                         :to="{ name: item.link }">

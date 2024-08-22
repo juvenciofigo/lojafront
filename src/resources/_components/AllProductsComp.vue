@@ -1,7 +1,7 @@
 <template>
     <div class="flex flex-row flex-1 gap-1 m-2 rounded-md bg-slate-100">
-        <section class=" w-[274px] hidden lg:flex flex-col gap-4 p-2">
-            <div class="w-full p-3 bg-white  categories-list indent-4 overflow-auto">
+        <section class="w-[274px] hidden lg:flex flex-col gap-4 p-2">
+            <div class="w-full p-3 bg-white categories-list indent-4 overflow-auto">
                 <h2 class="bg-[#3a7ebe] p-2 font-semibold">Categorias</h2>
 
                 <ul class="list-none">
@@ -65,7 +65,7 @@
             </div>
 
             <div class="filter-container w-full bg-white">
-                <div class="price  p-3">
+                <div class="price p-3">
                     <h2 class="p-2 font-semibold">Preço</h2>
                     <div class="slider-demo-block">
                         <p class="text-base font-serif">{{ priceValue }}</p>
@@ -77,15 +77,15 @@
                             :max="pricelimit" />
                     </div>
                 </div>
-                <div class="marca ">
+                <div class="marca">
                     <h2 class="p-2 font-semibold">Marca</h2>
                     <div class="p-3"></div>
                 </div>
-                <div class="deal  p-3">
+                <div class="deal p-3">
                     <h2 class="p-2 font-semibold">Negócio</h2>
                     <div class="p-3"></div>
                 </div>
-                <div class="rating p-3" >
+                <div class="rating p-3">
                     <h2 class="p-2 font-semibold">Preço</h2>
                     <div class="p-3"></div>
                 </div>
@@ -93,13 +93,19 @@
         </section>
 
         <section class="flex-1 flex flex-col h-full">
-            <div class="h-[50px] p-2 sticky bg-white justify-between flex flex-row">
+            <div class="h-[40px] mt-2 p-2 sticky bg-white justify-between flex flex-row">
                 <div class="flex flex-row justify-between">
-                    <h2>{{ category }}</h2>
+                    <h2>{{ category || "Todos Produtos" }}</h2>
                 </div>
                 <div>
                     <router-link :to="{ name: newProduct }">
-                        <Button :class="buttonShow"> <Plus />Novo Produto </Button>
+                        <el-button
+                            :class="buttonShow"
+                            link
+                            type="primary"
+                            size="small">
+                            <Plus />Novo Produto
+                        </el-button>
                     </router-link>
                 </div>
             </div>
@@ -136,20 +142,18 @@
 <script setup>
     import ProductViewComp from "./ProductViewComp.vue";
     import ProductSkeleton from "@/components/skeletons/ProductSkeleton.vue";
-    import { defineProps, computed, ref, onBeforeUnmount, onBeforeMount } from "vue";
+    import { defineProps, computed, ref, onBeforeUnmount, onBeforeMount, watch } from "vue";
     import { useStore } from "vuex";
     import { useRouter, useRoute } from "vue-router";
-
-    import { Plus } from "lucide-vue-next";
-    import { Button } from "@/components/ui/button";
+    // import { Plus } from "lucide-vue-next";
 
     const props = defineProps({
         nameRoute: String,
         fetchRouteName: String,
-        category: String,
         buttonShow: String,
         newProduct: String,
         skeleton: Boolean,
+        getCategories: String,
     });
 
     const router = useRouter();
@@ -159,6 +163,13 @@
     const products = computed(() => store.getters.products.docs);
     const categories = computed(() => store.state.categories);
     const currentPage = ref(Number(route.query.offset) || 1);
+    const category = ref(null);
+    watch(
+        () => route.query.category,
+        (newRoute) => {
+            category.value = newRoute;
+        }
+    );
 
     const totalPages = computed(() => {
         if (store.state.products.products) {
@@ -172,35 +183,37 @@
         router.push({ name: props.fetchRouteName || "allProductsClient", query: { offset: offset } });
     };
 
+    const priceValue = ref(0);
+    const pricelimit = ref(200000);
+
+    function filterProduct(category, subCategory, sub_category) {
+        const query = {
+            _id: category._id,
+            category: category.categoryName,
+        };
+
+        if (subCategory) {
+            query.subcategory = subCategory._id;
+        }
+
+        if (sub_category) {
+            query.sub_category = sub_category._id;
+        }
+
+        router.push({
+            name: props.fetchRouteName || "allProductsClient",
+            query: query,
+        });
+    }
+
     onBeforeUnmount(() => {
         store.commit("CLEAR_PRODUCTS");
     });
 
     onBeforeMount(async () => {
-        await store.dispatch("getAllCategoryAdmin");
+        category.value = route.query.category;
+        await store.dispatch(props.getCategories || "getAllCategory");
     });
-
-    const priceValue = ref(0);
-    const pricelimit = ref(200000)
-    // function filterProduct(category, subCategory, sub_category) {
-    //     const query = {
-    //         _id: category._id,
-    //         category: category.categoryName,
-    //     };
-
-    //     if (subCategory) {
-    //         query.subcategory = subCategory._id;
-    //     }
-
-    //     if (sub_category) {
-    //         query.sub_category = sub_category._id;
-    //     }
-
-    //     router.push({
-    //         name: props.fetchRouteName || "allProductsClient",
-    //         query: query,
-    //     });
-    // }
 </script>
 <style scoped>
     .slider-demo-block {

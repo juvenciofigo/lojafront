@@ -4,9 +4,10 @@
             <el-drawer
                 :size="300"
                 v-model="drawer"
+                :close-on-click-modal="true"
                 direction="ltr">
                 <template #header>
-                    <div class="flex-col flex justify-center items-center">
+                    <div class="flex flex-col justify-center items-center">
                         <LogoPart />
                     </div>
                 </template>
@@ -14,7 +15,7 @@
                 <div>
                     <div
                         class="login/logout cursor-pointer"
-                        v-if="isAuthenticated === false"
+                        v-if="!isAuthenticated"
                         @click="login()">
                         <div class="flex flex-row items-center gap-2 h-max">
                             <LogIn class="w-4 h-4" />
@@ -28,10 +29,12 @@
                         <router-link
                             v-if="user"
                             class="cursor-pointer"
-                            :to="{ name: `profile`, params: { user: user.id } }">
+                            :to="{ name: 'profile', params: { user: user.id } }">
                             <div class="flex flex-col justify-between text-sm whitespace-nowrap">
-                                <span>{{ user.firstName.split(" ").at(0) }} {{ user.lastName.split(" ").at(-1) }} </span>
-
+                                <span>
+                                    {{ user?.firstName?.split(" ")?.[0] || "" }}
+                                    {{ user?.lastName?.split(" ")?.slice(-1)?.[0] || "" }}
+                                </span>
                                 <span class="text-muted-foreground text-xs">Ver perfil</span>
                             </div>
                         </router-link>
@@ -50,18 +53,17 @@
                     <nav class="flex flex-col gap-1">
                         <el-tag
                             size="small"
-                            class="cursor-pointer w-full"
-                            @click="filterProduct()"
-                            >Todos Produtos</el-tag
-                        >
+                            class="cursor-pointer w-full">
+                            <router-link :to="{ name: 'allProductsClient' }">Todos produtos</router-link>
+                        </el-tag>
                         <el-tag
                             class="cursor-pointer w-full"
                             size="small"
                             v-for="category in categories"
                             :key="category._id"
-                            @click="filterProduct(category._id)">
-                            {{ category.categoryName }}</el-tag
-                        >
+                            @click="filterProduct(category)">
+                            {{ category.categoryName }}
+                        </el-tag>
                     </nav>
                 </template>
             </el-drawer>
@@ -104,8 +106,11 @@
                                 v-bind="props">
                                 <div class="hidden group lg:flex flex-row justify-center items-end gap-1 cursor-pointer">
                                     <User />
-                                    <p v-if="isAuthenticated === true">
-                                        <span>{{ user.firstName.split(" ").at(0) }} {{ user.lastName.split(" ").at(-1) }}</span>
+                                    <p v-if="isAuthenticated">
+                                        <span>
+                                            {{ user?.firstName?.split(" ")?.[0] || "" }}
+                                            {{ user?.lastName?.split(" ")?.slice(-1)?.[0] || "" }}
+                                        </span>
                                     </p>
                                     <ChevronDown class="group-hover:rotate-180 duration-300" />
                                 </div>
@@ -116,19 +121,19 @@
                             <v-list>
                                 <v-list-item
                                     class="orders vListItem cursor-pointer"
-                                    :to="{ name: `profile`, params: { user: user.id } }"
-                                    v-if="isAuthenticated === true">
+                                    :to="{ name: 'profile', params: { user: user.id } }"
+                                    v-if="isAuthenticated">
                                     Meu perfil
                                 </v-list-item>
                                 <v-list-item
                                     class="orders vListItem cursor-pointer"
-                                    v-if="isAuthenticated === true">
+                                    v-if="isAuthenticated">
                                     <router-link to="/">Meus pedidos</router-link>
                                 </v-list-item>
 
                                 <v-list-item
                                     class="login/logout cursor-pointer vListItem"
-                                    v-if="isAuthenticated === false"
+                                    v-if="!isAuthenticated"
                                     @click="login()">
                                     <div class="flex flex-row items-center gap-2 h-max mx-[15px]">
                                         <LogIn class="w-4 h-4" />
@@ -144,7 +149,7 @@
                                         <p
                                             class="lg:hidden"
                                             v-if="user">
-                                            {{ user.lastName.split(" ").at(-1) }}
+                                            {{ user?.lastName?.split(" ")?.slice(-1)?.[0] || "" }}
                                         </p>
                                         <span class="hidden lg:inline text-[15px] font-normal">Sair</span>
                                         <LogOut class="w-4 h-4" />
@@ -160,8 +165,8 @@
         <Separator
             orientation="horizontal"
             class="bg-[#2196F3]"
-            decotarive />
-        <!-- star header-2 -->
+            decorative />
+        <!-- start header-2 -->
         <nav class="header-2 lg:h-[100px] h-[50px] flex flex-row gap-4 items-center bg-white">
             <div class="py-2 px-3 lg:block rounded-md hidden duration-700 hover:-translate-y-1">
                 <LogoPart />
@@ -228,16 +233,23 @@
                     </div>
                 </div>
             </div>
+
+            <div class="flex flex-col gap-2 lg:flex-row lg:gap-5">
+                <router-link
+                    v-for="link in Links"
+                    :key="link"
+                    :to="link"
+                    class="text-[#333333] hover:scale-110 text-xs font-medium duration-700 hover:text-[#2196F3]">
+                    {{ link }}
+                </router-link>
+            </div>
         </nav>
-        <Separator
-            orientation="horizontal"
-            class="bg-[#2196F3]"
-            decotarive />
         <!-- end header-2 -->
     </div>
 </template>
+
 <script setup>
-    import { onMounted, computed, ref } from "vue";
+    import { onMounted, computed, ref, onBeforeUnmount } from "vue";
     import { useStore } from "vuex";
     import { useRouter } from "vue-router";
 
@@ -286,14 +298,17 @@
     const isAuthenticated = ref(computed(() => store.getters.isAuthenticated("authToken")));
 
     function filterProduct(category) {
+        drawer.value = false;
         const query = {
-            category: category,
+            _id: category._id,
+            category: category.categoryName,
         };
 
         router.push({
             name: "allProductsClient",
             query: query,
         });
+        console.log(query);
     }
 
     const user = computed(() => JSON.parse(localStorage.getItem("userData")));
@@ -307,6 +322,11 @@
             currency: "MZN",
         });
     };
+    
+    onBeforeUnmount(() => {
+        store.commit("CLEAR_CATEGORIES");
+    });
+
     onMounted(async () => {
         await store.dispatch("displayCartPrices", isAuthenticated.value);
         await store.dispatch("getAllCategory");
