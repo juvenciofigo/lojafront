@@ -35,7 +35,7 @@
         <div class="flex flex-col flex-1 gap-2 lg:overflow-auto lg:max-h-[calc(100vh-82px)]">
             <div class="Descriptions flex-1 flex flex-col gap-4 bg-white rounded-md p-2 md:p-4">
                 <div>
-                    <h1 class="text-2xl">{{ product.productName }}</h1>
+                    <h1 class="text-lg lg:text-xl">{{ product.productName }}</h1>
 
                     <v-rating
                         readonly
@@ -71,7 +71,7 @@
                 </div>
 
                 <!-- Seção de seleção de variações -->
-                <div class="button flex flex-col lg:flex-row flex-wrap gap-3">
+                <div class="buttons-chips flex flex-col lg:flex-row flex-wrap gap-3">
                     <div
                         class="color chips_div"
                         v-if="colors.length > 0">
@@ -92,7 +92,7 @@
                                             <div v-if="item.variationImage && item.variationImage.length > 0">
                                                 <img
                                                     :src="item.variationImage[0]"
-                                                    alt="Image"
+                                                    alt="Imagem da variacao do produto"
                                                     class="chip-image object-contain" />
                                             </div>
                                             <div v-else>
@@ -125,7 +125,7 @@
                                         <div v-if="item.variationImage && item.variationImage.length > 0">
                                             <img
                                                 :src="item.variationImage[0]"
-                                                alt="Image"
+                                                alt="Imagem da variacao do produto"
                                                 class="chip-image object-contain" />
                                         </div>
                                         <div v-else>
@@ -158,7 +158,7 @@
                                         <div v-if="item.variationImage && item.variationImage.length > 0">
                                             <img
                                                 :src="item.variationImage[0]"
-                                                alt="Image"
+                                                alt="Imagem da variacao do produto"
                                                 class="chip-image object-contain" />
                                         </div>
                                         <div v-else>
@@ -191,7 +191,7 @@
                                         <div v-if="item.variationImage && item.variationImage.length > 0">
                                             <img
                                                 :src="item.variationImage[0]"
-                                                alt="Image"
+                                                alt="Imagem da variacao do produto"
                                                 class="chip-image object-contain" />
                                         </div>
                                         <div v-else>
@@ -208,7 +208,7 @@
                 <!-- Botões de ação -->
                 <div
                     ref="buttons"
-                    class="flex-row gap-2 flex flex-wrap">
+                    class="buttons flex-row gap-1 flex flex-wrap">
                     <el-button
                         ref="ref1"
                         size="small"
@@ -415,6 +415,8 @@
     </el-tour>
 </template>
 <script setup>
+    import { useHead } from '@vueuse/head';
+
     import { format, differenceInHours } from "date-fns";
     import { useStore } from "vuex";
     import { ref, defineProps, computed, watch, defineEmits, watchEffect, onMounted } from "vue";
@@ -593,11 +595,30 @@
             observer.observe(buttons.value);
         }
     });
+
+    useHead({
+        title: `${product.value.productName} - ${store.state.storeName}`,
+        meta: [
+            {
+                name: "description",
+                content: `Compre o ${product.value.productName}. Confira agora!`,
+            },
+        ],
+    });
 </script>
 
 <style scoped>
     .chip-image {
         width: 50px;
         height: 50px;
+    }
+    .v-slide-group__content {
+        flex-wrap: wrap;
+    }
+</style>
+<style>
+    .buttons-chips .v-slide-group__content {
+        flex-wrap: wrap;
+        flex: 0 auto;
     }
 </style>

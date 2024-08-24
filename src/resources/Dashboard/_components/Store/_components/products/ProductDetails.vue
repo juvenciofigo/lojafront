@@ -68,7 +68,8 @@
 </template>
 
 <script setup>
-    import ProductDetailsComp from "@/resources/_components/ProductDetailsComp.vue";
+    const ProductDetailsComp = () => import("@/resources/_components/ProductDetailsComp.vue");
+
     import { onBeforeMount, onBeforeUnmount, ref, computed, watch } from "vue";
     import { useStore } from "vuex";
     import { useRoute, useRouter } from "vue-router";
