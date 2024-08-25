@@ -114,6 +114,8 @@
 </template>
 
 <script setup>
+    import { useHead } from "@vueuse/head";
+
     import { useStore } from "vuex";
     import { onBeforeMount, computed, ref } from "vue";
     import { useRouter } from "vue-router";
@@ -160,7 +162,20 @@
     onBeforeMount(async () => {
         await store.dispatch("getAllProducts");
         skeleton.value = false;
+        updateHead();
     });
+
+    function updateHead() {
+        useHead({
+            title: `${store.state?.storeName} - Pagina inicial`,
+            meta: [
+                {
+                    name: "description",
+                    content: `Produtos importados, com os melhores preços. Confira agora!`,
+                },
+            ],
+        });
+    }
 </script>
 
 <style scoped>

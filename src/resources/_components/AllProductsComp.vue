@@ -168,6 +168,7 @@
         () => route.query.category,
         (newRoute) => {
             category.value = newRoute;
+              head()
         }
     );
 
@@ -210,10 +211,25 @@
         store.commit("CLEAR_PRODUCTS");
     });
 
+    import { useHead } from "@vueuse/head";
+
     onBeforeMount(async () => {
         category.value = route.query.category;
         await store.dispatch(props.getCategories || "getAllCategory");
+        head();
     });
+
+    function head() {
+        useHead({
+            title: ` ${store.state.storeName} - ${category.value || "Todos Produtos"}`,
+            meta: [
+                {
+                    name: "description",
+                    content: `Melhores produtos importados!`,
+                },
+            ],
+        });
+    }
 </script>
 <style scoped>
     .slider-demo-block {

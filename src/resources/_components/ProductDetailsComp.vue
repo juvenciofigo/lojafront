@@ -415,7 +415,7 @@
     </el-tour>
 </template>
 <script setup>
-    import { useHead } from '@vueuse/head';
+    import { useHead } from "@vueuse/head";
 
     import { format, differenceInHours } from "date-fns";
     import { useStore } from "vuex";
@@ -596,15 +596,19 @@
         }
     });
 
-    useHead({
-        title: `${product.value.productName} - ${store.state.storeName}`,
-        meta: [
-            {
-                name: "description",
-                content: `Compre o ${product.value.productName}. Confira agora!`,
-            },
-        ],
-    });
+    const updateHead = () => {
+        useHead({
+            title: `${product.value?.productName || "Produto"} - ${store.state?.storeName}`,
+            meta: [
+                {
+                    name: "description",
+                    content: `Compre o ${product.value?.productName || "Produto"}. Confira agora!`,
+                },
+            ],
+        });
+    };
+
+    watch(() => [product.value.productName, store.state.storeName], updateHead, { immediate: true });
 </script>
 
 <style scoped>
