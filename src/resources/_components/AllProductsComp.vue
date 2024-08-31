@@ -168,7 +168,7 @@
         () => route.query.category,
         (newRoute) => {
             category.value = newRoute;
-              head()
+            head();
         }
     );
 
