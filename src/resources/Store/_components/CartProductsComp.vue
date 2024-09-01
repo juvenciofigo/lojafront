@@ -15,13 +15,23 @@
                 <template #default="scope">
                     <button
                         @click="goTo(scope.row.productId)"
-                        class="flex flex-row flex-wrap justify-center items-center lg:text-lg gap-2">
-                        <img
+                        class="flex flex-row flex-wrap justify-center items-center gap-2">
+                        <el-image
                             :src="scope.row.picture"
-                            alt="Imagem do Produto"
-                            class="min-h-10 max-h-24 border"
-                            :class="image" />
-                        {{ scope.row.productName }}
+                            alt="Imagem do Produto">
+                            <template #placeholder>
+                                <el-skeleton-item
+                                    animeted
+                                    variant="image"
+                                    style="width: 100%; height: 100%" />
+                            </template>
+                            <template #error>
+                                <div class="image-slot h-full flex justify-center items-center w-full">
+                                    <el-icon><Picture /></el-icon>
+                                </div>
+                            </template>
+                        </el-image>
+                        <span class="font-semibold">{{ scope.row.productName }}</span>
                     </button>
                 </template>
             </el-table-column>
@@ -120,6 +130,7 @@
     import { useRouter } from "vue-router";
     import { useStore } from "vuex";
     import { Trash2 } from "lucide-vue-next";
+    import { Picture } from "@element-plus/icons-vue";
 
     const router = useRouter();
     const store = useStore();

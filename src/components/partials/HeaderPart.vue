@@ -69,7 +69,7 @@
             </el-drawer>
         </nav>
 
-        <nav class="header-1 h-[50px] flex flex-row justify-between items-center p-1 lg:p-7 bg-white">
+        <nav class="header-1 h-[40px] flex flex-row justify-between items-center p-1 lg:p-2 bg-white">
             <p class="text-xs text-center hidden lg:block">Bem-vindo ao {{ storeName }}</p>
             <div class="lg:hidden flex flex-row">
                 <Button
@@ -80,86 +80,71 @@
                 <LogoPart />
             </div>
 
-            <div class="items-center flex flex-row">
-                <router-link
-                    to="/carrinho"
-                    class="hover:after:bg-red-500 flex flex-row items-center gap-2 h-max w-max mx-[15px]">
-                    <span class="text-xs md:text-base">{{ formatCurrency(priceTotal) }} </span>
-                    <Button
-                        variant="Ghost"
-                        class="flex gap-2 h-max">
+            <el-menu
+                class="el-menu-demo-header"
+                mode="horizontal"
+                :ellipsis="false">
+                <el-menu-item index="0"
+                    ><router-link
+                        to="/carrinho"
+                        class="flex flex-row items-center gap-1">
+                        <span class="text-xs md:text-base">{{ formatCurrency(priceTotal) }} </span>
+
                         <lord-icon
                             src="https://cdn.lordicon.com/odavpkmb.json"
                             trigger="hover"
                             style="width: 25px; height: 25px">
-                        </lord-icon>
-                    </Button>
-                </router-link>
+                        </lord-icon> </router-link
+                ></el-menu-item>
+                <el-sub-menu
+                    index="1"
+                    :show-timeout="100">
+                    <template #title>
+                        <div class="hidden group lg:flex flex-row items-center gap-1 cursor-pointer">
+                            <p v-if="isAuthenticated">
+                                <span>
+                                    {{ user?.firstName?.split(" ")?.[0] || "" }}
+                                    {{ user?.lastName?.split(" ")?.slice(-1)?.[0] || "" }}
+                                </span>
+                            </p>
+                            <User v-else />
+                        </div>
+                    </template>
+                    <el-menu-item
+                        index="1-1"
+                        class="orders"
+                        v-if="isAuthenticated">
+                        <router-link :to="{ name: 'profile', params: { user: user.id } }"> Meu perfil</router-link>
+                    </el-menu-item>
 
-                <div class="flex">
-                    <v-menu
-                        open-on-focus
-                        open-on-hover>
-                        <template v-slot:activator="{ props }">
-                            <button
-                                color="indigo"
-                                v-bind="props">
-                                <div class="hidden group lg:flex flex-row justify-center items-end gap-1 cursor-pointer">
-                                    <User />
-                                    <p v-if="isAuthenticated">
-                                        <span>
-                                            {{ user?.firstName?.split(" ")?.[0] || "" }}
-                                            {{ user?.lastName?.split(" ")?.slice(-1)?.[0] || "" }}
-                                        </span>
-                                    </p>
-                                    <ChevronDown class="group-hover:rotate-180 duration-300" />
-                                </div>
-                            </button>
-                        </template>
-
-                        <v-card min-width="300">
-                            <v-list>
-                                <v-list-item
-                                    class="orders vListItem cursor-pointer"
-                                    :to="{ name: 'profile', params: { user: user.id } }"
-                                    v-if="isAuthenticated">
-                                    Meu perfil
-                                </v-list-item>
-                                <v-list-item
-                                    class="orders vListItem cursor-pointer"
-                                    v-if="isAuthenticated">
-                                    <router-link to="/">Meus pedidos</router-link>
-                                </v-list-item>
-
-                                <v-list-item
-                                    class="login/logout cursor-pointer vListItem"
-                                    v-if="!isAuthenticated"
-                                    @click="login()">
-                                    <div class="flex flex-row items-center gap-2 h-max mx-[15px]">
-                                        <LogIn class="w-4 h-4" />
-                                        <span class="hidden lg:inline text-[15px] font-normal">Entrar</span>
-                                    </div>
-                                </v-list-item>
-
-                                <v-list-item
-                                    class="login/logout vListItem cursor-pointer"
-                                    @click="store.dispatch('logout', router)"
-                                    v-else>
-                                    <div class="flex flex-row items-center gap-2 h-max mx-[15px]">
-                                        <p
-                                            class="lg:hidden"
-                                            v-if="user">
-                                            {{ user?.lastName?.split(" ")?.slice(-1)?.[0] || "" }}
-                                        </p>
-                                        <span class="hidden lg:inline text-[15px] font-normal">Sair</span>
-                                        <LogOut class="w-4 h-4" />
-                                    </div>
-                                </v-list-item>
-                            </v-list>
-                        </v-card>
-                    </v-menu>
-                </div>
-            </div>
+                    <el-menu-item
+                        index="1-3"
+                        class="login/logout"
+                        v-if="!isAuthenticated"
+                        @click="login()">
+                        <div class="flex flex-row items-center gap-2 h-max mx-[15px]">
+                            <LogIn class="w-4 h-4" />
+                            <span class="hidden lg:inline">Entrar</span>
+                        </div></el-menu-item
+                    >
+                    <el-menu-item
+                        index="1-4"
+                        class="login/logout"
+                        @click="store.dispatch('logout', router)"
+                        v-else>
+                        <div class="flex flex-row items-center gap-2 h-max mx-[15px]">
+                            <p
+                                class="lg:hidden"
+                                v-if="user">
+                                {{ user?.firstName?.split(" ")?.[0] || "" }}
+                                {{ user?.lastName?.split(" ")?.slice(-1)?.[0] || "" }}
+                            </p>
+                            <span class="hidden lg:inline">Sair</span>
+                            <LogOut class="w-4 h-4" />
+                        </div>
+                    </el-menu-item>
+                </el-sub-menu>
+            </el-menu>
         </nav>
         <!-- end header-1 -->
         <Separator
@@ -167,7 +152,7 @@
             class="bg-[#2196F3]"
             decorative />
         <!-- start header-2 -->
-        <nav class="header-2 lg:h-[100px] h-[50px] flex flex-row gap-4 items-center bg-white">
+        <nav class="header-2 lg:h-[70px] h-[50px] flex flex-row gap-4 items-center bg-white">
             <div class="py-2 px-3 lg:block rounded-md hidden duration-700 hover:-translate-y-1">
                 <LogoPart />
             </div>
@@ -322,7 +307,7 @@
             currency: "MZN",
         });
     };
-    
+
     onBeforeUnmount(() => {
         store.commit("CLEAR_CATEGORIES");
     });
@@ -333,8 +318,18 @@
     });
 </script>
 <style scoped>
-    .vListItem:hover {
-        background-color: rgb(253 224 71);
-        transition-duration: 0.4s;
+    .el-menu-demo-header {
+        background-color: unset;
+        border: unset;
+        height: 100%;
+    }
+    .el-menu-demo-header .is-active {
+        border: unset;
+        color: unset !important;
+    }
+    .el-menu-demo-header .el-menu-item {
+        height: unset;
+        border: unset;
+        padding: unset;
     }
 </style>
