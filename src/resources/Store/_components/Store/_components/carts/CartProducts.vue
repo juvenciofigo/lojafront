@@ -1,6 +1,8 @@
 <template lang="">
-    <div class="flex flex-col lg:items-start lg:flex-row lg:pr-5 flex-1 gap-4 flex-wrap">
-        <div class="flex-1">
+    <div class="flex flex-col lg:items-start lg:flex-row lg:pr-5 flex-1 gap-4 flex-wrap p-3">
+        <div
+            class="flex-1"
+            style="width: calc(100% - 1px)">
             <CartProductsComp
                 v-if="cart"
                 :cart="cart"
@@ -31,8 +33,7 @@
             <el-button
                 :disabled="buttonStatus"
                 size="small"
-                @click="makeOrder()"
-                class="w-max lg:w-full self-end">
+                @click="makeOrder()">
                 Fazer pedido
             </el-button>
         </div>

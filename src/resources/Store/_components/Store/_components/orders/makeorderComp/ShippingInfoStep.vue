@@ -27,169 +27,178 @@
             </template>
         </div>
         <br />
-        <form @submit.stop>
-            <div class="flex flex-col gap-3">
-                <h3 class="text-xl">Novo Endereço</h3>
-                <!-- Nome -->
-                <v-text-field
-                    :disabled="disabledTextarea || addressSkeleton == false"
-                    v-model="firstName.value.value"
-                    variant="outlined"
-                    placeholder="Nome"
-                    density="compact"
-                    bg-color="white"
-                    :counter="40"
-                    :error-messages="firstName.errorMessage.value"
-                    label="Nome"></v-text-field>
+        <el-collapse
+            v-model="activeName"
+            accordion>
+            <el-collapse-item title="Novo Enderenço">
+                <form @submit.stop>
+                    <div class="flex flex-col gap-3">
+                        <!-- Nome -->
+                        <v-text-field
+                            :disabled="disabledTextarea || addressSkeleton == false"
+                            v-model="firstName.value.value"
+                            variant="outlined"
+                            placeholder="Nome"
+                            density="compact"
+                            bg-color="white"
+                            :counter="40"
+                            :error-messages="firstName.errorMessage.value"
+                            label="Nome"></v-text-field>
 
-                <!-- Apelido -->
-                <v-text-field
-                    :disabled="disabledTextarea || addressSkeleton == false"
-                    v-model="lastName.value.value"
-                    variant="outlined"
-                    placeholder="Nome"
-                    density="compact"
-                    bg-color="white"
-                    :counter="40"
-                    :error-messages="lastName.errorMessage.value"
-                    label="Apelido"></v-text-field>
+                        <!-- Apelido -->
+                        <v-text-field
+                            :disabled="disabledTextarea || addressSkeleton == false"
+                            v-model="lastName.value.value"
+                            variant="outlined"
+                            placeholder="Nome"
+                            density="compact"
+                            bg-color="white"
+                            :counter="40"
+                            :error-messages="lastName.errorMessage.value"
+                            label="Apelido"></v-text-field>
 
-                <!-- Email -->
-                <v-text-field
-                    :disabled="disabledTextarea || addressSkeleton == false"
-                    v-model="email.value.value"
-                    autocomplete="email"
-                    variant="outlined"
-                    density="compact"
-                    bg-color="white"
-                    :error-messages="email.errorMessage.value"
-                    label="E-mail"></v-text-field>
+                        <!-- Email -->
+                        <v-text-field
+                            :disabled="disabledTextarea || addressSkeleton == false"
+                            v-model="email.value.value"
+                            autocomplete="email"
+                            variant="outlined"
+                            density="compact"
+                            bg-color="white"
+                            :error-messages="email.errorMessage.value"
+                            label="E-mail"></v-text-field>
 
-                <!-- Número de Celular -->
-                <v-text-field
-                    :disabled="disabledTextarea || addressSkeleton == false"
-                    v-model="cellNumber.value.value"
-                    autocomplete="tel"
-                    variant="outlined"
-                    density="compact"
-                    bg-color="white"
-                    :error-messages="cellNumber.errorMessage.value"
-                    label="Número de Celular"></v-text-field>
+                        <!-- Número de Celular -->
+                        <v-text-field
+                            :disabled="disabledTextarea || addressSkeleton == false"
+                            v-model="cellNumber.value.value"
+                            autocomplete="tel"
+                            variant="outlined"
+                            density="compact"
+                            bg-color="white"
+                            :error-messages="cellNumber.errorMessage.value"
+                            label="Número de Celular"></v-text-field>
 
-                <!-- Bairro -->
-                <v-text-field
-                    :disabled="disabledTextarea || addressSkeleton == false"
-                    v-model="neighborhood.value.value"
-                    variant="outlined"
-                    placeholder="Cidade"
-                    density="compact"
-                    bg-color="white"
-                    :error-messages="neighborhood.errorMessage.value"
-                    label="Bairro"></v-text-field>
+                        <!-- Bairro -->
+                        <v-text-field
+                            :disabled="disabledTextarea || addressSkeleton == false"
+                            v-model="neighborhood.value.value"
+                            variant="outlined"
+                            placeholder="Cidade"
+                            density="compact"
+                            bg-color="white"
+                            :error-messages="neighborhood.errorMessage.value"
+                            label="Bairro"></v-text-field>
 
-                <!-- Endereço completo -->
-                <v-text-field
-                    :disabled="disabledTextarea || addressSkeleton == false"
-                    v-model="complete.value.value"
-                    variant="outlined"
-                    placeholder="Endereço"
-                    density="compact"
-                    bg-color="white"
-                    :error-messages="complete.errorMessage.value"
-                    label="Endereço Completo"></v-text-field>
+                        <!-- Endereço completo -->
+                        <v-text-field
+                            :disabled="disabledTextarea || addressSkeleton == false"
+                            v-model="complete.value.value"
+                            variant="outlined"
+                            placeholder="Endereço"
+                            density="compact"
+                            bg-color="white"
+                            :error-messages="complete.errorMessage.value"
+                            label="Endereço Completo"></v-text-field>
 
-                <!-- Província -->
-                <v-text-field
-                    :disabled="disabledTextarea || addressSkeleton == false"
-                    v-model="province.value.value"
-                    variant="outlined"
-                    placeholder="Província"
-                    density="compact"
-                    bg-color="white"
-                    :error-messages="province.errorMessage.value"
-                    label="Província"></v-text-field>
+                        <!-- Província -->
+                        <v-text-field
+                            :disabled="disabledTextarea || addressSkeleton == false"
+                            v-model="province.value.value"
+                            variant="outlined"
+                            placeholder="Província"
+                            density="compact"
+                            bg-color="white"
+                            :error-messages="province.errorMessage.value"
+                            label="Província"></v-text-field>
 
-                <!-- Cidade -->
-                <v-text-field
-                    :disabled="disabledTextarea || addressSkeleton == false"
-                    v-model="city.value.value"
-                    variant="outlined"
-                    placeholder="Cidade"
-                    density="compact"
-                    bg-color="white"
-                    :error-messages="city.errorMessage.value"
-                    label="Cidade"></v-text-field>
+                        <!-- Cidade -->
+                        <v-text-field
+                            :disabled="disabledTextarea || addressSkeleton == false"
+                            v-model="city.value.value"
+                            variant="outlined"
+                            placeholder="Cidade"
+                            density="compact"
+                            bg-color="white"
+                            :error-messages="city.errorMessage.value"
+                            label="Cidade"></v-text-field>
 
-                <!-- Postal -->
-                <v-text-field
-                    :disabled="disabledTextarea || addressSkeleton == false"
-                    v-model="postalCode.value.value"
-                    variant="outlined"
-                    placeholder="Cidade"
-                    density="compact"
-                    bg-color="white"
-                    :error-messages="postalCode.errorMessage.value"
-                    label="Código postal"></v-text-field>
+                        <!-- Postal -->
+                        <v-text-field
+                            :disabled="disabledTextarea || addressSkeleton == false"
+                            v-model="postalCode.value.value"
+                            variant="outlined"
+                            placeholder="Cidade"
+                            density="compact"
+                            bg-color="white"
+                            :error-messages="postalCode.errorMessage.value"
+                            label="Código postal"></v-text-field>
 
-                <!-- País -->
-                <v-text-field
-                    :disabled="disabledTextarea || addressSkeleton == false"
-                    v-model="country.value.value"
-                    variant="outlined"
-                    placeholder="País"
-                    density="compact"
-                    bg-color="white"
-                    :error-messages="country.errorMessage.value"
-                    label="País"></v-text-field>
+                        <!-- País -->
+                        <v-text-field
+                            :disabled="disabledTextarea || addressSkeleton == false"
+                            v-model="country.value.value"
+                            variant="outlined"
+                            placeholder="País"
+                            density="compact"
+                            bg-color="white"
+                            :error-messages="country.errorMessage.value"
+                            label="País"></v-text-field>
 
-                <!-- Referencia -->
-                <v-text-field
-                    :disabled="disabledTextarea || addressSkeleton == false"
-                    v-model="reference.value.value"
-                    variant="outlined"
-                    placeholder="Referência"
-                    density="compact"
-                    bg-color="white"
-                    :error-messages="reference.errorMessage.value"
-                    label="Referência"></v-text-field>
+                        <!-- Referencia -->
+                        <v-text-field
+                            :disabled="disabledTextarea || addressSkeleton == false"
+                            v-model="reference.value.value"
+                            variant="outlined"
+                            placeholder="Referência"
+                            density="compact"
+                            bg-color="white"
+                            :error-messages="reference.errorMessage.value"
+                            label="Referência"></v-text-field>
 
-                <!-- Nota -->
-                <v-textarea
-                    :disabled="disabledTextarea || addressSkeleton == false"
-                    v-model="note.value.value"
-                    variant="outlined"
-                    placeholder="Nota"
-                    density="compact"
-                    bg-color="white"
-                    :error-messages="note.errorMessage.value"
-                    label="Nota"></v-textarea>
+                        <!-- Nota -->
+                        <v-textarea
+                            :disabled="disabledTextarea || addressSkeleton == false"
+                            v-model="note.value.value"
+                            variant="outlined"
+                            placeholder="Nota"
+                            density="compact"
+                            bg-color="white"
+                            :error-messages="note.errorMessage.value"
+                            label="Nota"></v-textarea>
 
-                <input
-                    v-model="addressId.value.value"
-                    type="text"
-                    readonly
-                    hidden />
-            </div>
+                        <input
+                            v-model="addressId.value.value"
+                            type="text"
+                            readonly
+                            hidden />
+                    </div>
 
-            <!-- Botões -->
-            <div class="flex flex-row gap-3">
-                <el-button
-                    :disabled="disabledTextarea"
-                    @click="submit()"
-                    >Entrar</el-button
-                >
-                <el-button
-                    style="background-color: rgb(204, 15, 15)"
-                    @click="
-                        () => {
-                            handleReset();
-                            enableTextarea();
-                        }
-                    ">
-                    Limpar
-                </el-button>
-            </div>
-        </form>
+                    <!-- Botões -->
+                    <div class="flex flex-row gap-1">
+                        <el-button
+                            size="small"
+                            type="success"
+                            :disabled="disabledTextarea"
+                            @click="submit()"
+                            >Enviar</el-button
+                        >
+                        <el-button
+                            size="small"
+                            type="danger"
+                            style="background-color: rgb(204, 15, 15)"
+                            @click="
+                                () => {
+                                    handleReset();
+                                    enableTextarea();
+                                }
+                            ">
+                            Limpar
+                        </el-button>
+                    </div>
+                </form>
+            </el-collapse-item>
+        </el-collapse>
     </v-stepper-window-item>
 </template>
 
@@ -328,18 +337,4 @@
         }
     });
 </script>
-<style scoped>
-    button {
-        background-color: #2da848;
-        color: #fff;
-        font-size: 12px;
-        padding: 10px 45px;
-        border: 1px solid transparent;
-        border-radius: 8px;
-        font-weight: 600;
-        letter-spacing: 0.5px;
-        text-transform: uppercase;
-        margin-top: 10px;
-        cursor: pointer;
-    }
-</style>
+<style scoped></style>

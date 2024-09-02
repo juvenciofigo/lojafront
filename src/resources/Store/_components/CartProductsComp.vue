@@ -1,111 +1,18 @@
 <template lang="">
-    <div
-        v-if="cart.items && cart.items.length > 0"
-        class="bg-white lg:m-3 rounded-md lg:p-3">
-        <el-table
-            :data="cart.items"
-            :fit="true"
-            show-header
-            size="small">
-            <el-table-column
-                header-align="center"
-                align="center"
-                fixed
-                label="Produto">
-                <template #default="scope">
-                    <button
-                        @click="goTo(scope.row.productId)"
-                        class="flex flex-row flex-wrap justify-center items-center gap-2">
-                        <el-image
-                            :src="scope.row.picture"
-                            alt="Imagem do Produto">
-                            <template #placeholder>
-                                <el-skeleton-item
-                                    animeted
-                                    variant="image"
-                                    style="width: 100%; height: 100%" />
-                            </template>
-                            <template #error>
-                                <div class="image-slot h-full flex justify-center items-center w-full">
-                                    <el-icon><Picture /></el-icon>
-                                </div>
-                            </template>
-                        </el-image>
-                        <span class="font-semibold">{{ scope.row.productName }}</span>
-                    </button>
-                </template>
-            </el-table-column>
-            <el-table-column
-                header-align="center"
-                align="center"
-                prop="productPrice"
-                label="Preço unit.">
-                <template #default="scope">
-                    <span class="whitespace-nowrap">{{ formatCurrency(scope.row.productPrice) }}</span>
-                </template>
-            </el-table-column>
-            <el-table-column
-                header-align="center"
-                align="center"
-                label="Quant.">
-                <template #default="scope">
-                    <input
-                        class="text-center w-9 border"
-                        type="number"
-                        placeholder="Digite a quantidade"
-                        v-model.number="scope.row.quantity"
-                        @change="updateQuantity(scope.row.item, scope.row.quantity)"
-                        min="1" />
-                </template>
-            </el-table-column>
-            <el-table-column
-                header-align="center"
-                align="center"
-                prop="variation"
-                label="Espec."
-                :formatter="formatCurrency">
-                <template #default="scope">
-                    <div
-                        class="color whitespace-nowrap"
-                        v-if="scope.row.variation && scope.row.variation.color">
-                        <span>{{ scope.row.variation.color.variationType }}: </span>
-                        <span>{{ scope.row.variation.color.variationValue }}</span>
-                    </div>
-                    <div
-                        class="model whitespace-nowrap"
-                        v-if="scope.row.variation && scope.row.variation.model">
-                        <span>{{ scope.row.variation.model.variationType }}: </span>
-                        <span>{{ scope.row.variation.model.variationValue }}</span>
-                    </div>
-                    <div
-                        class="size whitespace-nowrap"
-                        v-if="scope.row.variation && scope.row.variation.size">
-                        <span>{{ scope.row.variation.size.variationType }}: </span>
-                        <span>{{ scope.row.variation.size.variationValue }}</span>
-                    </div>
-                    <div
-                        class="material whitespace-nowrap"
-                        v-if="scope.row.variation && scope.row.variation.material">
-                        <span>{{ scope.row.variation.material.variationType }}: </span>
-                        <span>{{ scope.row.variation.material.variationValue }}</span>
-                    </div>
-                </template>
-            </el-table-column>
-            <el-table-column
-                header-align="center"
-                align="center"
-                label="Subtotal">
-                <template #default="scope">
-                    {{ formatCurrency(scope.row.subtotal) }}
-                </template>
-            </el-table-column>
-
-            <el-table-column
-                header-align="center"
-                align="center"
-                label="Ações"
-                min-width="120">
-                <template #default="scope">
+    <el-table
+        style="width: max-content"
+        :data="cart.items"
+        :fit="true"
+        show-header
+        size="small"
+        v-if="cart.items && cart.items.length > 0">
+        <el-table-column
+            width="350"
+            header-align="center"
+            align="center"
+            label="Produto">
+            <template #default="scope">
+                <div class="flex flex-row items-center gap-2">
                     <el-button
                         link
                         type="danger"
@@ -115,10 +22,99 @@
                             color="red"
                             size="18" />
                     </el-button>
-                </template>
-            </el-table-column>
-        </el-table>
-    </div>
+                    <button
+                        @click="goTo(scope.row.productId)"
+                        class="flex flex-row justify-center items-center gap-2">
+                        <el-image
+                            style="width: 80px; height: 80px; border-radius: 5px"
+                            :src="scope.row.picture"
+                            alt="Imagem do Produto">
+                            <template #placeholder>
+                                <el-skeleton-item
+                                    animeted
+                                    variant="image"
+                                    style="width: 70px; height: 70px" />
+                            </template>
+                            <template #error>
+                                <div class="image-slot h-full flex justify-center items-center w-full">
+                                    <el-icon><Picture /></el-icon>
+                                </div>
+                            </template>
+                        </el-image>
+                        <span class="font-semibold">{{ scope.row.productName }}</span>
+                    </button>
+                </div>
+            </template>
+        </el-table-column>
+        <el-table-column
+            header-align="center"
+            width="120"
+            align="center"
+            prop="productPrice"
+            label="Preço unit.">
+            <template #default="scope">
+                <span class="whitespace-nowrap">{{ formatCurrency(scope.row.productPrice) }}</span>
+            </template>
+        </el-table-column>
+        <el-table-column
+            header-align="center"
+            width="120"
+            align="center"
+            label="Quant.">
+            <template #default="scope">
+                <input
+                    class="text-center w-9 border"
+                    type="number"
+                    placeholder="Digite a quantidade"
+                    v-model.number="scope.row.quantity"
+                    @change="updateQuantity(scope.row.item, scope.row.quantity)"
+                    min="1" />
+            </template>
+        </el-table-column>
+        <el-table-column
+            header-align="center"
+            width="120"
+            align="center"
+            prop="variation"
+            label="Espec."
+            :formatter="formatCurrency">
+            <template #default="scope">
+                <div
+                    class="color whitespace-nowrap"
+                    v-if="scope.row.variation && scope.row.variation.color">
+                    <span>{{ scope.row.variation.color.variationType }}: </span>
+                    <span>{{ scope.row.variation.color.variationValue }}</span>
+                </div>
+                <div
+                    class="model whitespace-nowrap"
+                    v-if="scope.row.variation && scope.row.variation.model">
+                    <span>{{ scope.row.variation.model.variationType }}: </span>
+                    <span>{{ scope.row.variation.model.variationValue }}</span>
+                </div>
+                <div
+                    class="size whitespace-nowrap"
+                    v-if="scope.row.variation && scope.row.variation.size">
+                    <span>{{ scope.row.variation.size.variationType }}: </span>
+                    <span>{{ scope.row.variation.size.variationValue }}</span>
+                </div>
+                <div
+                    class="material whitespace-nowrap"
+                    v-if="scope.row.variation && scope.row.variation.material">
+                    <span>{{ scope.row.variation.material.variationType }}: </span>
+                    <span>{{ scope.row.variation.material.variationValue }}</span>
+                </div>
+            </template>
+        </el-table-column>
+        <el-table-column
+            header-align="center"
+            width="120"
+            align="center"
+            label="Subtotal">
+            <template #default="scope">
+                {{ formatCurrency(scope.row.subtotal) }}
+            </template>
+        </el-table-column>
+    </el-table>
     <div
         v-else
         class="text-center">
