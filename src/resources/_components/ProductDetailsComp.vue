@@ -37,14 +37,14 @@
                 <div>
                     <h1 class="text-lg lg:text-xl">{{ product.productName }}</h1>
 
-                    <v-rating
+                    <!-- <v-rating
                         readonly
                         item-aria-label="custom icon label text {0} of {1}"
                         size="small"
                         :length="5"
                         half-increments
                         :model-value="product.productStatistc.ratingAverage"
-                        active-color="primary" />
+                        active-color="primary" /> -->
 
                     <div class="text-lg font-semibold">
                         <p v-if="product.productPromotion">
