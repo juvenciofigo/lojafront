@@ -1,9 +1,9 @@
 <template lang="">
-    <ProductDetaislsSkeleton v-if="skeleton"></ProductDetaislsSkeleton>
+    <!-- <ProductDetaislsSkeleton v-if="skeleton"></ProductDetaislsSkeleton> -->
 
     <!-- prettier-ignore -->
+    <!-- v-else -->
     <ProductDetailsComp
-        v-else
         :firstButton="delProduct"
         :secondButton="navigateTo"
         :thirdButton="addImage"
@@ -68,8 +68,7 @@
 </template>
 
 <script setup>
-    const ProductDetailsComp = () => import("@/resources/_components/ProductDetailsComp.vue");
-
+    import ProductDetailsComp from "@/resources/_components/ProductDetailsComp.vue";
     import { onBeforeMount, onBeforeUnmount, ref, computed, watch } from "vue";
     import { useStore } from "vuex";
     import { useRoute, useRouter } from "vue-router";
@@ -93,7 +92,7 @@
             if (newProduct && Array.isArray(newProduct.sales)) {
                 totalOrders.value = newProduct.sales.reduce((total, item) => total + item.quantity, 0);
             }
-            totalRevenue.value = newProduct.totalRevenue || 0; // Verifique se totalRevenue está disponível
+            totalRevenue.value = newProduct.totalRevenue || 0;
         },
         { immediate: true }
     );
@@ -137,7 +136,8 @@
     };
 
     function navigateTo() {
-        router.push({ name: "update", params: { id: route.params.id } });
+        console.log(route.params.id);
+        router.push({ name: "update", params: { productID: route.params.id } });
     }
     function addImage() {
         router.push({ name: "addImage", params: { id: route.params.id } });

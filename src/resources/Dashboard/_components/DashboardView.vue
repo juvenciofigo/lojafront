@@ -147,8 +147,6 @@
         const paths = router.currentRoute.value.path.split("/").filter((path) => path !== "");
         return paths.slice(0, 2);
     });
-    console.log("API URL:", process.env.VUE_APP_API_URL);
-
     window.addEventListener("resize", () => {
         if (window.innerWidth > 1279) {
             drawer.value = false;
