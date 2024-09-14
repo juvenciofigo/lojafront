@@ -73,7 +73,7 @@
     import { useStore } from "vuex";
     import { useRoute, useRouter } from "vue-router";
     import DialogConfirmation from "@/components/partials/DialogConfirmation.vue";
-    import ProductDetaislsSkeleton from "@/components/skeletons/ProductDetaislsSkeleton.vue";
+    // import ProductDetaislsSkeleton from "@/components/skeletons/ProductDetaislsSkeleton.vue";
     import { Receipt, Copy, Trash2 } from "lucide-vue-next";
 
     const router = useRouter();
