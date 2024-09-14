@@ -37,14 +37,11 @@
                 <div>
                     <h1 class="text-lg lg:text-xl">{{ product.productName }}</h1>
 
-                    <v-rating
-                        readonly
-                        item-aria-label="custom icon label text {0} of {1}"
-                        size="small"
-                        :length="5"
-                        half-increments
-                        :model-value="product.productStatistc.ratingAverage"
-                        active-color="primary" />
+                    <el-rate
+                        disabled
+                        allow-half
+                        v-model="product.productStatistc.ratingAverage"
+                        :colors="colorsRate" />
 
                     <div class="text-lg font-semibold">
                         <p v-if="product.productPromotion">
@@ -288,10 +285,11 @@
                             <span>{{ product.productStatistc.ratingAverage.toFixed(1) }} de 5</span>
                         </div>
 
-                        <v-rating
-                            :model-value="product.productStatistc.ratingAverage"
-                            color="yellow-darken-3"
-                            half-increments></v-rating>
+                        <el-rate
+                            show-score
+                            allow-half
+                            v-model="product.productStatistc.ratingAverage" />
+
                         <div class="px-3">{{ product.productRatings.length }}</div>
                     </div>
 
@@ -463,6 +461,8 @@
     const ref2 = ref(null);
     const ref3 = ref(null);
 
+    const colorsRate = ref(["#99A9BF", "#F7BA2A", "#FF9900"]);
+
     const open = ref(false);
     //////////////////////////
     const emits = defineEmits(["value-updated", "material-Value", "sizes-Value", "color-Value", "model-Value", "rating-dialog"]);
@@ -616,11 +616,15 @@
         width: 50px;
         height: 50px;
     }
+
     .v-slide-group__content {
         flex-wrap: wrap;
     }
 </style>
 <style>
+    .el-rate.is-disabled .el-rate__item {
+        color: #898a8d7d;
+    }
     .buttons-chips .v-slide-group__content {
         flex-wrap: wrap;
         flex: 0 auto;

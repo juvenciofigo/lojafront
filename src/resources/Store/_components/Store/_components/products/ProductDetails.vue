@@ -218,3 +218,8 @@
         skeleton.value = false;
     });
 </script>
+<style>
+    .buttons :nth-child(4) {
+        display: none;
+    }
+</style>
