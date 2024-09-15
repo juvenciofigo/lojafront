@@ -534,11 +534,12 @@
             if (productSeleted) {
                 await store.dispatch("updateProduct", { productSeleted, formData });
             } else {
-                let result;
-                result = await store.dispatch("addProduct", formData);
-                if (result === true) {
-                    handleReset();
-                }
+                // let result;
+                // result = await store.dispatch("addProduct", formData);
+                await store.dispatch("addProduct", formData);
+                // if (result === true) {
+                //     handleReset();
+                // }
             }
 
             loadSubmitButton.value = false;

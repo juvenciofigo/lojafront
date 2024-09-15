@@ -334,7 +334,7 @@
             }
 
             if (response === true) {
-                handleReset();
+                // handleReset();
                 fileList.value = [];
                 variationImage.value = [];
             }
