@@ -293,7 +293,6 @@
             name: "allProductsClient",
             query: query,
         });
-        console.log(query);
     }
 
     const user = computed(() => JSON.parse(localStorage.getItem("userData")));
@@ -312,7 +311,14 @@
         store.commit("CLEAR_CATEGORIES");
     });
 
+    function novoVisitante() {
+        if (!localStorage.getItem("registoDeVisita")) {
+            localStorage.setItem("registoDeVisita", "true");
+            store.dispatch("novoVisitante");
+        }
+    }
     onMounted(async () => {
+        novoVisitante();
         await store.dispatch("displayCartPrices", isAuthenticated.value);
         await store.dispatch("getAllCategory");
     });

@@ -1036,7 +1036,10 @@ export default createStore({
                 errorMessage(error);
             }
         },
-
+        async novoVisitante({ commit }) {
+            sendAxio("get", `/visitaReg`, null, null);
+            commit("", false);
+        },
         // auth
         async login({ commit, state }, payload) {
             try {

@@ -578,7 +578,6 @@
                     if (!localStorage.getItem("tourShown")) {
                         open.value = true;
                         localStorage.setItem("tourShown", "true");
-                        console.log();
                         document.body.style.overflow = "hidden";
                     }
                 }
