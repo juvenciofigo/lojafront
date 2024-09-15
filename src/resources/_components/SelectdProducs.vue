@@ -4,7 +4,9 @@
         class="flex flex-col">
         <div class="bg-white rounded-[10px] flex flex-row justify-between p-2">
             <h1 class="text-xl">{{ title }}</h1>
-            <el-button>{{ link }}</el-button>
+            <router-link :to="link">
+                <el-button> Ver Mais</el-button>
+            </router-link>
         </div>
 
         <div class="flex flex-row gap-1 overflow-x-auto scroll-container w-[calc(100%)] py-2">

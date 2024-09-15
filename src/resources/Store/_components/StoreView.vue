@@ -90,12 +90,12 @@
                 <SelectdProducs
                     :title="`Produtos Recentes`"
                     :products="products"
-                    :link="`Ver`" />
+                    :link="`produtos`" />
 
                 <SelectdProducs
                     :title="`Top Produtos`"
                     :products="products"
-                    :link="`Ver`" />
+                    :link="`produtos`" />
             </div>
             <div class="ads slider gap-2 self-center">
                 <template
