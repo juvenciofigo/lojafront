@@ -10,8 +10,8 @@
                         :size="50"
                         color="primary"
                         indeterminate>
-                    </v-progress-circular
-                ></span>
+                    </v-progress-circular>
+                </span>
             </p>
             <div>
                 <router-link
