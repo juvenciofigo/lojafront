@@ -4,6 +4,7 @@
             <p class="text-xl text-muted-foreground font-semibold">{{ nameCard }}</p>
             <p class="text-2xl font-semibold">
                 <span v-if="result">{{ result }}</span>
+
                 <span v-else>
                     <v-progress-circular
                         :size="50"
@@ -29,7 +30,7 @@
 </template>
 <script setup>
     import { defineProps } from "vue";
-    defineProps({
+    const props = defineProps({
         nameCard: {
             type: String,
             required: true,
@@ -47,4 +48,6 @@
             required: false,
         },
     });
+
+    console.log(props);
 </script>
