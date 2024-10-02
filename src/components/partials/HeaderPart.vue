@@ -158,7 +158,7 @@
             </div>
 
             <div class="search flex-1 flex flex-row md:gap-[10%] justify-end">
-                <div class="border-2 ml-3 w-full md:m-0 border-[#2196F3] flex flex-1 max-w-[700px] flex-row rounded-[50px]">
+                <!-- <div class="border-2 ml-3 w-full md:m-0 border-[#2196F3] flex flex-1 max-w-[700px] flex-row rounded-[50px]">
                     <Input
                         class="flex-1 w-full rounded-l-[50px]"
                         autocomplete="off"
@@ -216,6 +216,33 @@
                             <Search
                         /></Button>
                     </div>
+                </div> -->
+
+                <div class="ml-3 w-full md:m-0 border-[#2196F3] flex flex-1 max-w-[700px] flex-row">
+                    <el-input
+                        v-model="textSearch"
+                        style="max-width: 600px"
+                        placeholder="Pesquise pelo nome do produto"
+                        class="input-with-select">
+                        <template #prepend>
+                            <el-select
+                                clearable
+                                v-model="selectedCategory"
+                                placeholder="Categoria"
+                                style="width: 115px">
+                                <el-option
+                                    v-for="category in categories"
+                                    :key="category._id"
+                                    :value="category.categoryName"
+                                    :label="category.categoryName" />
+                            </el-select>
+                        </template>
+                        <template #append>
+                            <el-button
+                                v-on:click="search"
+                                :icon="Search" />
+                        </template>
+                    </el-input>
                 </div>
             </div>
 
@@ -238,11 +265,11 @@
     import { useStore } from "vuex";
     import { useRouter } from "vue-router";
 
-    import { Search, Check, LogIn, LogOut, ChevronDown, ChevronUp, Menu, User } from "lucide-vue-next";
+    import { Search } from "lucide-vue-next";
     import { Separator } from "@/components/ui/separator";
     import { Button } from "@/components/ui/button";
 
-    import { Input } from "@/components/ui/input";
+    // import { Input } from "@/components/ui/input";
 
     const drawer = ref(false);
 
@@ -252,20 +279,20 @@
         }
     });
 
-    import {
-        SelectContent,
-        SelectGroup,
-        SelectItem,
-        SelectItemIndicator,
-        SelectItemText,
-        SelectPortal,
-        SelectRoot,
-        SelectScrollDownButton,
-        SelectScrollUpButton,
-        SelectTrigger,
-        SelectValue,
-        SelectViewport,
-    } from "radix-vue";
+    // import {
+    //     SelectContent,
+    //     SelectGroup,
+    //     SelectItem,
+    //     SelectItemIndicator,
+    //     SelectItemText,
+    //     SelectPortal,
+    //     SelectRoot,
+    //     SelectScrollDownButton,
+    //     SelectScrollUpButton,
+    //     SelectTrigger,
+    //     SelectValue,
+    //     SelectViewport,
+    // } from "radix-vue";
 
     import LogoPart from "./LogoPart.vue";
     const store = useStore();
@@ -273,7 +300,8 @@
 
     const categories = computed(() => store.state.categories);
     const priceTotal = computed(() => store.getters.cartPrice);
-    const category = ref();
+    const selectedCategory = ref(null);
+    const textSearch = ref(null);
 
     function login() {
         store.commit("SET_LOGIN_OVERLAY", true);
@@ -284,10 +312,28 @@
 
     function filterProduct(category) {
         drawer.value = false;
+
         const query = {
             _id: category._id,
             category: category.categoryName,
         };
+
+        router.push({
+            name: "allProductsClient",
+            query: query,
+        });
+    }
+
+    function search() {
+        if (textSearch.value == null) return;
+
+        const query = {
+            text: textSearch.value,
+        };
+
+        if (selectedCategory.value !== null) {
+            query.category = selectedCategory.value;
+        }
 
         router.push({
             name: "allProductsClient",

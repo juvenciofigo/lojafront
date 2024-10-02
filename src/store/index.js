@@ -666,12 +666,13 @@ export default createStore({
         },
 
         async searchProducts({ commit }, payload) {
+            console.log(payload);
             try {
                 const res = await axios.request({
                     method: "get",
                     baseURL: config.apiURL,
-                    url: "/products",
-                    params: { offset: payload },
+                    url: `/products/search/${payload.text}`,
+                    params: { offset: payload, category: payload.category },
                 });
 
                 if (res.data) {

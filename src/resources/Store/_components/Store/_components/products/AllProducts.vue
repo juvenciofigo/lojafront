@@ -53,8 +53,6 @@
     });
 
     onBeforeMount(() => {
-        console.log(true);
-
         fetchProducts(payload);
     });
 </script>
