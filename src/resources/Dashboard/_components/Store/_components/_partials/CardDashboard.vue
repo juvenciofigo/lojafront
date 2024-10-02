@@ -3,7 +3,7 @@
         <div class="flex-1 flex justify-around gap-3 flex-col text-blue-400">
             <p class="text-xl text-muted-foreground font-semibold">{{ nameCard }}</p>
             <p class="text-2xl font-semibold">
-                <span v-if="result">{{ result }}</span>
+                <span v-if="result || result == 0">{{ result }}</span>
 
                 <span v-else>
                     <v-progress-circular
@@ -48,6 +48,4 @@
             required: false,
         },
     });
-
-    console.log(props);
 </script>
