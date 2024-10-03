@@ -214,10 +214,10 @@
     import { useHead } from "@vueuse/head";
 
     onBeforeMount(async () => {
-        head();
         if (route.query.text) {
             await store.dispatch("searchProducts", { category: route.query.category, text: route.query.text });
         } else {
+            head();
             category.value = route.query.category;
             await store.dispatch(props.getCategories || "getAllCategory");
         }
