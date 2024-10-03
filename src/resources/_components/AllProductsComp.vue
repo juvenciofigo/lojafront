@@ -145,7 +145,7 @@
     import { defineProps, computed, ref, onBeforeUnmount, onBeforeMount, watch } from "vue";
     import { useStore } from "vuex";
     import { useRouter, useRoute } from "vue-router";
-    // import { Plus } from "lucide-vue-next";
+    import { Plus } from "lucide-vue-next";
 
     const props = defineProps({
         nameRoute: String,
@@ -215,10 +215,10 @@
 
     onBeforeMount(async () => {
         head();
-        category.value = route.query.category;
         if (route.query.text) {
             await store.dispatch("searchProducts", { category: route.query.category, text: route.query.text });
         } else {
+            category.value = route.query.category;
             await store.dispatch(props.getCategories || "getAllCategory");
         }
     });

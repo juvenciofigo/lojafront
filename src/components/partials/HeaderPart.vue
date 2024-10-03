@@ -263,7 +263,7 @@
 <script setup>
     import { onMounted, computed, ref, onBeforeUnmount } from "vue";
     import { useStore } from "vuex";
-    import { useRouter } from "vue-router";
+    import { useRouter, useRoute } from "vue-router";
 
     import { Search } from "lucide-vue-next";
     import { Separator } from "@/components/ui/separator";
@@ -297,6 +297,7 @@
     import LogoPart from "./LogoPart.vue";
     const store = useStore();
     const router = useRouter();
+    const route = useRoute();
 
     const categories = computed(() => store.state.categories);
     const priceTotal = computed(() => store.getters.cartPrice);
@@ -324,7 +325,7 @@
         });
     }
 
-    function search() {
+    async function search() {
         if (textSearch.value == null) return;
 
         const query = {
@@ -339,6 +340,7 @@
             name: "allProductsClient",
             query: query,
         });
+        await store.dispatch("searchProducts", { category: route.query.category, text: route.query.text });
     }
 
     const user = computed(() => JSON.parse(localStorage.getItem("userData")));

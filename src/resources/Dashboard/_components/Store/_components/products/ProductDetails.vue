@@ -136,7 +136,6 @@
     };
 
     function navigateTo() {
-        console.log(route.params.id);
         router.push({ name: "update", params: { productID: route.params.id } });
     }
     function addImage() {

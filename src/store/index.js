@@ -666,7 +666,6 @@ export default createStore({
         },
 
         async searchProducts({ commit }, payload) {
-            console.log(payload);
             try {
                 const res = await axios.request({
                     method: "get",
