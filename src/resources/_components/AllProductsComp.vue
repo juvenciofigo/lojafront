@@ -164,11 +164,29 @@
     const categories = computed(() => store.state.categories);
     const currentPage = ref(Number(route.query.offset) || 1);
     const category = ref(null);
+
     watch(
         () => route.query.category,
         (newRoute) => {
             category.value = newRoute;
             head();
+        }
+    );
+
+    watch(
+        () => route.query,
+        async (newRoute, oldRoute) => {
+            console.log("nova rota", newRoute);
+            console.log("antiga", oldRoute);
+            if (newRoute != oldRoute) {
+                if (newRoute.search) {
+                    await store.dispatch("searchProducts", { category: route.query.category, search: route.query.search });
+                } else {
+                    head();
+                    category.value = route.query.category;
+                    await store.dispatch(props.getCategories || "getAllCategory");
+                }
+            }
         }
     );
 
@@ -214,8 +232,8 @@
     import { useHead } from "@vueuse/head";
 
     onBeforeMount(async () => {
-        if (route.query.text) {
-            await store.dispatch("searchProducts", { category: route.query.category, text: route.query.text });
+        if (route.query.search) {
+            await store.dispatch("searchProducts", { category: route.query.category, search: route.query.search });
         } else {
             head();
             category.value = route.query.category;

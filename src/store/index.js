@@ -670,7 +670,7 @@ export default createStore({
                 const res = await axios.request({
                     method: "get",
                     baseURL: config.apiURL,
-                    url: `/products/search/${payload.text}`,
+                    url: `/products/search/${payload.search}`,
                     params: { offset: payload, category: payload.category },
                 });
 

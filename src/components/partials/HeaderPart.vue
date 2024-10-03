@@ -158,66 +158,6 @@
             </div>
 
             <div class="search flex-1 flex flex-row md:gap-[10%] justify-end">
-                <!-- <div class="border-2 ml-3 w-full md:m-0 border-[#2196F3] flex flex-1 max-w-[700px] flex-row rounded-[50px]">
-                    <Input
-                        class="flex-1 w-full rounded-l-[50px]"
-                        autocomplete="off"
-                        type="text"
-                        placeholder="Pesquise pelo nome do produto" />
-
-                    <div class="flex flex-row">
-                        <SelectRoot
-                            v-model="category"
-                            class="bg-black">
-                            <SelectTrigger
-                                class="flex items-center justify-between w-32 px-[15px] text-[13px] gap-[5px]"
-                                aria-label="Customise options">
-                                <SelectValue
-                                    class="whitespace-nowrap"
-                                    placeholder="Por categoria" />
-                                <ChevronDown />
-                            </SelectTrigger>
-
-                            <SelectPortal>
-                                <SelectContent
-                                    class="bg-white rounded shadow-[0px_10px_38px_-10px_rgba(22,_23,_24,_0.35),_0px_10px_20px_-15px_rgba(22,_23,_24,_0.2)] z-[100]"
-                                    :side-offset="5">
-                                    <SelectScrollUpButton class="flex items-center justify-center h-[25px] bg-white text-violet11 cursor-default">
-                                        <ChevronUp class="h-3.5 w-3.5" />
-                                    </SelectScrollUpButton>
-
-                                    <SelectViewport class="p-[5px]">
-                                        <SelectGroup>
-                                            <SelectItem
-                                                v-for="category in categories"
-                                                :key="category._id"
-                                                class="text-[13px] leading-none flex items-center h-[25px] pr-[35px] pl-[25px] relative select-none"
-                                                :value="category._id">
-                                                <SelectItemIndicator class="absolute left-0 w-[25px] inline-flex items-center justify-center">
-                                                    <Check class="h-3.5 w-3.5" />
-                                                </SelectItemIndicator>
-                                                <SelectItemText>
-                                                    {{ category.categoryName }}
-                                                </SelectItemText>
-                                            </SelectItem>
-                                        </SelectGroup>
-                                    </SelectViewport>
-
-                                    <SelectScrollDownButton class="flex items-center justify-center h-[25px] bg-white text-violet11 cursor-default">
-                                        <ChevronDown class="h-3.5 w-3.5" />
-                                    </SelectScrollDownButton>
-                                </SelectContent>
-                            </SelectPortal>
-                        </SelectRoot>
-
-                        <Button
-                            variant="ghost"
-                            class="w-max bg-[#2196F3] rounded-r-[50px] flex gap-2 h-full px-[15px]">
-                            <Search
-                        /></Button>
-                    </div>
-                </div> -->
-
                 <div class="ml-3 w-full md:m-0 border-[#2196F3] flex flex-1 max-w-[700px] flex-row">
                     <el-input
                         v-model="textSearch"
@@ -263,13 +203,11 @@
 <script setup>
     import { onMounted, computed, ref, onBeforeUnmount } from "vue";
     import { useStore } from "vuex";
-    import { useRouter, useRoute } from "vue-router";
+    import { useRouter } from "vue-router";
 
     import { Search } from "lucide-vue-next";
     import { Separator } from "@/components/ui/separator";
     import { Button } from "@/components/ui/button";
-
-    // import { Input } from "@/components/ui/input";
 
     const drawer = ref(false);
 
@@ -279,25 +217,9 @@
         }
     });
 
-    // import {
-    //     SelectContent,
-    //     SelectGroup,
-    //     SelectItem,
-    //     SelectItemIndicator,
-    //     SelectItemText,
-    //     SelectPortal,
-    //     SelectRoot,
-    //     SelectScrollDownButton,
-    //     SelectScrollUpButton,
-    //     SelectTrigger,
-    //     SelectValue,
-    //     SelectViewport,
-    // } from "radix-vue";
-
     import LogoPart from "./LogoPart.vue";
     const store = useStore();
     const router = useRouter();
-    const route = useRoute();
 
     const categories = computed(() => store.state.categories);
     const priceTotal = computed(() => store.getters.cartPrice);
@@ -325,22 +247,20 @@
         });
     }
 
-    async function search() {
+    function search() {
         if (textSearch.value == null) return;
 
         const query = {
-            text: textSearch.value,
+            search: textSearch.value,
         };
 
         if (selectedCategory.value !== null) {
             query.category = selectedCategory.value;
         }
-
         router.push({
             name: "allProductsClient",
             query: query,
         });
-        await store.dispatch("searchProducts", { category: route.query.category, text: route.query.text });
     }
 
     const user = computed(() => JSON.parse(localStorage.getItem("userData")));
