@@ -34,6 +34,16 @@
                     </template>
                 </CardDashboard>
                 <!--end Customers -->
+                <CardDashboard
+                    class="Customers"
+                    :nameCard="`Visitas`"
+                    :result="results.visitsCount"
+                    :percent="`10%`">
+                    <template #icon>
+                        <HandCoins class="w-[40px] h-[40px] text-blue-400" />
+                    </template>
+                </CardDashboard>
+                <!--end Visits -->
             </div>
             <div class="flex-1 bg-white p-2 rounded-md">
                 <ChartComp />

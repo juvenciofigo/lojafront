@@ -597,7 +597,10 @@ export default createStore({
         async estatistic({ commit }) {
             try {
                 const res = await sendAxio("get", `/estatistic`, null, headers());
-                if (res.status === 200) return res.data;
+                if (res.status === 200) {
+                    console.log(res.data);
+                    return res.data;
+                }
                 commit();
             } catch (error) {
                 errorMessage(error);
