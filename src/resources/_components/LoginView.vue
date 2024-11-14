@@ -60,7 +60,9 @@
                             >Limpar</el-button
                         >
                     </div>
-                    <p class="mt-4">Esqueceu sua senha? Clique em <span class="text-decoration-underline">Aqui</span></p>
+                    <p class="mt-4">
+                        Esqueceu sua senha? Clique em <a target="_blank" :href="url"><span class="text-decoration-underline">Aqui</span></a>
+                    </p>
                 </form>
 
                 <!-- Sign Up Form -->
@@ -188,6 +190,8 @@
     import { Close } from "@element-plus/icons-vue";
     const store = useStore();
     const router = useRouter();
+
+    const url = process.env.VUE_APP_API_URL + "/showRecovery";
 
     const loadLoginBtn = ref(false);
     const toggleButtonLoad = ref(false);
