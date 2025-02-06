@@ -36,13 +36,12 @@ const cookieExists = (name) => {
 };
 
 function errorMessage(error) {
-    console.log(error);
     if (error.message === "Network Error") {
-        store.commit("updateSnackbar", { show: true, text: "Servidor fora do ar!", color: "red" });
+        store.commit("updateSnackbar", { text: "Servidor fora do ar!", snackbarType: "error" });
         console.error(error);
         return;
     } else if (error.response) {
-        store.commit("updateSnackbar", { show: true, text: error.response.data.message, color: "red" });
+        store.commit("updateSnackbar", { text: error.response.data.message, snackbarType: "error" });
         return;
     } else {
         console.error(error);

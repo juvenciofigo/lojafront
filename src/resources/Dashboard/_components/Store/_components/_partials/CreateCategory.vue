@@ -190,24 +190,24 @@
 
     async function createCategory() {
         if (!categoryName.value) {
-            store.commit("updateSnackbar", { show: true, text: "Preencha o campo o nome da categoria", color: "red" });
+            store.commit("updateSnackbar", { text: "Preencha o campo o nome da categoria", snackbarType: "error" });
             return;
         }
         await store.dispatch("createCategory", categoryName.value);
     }
 
     async function createSubCategory() {
-        if (!subCategoryName.value) store.commit("updateSnackbar", { show: true, text: "Preencha o campo o nome da subcategoria", color: "red" });
+        if (!subCategoryName.value) store.commit("updateSnackbar", { text: "Preencha o campo o nome da subcategoria", snackbarType: "error" });
 
-        if (!categoryName.value) store.commit("updateSnackbar", { show: true, text: "Escolha uma Categoria", color: "red" });
+        if (!categoryName.value) store.commit("updateSnackbar", { text: "Escolha uma Categoria", snackbarType: "error" });
 
         await store.dispatch("createSubCategory", { categoryID: selectedCategory.value, subCategoryName: subCategoryName.value });
     }
 
     async function createSub_category() {
-        if (!sub_categoryName.value) store.commit("updateSnackbar", { show: true, text: "Preencha o campo o nome da sub_categoria", color: "red" });
+        if (!sub_categoryName.value) store.commit("updateSnackbar", { text: "Preencha o campo o nome da sub_categoria", snackbarType: "error" });
 
-        if (!subCategoryName.value) store.commit("updateSnackbar", { show: true, text: "Escolha uma Subcategoria", color: "red" });
+        if (!subCategoryName.value) store.commit("updateSnackbar", { text: "Escolha uma Subcategoria", snackbarType: "error" });
 
         await store.dispatch("createSub_category", { subCategoryID: selectedSubcategory.value, sub_categoryName: sub_categoryName.value });
     }

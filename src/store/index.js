@@ -73,9 +73,8 @@ export default createStore({
         cartPrice: 0,
 
         /// snackbar
-        snackbar: false,
         snackbarText: "",
-        snackbarColor: "",
+        snackbarType: "",
         redirectTo: null,
         authToken: null,
 
@@ -123,9 +122,8 @@ export default createStore({
         overlay: (state) => state.overlay,
         payment: (state) => state.payment,
         loginOverlay: (state) => state.loginOverlay,
-        snackbar: (state) => state.snackbar,
         snackbarText: (state) => state.snackbarText,
-        snackbarColor: (state) => state.snackbarColor,
+        snackbarType: (state) => state.snackbarType,
     },
 
     mutations: {
@@ -134,11 +132,9 @@ export default createStore({
             state.userDetails = data;
         },
         updateSnackbar(state, payload) {
-            state.snackbar = payload.show;
             state.snackbarText = payload.text;
-            state.snackbarColor = payload.color;
+            state.snackbarType = payload.snackbarType;
             setTimeout(() => {
-                state.snackbar = false;
                 state.snackbarText = "";
             }, 4000);
         },
@@ -262,7 +258,7 @@ export default createStore({
                 const res = await sendAxio("post", `/product`, payload, headers());
 
                 if (res.status === 200) {
-                    commit("updateSnackbar", { show: true, text: "Produto adicionado", color: "green" });
+                    commit("updateSnackbar", { text: "Produto adicionado", snackbarType: "success" });
                     window.location.reload();
                 }
             } catch (error) {
@@ -284,7 +280,7 @@ export default createStore({
                 if (res.data) {
                     const products = res.data;
                     commit("SET_PRODUCTS", products);
-                    commit("updateSnackbar", { show: true, text: "Produto actualizado", color: "green" });
+                    commit("updateSnackbar", { text: "Produto actualizado", snackbarType: "success" });
                     window.location.reload();
                 }
             } catch (error) {
@@ -305,7 +301,7 @@ export default createStore({
                 });
 
                 if (res.data) {
-                    commit("updateSnackbar", { show: true, text: "Produto actualizado", color: "green" });
+                    commit("updateSnackbar", { text: "Produto actualizado", snackbarType: "success" });
                     window.location.reload();
                 }
             } catch (error) {
@@ -323,7 +319,7 @@ export default createStore({
                     headers: headers(),
                 });
 
-                commit("updateSnackbar", { show: true, text: "Produto apagado", color: "green" });
+                commit("updateSnackbar", { text: "Produto apagado", snackbarType: "success" });
                 router.push({ name: "produtos" });
             } catch (error) {
                 errorMessage(error);
@@ -341,7 +337,7 @@ export default createStore({
                 });
 
                 if (res.status === 200) {
-                    commit("updateSnackbar", { show: true, text: "Variçãao criada", color: "green" });
+                    commit("updateSnackbar", { text: "Variçãao criada", snackbarType: "success" });
                     return true;
                 }
             } catch (error) {
@@ -361,7 +357,7 @@ export default createStore({
                 });
 
                 if (res.status === 200) {
-                    commit("updateSnackbar", { show: true, text: "Varição modificada", color: "green" });
+                    commit("updateSnackbar", { text: "Varição modificada", snackbarType: "success" });
                     return true;
                 }
             } catch (error) {
@@ -376,7 +372,7 @@ export default createStore({
                 if (res.status === 200) {
                     return res.data.variation;
                 }
-                commit("updateSnackbar", { show: false, text: "", color: "" });
+                commit("updateSnackbar", { text: "", snackbarType: "" });
             } catch (error) {
                 errorMessage(error);
             }
@@ -388,7 +384,7 @@ export default createStore({
                 if (res.status == 200) {
                     return res.data.variations;
                 }
-                commit("updateSnackbar", { show: false, text: "", color: "" });
+                commit("updateSnackbar", { text: "", snackbarType: "" });
             } catch (error) {
                 errorMessage(error);
             }
@@ -432,7 +428,7 @@ export default createStore({
             try {
                 const res = await sendAxio("patch", `/rating/${payload.rating}/delete`, null, headers(), null);
                 if (res.status === 200) {
-                    commit("updateSnackbar", { show: true, text: "Comentário apagado", color: "green" });
+                    commit("updateSnackbar", { text: "Comentário apagado", snackbarType: "success" });
                 }
                 return;
             } catch (error) {
@@ -484,7 +480,7 @@ export default createStore({
                 });
 
                 if (res.status === 200) {
-                    commit("updateSnackbar", { show: true, text: "Categoria criada", color: "green" });
+                    commit("updateSnackbar", { text: "Categoria criada", snackbarType: "success" });
                     dispatch("getAllCategory");
                     return;
                 }
@@ -504,7 +500,7 @@ export default createStore({
                 });
 
                 if (res.status === 200) {
-                    commit("updateSnackbar", { show: true, text: "SubCategoria criada", color: "green" });
+                    commit("updateSnackbar", { text: "SubCategoria criada", snackbarType: "success" });
                     dispatch("getAllCategory");
                     return;
                 }
@@ -523,7 +519,7 @@ export default createStore({
                     data: payload,
                 });
                 if (res.status === 200) {
-                    commit("updateSnackbar", { show: true, text: "Sub_categoria criada", color: "green" });
+                    commit("updateSnackbar", { text: "Sub_categoria criada", snackbarType: "success" });
                     dispatch("getAllCategory");
                     return;
                 }
@@ -703,7 +699,7 @@ export default createStore({
                 const res = await sendAxio("post", `${config.apiURL}/rating/${payload.productId}`, { ratingScore: payload.ratingScore, ratingText: payload.ratingText }, headers(), null);
 
                 if (res.status === 200) {
-                    commit("updateSnackbar", { show: true, text: "Avaliaçao adicionada!", color: "green" });
+                    commit("updateSnackbar", { text: "Avaliaçao adicionada!", snackbarType: "success" });
                     window.location.reload();
                 }
                 return;
@@ -733,7 +729,7 @@ export default createStore({
 
                     const existingProductIndex = tempCart.findIndex((item) => {
                         if (item.productId == itemProduct.productId) {
-                            if (item.variation.color == itemProduct.variation.color) {
+                            if (item.variation.snackbarType == itemProduct.variation.snackbarType) {
                                 if (item.variation.model == itemProduct.variation.model) {
                                     if (item.variation.material == itemProduct.variation.material) {
                                         return item.variation.size == itemProduct.variation.size;
@@ -754,7 +750,7 @@ export default createStore({
                             productId: itemProduct.productId,
                             quantity: Number(itemProduct.quantity) || 1,
                             variation: {
-                                color: itemProduct.variation.color,
+                                snackbarType: itemProduct.variation.snackbarType,
                                 model: itemProduct.variation.model,
                                 size: itemProduct.variation.size,
                                 material: itemProduct.variation.material,
@@ -764,12 +760,12 @@ export default createStore({
                     }
 
                     setCookie("tempCart", JSON.stringify(tempCart), 7);
-                    commit("updateSnackbar", { show: true, text: "Produto adicionado ao carrinho ", color: "green" });
+                    commit("updateSnackbar", { text: "Produto adicionado ao carrinho ", snackbarType: "success" });
                     return;
                 } else {
                     const res = await sendAxio("post", `/cart/${user.id}/addProduct`, item, headers());
 
-                    commit("updateSnackbar", { show: true, text: `${res.data.message}`, color: "green" });
+                    commit("updateSnackbar", { text: `${res.data.message}`, snackbarType: "success" });
                     return;
                 }
             } catch (error) {
@@ -792,9 +788,9 @@ export default createStore({
                         if (tempCart.length == 0) {
                             window.location.reload();
                         }
-                        commit("updateSnackbar", { show: true, text: "Item removido", color: "green" });
+                        commit("updateSnackbar", { text: "Item removido", snackbarType: "success" });
                     } else {
-                        commit("updateSnackbar", { show: true, text: "Carrinho vaio", color: "green" });
+                        commit("updateSnackbar", { text: "Carrinho vaio", snackbarType: "success" });
                         window.location.reload();
                     }
 
@@ -802,7 +798,7 @@ export default createStore({
                 } else {
                     const res = await sendAxio("delete", `/cart/${user.id}/remove/${payload.item}`, null, headers());
 
-                    commit("updateSnackbar", { show: true, text: `${res.data.message}`, color: "green" });
+                    commit("updateSnackbar", { text: `${res.data.message}`, snackbarType: "success" });
                     return;
                 }
             } catch (error) {
@@ -883,12 +879,12 @@ export default createStore({
                     }
                 }
 
-                commit("updateSnackbar", { show: false, text: "Produto adicionado ao carrinho ", color: "green" });
+                commit("updateSnackbar", { text: "Produto adicionado ao carrinho ", snackbarType: "success" });
                 return;
             } else {
                 const res = await sendAxio("put", `/cart/${user.id}/update/${payload.item}/${Number(payload.quantity)}`, null, headers());
 
-                commit("updateSnackbar", { show: false, text: `${res.data.msg}`, color: "green" });
+                commit("updateSnackbar", { text: `${res.data.msg}`, snackbarType: "success" });
                 return;
             }
         },
@@ -908,7 +904,7 @@ export default createStore({
                     const res = await sendAxio("post", `/order`, { cart, delivery }, headers());
                     if (res.status === 200) {
                         const order = res.data.order;
-                        commit("updateSnackbar", { show: true, text: "Pedido enviado", color: "green" });
+                        commit("updateSnackbar", { text: "Pedido enviado", snackbarType: "success" });
                         commit("SET_ID_ORDER", order._id);
                         commit("SET_AMOUTPAYMENT", order.totalPrice);
                         commit("SET_PAYMENT");
@@ -994,7 +990,7 @@ export default createStore({
                 const res = await sendAxio("patch", `/order/${payload}`, null, headers());
 
                 if (res.status === 200) {
-                    commit("updateSnackbar", { show: true, text: "Pedido apagado", color: "green" });
+                    commit("updateSnackbar", { text: "Pedido apagado", snackbarType: "success" });
                     router.go(0);
                 }
             } catch (error) {
@@ -1007,7 +1003,7 @@ export default createStore({
                 const res = await sendAxio("patch", `/order/${payload}`, null, headers());
 
                 if (res.status === 200) {
-                    commit("updateSnackbar", { show: true, text: "Pedido apagado", color: "green" });
+                    commit("updateSnackbar", { text: "Pedido apagado", snackbarType: "success" });
                     router.go(0);
                 }
             } catch (error) {
@@ -1029,7 +1025,7 @@ export default createStore({
             try {
                 const res = await sendAxio("post", `/user`, values, null);
                 if (res.status === 200) {
-                    commit("updateSnackbar", { show: true, text: "Conta criada, faça o login", color: "green" });
+                    commit("updateSnackbar", { text: "Conta criada, faça o login", snackbarType: "success" });
                     commit("SET_LOGIN_OVERLAY", true);
                 }
             } catch (error) {
@@ -1068,7 +1064,7 @@ export default createStore({
                         })
                     );
                 } else {
-                    commit("updateSnackbar", { show: true, text: "Dados errados", color: "red" });
+                    commit("updateSnackbar", { text: "Dados errados", snackbarType: "error" });
                     return;
                 }
 
@@ -1082,7 +1078,7 @@ export default createStore({
                     }
                 }
 
-                commit("updateSnackbar", { show: true, text: "Bem-vindo", color: "green" });
+                commit("updateSnackbar", { text: "Bem-vindo", snackbarType: "success" });
                 let redirect = null;
                 if (state.redirectTo !== null) {
                     redirect = state.redirectTo;
@@ -1107,7 +1103,7 @@ export default createStore({
 
                 commit("CLEAR_CARTPRICE");
 
-                commit("updateSnackbar", { show: false, text: "", color: "" });
+                commit("updateSnackbar", { text: "", snackbarType: "" });
 
                 window.location.reload();
                 return;
@@ -1153,10 +1149,10 @@ export default createStore({
                 const res = await sendAxio("put", `/customer/${payload}/address`, null, headers());
 
                 if (res.status === 200) {
-                    commit("updateSnackbar", { show: true, text: "Endereço apagado", color: "green" });
+                    commit("updateSnackbar", { text: "Endereço apagado", snackbarType: "success" });
                     return;
                 } else {
-                    commit("updateSnackbar", { show: true, text: "Falha ao apagar", color: "green" });
+                    commit("updateSnackbar", { text: "Falha ao apagar", snackbarType: "success" });
                     return;
                 }
             } catch (error) {
@@ -1172,7 +1168,7 @@ export default createStore({
             try {
                 const res = await sendAxio("post", `/mpesaPay`, { ...payload, orderId: state.orderPaymentId }, headers());
                 if (res.status === 200 || res.status === 201) {
-                    commit("updateSnackbar", { show: true, text: res.data.message, color: "green" });
+                    commit("updateSnackbar", { text: res.data.message, snackbarType: "success" });
                     commit("SET_PAYMENT");
                     window.location.href = `/perfil/${user.id}/pedidos`;
                     return;

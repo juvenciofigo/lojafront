@@ -5,8 +5,7 @@
             <p class="text-xs indent-2">Preencha as informações abaixo</p>
         </div>
         <div>
-            <form
-                @submit.prevent="updateProduct">
+            <form @submit.prevent="updateProduct">
                 <div class="flex flex-row gap-8">
                     <div class="Right flex-[2] flex flex-col gap-8">
                         <div class="TIT_Desc">
@@ -332,7 +331,7 @@
     // Função para criar uma nova categoria
     async function createCategory() {
         if (!newCategoryName.value) {
-            store.commit("updateSnackbar", { show: true, text: "Preencha o campo o nome da categoria", color: "red" });
+            store.commit("updateSnackbar", { text: "Preencha o campo o nome da categoria", snackbarType: "error" });
             return;
         }
         await store.dispatch("createCategory", newCategoryName.value);
@@ -351,7 +350,7 @@
         //     !sku.value ||
         //     !productVendor.value
         // ) {
-        //     store.commit("updateSnackbar", { show: true, text: "Preencha todos os campos", color: "red" });
+        //     store.commit("updateSnackbar", { text: "Preencha todos os campos", snackbarType: "error" });
         //     return;
         // }
         // try {

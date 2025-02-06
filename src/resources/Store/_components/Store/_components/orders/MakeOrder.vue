@@ -161,9 +161,8 @@
     async function sendOrder() {
         if (!selectAddress.value) {
             store.commit("updateSnackbar", {
-                show: true,
                 text: "Preencha o campo com as informações de envio",
-                color: "red",
+                snackbarType: "error",
             });
             loading.value = false;
             prevStep();

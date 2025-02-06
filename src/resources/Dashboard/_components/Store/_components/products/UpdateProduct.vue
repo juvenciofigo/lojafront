@@ -272,7 +272,7 @@
 
 <script setup>
     import { useStore } from "vuex";
-    import { ref, onMounted, computed, } from "vue";
+    import { ref, onMounted, computed } from "vue";
     import Editor from "@tinymce/tinymce-vue";
     import { useRoute } from "vue-router";
     import { Button } from "@/components/ui/button";
@@ -337,7 +337,7 @@
     // Função para criar uma nova categoria
     async function createCategory() {
         if (!newCategoryName.value) {
-            store.commit("updateSnackbar", { show: true, text: "Preencha o campo o nome da categoria", color: "red" });
+            store.commit("updateSnackbar", { text: "Preencha o campo o nome da categoria", snackbarType: "error" });
             return;
         }
         await store.dispatch("createCategory", newCategoryName.value);
@@ -356,7 +356,7 @@
             !sku.value ||
             !productVendor.value
         ) {
-            store.commit("updateSnackbar", { show: true, text: "Preencha todos os campos", color: "red" });
+            store.commit("updateSnackbar", { text: "Preencha todos os campos", snackbarType: "error" });
             return;
         }
         try {

@@ -229,7 +229,7 @@ router.beforeEach(async (to, from, next) => {
                 next();
             } else {
                 store.commit("setRedirectTo", to.fullPath);
-                store.commit("updateSnackbar", { show: true, text: "Faça Login", color: "red" });
+                store.commit("updateSnackbar", { text: "Faça Login", snackbarType: "error" });
                 store.commit("SET_LOGIN_OVERLAY", true);
                 next(false);
             }
@@ -242,11 +242,11 @@ router.beforeEach(async (to, from, next) => {
             } else {
                 if (Number(tring) < 2) {
                     store.commit("Set_tringValue");
-                    store.commit("updateSnackbar", { show: true, text: "Sem permisão", color: "red" });
+                    store.commit("updateSnackbar", { text: "Sem permisão", snackbarType: "error" });
                     store.commit("SET_LOGIN_OVERLAY", true);
                     next(false);
                 } else {
-                    store.commit("updateSnackbar", { show: true, text: "Página inicial", color: "orange" });
+                    store.commit("updateSnackbar", { text: "Página inicial", color: "orange" });
                     next({ name: "home" });
                 }
             }

@@ -23,7 +23,7 @@
     function fechar() {
         store.commit("SET_PAYMENT");
         store.commit("SET_ID_ORDER", null);
-        store.commit("updateSnackbar", { show: true, text: "Pagamento não relalizado", color: "red" });
+        store.commit("updateSnackbar", { text: "Pagamento não relalizado", snackbarType: "error" });
         store.commit("SET_AMOUTPAYMENT", 0);
     }
 

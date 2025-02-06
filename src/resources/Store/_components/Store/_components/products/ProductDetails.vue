@@ -164,7 +164,7 @@
         const res = await verifyVaraiations();
 
         if (res) {
-            store.commit("updateSnackbar", { show: true, text: res.error, color: "red" });
+            store.commit("updateSnackbar", { text: res.error, snackbarType: "error" });
             loading_button.value = false;
             return;
         }
@@ -207,7 +207,7 @@
         const res = await verifyVaraiations();
 
         if (res) {
-            store.commit("updateSnackbar", { show: true, text: res.error, color: "red" });
+            store.commit("updateSnackbar", { text: res.error, snackbarType: "error" });
             return;
         }
         router.push({ name: "makeOrder", query: { productsFrom: "payNow", product: route.params.id, quantity: quantity.value || 1, variation: toRaw(variation.value) } });

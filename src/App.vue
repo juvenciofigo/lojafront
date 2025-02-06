@@ -7,20 +7,6 @@
 
         <!-- Paymnet -->
         <PaymentDialog />
-
-        <v-snackbar
-            v-model="snackbar"
-            :color="snackbarColor">
-            {{ snackbarText }}
-            <template v-slot:actions>
-                <v-btn
-                    variant="text"
-                    @click="closeSnackbar">
-                    Fechar
-                </v-btn>
-            </template>
-        </v-snackbar>
-
         <!-- Auth -->
         <el-dialog
             :close-on-press-escape="false"
@@ -40,23 +26,34 @@
 </template>
 
 <script setup>
-    import { computed } from "vue";
+    import { computed, watch } from "vue";
     import { useStore } from "vuex";
+    import { ElMessage } from "element-plus";
     import LoadPage from "./components/partials/LoadPage.vue";
     import PaymentDialog from "@/resources/Store/_components/Store/_components/payment/PaymentDialog.vue";
     import LoginView from "./resources/_components/LoginView.vue";
     const store = useStore();
-    const snackbar = computed(() => store.getters.snackbar);
-    const snackbarText = computed(() => store.getters.snackbarText);
-    const snackbarColor = computed(() => store.getters.snackbarColor);
+
     const loginOverlay = computed(() => store.getters.loginOverlay);
+    
+    const snackbarText = computed(() => store.getters.snackbarText);
+    const snackbarType = computed(() => store.getters.snackbarType);
+
+    watch(
+        () => snackbarText.value,
+        (text) => {
+            if (text != "") {
+                ElMessage({
+                    message: snackbarText,
+                    type: snackbarType.value,
+                });
+            }
+        }
+    );
 
     function dialogLogClose() {
         store.commit("SET_LOGIN_OVERLAY", false);
     }
-    const closeSnackbar = () => {
-        store.commit("updateSnackbar", { show: false, text: "" });
-    };
 </script>
 <style scoped>
     .v-card-item,
