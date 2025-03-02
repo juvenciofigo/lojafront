@@ -3,28 +3,6 @@ import store from "@/store/index";
 import NProgress from "nprogress";
 import "nprogress/nprogress.css";
 
-function waitForImagesToLoad() {
-    return new Promise((resolve) => {
-        const images = Array.from(document.images);
-        if (images.length === 0) {
-            resolve();
-        }
-
-        let loadedCount = 0;
-        images.forEach((img) => {
-            if (img.complete) {
-                loadedCount++;
-                if (loadedCount === images.length) resolve();
-            } else {
-                img.onload = img.onerror = () => {
-                    loadedCount++;
-                    if (loadedCount === images.length) resolve();
-                };
-            }
-        });
-    });
-}
-
 const routes = [
     {
         path: "/",
@@ -285,7 +263,8 @@ router.beforeEach(async (to, from, next) => {
 });
 
 router.afterEach(async () => {
-    await waitForImagesToLoad();
-    NProgress.done();
+    window.onload = () => {
+        NProgress.done();
+    };
 });
 export default router;
