@@ -162,7 +162,7 @@
         if (!selectAddress.value) {
             store.commit("updateSnackbar", {
                 text: "Preencha o campo com as informações de envio",
-                snackbarType: "error",
+                snackbarType: "warning",
             });
             loading.value = false;
             prevStep();

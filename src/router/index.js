@@ -1,5 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
 import store from "@/store/index";
+import NProgress from "nprogress";
+import "nprogress/nprogress.css";
 
 const routes = [
     {
@@ -222,6 +224,7 @@ const router = createRouter({
 });
 
 router.beforeEach(async (to, from, next) => {
+    NProgress.start(); // Inicia a barra de progresso
     try {
         if (to.matched.some((record) => record.meta.requiresLogin)) {
             const isAuthenticated = await store.getters.isAuthenticated("authToken");
@@ -229,7 +232,7 @@ router.beforeEach(async (to, from, next) => {
                 next();
             } else {
                 store.commit("setRedirectTo", to.fullPath);
-                store.commit("updateSnackbar", { text: "Faça Login", snackbarType: "error" });
+                store.commit("updateSnackbar", { text: "Faça Login", snackbarType: "warning" });
                 store.commit("SET_LOGIN_OVERLAY", true);
                 next(false);
             }
@@ -246,7 +249,7 @@ router.beforeEach(async (to, from, next) => {
                     store.commit("SET_LOGIN_OVERLAY", true);
                     next(false);
                 } else {
-                    store.commit("updateSnackbar", { text: "Página inicial", color: "orange" });
+                    store.commit("updateSnackbar", { text: "Página inicial", snackbarType: "warning" });
                     next({ name: "home" });
                 }
             }
@@ -259,4 +262,7 @@ router.beforeEach(async (to, from, next) => {
     }
 });
 
+router.afterEach(() => {
+    NProgress.done(); // Finaliza a barra de progresso
+});
 export default router;

@@ -13,7 +13,7 @@
             @click.stop="confirmDelete(address._id)"
             class="p-[3px] rounded-md shadow-[#969191] shadow-sm">
             <PencilLine
-                color="geen"
+                color="green"
                 size="20" />
         </button>
         <button

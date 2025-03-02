@@ -331,7 +331,7 @@
     // Função para criar uma nova categoria
     async function createCategory() {
         if (!newCategoryName.value) {
-            store.commit("updateSnackbar", { text: "Preencha o campo o nome da categoria", snackbarType: "error" });
+            store.commit("updateSnackbar", { text: "Preencha o campo o nome da categoria", snackbarType: "warning" });
             return;
         }
         await store.dispatch("createCategory", newCategoryName.value);
@@ -350,7 +350,7 @@
         //     !sku.value ||
         //     !productVendor.value
         // ) {
-        //     store.commit("updateSnackbar", { text: "Preencha todos os campos", snackbarType: "error" });
+        //     store.commit("updateSnackbar", { text: "Preencha todos os campos", snackbarType: "warning" });
         //     return;
         // }
         // try {
