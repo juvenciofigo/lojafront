@@ -1,5 +1,5 @@
 <template>
-    <v-app class="dark bg-slate-50 overflow-hidden">
+    <v-app class="mt-1 dark bg-slate-50 overflow-hidden">
         <!--  main -->
         <v-main class="main-vier overflow-hidden">
             <router-view class="principal-viewr" />
