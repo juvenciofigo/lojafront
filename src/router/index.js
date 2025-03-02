@@ -229,6 +229,7 @@ const router = createRouter({
 });
 
 router.beforeEach(async (to, from, next) => {
+    NProgress.done();
     NProgress.start(); // Inicia a barra de progresso
     try {
         if (to.matched.some((record) => record.meta.requiresLogin)) {
