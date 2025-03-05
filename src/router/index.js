@@ -2,10 +2,11 @@ import { createRouter, createWebHistory } from "vue-router";
 import store from "@/store/index";
 import NProgress from "nprogress";
 import "nprogress/nprogress.css";
+import { nextTick } from "vue";
 
 NProgress.configure({
-    showSpinner: false, 
-    easing: "ease-out", 
+    showSpinner: false,
+    easing: "ease-out",
 });
 
 const routes = [
@@ -269,8 +270,9 @@ router.beforeEach(async (to, from, next) => {
 });
 
 router.afterEach(async () => {
-    window.onload = () => {
+    nextTick(() => {
+
         NProgress.done();
-    };
+    });
 });
 export default router;
