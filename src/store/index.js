@@ -897,9 +897,9 @@ export default createStore({
             const user = JSON.parse(localStorage.getItem("userData"));
 
             async function sendOrderRequest(data) {
-                const { cart, address, reference } = data;
+                const { cart, address } = data;
 
-                const delivery = { address, reference };
+                const delivery = { address };
                 try {
                     const res = await sendAxio("post", `/order`, { cart, delivery }, headers());
                     if (res.status === 200) {
@@ -925,14 +925,12 @@ export default createStore({
                         await sendOrderRequest({
                             cart: payload.cart,
                             address: addressId,
-                            reference: payload.reference,
                         });
                     }
                 } else {
                     await sendOrderRequest({
                         cart: payload.cart,
                         address: payload.selectAddress.addressId,
-                        reference: payload.reference,
                     });
                 }
             } catch (error) {

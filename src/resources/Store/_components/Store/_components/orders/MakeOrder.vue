@@ -1,61 +1,67 @@
 <template>
-    <div class="flex-1">
-        <v-stepper
-            prev-text="Anterior"
-            next-text="Próximo"
-            editable
-            v-model="currentStep">
-            <template v-slot:default="{ prev, next }">
-                <v-stepper-header>
-                    <template
-                        v-for="(step, index) in steps"
-                        :key="index">
-                        <v-stepper-item
-                            :complete="currentStep > index"
-                            :value="index + 1"
-                            :title="step">
-                        </v-stepper-item>
+    <div class="stepper mb-2">
+        <div>
+            <el-steps
+                :active="active"
+                align-center>
+                <template
+                    v-for="(step, index) in steps"
+                    :key="index">
+                    <el-step :title="step" />
+                </template>
+            </el-steps>
 
-                        <v-divider
-                            v-if="index !== steps.length - 1"
-                            :key="`divider-${index}`">
-                        </v-divider>
-                    </template>
-                </v-stepper-header>
+            <ShippingInfoStep
+                v-if="active === 0"
+                :addressSkeleton="addressRes"
+                @address="handleDeliveryData" />
+            <ConfirmationStep
+                v-if="active === 1"
+                @submit="handleConfirmationData" />
+        </div>
 
-                <v-stepper-window>
-                    <ShippingInfoStep
-                        :currentStep="currentStep"
-                        :addressSkeleton="addressRes"
-                        @next="nextStep"
-                        @address="handleDeliveryData" />
-                    <ConfirmationStep
-                        :currentStep="currentStep"
-                        @submit="handleConfirmationData"
-                        @prev="prevStep" />
-                </v-stepper-window>
-
-                <v-stepper-actions
-                    :disabled="disabled"
-                    @click:next="next"
-                    @click:prev="prev">
-                </v-stepper-actions>
-            </template>
-        </v-stepper>
         <div class="mt-2 flex flex-row justify-end">
-            <v-btn
-                :disabled="buttonStatus"
-                :loading="loading"
-                class="self-end button"
-                @click="sendOrder()">
-                Finalizar Pedido
-            </v-btn>
+            <el-button
+                :disabled="active === 1"
+                @click="next"
+                >Próximo</el-button
+            >
+
+            <el-button
+                :disabled="active === 0 || loading"
+                @click="previous"
+                >Anterior</el-button
+            >
+
+            <span :class="active !== 1 ? 'hidden' : ''">
+                <el-button
+                    :disabled="active !== 1"
+                    :loading="loading"
+                    @click="sendOrder()">
+                    Finalizar Pedido
+                </el-button>
+            </span>
         </div>
     </div>
 </template>
 
 <script setup>
     import { ref, computed, onBeforeUnmount, onBeforeMount, toRaw } from "vue";
+
+    const active = ref(0);
+
+    function next() {
+        if (active.value < 1) {
+            active.value++;
+        }
+    }
+
+    const previous = () => {
+        if (active.value > 0) {
+            active.value--;
+        }
+    };
+
     import { useStore } from "vuex";
     import { useRoute, useRouter } from "vue-router";
 
@@ -65,21 +71,9 @@
     const route = useRoute();
     const router = useRouter();
     const store = useStore();
-    const steps = ref(["Informações de Envio", "Confirmação"]);
-    const currentStep = ref(1);
+    const steps = ["Informações de Envio", "Confirmação"];
     const isAuthenticated = ref(computed(() => store.getters.isAuthenticated("authToken")));
     const addressRes = ref(false);
-
-    const nextStep = () => {
-        currentStep.value++;
-    };
-
-    const prevStep = () => {
-        currentStep.value--;
-    };
-
-    const disabled = computed(() => (currentStep.value === 1 ? "prev" : currentStep.value === steps.value.length ? "next" : undefined));
-    const buttonStatus = computed(() => currentStep.value !== steps.value.length);
 
     // before Unmount
     onBeforeUnmount(() => {
@@ -125,27 +119,6 @@
         addressRes.value = true;
     }
 
-    function gerReferenceNumeber() {
-        const caracteres = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-        const caracteresLength = caracteres.length;
-        const tamanhoMinimo = 6;
-        const tamanhoMaximo = 20;
-
-        // Gerar um timestamp único
-        const timestamp = new Date().getTime().toString();
-
-        // Gerar um número aleatório de caracteres
-        const numeroAleatorio = Array.from({ length: tamanhoMaximo }, () => caracteres.charAt(Math.floor(Math.random() * caracteresLength))).join("");
-
-        // Calcula o tamanho do número de referência
-        const tamanho = Math.floor(Math.random() * (tamanhoMaximo - tamanhoMinimo + 1)) + tamanhoMinimo;
-
-        // Combinar o timestamp e o número aleatório para formar o número de referência
-        const numeroReferencia = `${timestamp}${numeroAleatorio}`.slice(0, tamanho);
-
-        return numeroReferencia;
-    }
-
     // Finalizar o pedido
     let selectAddress = ref(null);
     const confirmationData = ref(null);
@@ -159,13 +132,13 @@
     const loading = ref(false);
 
     async function sendOrder() {
+        loading.value = true;
         if (!selectAddress.value) {
             store.commit("updateSnackbar", {
                 text: "Preencha o campo com as informações de envio",
                 snackbarType: "warning",
             });
             loading.value = false;
-            prevStep();
             return;
         }
 
@@ -177,7 +150,6 @@
         const res = await store.dispatch("sendOrder", {
             selectAddress: toRaw(selectAddress.value),
             cart: cart.value.cartId,
-            reference: gerReferenceNumeber(),
         });
 
         if (!res || res === false) {
@@ -185,6 +157,7 @@
         }
     }
 </script>
+
 <style scoped>
     .button {
         background-color: #2da848;

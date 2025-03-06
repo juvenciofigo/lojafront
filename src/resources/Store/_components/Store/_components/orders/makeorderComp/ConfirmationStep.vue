@@ -1,6 +1,7 @@
 <template>
-    <v-stepper-window-item :value="2">
-        <CartProductsComp
+    <div class="flex flex-col">
+
+        <CartProductsComp class="self-center"
             :cart="cart"
             :tableRowHeight="'h-20'"
             :actionButton="'hidden'" />
@@ -30,7 +31,7 @@
             </Table>
         </div>
         <br />
-    </v-stepper-window-item>
+    </div>
 </template>
 <script setup>
     import { useStore } from "vuex";

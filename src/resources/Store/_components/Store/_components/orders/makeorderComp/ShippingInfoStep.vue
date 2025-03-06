@@ -1,171 +1,194 @@
 <template>
-    <v-stepper-window-item :value="1">
-        <h3 class="text-2xl">Informações de envio</h3>
-        <br />
-
-        <div class="flex flex-col">
-            <h2>Selecione o Endereço</h2>
+    <div class="flex flex-col">
+        <div class="flex flex-col p-2">
+            <h2>Selecione o Endereço ou adicione um novo</h2>
 
             <div v-if="addressSkeleton === false">
                 <AddressCompSkeleton />
             </div>
+
             <template v-else>
                 <ul
                     v-if="addresses && addresses.length > 0"
-                    class="flex flex-col md:flex-row gap-4">
-                    <template
+                    class="grid grid-cols-2 md:flex flex-row flex-wrap gap-1">
+                    <li
                         v-for="(address, index) in addresses"
-                        :key="index">
-                        <li
-                            :value="address._id"
-                            @click="select(index)"
-                            class="flex address min-w-60 hover:-translate-y-0.5 flex-col flex-wrap gap-4 w-max rounded-md cursor-pointer border-[1px] p-2 hover:border-[#f0d4d4] duration-500 border-[#d6d3d35b">
-                            <AddressComp :address="address" />
-                        </li>
-                    </template>
+                        :key="index"
+                        :value="address._id"
+                        @click="select(index)"
+                        class="col-span-1 
+                        md:flex flex-col 
+                        flex-wrap gap-4 
+                        p-4
+                        rounded-md 
+                        cursor-pointer 
+                        border 
+                        hover:-translate-y-1 
+                        duration-500 
+                        border-[#e5e7eb] bg-[#f9fafb] hover:border-[#e0a9a9] shadow-md address">
+                        <AddressComp :address="address" />
+                    </li>
                 </ul>
             </template>
         </div>
         <br />
         <el-collapse
+            class="flex flex-col p-2"
             v-model="activeName"
             accordion>
             <el-collapse-item title="Novo Enderenço">
                 <form @submit.stop>
-                    <div class="flex flex-col gap-3">
-                        <!-- Nome -->
-                        <v-text-field
-                            :disabled="disabledTextarea || addressSkeleton == false"
-                            v-model="firstName.value.value"
-                            variant="outlined"
-                            placeholder="Nome"
-                            density="compact"
-                            bg-color="white"
-                            :counter="40"
-                            :error-messages="firstName.errorMessage.value"
-                            label="Nome"></v-text-field>
+                    <div class="md:flex mb-2 p-2 flex-row gap-4 justify-center bg-blue-200">
+                        <!-- informacoes pessoais -->
+                        <div class="md:flex flex-row gap-4">
+                            <div>
+                                <!-- Nome -->
+                                <div class="w-full">
+                                    <el-input
+                                        :disabled="disabledTextarea || addressSkeleton == false"
+                                        type="text"
+                                        autocomplete="Name"
+                                        v-model="firstName.value.value"
+                                        placeholder="Nome" />
+                                    <span class="error-message">{{ firstName.errorMessage.value }}</span>
+                                </div>
+                                <!-- Apelido -->
+                                <div class="w-full">
+                                    <el-input
+                                        :disabled="disabledTextarea || addressSkeleton == false"
+                                        type="text"
+                                        autocomplete="lastname"
+                                        v-model="lastName.value.value"
+                                        placeholder="Apelido" />
+                                    <span class="error-message">{{ lastName.errorMessage.value }}</span>
+                                </div>
+                            </div>
 
-                        <!-- Apelido -->
-                        <v-text-field
-                            :disabled="disabledTextarea || addressSkeleton == false"
-                            v-model="lastName.value.value"
-                            variant="outlined"
-                            placeholder="Nome"
-                            density="compact"
-                            bg-color="white"
-                            :counter="40"
-                            :error-messages="lastName.errorMessage.value"
-                            label="Apelido"></v-text-field>
+                            <div class="flex flex-col">
+                                <!-- Email -->
+                                <div class="w-full">
+                                    <el-input
+                                        :disabled="disabledTextarea || addressSkeleton == false"
+                                        type="text"
+                                        autocomplete="email"
+                                        v-model="email.value.value"
+                                        placeholder="Email" />
+                                    <span class="error-message">{{ email.errorMessage.value }}</span>
+                                </div>
+                                <!-- Número de Celular -->
+                                <div class="w-full">
+                                    <el-input
+                                        :disabled="disabledTextarea || addressSkeleton == false"
+                                        type="text"
+                                        autocomplete="tel"
+                                        v-model="cellNumber.value.value"
+                                        placeholder="Telefone" />
+                                    <span class="error-message">{{ cellNumber.errorMessage.value }}</span>
+                                </div>
+                            </div>
+                        </div>
 
-                        <!-- Email -->
-                        <v-text-field
-                            :disabled="disabledTextarea || addressSkeleton == false"
-                            v-model="email.value.value"
-                            autocomplete="email"
-                            variant="outlined"
-                            density="compact"
-                            bg-color="white"
-                            :error-messages="email.errorMessage.value"
-                            label="E-mail"></v-text-field>
+                        <!-- informacoes de endereço -->
+                        <div class="flex flex-row gap-4">
+                            <div class="">
+                                <!-- Bairro -->
+                                <div class="w-full">
+                                    <el-input
+                                        name="neighborhood"
+                                        :disabled="disabledTextarea || addressSkeleton == false"
+                                        type="text"
+                                        autocomplete="address"
+                                        v-model="neighborhood.value.value"
+                                        placeholder="Bairro" />
+                                    <span class="error-message">{{ neighborhood.errorMessage.value }}</span>
+                                </div>
 
-                        <!-- Número de Celular -->
-                        <v-text-field
-                            :disabled="disabledTextarea || addressSkeleton == false"
-                            v-model="cellNumber.value.value"
-                            autocomplete="tel"
-                            variant="outlined"
-                            density="compact"
-                            bg-color="white"
-                            :error-messages="cellNumber.errorMessage.value"
-                            label="Número de Celular"></v-text-field>
+                                <!-- Cidade -->
+                                <div class="w-full">
+                                    <el-input
+                                        name="City"
+                                        :disabled="disabledTextarea || addressSkeleton == false"
+                                        type="text"
+                                        autocomplete="Cidade"
+                                        v-model="city.value.value"
+                                        placeholder="Cidade" />
+                                    <span class="error-message">{{ city.errorMessage.value }}</span>
+                                </div>
 
-                        <!-- Bairro -->
-                        <v-text-field
-                            :disabled="disabledTextarea || addressSkeleton == false"
-                            v-model="neighborhood.value.value"
-                            variant="outlined"
-                            placeholder="Cidade"
-                            density="compact"
-                            bg-color="white"
-                            :error-messages="neighborhood.errorMessage.value"
-                            label="Bairro"></v-text-field>
+                                <!-- Província -->
+                                <div class="w-full">
+                                    <el-input
+                                        name="Província"
+                                        :disabled="disabledTextarea || addressSkeleton == false"
+                                        type="text"
+                                        autocomplete="Província"
+                                        v-model="province.value.value"
+                                        placeholder="Província" />
+                                    <span class="error-message">{{ province.errorMessage.value }}</span>
+                                </div>
 
-                        <!-- Endereço completo -->
-                        <v-text-field
-                            :disabled="disabledTextarea || addressSkeleton == false"
-                            v-model="complete.value.value"
-                            variant="outlined"
-                            placeholder="Endereço"
-                            density="compact"
-                            bg-color="white"
-                            :error-messages="complete.errorMessage.value"
-                            label="Endereço Completo"></v-text-field>
+                                <!-- País -->
+                                <div class="w-full">
+                                    <el-input
+                                        name="País"
+                                        :disabled="disabledTextarea || addressSkeleton == false"
+                                        type="text"
+                                        autocomplete="contry"
+                                        v-model="country.value.value"
+                                        placeholder="País" />
+                                    <span class="error-message">{{ country.errorMessage.value }}</span>
+                                </div>
+                            </div>
 
-                        <!-- Província -->
-                        <v-text-field
-                            :disabled="disabledTextarea || addressSkeleton == false"
-                            v-model="province.value.value"
-                            variant="outlined"
-                            placeholder="Província"
-                            density="compact"
-                            bg-color="white"
-                            :error-messages="province.errorMessage.value"
-                            label="Província"></v-text-field>
+                            <div>
+                                <!-- Endereço completo -->
+                                <div class="w-full">
+                                    <el-input
+                                        name="Endereço"
+                                        :disabled="disabledTextarea || addressSkeleton == false"
+                                        type="text"
+                                        autocomplete="Address "
+                                        v-model="complete.value.value"
+                                        placeholder="Enderenço completo" />
+                                    <span class="error-message">{{ complete.errorMessage.value }}</span>
+                                </div>
 
-                        <!-- Cidade -->
-                        <v-text-field
-                            :disabled="disabledTextarea || addressSkeleton == false"
-                            v-model="city.value.value"
-                            variant="outlined"
-                            placeholder="Cidade"
-                            density="compact"
-                            bg-color="white"
-                            :error-messages="city.errorMessage.value"
-                            label="Cidade"></v-text-field>
+                                <!-- Postal -->
+                                <div class="w-full">
+                                    <el-input
+                                        name="Código postal"
+                                        :disabled="disabledTextarea || addressSkeleton == false"
+                                        type="text"
+                                        autocomplete="postalCode"
+                                        v-model="postalCode.value.value"
+                                        placeholder="Código postal" />
+                                    <span class="error-message">{{ postalCode.errorMessage.value }}</span>
+                                </div>
+                                <!-- Referencia -->
+                                <div class="w-full">
+                                    <el-input
+                                        name="Ponto de referência"
+                                        :disabled="disabledTextarea || addressSkeleton == false"
+                                        type="textarea"
+                                        v-model="reference.value.value"
+                                        autosize
+                                        placeholder="Ponto de referência" />
+                                    <span class="error-message">{{ reference.errorMessage.value }}</span>
+                                </div>
 
-                        <!-- Postal -->
-                        <v-text-field
-                            :disabled="disabledTextarea || addressSkeleton == false"
-                            v-model="postalCode.value.value"
-                            variant="outlined"
-                            placeholder="Cidade"
-                            density="compact"
-                            bg-color="white"
-                            :error-messages="postalCode.errorMessage.value"
-                            label="Código postal"></v-text-field>
-
-                        <!-- País -->
-                        <v-text-field
-                            :disabled="disabledTextarea || addressSkeleton == false"
-                            v-model="country.value.value"
-                            variant="outlined"
-                            placeholder="País"
-                            density="compact"
-                            bg-color="white"
-                            :error-messages="country.errorMessage.value"
-                            label="País"></v-text-field>
-
-                        <!-- Referencia -->
-                        <v-text-field
-                            :disabled="disabledTextarea || addressSkeleton == false"
-                            v-model="reference.value.value"
-                            variant="outlined"
-                            placeholder="Referência"
-                            density="compact"
-                            bg-color="white"
-                            :error-messages="reference.errorMessage.value"
-                            label="Referência"></v-text-field>
-
-                        <!-- Nota -->
-                        <v-textarea
-                            :disabled="disabledTextarea || addressSkeleton == false"
-                            v-model="note.value.value"
-                            variant="outlined"
-                            placeholder="Nota"
-                            density="compact"
-                            bg-color="white"
-                            :error-messages="note.errorMessage.value"
-                            label="Nota"></v-textarea>
+                                <!-- Nota -->
+                                <div class="w-full">
+                                    <el-input
+                                        name="Nota"
+                                        :disabled="disabledTextarea || addressSkeleton == false"
+                                        type="textarea"
+                                        v-model="note.value.value"
+                                        autosize
+                                        placeholder="Nota" />
+                                    <span class="error-message">{{ note.errorMessage.value }}</span>
+                                </div>
+                            </div>
+                        </div>
 
                         <input
                             v-model="addressId.value.value"
@@ -179,11 +202,13 @@
                         <el-button
                             size="small"
                             type="success"
+                            class="text-black"
                             :disabled="disabledTextarea"
                             @click="submit()"
-                            >Enviar</el-button
+                            >Submeter</el-button
                         >
                         <el-button
+                            class="text-black"
                             size="small"
                             type="danger"
                             style="background-color: rgb(204, 15, 15)"
@@ -199,7 +224,7 @@
                 </form>
             </el-collapse-item>
         </el-collapse>
-    </v-stepper-window-item>
+    </div>
 </template>
 
 <script setup>
@@ -227,10 +252,8 @@
     const { handleSubmit, handleReset } = useForm({
         validationSchema: toTypedSchema(
             z.object({
-                firstName: z
-                    .string()
-                    .regex(/^[\p{L}\s'-]+$/u, { message: "O nome deve conter apenas letras, espaços, apóstrofos e hífens" })
-                    .min(4, { message: "O nome deve ter no mínimo 4 caracteres" }),
+                firstName: z.string().regex(/^[\p{L}\s'-]+$/u, { message: "O nome deve conter apenas letras, espaços, apóstrofos e hífens" }),
+                // .min(4, { message: "O nome deve ter no mínimo 4 caracteres" })
                 lastName: z
                     .string()
                     .regex(/^[\p{L}\s'-]+$/u, { message: "O apelido deve conter apenas letras, espaços, apóstrofos e hífens" })
@@ -337,4 +360,34 @@
         }
     });
 </script>
-<style scoped></style>
+<style scoped>
+    .input-field {
+        max-width: 380px;
+        width: 100%;
+        margin: 5px 0;
+    }
+
+    .input-field input {
+        width: 100%;
+        border: none;
+        font-size: 13px;
+        border-radius: 8px;
+        width: 100%;
+        outline: none;
+    }
+    .error-message {
+        margin: 5px 0 0 0;
+        padding: 0 0 0 10px;
+        width: 100%;
+        height: 15px;
+        font-size: x-small;
+        line-height: 13px;
+        color: red;
+        display: flex;
+        align-items: center;
+    }
+    .input-field input::placeholder {
+        color: #aaa;
+        font-weight: 500;
+    }
+</style>

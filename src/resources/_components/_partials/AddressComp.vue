@@ -1,27 +1,29 @@
 <template lang="">
-    <div class="flex flex-col gap-2 text-center">
-        <div>{{ address.firstName.split(" ").at(0) }} {{ address.lastName.split(" ").at(-1) }}</div>
-        <div>
-            <div>{{ address.neighborhood }}</div>
-            <div>{{ address.city }}</div>
-            <div>{{ address.province }}</div>
-            <div>{{ address.country }}</div>
+    <div class="flex flex-col gap-2">
+        <div class="flex flex-col gap-1 text-center text-gray-700">
+            <div class="font-medium text-lg">{{ address.firstName.split(" ").at(0) }} {{ address.lastName.split(" ").at(-1) }}</div>
+            <div class="text-sm">
+                <div>{{ address.neighborhood }}</div>
+                <div>{{ address.city }}</div>
+                <div>{{ address.province }}</div>
+                <div>{{ address.country }}</div>
+            </div>
         </div>
-    </div>
-    <div class="flex flex-row gap-3">
-        <button
-            @click.stop="confirmDelete(address._id)"
-            class="p-[3px] rounded-md shadow-[#969191] shadow-sm">
-            <PencilLine
-                color="green"
-                size="20" />
-        </button>
-        <button
-            class="p-[3px] rounded-md shadow-[#969191] shadow-sm">
-            <Trash2
-                color="red"
-                size="20" />
-        </button>
+
+        <div class="flex flex-row gap-2">
+            <button
+                @click.stop="confirmDelete(address._id)"
+                class="p-[4px] rounded-md bg-green-100 hover:bg-green-200 shadow-sm transition">
+                <PencilLine
+                    color="#059669"
+                    size="15" />
+            </button>
+            <button class="p-[4px] rounded-md bg-red-100 hover:bg-red-200 shadow-sm transition">
+                <Trash2
+                    color="#dc2626"
+                    size="15" />
+            </button>
+        </div>
     </div>
 
     <DialogConfirmation
