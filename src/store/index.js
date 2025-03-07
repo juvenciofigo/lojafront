@@ -3,6 +3,7 @@ import axios from "axios";
 import config from "@/config/config";
 import { setCookie, getCookie, removeCookie, cookieExists, errorMessage } from "@/config/cookieUtils";
 import router from "@/router";
+import { ElNotification } from "element-plus";
 
 let tempCart = getCookie("tempCart");
 function getAuthToken() {
@@ -15,6 +16,14 @@ function headers() {
         Authorization: authToken ? `Ecommerce ${authToken}` : null,
     };
 }
+
+const notification = (payload) => {
+    ElNotification.success({
+        title: payload.title,
+        message: payload.message,
+        type: payload.type,
+    });
+};
 
 const user = JSON.parse(localStorage.getItem("userData"));
 
@@ -253,12 +262,16 @@ export default createStore({
         */
 
         //////////// add
-        async addProduct({ commit }, payload) {
+        async addProduct({}, payload) {
             try {
                 const res = await sendAxio("post", `/product`, payload, headers());
 
                 if (res.status === 200) {
-                    commit("updateSnackbar", { text: "Produto adicionado", snackbarType: "success" });
+                    notification({
+                        title: "Sucesso",
+                        type: "success",
+                        message: res.data.message,
+                    });
                     window.location.reload();
                 }
             } catch (error) {
@@ -269,18 +282,25 @@ export default createStore({
         ///////////////// update
         async updateProduct({ commit }, payload) {
             try {
-                const res = await axios.request({
-                    method: "put",
-                    baseURL: config.apiURL,
-                    url: `/product/${payload.productSeleted}`,
-                    headers: headers(),
-                    data: payload.formData,
-                });
+                const res = await sendAxio("put", `/product/${payload.productSeleted}`, payload.formData, headers());
 
-                if (res.data) {
+                // const res = await axios.request({
+                //     method: "put",
+                //     baseURL: config.apiURL,
+                //     url: `/product/${payload.productSeleted}`,
+                //     headers: headers(),
+                //     data: payload.formData,
+                // });
+
+                if (res.status === 200) {
                     const products = res.data;
                     commit("SET_PRODUCTS", products);
-                    commit("updateSnackbar", { text: "Produto actualizado", snackbarType: "success" });
+
+                    notification({
+                        title: "Sucesso",
+                        type: "success",
+                        message: res.data.message,
+                    });
                     window.location.reload();
                 }
             } catch (error) {
@@ -288,20 +308,24 @@ export default createStore({
             }
         },
 
-        async updateImage({ commit }, { productId, formData }) {
+        async updateImage({}, { productId, formData }) {
             try {
-                // const res = await axios.put(`${config.apiURL}/product/image/${productId}`, formData, { headers: { "Content-Type": "multipart/form-data", ...headers } });
+                const res = await sendAxio("put", `/product/image/${productId}`, formData, { "Content-Type": "multipart/form-data", ...headers() });
 
-                const res = await axios.request({
-                    method: "put",
-                    baseURL: config.apiURL,
-                    url: `${config.apiURL}/product/image/${productId}`,
-                    headers: { "Content-Type": "multipart/form-data", ...headers() },
-                    data: formData,
-                });
+                // const res = await axios.request({
+                // method: "put",
+                // baseURL: config.apiURL,
+                // url: `${config.apiURL}/product/image/${productId}`,
+                // headers: { "Content-Type": "multipart/form-data", ...headers() },
+                // data: formData,
+                // });
 
                 if (res.data) {
-                    commit("updateSnackbar", { text: "Produto actualizado", snackbarType: "success" });
+                    notification({
+                        title: "Sucesso",
+                        type: "success",
+                        message: res.data.message,
+                    });
                     window.location.reload();
                 }
             } catch (error) {
@@ -310,34 +334,48 @@ export default createStore({
         },
 
         ////////////// delete
-        async deleteProduct({ commit }, { productId, router }) {
+        async deleteProduct({}, { productId, router }) {
             try {
-                await axios.request({
-                    method: "delete",
-                    baseURL: config.apiURL,
-                    url: `${config.apiURL}/product/${productId}`,
-                    headers: headers(),
-                });
+                // await axios.request({
+                // method: "delete",
+                // baseURL: config.apiURL,
+                // url: `${config.apiURL}/product/${productId}`,
+                // headers: headers(),
+                // });
 
-                commit("updateSnackbar", { text: "Produto apagado", snackbarType: "success" });
-                router.push({ name: "produtos" });
+                const res = await sendAxio("delete", `/product/${productId}`, null, headers());
+
+                if (res.status === 200) {
+                    notification({
+                        title: "Sucesso",
+                        type: "success",
+                        message: res.data.message,
+                    });
+                    router.push({ name: "produtos" });
+                }
             } catch (error) {
                 errorMessage(error);
             }
         },
 
-        async addVariation({ commit }, payload) {
+        async addVariation({}, payload) {
             try {
-                const res = await axios.request({
-                    method: "post",
-                    baseURL: config.apiURL,
-                    url: `/variation/${payload.product}`,
-                    data: payload.formData,
-                    headers: { "Content-Type": "multipart/form-data", ...headers() },
-                });
+                // const res = await axios.request({
+                //     method: "post",
+                //     baseURL: config.apiURL,
+                //     url: `/variation/${payload.product}`,
+                //     data: payload.formData,
+                //     headers: { "Content-Type": "multipart/form-data", ...headers() },
+                // });
+
+                const res = await sendAxio("post", `/variation/${payload.product}`, payload.formData, { "Content-Type": "multipart/form-data", ...headers() });
 
                 if (res.status === 200) {
-                    commit("updateSnackbar", { text: "Variçãao criada", snackbarType: "success" });
+                    notification({
+                        title: "Sucesso",
+                        type: "success",
+                        message: res.data.message,
+                    });
                     return true;
                 }
             } catch (error) {
@@ -713,7 +751,7 @@ export default createStore({
        Carts cliente
        */
 
-        async addToCart({ commit }, { isAuthenticated, item }) {
+        async addToCart({}, { isAuthenticated, item }) {
             const itemProduct = item;
             const user = JSON.parse(localStorage.getItem("userData"));
 
@@ -760,12 +798,22 @@ export default createStore({
                     }
 
                     setCookie("tempCart", JSON.stringify(tempCart), 7);
-                    commit("updateSnackbar", { text: "Produto adicionado ao carrinho ", snackbarType: "success" });
+
+                    notification({
+                        title: "Successo",
+                        type: "success",
+                        message: "Produto adicionado ao carrinho ",
+                    });
+
                     return;
                 } else {
                     const res = await sendAxio("post", `/cart/${user.id}/addProduct`, item, headers());
 
-                    commit("updateSnackbar", { text: `${res.data.message}`, snackbarType: "success" });
+                    notification({
+                        title: "Successo",
+                        type: "success",
+                        message: res.data.message,
+                    });
                     return;
                 }
             } catch (error) {
@@ -773,7 +821,7 @@ export default createStore({
             }
         },
 
-        async removeProductCart({ commit }, payload) {
+        async removeProductCart({}, payload) {
             const user = JSON.parse(localStorage.getItem("userData"));
 
             try {
@@ -788,9 +836,17 @@ export default createStore({
                         if (tempCart.length == 0) {
                             window.location.reload();
                         }
-                        commit("updateSnackbar", { text: "Item removido", snackbarType: "success" });
+                        notification({
+                            title: "Successo",
+                            type: "success",
+                            message: "Item removido",
+                        });
                     } else {
-                        commit("updateSnackbar", { text: "Carrinho vaio", snackbarType: "success" });
+                        notification({
+                            title: "Successo",
+                            type: "success",
+                            message: "Carrinho vaZio",
+                        });
                         window.location.reload();
                     }
 
@@ -798,7 +854,11 @@ export default createStore({
                 } else {
                     const res = await sendAxio("delete", `/cart/${user.id}/remove/${payload.item}`, null, headers());
 
-                    commit("updateSnackbar", { text: `${res.data.message}`, snackbarType: "success" });
+                    notification({
+                        title: "Successo",
+                        type: "success",
+                        message: res.data.message,
+                    });
                     return;
                 }
             } catch (error) {
@@ -879,12 +939,20 @@ export default createStore({
                     }
                 }
 
-                commit("updateSnackbar", { text: "Produto adicionado ao carrinho ", snackbarType: "success" });
+                notification({
+                    title: "Successo",
+                    type: "success",
+                    message: "Produto adicionado ao carrinho ",
+                });
                 return;
             } else {
                 const res = await sendAxio("put", `/cart/${user.id}/update/${payload.item}/${Number(payload.quantity)}`, null, headers());
 
-                commit("updateSnackbar", { text: `${res.data.msg}`, snackbarType: "success" });
+                notification({
+                    title: "Successo",
+                    type: "success",
+                    message: res.data.message,
+                });
                 return;
             }
         },
@@ -904,7 +972,11 @@ export default createStore({
                     const res = await sendAxio("post", `/order`, { cart, delivery }, headers());
                     if (res.status === 200) {
                         const order = res.data.order;
-                        commit("updateSnackbar", { text: "Pedido enviado", snackbarType: "success" });
+                        notification({
+                            title: "Successo",
+                            type: "success",
+                            message: res.data.message,
+                        });
                         commit("SET_ID_ORDER", order._id);
                         commit("SET_AMOUTPAYMENT", order.totalPrice);
                         commit("SET_PAYMENT");
@@ -983,12 +1055,17 @@ export default createStore({
             commit("SET_CARTPRODUCTS", cartProducts);
         },
 
-        async deleteOrderClient({ commit }, payload) {
+        async deleteOrderClient({}, payload) {
             try {
                 const res = await sendAxio("patch", `/order/${payload}`, null, headers());
 
                 if (res.status === 200) {
-                    commit("updateSnackbar", { text: "Pedido apagado", snackbarType: "success" });
+                    notification({
+                        title: "Successo",
+                        type: "success",
+                        message: res.data.message,
+                    });
+
                     router.go(0);
                 }
             } catch (error) {
@@ -996,12 +1073,16 @@ export default createStore({
             }
         },
 
-        async orderToFalse({ commit }, payload) {
+        async orderToFalse({}, payload) {
             try {
                 const res = await sendAxio("patch", `/order/${payload}`, null, headers());
 
                 if (res.status === 200) {
-                    commit("updateSnackbar", { text: "Pedido apagado", snackbarType: "success" });
+                    notification({
+                        title: "Successo",
+                        type: "success",
+                        message: res.data.message,
+                    });
                     router.go(0);
                 }
             } catch (error) {
@@ -1023,7 +1104,12 @@ export default createStore({
             try {
                 const res = await sendAxio("post", `/user`, values, null);
                 if (res.status === 200) {
-                    commit("updateSnackbar", { text: "Conta criada, faça o login", snackbarType: "success" });
+                    notification({
+                        title: "Successo",
+                        type: "success",
+                        message: "Conta criada, faça o login",
+                    });
+
                     commit("SET_LOGIN_OVERLAY", true);
                 }
             } catch (error) {
@@ -1038,6 +1124,7 @@ export default createStore({
         async login({ commit, state }, payload) {
             try {
                 const res = await sendAxio("post", `/login`, payload.values, null);
+                console.log(res);
 
                 if (res.status === 200) {
                     const auth = res.data.user;
@@ -1062,7 +1149,15 @@ export default createStore({
                         })
                     );
                 } else {
-                    commit("updateSnackbar", { text: "Dados errados", snackbarType: "error" });
+                    // commit("updateSnackbar", { text: "Dados errados", snackbarType: "error" });
+                    console.log(res.data);
+
+                    notification({
+                        title: "Error",
+                        type: "error",
+                        message: res.data.message,
+                    });
+
                     return;
                 }
 
@@ -1088,7 +1183,15 @@ export default createStore({
                 window.location.reload();
                 return;
             } catch (error) {
-                errorMessage(error);
+                console.log(error.response.data.message);
+                if (error.response.data.message) {
+                    notification({
+                        title: "Error",
+                        type: "error",
+                        message: error.response.data.message,
+                    });
+                }
+                errorMessage("resposta", error);
             }
         },
 
@@ -1100,9 +1203,6 @@ export default createStore({
                 localStorage.removeItem("userData");
 
                 commit("CLEAR_CARTPRICE");
-
-                commit("updateSnackbar", { text: "", snackbarType: "" });
-
                 window.location.reload();
                 return;
             } catch (error) {
@@ -1147,10 +1247,19 @@ export default createStore({
                 const res = await sendAxio("put", `/customer/${payload}/address`, null, headers());
 
                 if (res.status === 200) {
-                    commit("updateSnackbar", { text: "Endereço apagado", snackbarType: "success" });
+                    notification({
+                        title: "Sucesso",
+                        type: "success",
+                        message: res.data.message,
+                    });
+
                     return;
                 } else {
-                    commit("updateSnackbar", { text: "Falha ao apagar", snackbarType: "success" });
+                    notification({
+                        title: "Errp!",
+                        type: "error",
+                        message: res.data.message,
+                    });
                     return;
                 }
             } catch (error) {
@@ -1166,10 +1275,14 @@ export default createStore({
             try {
                 const res = await sendAxio("post", `/mpesaPay`, { ...payload, orderId: state.orderPaymentId }, headers());
                 if (res.status === 200 || res.status === 201) {
-                    commit("updateSnackbar", { text: res.data.message, snackbarType: "success" });
+                    ElNotification.success({
+                        title: "Successo",
+                        type: "success",
+                        message: res.data.message,
+                    });
+
                     commit("SET_PAYMENT");
                     window.location.href = `/perfil/${user.id}/pedidos`;
-                    return;
                 }
             } catch (error) {
                 errorMessage(error);

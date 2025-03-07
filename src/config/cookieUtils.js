@@ -1,4 +1,12 @@
-import store from "@/store/index";
+import { ElNotification } from "element-plus";
+
+const notification = (message) => {
+    ElNotification.success({
+        title: "Erro!",
+        type: "error",
+        message: message,
+    });
+};
 
 const getCookie = (name) => {
     const cookieName = `${name}=`;
@@ -20,7 +28,7 @@ const setCookie = (name, value, days) => {
     document.cookie = `${name}=${encodeURIComponent(value)};${cookieOptions}`;
 };
 
-const removeCookie = (name) => {
+const removeCookie = async (name) => {
     document.cookie = `${name}=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/;Secure;SameSite=Strict`;
 };
 
@@ -37,14 +45,15 @@ const cookieExists = (name) => {
 
 function errorMessage(error) {
     if (error.message === "Network Error") {
-        store.commit("updateSnackbar", { text: "Servidor fora do ar!", snackbarType: "error" });
+        notification("Servidor fora do ar!");
         console.error(error);
         return;
     } else if (error.response) {
-        store.commit("updateSnackbar", { text: error.response.data.message, snackbarType: "error" });
+        notification(error.response.data.message);
+
         return;
     } else {
-        console.error(error);
+        // console.error(error);
     }
 }
 
