@@ -262,7 +262,7 @@ export default createStore({
         */
 
         //////////// add
-        async addProduct({}, payload) {
+        async addProduct(_, payload) {
             try {
                 const res = await sendAxio("post", `/product`, payload, headers());
 
@@ -308,7 +308,7 @@ export default createStore({
             }
         },
 
-        async updateImage({}, { productId, formData }) {
+        async updateImage(_, { productId, formData }) {
             try {
                 const res = await sendAxio("put", `/product/image/${productId}`, formData, { "Content-Type": "multipart/form-data", ...headers() });
 
@@ -334,7 +334,7 @@ export default createStore({
         },
 
         ////////////// delete
-        async deleteProduct({}, { productId, router }) {
+        async deleteProduct(_, { productId, router }) {
             try {
                 // await axios.request({
                 // method: "delete",
@@ -358,7 +358,7 @@ export default createStore({
             }
         },
 
-        async addVariation({}, payload) {
+        async addVariation(_, payload) {
             try {
                 // const res = await axios.request({
                 //     method: "post",
@@ -751,7 +751,7 @@ export default createStore({
        Carts cliente
        */
 
-        async addToCart({}, { isAuthenticated, item }) {
+        async addToCart(_, { isAuthenticated, item }) {
             const itemProduct = item;
             const user = JSON.parse(localStorage.getItem("userData"));
 
@@ -821,7 +821,7 @@ export default createStore({
             }
         },
 
-        async removeProductCart({}, payload) {
+        async removeProductCart(_, payload) {
             const user = JSON.parse(localStorage.getItem("userData"));
 
             try {
@@ -922,7 +922,7 @@ export default createStore({
             }
         },
 
-        async updateProductQuantity({ commit }, payload) {
+        async updateProductQuantity(_, payload) {
             const user = JSON.parse(localStorage.getItem("userData"));
 
             if (payload.isAuthenticated === false) {
@@ -1055,7 +1055,7 @@ export default createStore({
             commit("SET_CARTPRODUCTS", cartProducts);
         },
 
-        async deleteOrderClient({}, payload) {
+        async deleteOrderClient(_, payload) {
             try {
                 const res = await sendAxio("patch", `/order/${payload}`, null, headers());
 
@@ -1073,7 +1073,7 @@ export default createStore({
             }
         },
 
-        async orderToFalse({}, payload) {
+        async orderToFalse(_, payload) {
             try {
                 const res = await sendAxio("patch", `/order/${payload}`, null, headers());
 
@@ -1242,7 +1242,7 @@ export default createStore({
             }
         },
 
-        async deleteAddress({ commit }, payload) {
+        async deleteAddress(_, payload) {
             try {
                 const res = await sendAxio("put", `/customer/${payload}/address`, null, headers());
 
