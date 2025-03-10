@@ -83,7 +83,7 @@
                 <LogoPart />
             </div>
 
-            <div class="flex flex-col md:flex-row items-center gap-3">
+            <div class="flex flex-col md:flex-row items-center gap-1">
                 <el-dropdown
                     v-if="isAuthenticated"
                     @command="navigate"
@@ -128,13 +128,15 @@
                         v-loading="loadingPriceUpdate"
                         to="/carrinho"
                         class="flex flex-row items-center gap-1">
-                        <lord-icon
+                        <lord-icon class="w-5 md:w-10"
                             src="https://cdn.lordicon.com/odavpkmb.json"
-                            trigger="hover">
+                            trigger="hover"
+                            >
+                            
                         </lord-icon>
                         <div class="">
-                            <p class="font-medium text-[12px]">Carrinho de compras</p>
-                            <p class="text-[10px]">{{ formatCurrency(priceTotal) }}</p>
+                            <p class="font-medium text-[8px] md:text-[12px]">Carrinho de compras</p>
+                            <p class="text-[6px] md:text-[10px]">{{ formatCurrency(priceTotal) }}</p>
                         </div>
                     </router-link>
 
