@@ -69,7 +69,7 @@
             </el-drawer>
         </nav>
 
-        <nav class="desktop header-1 flex flex-row justify-between items-center p-1 bg-white">
+        <nav class="desktop header-1 flex flex-row justify-between items-center p-2 bg-white">
             <div class="text-xs text-center hidden lg:block">
                 <span>Bem-vindo ao {{ storeName }}</span>
             </div>
