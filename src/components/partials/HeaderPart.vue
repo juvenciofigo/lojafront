@@ -1,6 +1,6 @@
 <template lang="">
     <div class="flex flex-col">
-        <nav class="lg:hidden">
+        <!-- <nav class="lg:hidden">
             <el-drawer
                 :size="300"
                 v-model="drawer"
@@ -50,7 +50,7 @@
                 <p class="text-sm mb-1 text-muted-foreground">Categorias</p>
 
                 <template v-if="categories && categories.length > 0">
-                    <nav class="flex flex-col gap-1">
+                    <nav class="flex flex-col gap-1 text-xs">
                         <el-tag
                             size="small"
                             class="cursor-pointer w-full">
@@ -67,10 +67,13 @@
                     </nav>
                 </template>
             </el-drawer>
-        </nav>
+        </nav> -->
 
-        <nav class="header-1 h-[40px] flex flex-row justify-between items-center p-1 lg:p-2 bg-white">
-            <p class="text-xs text-center hidden lg:block">Bem-vindo ao {{ storeName }}</p>
+        <nav class="desktop header-1 flex flex-row justify-between items-center p-1 bg-white">
+            <div class="text-xs text-center hidden lg:block">
+                <span>Bem-vindo ao {{ storeName }}</span>
+            </div>
+
             <div class="lg:hidden flex flex-row">
                 <Button
                     @click.stop="drawer = !drawer"
@@ -80,77 +83,79 @@
                 <LogoPart />
             </div>
 
-            <el-menu
-                class="el-menu-demo-header"
-                mode="horizontal"
-                :ellipsis="false">
-                <el-menu-item index="0"
-                    ><router-link
-                        to="/carrinho"
-                        class="flex flex-row items-center gap-1">
-                        <span class="text-xs md:text-base">{{ formatCurrency(priceTotal) }} </span>
-
-                        <lord-icon
-                            src="https://cdn.lordicon.com/odavpkmb.json"
-                            trigger="hover"
-                            style="width: 25px; height: 25px">
-                        </lord-icon> </router-link
-                ></el-menu-item>
-                <el-sub-menu
-                    index="1"
-                    :show-timeout="100">
-                    <template #title>
-                        <div class="hidden group lg:flex flex-row items-center gap-1 cursor-pointer">
-                            <p v-if="isAuthenticated">
-                                <span>
-                                    {{ user?.firstName?.split(" ")?.[0] || "" }}
-                                    {{ user?.lastName?.split(" ")?.slice(-1)?.[0] || "" }}
-                                </span>
-                            </p>
-                            <User v-else />
-                        </div>
-                    </template>
-                    <el-menu-item
-                        index="1-1"
-                        class="orders"
-                        v-if="isAuthenticated">
-                        <router-link :to="{ name: 'profile', params: { user: user.id } }"> Meu perfil</router-link>
-                    </el-menu-item>
-
-                    <el-menu-item
-                        index="1-3"
-                        class="login/logout"
-                        v-if="!isAuthenticated"
-                        @click="login()">
-                        <div class="flex flex-row items-center gap-2 h-max mx-[15px]">
-                            <LogIn class="w-4 h-4" />
-                            <span class="hidden lg:inline">Entrar</span>
-                        </div></el-menu-item
-                    >
-                    <el-menu-item
-                        index="1-4"
-                        class="login/logout"
-                        @click="store.dispatch('logout', router)"
-                        v-else>
-                        <div class="flex flex-row items-center gap-2 h-max mx-[15px]">
-                            <p
-                                class="lg:hidden"
-                                v-if="user">
+            <div class="flex flex-col md:flex-row items-center gap-3">
+                <el-dropdown
+                    v-if="isAuthenticated"
+                    @command="navigate"
+                    size="small"
+                    class="">
+                    <div class="">
+                        <p>
+                            <span>
                                 {{ user?.firstName?.split(" ")?.[0] || "" }}
                                 {{ user?.lastName?.split(" ")?.slice(-1)?.[0] || "" }}
-                            </p>
-                            <span class="hidden lg:inline">Sair</span>
-                            <LogOut class="w-4 h-4" />
+                            </span>
+                            <el-icon class="el-icon--right"><arrow-down /></el-icon>
+                        </p>
+                    </div>
+
+                    <template
+                        #dropdown
+                        v-if="isAuthenticated">
+                        <el-dropdown-menu>
+                            <el-dropdown-item :command="{ name: 'profile', params: { user: user.id } }"> Meu perfil </el-dropdown-item>
+
+                            <el-dropdown-item class="login/logout">
+                                <div
+                                    @click="store.dispatch('logout', router)"
+                                    class="login/logout flex flex-row items-center gap-2 h-max">
+                                    <p
+                                        class="lg:hidden"
+                                        v-if="user">
+                                        {{ user?.firstName?.split(" ")?.[0] || "" }}
+                                        {{ user?.lastName?.split(" ")?.slice(-1)?.[0] || "" }}
+                                    </p>
+                                    <span class="text-[10px] text-red-500">Sair</span>
+                                    <LogOut class="w-4 h-4" />
+                                </div>
+                            </el-dropdown-item>
+                        </el-dropdown-menu>
+                    </template>
+                </el-dropdown>
+
+                <div>
+                    <router-link
+                        v-loading="loadingPriceUpdate"
+                        to="/carrinho"
+                        class="flex flex-row items-center gap-1">
+                        <lord-icon
+                            src="https://cdn.lordicon.com/odavpkmb.json"
+                            trigger="hover">
+                        </lord-icon>
+                        <div class="">
+                            <p class="font-medium text-[12px]">Carrinho de compras</p>
+                            <p class="text-[10px]">{{ formatCurrency(priceTotal) }}</p>
                         </div>
-                    </el-menu-item>
-                </el-sub-menu>
-            </el-menu>
+                    </router-link>
+
+                    <div
+                        v-if="!isAuthenticated"
+                        @click="login()"
+                        class="cursor-pointer text-base text-end ml-2 text-[#2196F3]">
+                        <!-- <LogIn class="w-4 h-4" /> -->
+                        <span class="">Entrar</span>
+                        <!-- <User /> -->
+                    </div>
+                </div>
+            </div>
         </nav>
+
         <!-- end header-1 -->
         <Separator
             orientation="horizontal"
             class="bg-[#2196F3]"
             decorative />
+
         <!-- start header-2 -->
         <nav class="header-2 lg:h-[70px] h-[50px] flex flex-row gap-4 items-center bg-white">
             <div class="py-2 px-3 lg:block rounded-md hidden duration-700 hover:-translate-y-1">
@@ -205,11 +210,25 @@
     import { useStore } from "vuex";
     import { useRouter } from "vue-router";
 
+    import { ArrowDown } from "@element-plus/icons-vue";
     import { Search } from "lucide-vue-next";
     import { Separator } from "@/components/ui/separator";
     import { Button } from "@/components/ui/button";
+    import LogoPart from "./LogoPart.vue";
+
+    const store = useStore();
+    const router = useRouter();
+
+    const loadingPriceUpdate = ref(computed(() => store.getters.loadingPriceUpdate));
 
     const drawer = ref(false);
+    const categories = computed(() => store.state.categories);
+    const priceTotal = computed(() => store.getters.cartPrice);
+    const selectedCategory = ref(null);
+    const textSearch = ref(null);
+    const storeName = store.state.storeName;
+    const isAuthenticated = ref(computed(() => store.getters.isAuthenticated("authToken")));
+    const user = computed(() => JSON.parse(localStorage.getItem("userData")));
 
     window.addEventListener("resize", () => {
         if (window.innerWidth > 1279) {
@@ -217,21 +236,15 @@
         }
     });
 
-    import LogoPart from "./LogoPart.vue";
-    const store = useStore();
-    const router = useRouter();
-
-    const categories = computed(() => store.state.categories);
-    const priceTotal = computed(() => store.getters.cartPrice);
-    const selectedCategory = ref(null);
-    const textSearch = ref(null);
+    const navigate = (route) => {
+        if (route) {
+            router.push(route);
+        }
+    };
 
     function login() {
         store.commit("SET_LOGIN_OVERLAY", true);
     }
-
-    const storeName = store.state.storeName;
-    const isAuthenticated = ref(computed(() => store.getters.isAuthenticated("authToken")));
 
     function filterProduct(category) {
         drawer.value = false;
@@ -263,8 +276,6 @@
         });
     }
 
-    const user = computed(() => JSON.parse(localStorage.getItem("userData")));
-
     const formatCurrency = (value) => {
         if (typeof value !== "number" || isNaN(value)) {
             return "MZN 0.00";
@@ -292,18 +303,20 @@
     });
 </script>
 <style scoped>
-    .el-menu-demo-header {
-        background-color: unset;
-        border: unset;
-        height: 100%;
+    .el-dropdown + .el-dropdown {
+        margin-left: 15px;
     }
-    .el-menu-demo-header .is-active {
-        border: unset;
-        color: unset !important;
+    .el-dropdown-link {
+        cursor: pointer;
+        display: flex;
+        align-items: center;
     }
-    .el-menu-demo-header .el-menu-item {
-        height: unset;
-        border: unset;
-        padding: unset;
+</style>
+<style>
+    .with-loader .circular {
+        width: 20px !important;
+    }
+    .with-loader .el-loading-spinner {
+        top: 0 !important;
     }
 </style>

@@ -58,13 +58,14 @@
                 <!-- Input para quantidade -->
                 <div class="flex flex-row gap-3">
                     <label for="quant">Quantidade:</label>
-                    <input
-                        type="number"
-                        name="quant"
-                        class="border px-2 w-20 rounded-md"
-                        min="1"
-                        @change="quantityValue"
-                        v-model="quantity" />
+
+                    <el-input-number
+                        :disabled="loading_button"
+                        v-model="quantity"
+                        :min="1"
+                        size="small"
+                        controls-position="right"
+                        @change="quantityValue" />
                 </div>
 
                 <!-- Seção de seleção de variações -->

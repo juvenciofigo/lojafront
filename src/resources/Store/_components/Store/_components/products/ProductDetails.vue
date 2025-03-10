@@ -161,6 +161,8 @@
 
     async function addToCart() {
         loading_button.value = true;
+        store.commit("SET_loadingPriceUpdate");
+        
         const res = await verifyVaraiations();
 
         if (res) {
@@ -173,6 +175,7 @@
 
         await store.dispatch("displayCartPrices", isAuthenticated.value);
         loading_button.value = false;
+        store.commit("SET_loadingPriceUpdate");
     }
 
     async function callWhatsapp() {

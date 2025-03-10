@@ -1,7 +1,7 @@
 <template lang="">
     <div class="flex flex-col lg:items-start lg:flex-row lg:pr-5 flex-1 gap-4 flex-wrap p-3">
         <div
-            class="flex-1"
+            class="flex-1 w-full flex justify-center"
             style="width: calc(100% - 1px)">
             <CartProductsComp
                 v-if="cart"
@@ -9,7 +9,9 @@
                 :TableRowHeight="'h-40'" />
         </div>
 
-        <div class="shadow-md p-4 rounded-md mt-4 text-center w-full max-w-[410px] lg:w-[410px] flex flex-col gap-6 bg-white">
+        <div
+            v-loading="loadingPriceUpdate"
+            class="shadow-md p-4 rounded-md mt-4 text-center w-full max-w-[410px] lg:w-[410px] flex flex-col gap-6 bg-white">
             <div
                 v-if="skeleton"
                 class="w-full mx-auto">
@@ -56,6 +58,7 @@
     const totalPedido = computed(() => priceTotal.value + shippingPrice.value);
     const buttonStatus = ref(true);
     const skeleton = ref(true);
+    const loadingPriceUpdate = ref(computed(() => store.getters.loadingPriceUpdate));
 
     onBeforeMount(async () => {
         await store.dispatch("displayCartProducts", isAuthenticated.value);

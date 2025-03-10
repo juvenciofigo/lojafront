@@ -1,5 +1,7 @@
 <template lang="">
     <el-table
+        v-loading="loadingPriceUpdate"
+        element-loading-text="Processando"
         style="width: max-content"
         :data="cart.items"
         :fit="true"
@@ -126,7 +128,6 @@
     import { useRouter } from "vue-router";
     import { useStore } from "vuex";
     import { Trash2 } from "lucide-vue-next";
-    import { Picture } from "@element-plus/icons-vue";
 
     const router = useRouter();
     const store = useStore();
@@ -143,6 +144,7 @@
     }
 
     const isAuthenticated = ref(computed(() => store.getters.isAuthenticated("authToken")));
+    const loadingPriceUpdate = ref(computed(() => store.getters.loadingPriceUpdate));
 
     async function update() {
         await store.dispatch("displayCartPrices", isAuthenticated.value);
@@ -155,8 +157,10 @@
     }
 
     async function updateQuantity(item, quantity) {
+        store.commit("SET_loadingPriceUpdate");
         await store.dispatch("updateProductQuantity", { item, quantity: quantity || 1, isAuthenticated: isAuthenticated.value, store });
         update();
+        store.commit("SET_loadingPriceUpdate");
     }
 
     // Função para formatar valores monetários

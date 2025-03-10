@@ -2,20 +2,20 @@
     <section class="flex-1 bg-slate-100">
         <div class="mt-6 mx-2 flex flex-row">
             <!-- Categorias -->
-            <div class="m-2 categories-card hidden lg:block flex-col w-72 rounded-lg ml-5 bg-white pb-1">
+            <div class="m-2 categories-card hidden lg:block flex-col w-72 rounded-lg bg-white pb-1">
                 <p class="bg-yellow-300 p-2 rounded-t-lg font-semibold">Categorias</p>
 
                 <div
                     v-if="categories && categories.length > 0"
-                    class="categories-list indent-4 overflow-auto">
+                    class="categories-list indent-4 overflow-auto p-1">
                     <ul class="list-none">
-                        <li class="whitespace-nowrap hover:text-[#0062bd]">
+                        <li class="duration-75 item-list">
                             <router-link :to="{ name: 'allProductsClient' }">Todos produtos</router-link>
                         </li>
                         <template
                             v-for="category in categories"
                             :key="category._id">
-                            <li class="whitespace-nowrap hover:text-[#0062bd]">
+                            <li class=" item-list">
                                 <v-menu
                                     transition="scroll-x-transition"
                                     location="end"
@@ -30,11 +30,11 @@
                                             {{ category.categoryName }}
                                         </button>
                                     </template>
-                                    <div class="bg-white p-2 flex flex-col gap-2">
+                                    <div class="bg-white">
                                         <ul
                                             v-for="subCategory in category.subCategories"
                                             :key="subCategory._id">
-                                            <li class="whitespace-nowrap hover:text-[#0062bd]">
+                                            <li class="subCategory item-list">
                                                 <v-menu
                                                     transition="scale-transition"
                                                     location="end"
@@ -51,11 +51,11 @@
                                                     </template>
                                                     <div
                                                         v-if="subCategory.sub_categories && subCategory.sub_categories.length > 0"
-                                                        class="bg-white p-2 flex flex-col gap-2">
+                                                        class="bg-white">
                                                         <ul
                                                             v-for="sub_category in subCategory.sub_categories"
                                                             :key="sub_category._id">
-                                                            <li class="whitespace-nowrap hover:text-[#0062bd]">
+                                                            <li class="item-list">
                                                                 <button @click="filterProduct(category, subCategory, sub_category)">
                                                                     {{ sub_category.sub_categoryName }}
                                                                 </button>
@@ -87,13 +87,13 @@
         <!-- Produtos e Promoções -->
         <div class="w-full flex lg:flex-row gap-3 p-2 flex-col-reverse">
             <div class="overflow-hidden flex-1 gap-2 flex flex-col">
-                <SelectdProducs
-                    :title="`Produtos Recentes`"
+                <SelectdProducts
+                    :title="`Novidades`"
                     :products="products"
                     :link="`produtos`" />
 
-                <SelectdProducs
-                    :title="`Top Produtos`"
+                <SelectdProducts
+                    :title="`Destaque`"
                     :products="products"
                     :link="`produtos`" />
             </div>
@@ -119,7 +119,7 @@
     import { useStore } from "vuex";
     import { onBeforeMount, computed, ref } from "vue";
     import { useRouter } from "vue-router";
-    import SelectdProducs from "@/resources/_components/SelectdProducs.vue";
+    import SelectdProducts from "@/resources/_components/SelectdProducts.vue";
     import BannerComp from "@/resources/Store/_components/Store/_components/banners/BannerComp.vue";
 
     const store = useStore();
@@ -182,6 +182,21 @@
     .ads {
         display: flex;
         flex-direction: row;
+    }
+
+    .categories-card {
+        width: 350px;
+    }
+
+    .item-list {
+        padding: 6px 5px;
+        font-size: 13px;
+        line-height: 20px;
+    }
+
+    .item-list:hover {
+        color: #0062bd;
+        outline: 1px solid #0062bd;
     }
 
     @media (min-width: 1024px) {

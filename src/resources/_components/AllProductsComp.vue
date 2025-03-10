@@ -4,7 +4,7 @@
             <div class="w-full p-3 bg-white categories-list indent-4 overflow-auto">
                 <h2 class="bg-[#3a7ebe] p-2 font-semibold">Categorias</h2>
 
-                <ul class="list-none">
+                <ul class="list-nonez">
                     <li class="whitespace-nowrap hover:text-[#0062bd] duration-500"><router-link :to="{ name: 'allProductsClient' }">Todos produtos</router-link></li>
                     <template
                         v-for="category in categories"

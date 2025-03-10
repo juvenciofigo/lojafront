@@ -89,6 +89,7 @@ export default createStore({
 
         // confirmation dialog
         overlay: false,
+        loadingPriceUpdate: false,
         // dialog
         payment: false,
         loginOverlay: false,
@@ -129,6 +130,7 @@ export default createStore({
 
         // overlay
         overlay: (state) => state.overlay,
+        loadingPriceUpdate: (state) => state.loadingPriceUpdate,
         payment: (state) => state.payment,
         loginOverlay: (state) => state.loginOverlay,
         snackbarText: (state) => state.snackbarText,
@@ -136,6 +138,9 @@ export default createStore({
     },
 
     mutations: {
+        SET_loadingPriceUpdate(state) {
+            state.loadingPriceUpdate = !state.loadingPriceUpdate;
+        },
         // users
         DETAILS_USER(state, data) {
             state.userDetails = data;
@@ -151,6 +156,7 @@ export default createStore({
         SET_LOGIN_OVERLAY(state, status) {
             state.loginOverlay = status;
         },
+
         setRedirectTo(state, route) {
             state.redirectTo = route;
         },
