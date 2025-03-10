@@ -102,7 +102,7 @@
                     <template
                         #dropdown
                         v-if="isAuthenticated">
-                        <el-dropdown-menu>
+                        <el-dropdown-menu class="">
                             <el-dropdown-item :command="{ name: 'profile', params: { user: user.id } }"> Meu perfil </el-dropdown-item>
 
                             <el-dropdown-item class="login/logout">

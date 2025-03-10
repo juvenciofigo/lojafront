@@ -11,7 +11,7 @@
 
         <div
             v-loading="loadingPriceUpdate"
-            class="shadow-md p-4 rounded-md mt-4 text-center w-full max-w-[410px] lg:w-[410px] flex flex-col gap-6 bg-white">
+            class="shadow-md rounded-md mt-4 text-center w-full max-w-[410px] lg:w-[410px] flex flex-col gap-6 bg-white">
             <div
                 v-if="skeleton"
                 class="w-full mx-auto">
@@ -21,23 +21,26 @@
                 </v-skeleton-loader>
             </div>
 
-            <el-descriptions
-                title="Resumo do pedido"
-                direction="horizontal"
-                :column="1"
-                :size="size"
-                border>
-                <el-descriptions-item label="Total de produtos:">{{ formatCurrency(priceTotal) }}</el-descriptions-item>
-                <el-descriptions-item label="Taxa de envio:">{{ formatCurrency(shippingPrice) }}</el-descriptions-item>
-                <el-descriptions-item label="Total">{{ formatCurrency(totalPedido) }}</el-descriptions-item>
-            </el-descriptions>
-
-            <el-button
-                :disabled="buttonStatus"
-                size="small"
-                @click="makeOrder()">
-                Fazer pedido
-            </el-button>
+            <div v-else>
+                <p class="my-1 font-semibold">Resumo do pedido</p>
+                <el-descriptions
+                    title=""
+                    direction="horizontal"
+                    :column="1"
+                    :size="size"
+                    border>
+                    <el-descriptions-item label="Total de produtos:">{{ formatCurrency(priceTotal) }}</el-descriptions-item>
+                    <el-descriptions-item label="Taxa de envio:">{{ formatCurrency(shippingPrice) }}</el-descriptions-item>
+                    <el-descriptions-item label="Total">{{ formatCurrency(totalPedido) }}</el-descriptions-item>
+                </el-descriptions>
+                <el-button
+                    class="w-full m-1"
+                    :disabled="buttonStatus"
+                    size="small"
+                    @click="makeOrder()">
+                    Fazer pedido
+                </el-button>
+            </div>
         </div>
     </div>
 </template>
