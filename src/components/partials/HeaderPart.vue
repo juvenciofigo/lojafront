@@ -128,15 +128,15 @@
                         v-loading="loadingPriceUpdate"
                         to="/carrinho"
                         class="flex flex-row items-center gap-1">
-                        <lord-icon class="w-5 md:w-10"
+                        <lord-icon class="w-6 md:w-10"
                             src="https://cdn.lordicon.com/odavpkmb.json"
                             trigger="hover"
                             >
                             
                         </lord-icon>
                         <div class="">
-                            <p class="font-medium text-[8px] md:text-[12px]">Carrinho de compras</p>
-                            <p class="text-[6px] md:text-[10px]">{{ formatCurrency(priceTotal) }}</p>
+                            <p class="font-medium text-[10px] md:text-[12px]">Carrinho de compras</p>
+                            <p class="text-[8px] md:text-[10px]">{{ formatCurrency(priceTotal) }}</p>
                         </div>
                     </router-link>
 
