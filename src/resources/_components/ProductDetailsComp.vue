@@ -1,11 +1,11 @@
 <template>
     <div class="mt-3 flex flex-col gap-4">
         <div class="flex flex-row justify-between gap-3">
-            <div class="flex flex-row flex-1 bg-white p-4 gap-4">
+            <div class="flex flex-col sm:flex-row flex-1 bg-white p-2 lg:p-4 gap-4">
                 <!-- Seção de imagens do produto -->
-                <div class="images rounded-md p-2 flex flex-row gap-3">
+                <div class="images rounded-md lg:p-2 flex flex-col-reverse lg:flex-row gap-3">
                     <div
-                        class="changeImage flex flex-col p-1 gap-2 overflow-auto w-full"
+                        class="changeImage flex flex-nowrap lg:flex-col lg:p-1 gap-2 overflow-auto w-full"
                         v-if="images && images.length > 1">
                         <button
                             v-for="(image, index) in images"
@@ -20,7 +20,7 @@
                     </div>
 
                     <div class="image self-center">
-                        <div class="border w-[310px] h-[310px] overflow-hidden">
+                        <div class="border max-w-[370px] max-h-[400px] lg:w-[310px] lg:h-[310px] overflow-hidden">
                             <el-image
                                 class="w-full h-full"
                                 :src="imageLink"
@@ -38,14 +38,233 @@
                 <!--Fim Seção de imagens do produto -->
 
                 <!-- Descrição do produto -->
-                <div class="">
+                <div class="flex-1">
                     <h1 class="text-xl">{{ product.productName }}</h1>
                     <el-rate
                         disabled
                         allow-half
                         v-model="product.productStatistc.ratingAverage"
                         :colors="colorsRate" />
-                    <br />
+
+                    <div class="compra-mobile lg:hidden flex flex-col gap-4 bg-white rounded-md">
+                        <div class="text-2xl">
+                            <span class="font-medium text-xs">Preço: </span>
+                            <span
+                                class="font-semibold"
+                                v-if="product.productPromotion">
+                                {{ formatCurrency(finalPrice) }}
+                            </span>
+                            <span
+                                class="font-semibold"
+                                v-else>
+                                {{ formatCurrency(finalPrice) }}
+                            </span>
+                        </div>
+
+                        <slot name="product-statistic" />
+
+                        <!-- Input para quantidade -->
+                        <div class="flex flex-row items-center gap-3">
+                            <label
+                                class="font-semibold"
+                                for="quant">
+                                Quantidade:
+                            </label>
+
+                            <el-input-number
+                                :disabled="loading_button"
+                                v-model="quantity"
+                                :min="1"
+                                size="small"
+                                controls-position="right"
+                                @change="quantityValue" />
+                        </div>
+
+                        <!-- Seção de seleção de variações -->
+                        <div class="buttons-chips flex flex-col lg:flex-row flex-wrap gap-3 font-semibold">
+                            <!-- Cores -->
+                            <div
+                                class="color chips_div"
+                                v-if="colors.length > 0">
+                                <p>
+                                    Cores: <span v-if="selectedColor">{{ selectedColor.variationValue }}</span>
+                                </p>
+                                <div>
+                                    <v-chip-group
+                                        selected-class="bg-primary"
+                                        @update:model-value="colorValue"
+                                        mandatory>
+                                        <v-chip
+                                            v-for="(item, index) in colors"
+                                            :key="index"
+                                            :value="item._id">
+                                            <template v-slot:default>
+                                                <el-tooltip :content="item.variationValue">
+                                                    <div v-if="item.variationImage && item.variationImage.length > 0">
+                                                        <img
+                                                            :src="item.variationImage[0]"
+                                                            alt="Imagem da variacao do produto"
+                                                            class="chip-image object-contain" />
+                                                    </div>
+                                                    <div v-else>
+                                                        {{ item.variationValue }}
+                                                    </div>
+                                                </el-tooltip>
+                                            </template>
+                                        </v-chip>
+                                    </v-chip-group>
+                                </div>
+                            </div>
+                            <!--Fim Cores -->
+
+                            <!-- Tamanhos -->
+                            <div
+                                class="sizes chips_div"
+                                v-if="sizes.length > 0">
+                                <p>
+                                    Tamanhos: <span v-if="selectedSize">{{ selectedSize.variationValue }}</span>
+                                </p>
+                                <div class=" ">
+                                    <v-chip-group
+                                        selected-class="bg-primary"
+                                        @update:model-value="sizesValue"
+                                        mandatory>
+                                        <v-chip
+                                            v-for="(item, index) in sizes"
+                                            :key="index"
+                                            :value="item._id">
+                                            <template v-slot:default>
+                                                <el-tooltip :content="item.variationValue"> </el-tooltip>
+                                                <div v-if="item.variationImage && item.variationImage.length > 0">
+                                                    <img
+                                                        :src="item.variationImage[0]"
+                                                        alt="Imagem da variacao do produto"
+                                                        class="chip-image object-contain" />
+                                                </div>
+                                                <div v-else>
+                                                    {{ item.variationValue }}
+                                                </div>
+                                                <el-tooltip :content="item.variationValue"> </el-tooltip>
+                                            </template>
+                                        </v-chip>
+                                    </v-chip-group>
+                                </div>
+                            </div>
+                            <!--Fim Tamanhos -->
+
+                            <!-- Modelos -->
+                            <div
+                                class="model chips_div"
+                                v-if="models.length > 0">
+                                <p>
+                                    Modelos: <span v-if="selectedModel">{{ selectedModel.variationValue }}</span>
+                                </p>
+                                <div>
+                                    <v-chip-group
+                                        selected-class="bg-primary"
+                                        @update:model-value="modelValue"
+                                        mandatory>
+                                        <v-chip
+                                            v-for="(item, index) in models"
+                                            :key="index"
+                                            :value="item._id">
+                                            <template v-slot:default>
+                                                <el-tooltip :content="item.variationValue"> </el-tooltip>
+                                                <div v-if="item.variationImage && item.variationImage.length > 0">
+                                                    <img
+                                                        :src="item.variationImage[0]"
+                                                        alt="Imagem da variacao do produto"
+                                                        class="chip-image object-contain" />
+                                                </div>
+                                                <div v-else>
+                                                    {{ item.variationValue }}
+                                                </div>
+                                                <el-tooltip :content="item.variationValue"> </el-tooltip>
+                                            </template>
+                                        </v-chip>
+                                    </v-chip-group>
+                                </div>
+                            </div>
+                            <!-- Fim Modelos -->
+
+                            <!-- Material -->
+                            <div
+                                class="materials chips_div"
+                                v-if="materials.length > 0">
+                                <p>
+                                    Materiais: <span v-if="selectedMaterial">{{ selectedMaterial.variationValue }}</span>
+                                </p>
+                                <div class=" ">
+                                    <v-chip-group
+                                        selected-class="bg-primary"
+                                        @update:model-value="materialValue"
+                                        mandatory>
+                                        <v-chip
+                                            v-for="(item, index) in materials"
+                                            :key="index"
+                                            :value="item._id">
+                                            <template v-slot:default>
+                                                <el-tooltip :content="item.variationValue"> </el-tooltip>
+                                                <div v-if="item.variationImage && item.variationImage.length > 0">
+                                                    <img
+                                                        :src="item.variationImage[0]"
+                                                        alt="Imagem da variacao do produto"
+                                                        class="chip-image object-contain" />
+                                                </div>
+                                                <div v-else>
+                                                    {{ item.variationValue }}
+                                                </div>
+                                                <el-tooltip :content="item.variationValue"> </el-tooltip>
+                                            </template>
+                                        </v-chip>
+                                    </v-chip-group>
+                                </div>
+                            </div>
+                            <!--Fim Material -->
+                        </div>
+
+                        <!-- Botões de ação -->
+                        <div
+                            ref="buttons"
+                            class="buttons flex-row gap-1 flex flex-wrap">
+                            <el-button
+                                ref="ref1"
+                                size="small"
+                                :icon="first_icon"
+                                :loading="loading_button"
+                                :type="styl_firstbutton"
+                                @click="firstButton">
+                                {{ titleFirst }}
+                            </el-button>
+
+                            <el-button
+                                ref="ref2"
+                                size="small"
+                                :loading="loading_button"
+                                :type="styl_secondbutton"
+                                @click="secondButton">
+                                {{ titleSecond }}
+                            </el-button>
+
+                            <el-button
+                                ref="ref3"
+                                size="small"
+                                :loading="loading_button"
+                                :type="styl_thirdbutton"
+                                @click="thirdButton">
+                                {{ titleThird }}
+                            </el-button>
+
+                            <el-button
+                                size="small"
+                                :loading="loading_button"
+                                :type="styl_fourthbutton"
+                                @click="fourthButton">
+                                {{ titleFourth }}
+                            </el-button>
+                        </div>
+                        <!-- Fim da seção de seleção de variações -->
+                    </div>
                     <br />
                     <div>
                         <h2 class="text-lg mb-1">Descrição:</h2>
@@ -54,9 +273,10 @@
                             class="font-normal indent-2"></p>
                     </div>
                 </div>
+                <!--Fim Descrição do produto -->
             </div>
 
-            <div class="compra flex flex-col gap-4 bg-white rounded-md p-4 h-max">
+            <div class="compra-desktop hidden lg:flex flex-col gap-4 bg-white rounded-md p-4 h-max">
                 <div class="text-2xl">
                     <span class="font-medium text-xs">Preço: </span>
                     <span
@@ -91,7 +311,7 @@
                 </div>
 
                 <!-- Seção de seleção de variações -->
-                <div class="buttons-chips flex flex-col lg:flex-row flex-wrap gap-3  font-semibold">
+                <div class="buttons-chips flex flex-col lg:flex-row flex-wrap gap-3 font-semibold">
                     <!-- Cores -->
                     <div
                         class="color chips_div"
@@ -278,7 +498,7 @@
         </div>
 
         <!-- ///////////////////////////////// -->
-         
+
         <!-- Seção de detalhes do produto -->
         <div class="flex flex-col flex-1 gap-2 lg:overflow-auto lg:max-h-[calc(100vh-82px)]">
             <!-- Especificações do produto -->
