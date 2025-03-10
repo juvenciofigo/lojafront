@@ -1,6 +1,6 @@
 <template lang="">
     <div class="flex flex-col">
-        <!-- <nav class="lg:hidden">
+         <nav class="lg:hidden">
             <el-drawer
                 :size="300"
                 v-model="drawer"
@@ -67,7 +67,7 @@
                     </nav>
                 </template>
             </el-drawer>
-        </nav> -->
+        </nav>
 
         <nav class="desktop header-1 flex flex-row justify-between items-center p-1 bg-white">
             <div class="text-xs text-center hidden lg:block">
