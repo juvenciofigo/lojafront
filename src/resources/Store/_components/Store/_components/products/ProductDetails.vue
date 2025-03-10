@@ -136,7 +136,17 @@
     function modelValue(value) {
         variation.value.model = value;
     }
+    import { ElNotification } from "element-plus";
 
+   
+
+    const notification = (message) => {
+    ElNotification({
+        title: "Erro!",
+        message: message,
+        type: "error",
+    });
+};
     const verifyVaraiations = async () => {
         let error = null;
         const colors = await computed(() => product.value.productVariations.filter((item) => item.variationType === "Cor"));
@@ -145,31 +155,30 @@
         const materials = await computed(() => product.value.productVariations.filter((item) => item.variationType === "Material"));
 
         if (colors.value.length && !variation.value.color) {
-            return { error: "Selecione a cor" };
+            return "Selecione a cor";
         }
         if (sizes.value.length && !variation.value.size) {
-            return { error: "Selecione o tamanho" };
+            return "Selecione o tamanho";
         }
         if (models.value.length && !variation.value.model) {
-            return { error: "Selecione o modelo" };
+            return "Selecione o modelo";
         }
         if (materials.value.length && !variation.value.material) {
-            return { error: "Selecione o material" };
+            return "Selecione o material";
         }
         return error;
     };
 
     async function addToCart() {
-        loading_button.value = true;
-        store.commit("SET_loadingPriceUpdate");
-        
         const res = await verifyVaraiations();
 
         if (res) {
-            store.commit("updateSnackbar", { text: res.error, snackbarType: "error" });
+            notification(res);
             loading_button.value = false;
             return;
         }
+        loading_button.value = true;
+        store.commit("SET_loadingPriceUpdate");
 
         await store.dispatch("addToCart", { isAuthenticated: isAuthenticated.value, item: { productId: route.params.id, variation: toRaw(variation.value), quantity: quantity.value || 1 } });
 

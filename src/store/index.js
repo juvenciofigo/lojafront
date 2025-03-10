@@ -18,7 +18,7 @@ function headers() {
 }
 
 const notification = (payload) => {
-    ElNotification.success({
+    ElNotification({
         title: payload.title,
         message: payload.message,
         type: payload.type,
@@ -1262,7 +1262,7 @@ export default createStore({
                     return;
                 } else {
                     notification({
-                        title: "Errp!",
+                        title: "Erro!",
                         type: "error",
                         message: res.data.message,
                     });
@@ -1281,12 +1281,11 @@ export default createStore({
             try {
                 const res = await sendAxio("post", `/mpesaPay`, { ...payload, orderId: state.orderPaymentId }, headers());
                 if (res.status === 200 || res.status === 201) {
-                    ElNotification.success({
-                        title: "Successo",
+                    notification({
+                        title: "Sucesso!",
                         type: "success",
                         message: res.data.message,
                     });
-
                     commit("SET_PAYMENT");
                     window.location.href = `/perfil/${user.id}/pedidos`;
                 }

@@ -1,7 +1,7 @@
 import { ElNotification } from "element-plus";
 
 const notification = (message) => {
-    ElNotification.success({
+    ElNotification({
         title: "Erro!",
         type: "error",
         message: message,
