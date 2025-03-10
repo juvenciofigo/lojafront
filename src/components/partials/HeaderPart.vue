@@ -1,6 +1,6 @@
 <template lang="">
     <div class="flex flex-col">
-         <nav class="lg:hidden">
+        <nav class="lg:hidden">
             <el-drawer
                 :size="300"
                 v-model="drawer"
@@ -128,11 +128,10 @@
                         v-loading="loadingPriceUpdate"
                         to="/carrinho"
                         class="flex flex-row items-center gap-1">
-                        <lord-icon class="w-6 md:w-10"
+                        <lord-icon
+                            class="w-6 md:w-10"
                             src="https://cdn.lordicon.com/odavpkmb.json"
-                            trigger="hover"
-                            >
-                            
+                            trigger="hover">
                         </lord-icon>
                         <div class="">
                             <p class="font-medium text-[10px] md:text-[12px]">Carrinho de compras</p>
@@ -320,5 +319,10 @@
     }
     .with-loader .el-loading-spinner {
         top: 0 !important;
+    }
+    .el-notification {
+        height: auto !important;
+        padding: 5px !important;
+        font-size: 10px !important;
     }
 </style>
