@@ -109,7 +109,7 @@
                         <div class="mt-2 mt-sm-0 flex-row flex-wrap flex justify-end gap-2 w-max">
                             <button
                                 v-if="order.payment.status !== `Pago`"
-                                class="bg-green-500 text-green-100 active:text-green-500 duration-500 active:bg-green-100 text-xs p-1 rounded-md w-max"
+                                class="bg-green-500 text-green-100 active:text-green-500 duration-500 active:bg-green-100 p-1 rounded-md w-max"
                                 @click="makePayment(order.payment.status, order._id, order.payment.amount)">
                                 Fazer pagamento
                             </button>
@@ -117,11 +117,11 @@
                                 name="doPay"
                                 v-if="order.payment.status !== `Pago`"
                                 @click="makePayment(order.payment.status, order._id, order.payment.amount)" />
-                            <button class="bg-blue-100 text-blue-500 active:text-blue-100 duration-500 active:bg-blue-500 text-xs p-1 rounded-md w-max">Mudar Endereço</button>
+                            <button class="bg-blue-100 text-blue-500 active:text-blue-100 duration-500 active:bg-blue-500 p-1 rounded-md w-max">Mudar Endereço</button>
 
                             <button
                                 v-if="order.payment.status !== `Pago`"
-                                class="text-red-500 bg-red-100 active:text-red-100 active:bg-red-500 duration-500 text-xs p-1 rounded-md">
+                                class="text-red-500 bg-red-100 active:text-red-100 active:bg-red-500 duration-500 p-1 rounded-md">
                                 Cancelar Pedido
                             </button>
                         </div>
@@ -286,7 +286,7 @@
                                         <span>{{ order.customer.firstName }}</span>
                                         <span>{{ order.customer.lastName }}</span>
                                     </h6>
-                                    <p class="text-xs text-muted-foreground">Customer</p>
+                                    <p class="text-muted-foreground">Customer</p>
                                 </div>
                             </div>
                         </li>

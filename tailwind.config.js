@@ -16,6 +16,9 @@ module.exports = {
             },
         },
         extend: {
+            fontSize: {
+                text13: ["13px", "16px"],
+            },
             screens: {
                 x: "420px",
             },

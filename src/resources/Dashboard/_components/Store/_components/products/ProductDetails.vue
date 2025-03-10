@@ -21,30 +21,32 @@
         :styl_fourthbutton="`info`">
 
         <template #product-statistic>
-            <div class="border border-slate-50 p-2 rounded-md">
-                <div class="flex flex-row flex-wrap gap-4 my-3">
-                    <div class="flex flex-row shadow-md p-4 rounded-md border-[0.6px] border-slate-50 gap-2">
-                        <div class="flex items-center p-2">
+            <div class="border border-slate-50 p-1 rounded-md">
+                <div class="flex flex-row justify-center flex-wrap gap-4 my-3">
+
+                    <div class="flex flex-row shadow-md items-center p-2 rounded-md border-[0.6px] border-slate-50 gap-2">
+                        <div class="flex items-center p-1">
                             <Copy />
                         </div>
                         <div class="flex flex-col text-center">
-                            <h2>Nr. pedidos::</h2>
-                            <div>{{ totalOrders }}</div>
+                            <p class="font-semibold">Nr. pedidos:</p>
+                            <p>{{ totalOrders }}</p>
                         </div>
                     </div>
-                    <div class="flex flex-row shadow-md p-4 rounded-md border-[0.6px] border-slate-50">
-                        <div class="flex items-center p-2">
+
+                    <div class="flex flex-row items-center shadow-md p-2 rounded-md border-[0.6px] border-slate-50">
+                        <div class="flex items-center p-1">
                             <Receipt />
                         </div>
                         <div class="flex flex-col text-center">
-                            <h2>Total vendido:</h2>
-                            <div>{{ formatCurrency(totalRevenue) }}</div>
+                            <p class="font-semibold">Total vendido:</p>
+                            <p>{{ formatCurrency(totalRevenue) }}</p>
                         </div>
                     </div>
                 </div>
                 <div>
-                    <h2>Fornecedor:</h2>
-                    <p>{{ product.productVendor }}</p>
+                    <span class="font-semibold">Fornecedor: </span>
+                    <span> {{ product.productVendor }}</span>
                 </div>
             </div>
         </template>

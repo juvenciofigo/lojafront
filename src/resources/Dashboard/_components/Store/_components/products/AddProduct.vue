@@ -2,7 +2,7 @@
     <div class="bottom-0 top-[4px] p-4 right-0 flex-1 w-full flex flex-col overflow-auto bg-white gap-2 flex-nowrap">
         <div>
             <h1 class="text-lg font-semibold">Informações Básicas</h1>
-            <p class="text-xs indent-2">Preencha as informações abaixo</p>
+            <p class="indent-2">Preencha as informações abaixo</p>
         </div>
 
         <form
@@ -534,7 +534,7 @@
             if (productSeleted) {
                 await store.dispatch("updateProduct", { productSeleted, formData });
             } else {
-                // let result; 
+                // let result;
                 // result = await store.dispatch("addProduct", formData);
                 await store.dispatch("addProduct", formData);
                 // if (result === true) {

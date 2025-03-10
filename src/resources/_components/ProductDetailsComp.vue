@@ -1,63 +1,85 @@
 <template>
-    <div class="flex flex-col lg:flex-row p-1 gap-1 flex-1 h-max">
-        <!-- Seção de imagens do produto -->
-        <div class="images bg-white rounded-md w-full p-2 lg:w-[460px] flex flex-col gap-3">
-            <div class="image self-center max-w-[450px] lg:w-full">
-                <el-image
-                    :src="imageLink"
-                    hide-on-click-modal
-                    :zoom-rate="1.2"
-                    :max-scale="7"
-                    :min-scale="0.2"
-                    :preview-teleported="true"
-                    :preview-src-list="images"
-                    :initial-index="selectedImage"
-                    fit="cover" />
-            </div>
+    <div class="mt-3 flex flex-col gap-4">
+        <div class="flex flex-row justify-between gap-3">
+            <div class="flex flex-row flex-1 bg-white p-4 gap-4">
+                <!-- Seção de imagens do produto -->
+                <div class="images rounded-md p-2 flex flex-row gap-3">
+                    <div
+                        class="changeImage flex flex-col p-1 gap-2 overflow-auto w-full"
+                        v-if="images && images.length > 1">
+                        <button
+                            v-for="(image, index) in images"
+                            :key="index"
+                            @click="updateImageLink(index)"
+                            class="select rounded-md w-[60px] h-[60px] flex-shrink-0 outline outline-1">
+                            <img
+                                :src="image"
+                                alt="Imagem do Produto"
+                                class="image rounded-sm w-full h-full object-contain" />
+                        </button>
+                    </div>
 
-            <div
-                class="changeImage flex flex-row mx-auto p-1 gap-2 overflow-auto w-full"
-                v-if="images && images.length > 1">
-                <button
-                    v-for="(image, index) in images"
-                    :key="index"
-                    @click="updateImageLink(index)"
-                    class="select rounded-md w-[100px] h-[70px] flex-shrink-0">
-                    <img
-                        :src="image"
-                        alt="Imagem do Produto"
-                        class="image rounded-sm w-full h-full object-cover" />
-                </button>
-            </div>
-        </div>
+                    <div class="image self-center">
+                        <div class="border w-[310px] h-[310px] overflow-hidden">
+                            <el-image
+                                class="w-full h-full"
+                                :src="imageLink"
+                                hide-on-click-modal
+                                :zoom-rate="1.2"
+                                :max-scale="7"
+                                :min-scale="0.2"
+                                :preview-teleported="true"
+                                :preview-src-list="images"
+                                :initial-index="selectedImage"
+                                fit="cover" />
+                        </div>
+                    </div>
+                </div>
+                <!--Fim Seção de imagens do produto -->
 
-        <!-- Seção de detalhes do produto -->
-        <div class="flex flex-col flex-1 gap-2 lg:overflow-auto lg:max-h-[calc(100vh-82px)]">
-            <div class="Descriptions flex-1 flex flex-col gap-4 bg-white rounded-md p-2 md:p-4">
-                <div>
-                    <h1 class="text-lg lg:text-xl">{{ product.productName }}</h1>
-
+                <!-- Descrição do produto -->
+                <div class="">
+                    <h1 class="text-xl">{{ product.productName }}</h1>
                     <el-rate
                         disabled
                         allow-half
                         v-model="product.productStatistc.ratingAverage"
                         :colors="colorsRate" />
-
-                    <div class="text-lg font-semibold">
-                        <p v-if="product.productPromotion">
-                            <span>{{ formatCurrency(finalPrice) }}</span>
-                        </p>
-                        <p v-else>
-                            <span class="font-medium text-base">Preço: </span>
-                            <span>{{ formatCurrency(finalPrice) }}</span>
-                        </p>
+                    <br />
+                    <br />
+                    <div>
+                        <h2 class="text-lg mb-1">Descrição:</h2>
+                        <p
+                            v-html="product.productDescription"
+                            class="font-normal indent-2"></p>
                     </div>
                 </div>
+            </div>
+
+            <div class="compra flex flex-col gap-4 bg-white rounded-md p-4 h-max">
+                <div class="text-2xl">
+                    <span class="font-medium text-xs">Preço: </span>
+                    <span
+                        class="font-semibold"
+                        v-if="product.productPromotion">
+                        {{ formatCurrency(finalPrice) }}
+                    </span>
+                    <span
+                        class="font-semibold"
+                        v-else>
+                        {{ formatCurrency(finalPrice) }}
+                    </span>
+                </div>
+
                 <slot name="product-statistic" />
 
                 <!-- Input para quantidade -->
-                <div class="flex flex-row gap-3">
-                    <label for="quant">Quantidade:</label>
+                <div class="flex flex-row items-center gap-3">
+                    <label
+                        class="font-semibold"
+                        for="quant">
+                        Quantidade:
+                    </label>
 
                     <el-input-number
                         :disabled="loading_button"
@@ -69,7 +91,8 @@
                 </div>
 
                 <!-- Seção de seleção de variações -->
-                <div class="buttons-chips flex flex-col lg:flex-row flex-wrap gap-3">
+                <div class="buttons-chips flex flex-col lg:flex-row flex-wrap gap-3  font-semibold">
+                    <!-- Cores -->
                     <div
                         class="color chips_div"
                         v-if="colors.length > 0">
@@ -102,7 +125,9 @@
                             </v-chip-group>
                         </div>
                     </div>
+                    <!--Fim Cores -->
 
+                    <!-- Tamanhos -->
                     <div
                         class="sizes chips_div"
                         v-if="sizes.length > 0">
@@ -135,7 +160,9 @@
                             </v-chip-group>
                         </div>
                     </div>
+                    <!--Fim Tamanhos -->
 
+                    <!-- Modelos -->
                     <div
                         class="model chips_div"
                         v-if="models.length > 0">
@@ -168,7 +195,9 @@
                             </v-chip-group>
                         </div>
                     </div>
+                    <!-- Fim Modelos -->
 
+                    <!-- Material -->
                     <div
                         class="materials chips_div"
                         v-if="materials.length > 0">
@@ -201,6 +230,7 @@
                             </v-chip-group>
                         </div>
                     </div>
+                    <!--Fim Material -->
                 </div>
 
                 <!-- Botões de ação -->
@@ -244,16 +274,13 @@
                     </el-button>
                 </div>
                 <!-- Fim da seção de seleção de variações -->
-
-                <!-- Descrição do produto -->
-                <div>
-                    <h2 class="mb-1 font-semibold text-lg underline decoration-slate-300 line underline-offset-3">Descrição:</h2>
-                    <p
-                        v-html="product.productDescription"
-                        class="font-normal text"></p>
-                </div>
             </div>
+        </div>
 
+        <!-- ///////////////////////////////// -->
+         
+        <!-- Seção de detalhes do produto -->
+        <div class="flex flex-col flex-1 gap-2 lg:overflow-auto lg:max-h-[calc(100vh-82px)]">
             <!-- Especificações do produto -->
             <div class="Especificatios bg-white rounded-md p-2 md:p-4">
                 <h2 class="mb-4 font-semibold text-lg underline decoration-slate-300 line underline-offset-3">Especificações:</h2>
@@ -372,7 +399,7 @@
 
                                     <div
                                         v-if="rating.deleted === true"
-                                        class="flex flex-col text-center text-xs">
+                                        class="flex flex-col text-center">
                                         <p>Deleted by</p>
                                         <p>
                                             {{ rating.deletedby.firstName }}

@@ -35,13 +35,13 @@
                                     {{ user?.firstName?.split(" ")?.[0] || "" }}
                                     {{ user?.lastName?.split(" ")?.slice(-1)?.[0] || "" }}
                                 </span>
-                                <span class="text-muted-foreground text-xs">Ver perfil</span>
+                                <span class="text-muted-foreground">Ver perfil</span>
                             </div>
                         </router-link>
                         <p
                             class="flex flex-row items-center h-3 text-red-400 cursor-pointer text-start"
                             @click="store.dispatch('logout', router)">
-                            <span class="block text-xs font-normal">Sair</span>
+                            <span class="block font-normal">Sair</span>
                             <LogOut class="h-full" />
                         </p>
                     </div>
@@ -50,7 +50,7 @@
                 <p class="text-sm mb-1 text-muted-foreground">Categorias</p>
 
                 <template v-if="categories && categories.length > 0">
-                    <nav class="flex flex-col gap-1 text-xs">
+                    <nav class="flex flex-col gap-1">
                         <el-tag
                             size="small"
                             class="cursor-pointer w-full">
@@ -70,7 +70,7 @@
         </nav>
 
         <nav class="desktop header-1 flex flex-row justify-between items-center p-2 bg-white">
-            <div class="text-xs text-center hidden lg:block">
+            <div class="text-center hidden lg:block">
                 <span>Bem-vindo ao {{ storeName }}</span>
             </div>
 
@@ -142,7 +142,7 @@
                     <div
                         v-if="!isAuthenticated"
                         @click="login()"
-                        class="cursor-pointer text-base text-end ml-2 text-[#2196F3]">
+                        class="cursor-pointer text-end ml-2 text-[#2196F3]">
                         <!-- <LogIn class="w-4 h-4" /> -->
                         <span class="">Entrar</span>
                         <!-- <User /> -->
@@ -197,7 +197,7 @@
                     v-for="link in Links"
                     :key="link"
                     :to="link"
-                    class="text-[#333333] hover:scale-110 text-xs font-medium duration-700 hover:text-[#2196F3]">
+                    class="text-[#333333] hover:scale-110 font-medium duration-700 hover:text-[#2196F3]">
                     {{ link }}
                 </router-link>
             </div>

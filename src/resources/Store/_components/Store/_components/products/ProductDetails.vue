@@ -70,7 +70,7 @@
                                     hover>
                                 </v-rating>
                                 <pre>{{ ratingScore.value.value }}</pre>
-                                <div class="text-red-500 text-xs">{{ ratingScore.errorMessage.value }}</div>
+                                <div class="text-red-500">{{ ratingScore.errorMessage.value }}</div>
                             </div>
                         </div>
                     </div>
@@ -138,15 +138,13 @@
     }
     import { ElNotification } from "element-plus";
 
-   
-
     const notification = (message) => {
-    ElNotification({
-        title: "Erro!",
-        message: message,
-        type: "error",
-    });
-};
+        ElNotification({
+            title: "Erro!",
+            message: message,
+            type: "error",
+        });
+    };
     const verifyVaraiations = async () => {
         let error = null;
         const colors = await computed(() => product.value.productVariations.filter((item) => item.variationType === "Cor"));

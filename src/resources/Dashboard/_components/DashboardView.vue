@@ -32,7 +32,7 @@
                                 :to="{ name: `profile`, params: { user: user.id } }">
                                 <div class="flex flex-col justify-between text-sm whitespace-nowrap">
                                     <span>{{ user.firstName.split(" ").at(0) }} {{ user.lastName.split(" ").at(-1) }} </span>
-                                    <span class="text-muted-foreground text-xs">Ver perfil</span>
+                                    <span class="text-muted-foreground">Ver perfil</span>
                                 </div>
                             </router-link>
                             <p
@@ -88,7 +88,7 @@
                         class="h-7.5 w-7.5 lg:hidden"
                         @click.stop="drawer = !drawer" />
 
-                    <div class="route flex items-center lg:px-5 text-xs lg:text-sm text-muted-foreground">
+                    <div class="route flex items-center lg:px-5 lg:text-sm text-muted-foreground">
                         <template
                             v-for="(route, index) in breadcrumb"
                             :key="index">

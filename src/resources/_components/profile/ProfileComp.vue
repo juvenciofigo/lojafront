@@ -19,13 +19,13 @@
                         <div class="flex flex-col justify-between text-sm whitespace-nowrap">
                             <span>{{ user.firstName.split(" ").at(0) }} {{ user.lastName.split(" ").at(-1) }} </span>
 
-                            <span class="text-muted-foreground text-xs">Ver perfil</span>
+                            <span class="text-muted-foreground">Ver perfil</span>
                         </div>
                     </router-link>
                     <p
                         class="flex flex-row items-center h-3 text-red-400 cursor-pointer text-start"
                         @click="store.dispatch('logout', router)">
-                        <span class="block text-xs font-normal">Sair</span>
+                        <span class="block font-normal">Sair</span>
                         <LogOut class="h-full" />
                     </p>
                 </div>
@@ -48,7 +48,7 @@
         </el-drawer>
 
         <div class="header h-[50px] flex flex-row justify-between items-center p-1 lg:p-7 bg-white">
-            <p class="text-xs text-center hidden lg:block">Bem-vindo ao {{ storeName }}.</p>
+            <p class="text-center hidden lg:block">Bem-vindo ao {{ storeName }}.</p>
             <div class="lg:hidden flex flex-row">
                 <Button
                     @click.stop="drawer = !drawer"
@@ -62,7 +62,7 @@
                 <router-link
                     to="/carrinho"
                     class="flex flex-row items-center gap-2 h-max w-max mx-[15px]">
-                    <!-- <span class="text-xs md:text-base">{{ formatCurrency(priceTotal) }} </span> -->
+                    <!-- <span class=" md:">{{ formatCurrency(priceTotal) }} </span> -->
                     <Button
                         variant="Ghost"
                         class="flex gap-2 h-max">
@@ -131,7 +131,7 @@
                 </div>
 
                 <div class="flex flex-col p-1 flex-1 bg-white">
-                    <p class="text-xs text-muted-foreground">Menu</p>
+                    <p class="text-muted-foreground">Menu</p>
 
                     <nav class="flex flex-col gap-1 w-full">
                         <router-link

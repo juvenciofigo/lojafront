@@ -1,5 +1,5 @@
 <template>
-    <v-app class="mt-1 dark bg-slate-50 overflow-hidden">
+    <v-app class="mt-1 dark bg-[#f4f4f4] overflow-hidden text-text13">
         <!--  main -->
         <v-main class="main-vier overflow-hidden">
             <router-view class="principal-viewr" />
@@ -95,9 +95,9 @@
     .principal-viewr {
         width: 100%;
     }
-    @media screen and (min-width: 1500px) {
+    @media screen and (min-width: 1400px) {
         .principal-viewr {
-            width: 1500px;
+            width: 1400px;
         }
     }
 </style>

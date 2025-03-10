@@ -37,9 +37,9 @@
                     <div class="title">
                         <p class="text-center md:group-hover:text-white duration-700 text-[#0062bd] truncate">{{ product.productName }}</p>
                     </div>
-                    
+
                     <div class="title-price self-end">
-                        <div class="price text-center text-xs">
+                        <div class="price text-center">
                             <span class="font-bold">{{ formatCurrency(product.productPrice) }}</span>
                         </div>
                         <el-button
