@@ -11,7 +11,7 @@
                             v-for="(image, index) in images"
                             :key="index"
                             @click="updateImageLink(index)"
-                            class="select rounded-md w-10 h-10 lg:w-[60px] lg:h-[60px] flex-shrink-0 outline outline-1">
+                            class="select rounded-md w-10 h-10 lg:w-[60px] lg:h-[60px] flex-shrink-0 outline outline-1 m-[2px]">
                             <img
                                 :src="image"
                                 alt="Imagem do Produto"
