@@ -20,25 +20,26 @@
                 @submit="handleConfirmationData" />
         </div>
 
-        <div class="mt-2 flex flex-row justify-end">
-            <el-button
-                :disabled="active === 1"
-                @click="next"
-                >Próximo</el-button
-            >
-
-            <el-button
-                :disabled="active === 0 || loading"
-                @click="previous"
-                >Anterior</el-button
-            >
+        <div class="mt-2 flex flex-row justify-end gap-3">
+            <div>
+                <el-button
+                    :disabled="active === 1 || !addressRes"
+                    @click="next"
+                    >Próximo</el-button
+                >
+                <el-button
+                    :disabled="active === 0 || loading || !addressRes"
+                    @click="previous"
+                    >Anterior</el-button
+                >
+            </div>
 
             <span :class="active !== 1 ? 'hidden' : ''">
                 <el-button
                     :disabled="active !== 1"
-                    :loading="loading"
+                    :loading="loading || loadingPriceUpdate || !addressRes"
                     @click="sendOrder()">
-                    Finalizar Pedido
+                    Fazer Pagamento
                 </el-button>
             </span>
         </div>
@@ -67,6 +68,7 @@
 
     import ShippingInfoStep from "@/resources/Store/_components/Store/_components/orders/makeorderComp/ShippingInfoStep.vue";
     import ConfirmationStep from "@/resources/Store/_components/Store/_components/orders/makeorderComp/ConfirmationStep.vue";
+    import { ElNotification } from "element-plus";
 
     const route = useRoute();
     const router = useRouter();
@@ -74,6 +76,7 @@
     const steps = ["Informações de Envio", "Confirmação"];
     const isAuthenticated = ref(computed(() => store.getters.isAuthenticated("authToken")));
     const addressRes = ref(false);
+    const loadingPriceUpdate = ref(computed(() => store.getters.loadingPriceUpdate));
 
     // before Unmount
     onBeforeUnmount(() => {
@@ -126,18 +129,21 @@
     const handleDeliveryData = (data) => {
         selectAddress.value = data;
     };
+
     const handleConfirmationData = (data) => {
         confirmationData.value = data;
     };
+
     const loading = ref(false);
 
     async function sendOrder() {
         loading.value = true;
         if (!selectAddress.value) {
-            store.commit("updateSnackbar", {
-                text: "Preencha o campo com as informações de envio",
-                snackbarType: "warning",
+            ElNotification.error({
+                title: "Erro",
+                message: "Preencha o endereço de envio",
             });
+            active.value = 0;
             loading.value = false;
             return;
         }

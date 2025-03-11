@@ -1,5 +1,5 @@
 <template>
-    <div class="mt-3 flex flex-col gap-4">
+    <div class="mt-3 flex flex-col gap-4 px-1">
         <div class="flex flex-row justify-between gap-3">
             <div class="flex flex-col sm:flex-row flex-1 bg-white p-2 lg:p-4 gap-4 lg:max-h-[380px]">
                 <!-- Seção de imagens do produto -->
@@ -19,7 +19,7 @@
                         </button>
                     </div>
 
-                    <div class="image lg:self-start">
+                    <div class="image lg:self-start border self-center">
                         <div class="border max-w-[370px] max-h-[400px] lg:w-[310px] lg:h-[310px] overflow-hidden">
                             <el-image
                                 class="w-full h-full"
@@ -87,7 +87,7 @@
                                 class="color chips_div"
                                 v-if="colors.length > 0">
                                 <p>
-                                    Cores: <span v-if="selectedColor">{{ selectedColor.variationValue }}</span>
+                                    <span class="font-semibold">Cores: </span><span v-if="selectedColor">{{ selectedColor.variationValue }}</span>
                                 </p>
                                 <div>
                                     <v-chip-group
@@ -122,7 +122,7 @@
                                 class="sizes chips_div"
                                 v-if="sizes.length > 0">
                                 <p>
-                                    Tamanhos: <span v-if="selectedSize">{{ selectedSize.variationValue }}</span>
+                                    <span class="font-semibold">Tamanhos: </span><span v-if="selectedSize">{{ selectedSize.variationValue }}</span>
                                 </p>
                                 <div class=" ">
                                     <v-chip-group
@@ -157,7 +157,7 @@
                                 class="model chips_div"
                                 v-if="models.length > 0">
                                 <p>
-                                    Modelos: <span v-if="selectedModel">{{ selectedModel.variationValue }}</span>
+                                    <span class="font-semibold">Modelos: </span><span v-if="selectedModel">{{ selectedModel.variationValue }}</span>
                                 </p>
                                 <div>
                                     <v-chip-group
@@ -192,7 +192,7 @@
                                 class="materials chips_div"
                                 v-if="materials.length > 0">
                                 <p>
-                                    Materiais: <span v-if="selectedMaterial">{{ selectedMaterial.variationValue }}</span>
+                                    <sapn class="font-semibold">Materiais: </sapn><span v-if="selectedMaterial">{{ selectedMaterial.variationValue }}</span>
                                 </p>
                                 <div class=" ">
                                     <v-chip-group
@@ -226,7 +226,7 @@
                         <!-- Botões de ação -->
                         <div
                             ref="buttons"
-                            class="buttons flex-row gap-1 flex flex-wrap">
+                            class="buttons flex flex-row gap-1 flex-wrap">
                             <el-button
                                 ref="ref1"
                                 size="small"
@@ -263,6 +263,7 @@
                                 {{ titleFourth }}
                             </el-button>
                         </div>
+                        <!--Fim Botões de ação -->
                         <!-- Fim da seção de seleção de variações -->
                     </div>
                     <br />
@@ -276,9 +277,9 @@
                 <!--Fim Descrição do produto -->
             </div>
 
-            <div class="compra-desktop hidden lg:flex flex-col gap-4 bg-white rounded-md p-4 h-max">
+            <div class="compra-desktop hidden lg:flex flex-col gap-4 bg-white rounded-md p-2 h-max w-[300px]">
                 <div class="text-2xl">
-                    <span class="font-medium text-xs">Preço: </span>
+                    <span class="font-normal text-xs">Preço: </span>
                     <span
                         class="font-semibold"
                         v-if="product.productPromotion">
@@ -311,13 +312,13 @@
                 </div>
 
                 <!-- Seção de seleção de variações -->
-                <div class="buttons-chips flex flex-col lg:flex-row flex-wrap gap-3 font-semibold">
+                <div class="buttons-chips flex flex-col lg:flex-row flex-wrap gap-1">
                     <!-- Cores -->
                     <div
                         class="color chips_div"
                         v-if="colors.length > 0">
                         <p>
-                            Cores: <span v-if="selectedColor">{{ selectedColor.variationValue }}</span>
+                            <span class="font-semibold">Cores: </span><span v-if="selectedColor">{{ selectedColor.variationValue }}</span>
                         </p>
                         <div>
                             <v-chip-group
@@ -352,7 +353,7 @@
                         class="sizes chips_div"
                         v-if="sizes.length > 0">
                         <p>
-                            Tamanhos: <span v-if="selectedSize">{{ selectedSize.variationValue }}</span>
+                            <span class="font-semibold">Tamanhos: </span><span v-if="selectedSize">{{ selectedSize.variationValue }}</span>
                         </p>
                         <div class=" ">
                             <v-chip-group
@@ -387,7 +388,7 @@
                         class="model chips_div"
                         v-if="models.length > 0">
                         <p>
-                            Modelos: <span v-if="selectedModel">{{ selectedModel.variationValue }}</span>
+                            <span class="font-semibold">Modelos: </span><span v-if="selectedModel">{{ selectedModel.variationValue }}</span>
                         </p>
                         <div>
                             <v-chip-group
@@ -422,7 +423,7 @@
                         class="materials chips_div"
                         v-if="materials.length > 0">
                         <p>
-                            Materiais: <span v-if="selectedMaterial">{{ selectedMaterial.variationValue }}</span>
+                            <span class="font-semibold">Materiais: </span><span v-if="selectedMaterial">{{ selectedMaterial.variationValue }}</span>
                         </p>
                         <div class=" ">
                             <v-chip-group
@@ -456,7 +457,7 @@
                 <!-- Botões de ação -->
                 <div
                     ref="buttons"
-                    class="buttons flex-row gap-1 flex flex-wrap">
+                    class="buttons flex-row flex flex-nowrap">
                     <el-button
                         ref="ref1"
                         size="small"

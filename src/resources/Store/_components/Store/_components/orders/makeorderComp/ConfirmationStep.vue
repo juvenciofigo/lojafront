@@ -1,13 +1,13 @@
 <template>
     <div class="flex flex-col">
-
-        <CartProductsComp class="self-center"
+        <CartProductsComp
+            class="self-center"
             :cart="cart"
             :tableRowHeight="'h-20'"
             :actionButton="'hidden'" />
         <br />
         <div class="flex flex-row justify-end">
-            <Table>
+            <Table v-loading="loadingPriceUpdate">
                 <TableBody>
                     <TableRow>
                         <TableCell class="h-10 items-center flex flex-row justify-between">
@@ -45,6 +45,7 @@
     const priceTotal = computed(() => store.getters.cart.totalProducts);
     const totalPedido = computed(() => priceTotal.value + shippingPrice.value);
     const confirmationData = ref(null);
+    const loadingPriceUpdate = ref(computed(() => store.getters.loadingPriceUpdate));
 
     const formatCurrency = (value) => {
         if (typeof value !== "number" || isNaN(value)) {
@@ -69,7 +70,11 @@
 
     watch(
         cart,
-        () => {
+        (after) => {
+            if (!after.items || after.items.length === 0) { // esse codigo controla se o carrinho está vazio ou nao, se estiver atualiza a pagina
+                window.location.reload();
+                return;
+            }
             sendData();
         },
         { immediate: true }

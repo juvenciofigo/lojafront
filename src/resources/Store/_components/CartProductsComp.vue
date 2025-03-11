@@ -20,9 +20,12 @@
                         type="danger"
                         size="small"
                         @click="removeProduct(scope.row.item)">
-                        <Trash2
-                            color="red"
-                            size="18" />
+                        <div class="flex flex-col items-center">
+                            <Trash2
+                                color="red"
+                                size="14" />
+                            <span>Remover</span>
+                        </div>
                     </el-button>
                     <button
                         @click="goTo(scope.row.productId)"
@@ -149,9 +152,11 @@
     async function update() {
         await store.dispatch("displayCartPrices", isAuthenticated.value);
         await store.dispatch("displayCartProducts", isAuthenticated.value);
+        store.commit("SET_loadingPriceUpdate");
     }
 
     async function removeProduct(item) {
+        store.commit("SET_loadingPriceUpdate");
         await store.dispatch("removeProductCart", { isAuthenticated: isAuthenticated.value, item });
         update();
     }
@@ -160,7 +165,6 @@
         store.commit("SET_loadingPriceUpdate");
         await store.dispatch("updateProductQuantity", { item, quantity: quantity || 1, isAuthenticated: isAuthenticated.value, store });
         update();
-        store.commit("SET_loadingPriceUpdate");
     }
 
     // Função para formatar valores monetários
