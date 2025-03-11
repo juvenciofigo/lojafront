@@ -1,17 +1,17 @@
 <template>
     <div class="mt-3 flex flex-col gap-4">
         <div class="flex flex-row justify-between gap-3">
-            <div class="flex flex-col sm:flex-row flex-1 bg-white p-2 lg:p-4 gap-4">
+            <div class="flex flex-col sm:flex-row flex-1 bg-white p-2 lg:p-4 gap-4 lg:max-h-[380px]">
                 <!-- Seção de imagens do produto -->
-                <div class="images rounded-md lg:p-2 flex flex-col-reverse lg:flex-row gap-3">
+                <div class="images rounded-md lg:p-2 flex flex-col-reverse lg:flex-row lg:w-max gap-3">
                     <div
-                        class="changeImage flex flex-nowrap lg:flex-col lg:p-1 gap-2 overflow-auto w-full"
+                        class="changeImage sm:flex sm:flex-nowrap lg:flex-col lg:p-1 gap-2 overflow-auto max-w-[360px] lg:w-max"
                         v-if="images && images.length > 1">
                         <button
                             v-for="(image, index) in images"
                             :key="index"
                             @click="updateImageLink(index)"
-                            class="select rounded-md w-[60px] h-[60px] flex-shrink-0 outline outline-1">
+                            class="select rounded-md w-10 h-10 lg:w-[60px] lg:h-[60px] flex-shrink-0 outline outline-1">
                             <img
                                 :src="image"
                                 alt="Imagem do Produto"
@@ -19,7 +19,7 @@
                         </button>
                     </div>
 
-                    <div class="image self-center">
+                    <div class="image lg:self-start">
                         <div class="border max-w-[370px] max-h-[400px] lg:w-[310px] lg:h-[310px] overflow-hidden">
                             <el-image
                                 class="w-full h-full"
