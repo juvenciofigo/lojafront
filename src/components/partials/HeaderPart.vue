@@ -40,7 +40,7 @@
                         </router-link>
                         <p
                             class="flex flex-row items-center h-3 text-red-400 cursor-pointer text-start"
-                            @click="store.dispatch('logout', router)">
+                            @click="logout()">
                             <span class="block font-normal">Sair</span>
                             <LogOut class="h-full" />
                         </p>
@@ -107,7 +107,7 @@
 
                             <el-dropdown-item class="login/logout">
                                 <div
-                                    @click="store.dispatch('logout', router)"
+                                    @click="logout()"
                                     class="login/logout flex flex-row items-center gap-2 h-max">
                                     <p
                                         class="lg:hidden"
@@ -143,9 +143,7 @@
                         v-if="!isAuthenticated"
                         @click="login()"
                         class="cursor-pointer text-end ml-2 text-[#2196F3]">
-                        <!-- <LogIn class="w-4 h-4" /> -->
                         <span class="">Entrar</span>
-                        <!-- <User /> -->
                     </div>
                 </div>
             </div>
@@ -244,7 +242,9 @@
     };
 
     function login() {
-        store.commit("SET_LOGIN_OVERLAY", true);
+        if (!isAuthenticated.value) {
+            store.commit("SET_LOGIN_OVERLAY", true);
+        }
     }
 
     function filterProduct(category) {
@@ -275,6 +275,12 @@
             name: "allProductsClient",
             query: query,
         });
+    }
+
+    function logout() {
+        if (isAuthenticated.value) {
+            store.dispatch("logout", router);
+        }
     }
 
     const formatCurrency = (value) => {

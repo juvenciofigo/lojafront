@@ -1,33 +1,33 @@
 <template lang="">
-    <div class="flex flex-col lg:items-start lg:flex-row lg:pr-5 flex-1 gap-4 flex-wrap p-3">
+    <div
+        v-if="skeleton"
+        class="w-full mx-auto">
+        <v-skeleton-loader
+            class="w-full"
+            type="table,">
+        </v-skeleton-loader>
+    </div>
+    <div
+        v-else
+        class="flex flex-col lg:items-start lg:flex-row lg:pr-5 gap-4 p-3">
         <div
-            class="flex-1 w-full flex justify-center"
+            v-if="cart"
+            class="w-full flex justify-center"
             style="width: calc(100% - 1px)">
             <CartProductsComp
-                v-if="cart"
                 :cart="cart"
                 :TableRowHeight="'h-40'" />
         </div>
 
         <div
             v-loading="loadingPriceUpdate"
-            class="shadow-md rounded-md mt-4 text-center w-full max-w-[410px] lg:w-[410px] flex flex-col gap-6 bg-white">
-            <div
-                v-if="skeleton"
-                class="w-full mx-auto">
-                <v-skeleton-loader
-                    class="w-full"
-                    type="table,">
-                </v-skeleton-loader>
-            </div>
-
-            <div v-else>
-                <p class="my-1 font-semibold">Resumo do pedido</p>
+            class="shadow-md rounded-md text-center w-full md:max-w-[410px] flex flex-col gap-6 bg-white">
+            <div>
+                <p class="my-1 font-semibold text-lg">Resumo do pedido</p>
                 <el-descriptions
                     title=""
                     direction="horizontal"
                     :column="1"
-                    :size="size"
                     border>
                     <el-descriptions-item label="Total de produtos:">{{ formatCurrency(priceTotal) }}</el-descriptions-item>
                     <el-descriptions-item label="Taxa de envio:">{{ formatCurrency(shippingPrice) }}</el-descriptions-item>

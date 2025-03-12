@@ -103,27 +103,28 @@
 </style>
 <style>
     /* Estilizando a barra de rolagem */
-    ::-webkit-scrollbar {
+    /* ::-webkit-scrollbar {
         height: 7px; /* Altura da barra de rolagem */
-        width: 7px;
-    }
+        /* width: 7px;
+    } */
 
     /* Cor do track (fundo da barra de rolagem) */
-    ::-webkit-scrollbar-track {
+    /* ::-webkit-scrollbar-track {
         background: #6187b8;
         border-radius: 10px;
-    }
+    } */
 
     /* Cor da thumb (a parte que se move da barra de rolagem) */
-    ::-webkit-scrollbar-thumb {
+    /* ::-webkit-scrollbar-thumb {
         background: #70a0df3d;
 
         border-radius: 10px;
-        border: 2px solid #f1f1f1; /* Espaçamento entre thumb e track */
-    }
+        border: 2px solid #f1f1f1; */
+         /* Espaçamento entre thumb e track */
+    /* } */
 
     /* Cor da thumb ao passar o mouse */
-    ::-webkit-scrollbar-thumb:hover {
+    /* ::-webkit-scrollbar-thumb:hover {
         background-color: #1c5caf;
-    }
+    } */
 </style>

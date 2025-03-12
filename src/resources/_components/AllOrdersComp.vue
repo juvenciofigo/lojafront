@@ -1,63 +1,85 @@
 <template lang="">
-    <div class="flex flex-col flex-1 gap-2 overflow-auto">
-        <div class="p-4">
-            <Input
-                class="max-w-sm"
-                placeholder="Filter emails..." />
+    <div class="flex flex-col flex-1 gap-2 overflow-auto allOlders">
+        <div v-if="orderDocs && orderDocs.length > 0">
+            <div class="p-4">
+                <Input
+                    class="max-w-sm"
+                    placeholder="Filter emails..." />
+            </div>
+            <el-table
+                border
+                align="center"
+                :row-class-name="tableRowClassName"
+                :data="orderDocs"
+                fit
+                show-header
+                size="small">
+                <el-table-column
+                    align="center"
+                    fixed
+                    prop="referenceOrder"
+                    label="Referência" />
+                <el-table-column
+                    align="center"
+                    prop="customer.lastName"
+                    label="Cliente" />
+                <el-table-column
+                    align="center"
+                    prop="createdAt"
+                    label="Data"
+                    :formatter="formatDate" />
+                <el-table-column
+                    align="center"
+                    prop="payment.amount"
+                    label="Total"
+                    :formatter="formatCurrency" />
+                <el-table-column
+                    align="center"
+                    prop="payment.paymentMethod"
+                    label="Forma de pagamento" />
+                <el-table-column
+                    align="center"
+                    prop="payment.status"
+                    label="Estado do pagamento" />
+                <el-table-column
+                    align="center"
+                    prop="delivery.status"
+                    label="Estado da entrega" />
+                <el-table-column
+                    align="center"
+                    fixed="right"
+                    width="110"
+                    label="Ações"
+                    min-width="120">
+                    <template #default="scope">
+                        <el-button
+                            link
+                            type="primary"
+                            size="small"
+                            @click="handleView(scope.row)">
+                            Ver
+                        </el-button>
+                        <el-button
+                            link
+                            type="danger"
+                            size="small"
+                            @click="confirmDelete(scope.row._id, scope.row.payment.status)">
+                            Apagar
+                        </el-button>
+                    </template>
+                </el-table-column>
+            </el-table>
+            <div class="flex items-center space-x-2 py-4">
+                <v-pagination
+                    v-model="curentPage"
+                    @update:modelValue="pageEvent"
+                    :length="totalPages"
+                    :total-visible="4"
+                    density="compact"
+                    variant="flat">
+                </v-pagination>
+            </div>
         </div>
-
-        <el-table
-            v-if="orderDocs && orderDocs.length > 0"
-            :data="orderDocs"
-            :fit="true"
-            show-header
-            size="small">
-            <el-table-column
-                fixed
-                prop="referenceOrder"
-                label="Referência" />
-            <el-table-column
-                prop="customer.lastName"
-                label="Cliente" />
-            <el-table-column
-                prop="createdAt"
-                label="Data"
-                :formatter="formatDate" />
-            <el-table-column
-                prop="payment.amount"
-                label="Total"
-                :formatter="formatCurrency" />
-            <el-table-column
-                prop="payment.paymentMethod"
-                label="Forma de pagamento" />
-            <el-table-column
-                prop="payment.status"
-                label="Estado do pagamento" />
-            <el-table-column
-                prop="delivery.status"
-                label="Estado da entrega" />
-            <el-table-column
-                fixed="right"
-                label="Ações"
-                min-width="120">
-                <template #default="scope">
-                    <el-button
-                        link
-                        type="primary"
-                        size="small"
-                        @click="handleView(scope.row)">
-                        Ver
-                    </el-button>
-                    <el-button
-                        link
-                        type="danger"
-                        size="small"
-                        @click="confirmDelete(scope.row._id, scope.row.payment.status)">
-                        Apagar
-                    </el-button>
-                </template>
-            </el-table-column>
-        </el-table>
 
         <div
             v-else
@@ -65,34 +87,22 @@
             <p>Sem pedidos</p>
         </div>
 
-        <div class="flex items-center space-x-2 py-4">
-            <v-pagination
-                v-model="curentPage"
-                @update:modelValue="pageEvent"
-                :length="totalPages"
-                :total-visible="4"
-                density="compact"
-                variant="flat">
-            </v-pagination>
-        </div>
         <el-dialog
+            :fullscreen="windowWidth <= 768"
+            top="1"
+            close-on-press-escape
+            :lock-scroll="true"
+            show-close
+            align-center
+            destroy-on-close="x"
             v-model="dialogVisible"
-            :close="
-                () => {
-                    dialogVisible = false;
-                }
-            "
-            :title="`Detalhes do Pedido ${selectedOrder.referenceOrder}`"
-            :fullscreen="true">
-            <v-card>
-                <v-card-text class="bg-[#f3f3f9] p-1 overflow-x-hidden">
-                    <OrdersDetails :order="selectedOrder">
-                        <template #doPay>
-                            <slot name="doPay"></slot>
-                        </template>
-                    </OrdersDetails>
-                </v-card-text>
-            </v-card>
+            :title="`Detalhes do Pedido ${selectedOrder.referenceOrder}`">
+            <template #default>
+                <OrdersDetails
+                    class="bg-[#f3f3f9]"
+                    :order="selectedOrder">
+                </OrdersDetails>
+            </template>
         </el-dialog>
 
         <DialogConfirmation
@@ -106,7 +116,7 @@
     </div>
 </template>
 <script setup>
-    import { computed, watchEffect, ref, onBeforeUnmount, defineProps, defineEmits } from "vue";
+    import { computed, watchEffect, watch, ref, onBeforeUnmount, defineProps, defineEmits, onMounted, onUnmounted } from "vue";
     import { useStore } from "vuex";
     import { useRoute, useRouter } from "vue-router";
     import { format } from "date-fns";
@@ -127,7 +137,13 @@
     const curentPage = ref(Number(route.query.offset) || 1);
     const totalPages = ref(computed(() => orders.value.totalPages));
     const offset = ref(computed(() => route.query.offset || 1));
-
+    const tableRowClassName = ({ row }) => {
+        if (row.payment.status === "Pago") {
+            return "success-row";
+        } else {
+            return "warning-row";
+        }
+    };
     const dialogVisible = ref(false);
     const selectedOrder = ref({});
 
@@ -169,6 +185,21 @@
         fetchOrders();
     });
 
+    const updateWidth = () => {
+        windowWidth.value = window.innerWidth;
+    };
+    onMounted(() => {
+        window.addEventListener("resize", updateWidth);
+    });
+
+    onUnmounted(() => {
+        window.removeEventListener("resize", updateWidth);
+    });
+    const windowWidth = ref(window.innerWidth);
+    watch(windowWidth, (newWidth) => {
+        console.log("Largura da janela:", newWidth);
+    });
+
     function formatDate(row) {
         return row.createdAt ? format(new Date(row.createdAt), "dd/MM/yyyy HH:mm") : "";
     }
@@ -184,16 +215,39 @@
     };
 </script>
 <style>
-    .el-table .cell {
+    .allOlders .el-table .warning-row {
+        --el-table-tr-bg-color: rgba(255, 0, 0, 0.096);
+    }
+    .allOlders .el-table .success-row {
+        --el-table-tr-bg-color: rgba(0, 255, 21, 0.096);
+    }
+    .allOlders .el-dialog {
+        width: max-content;
+        background: #00000000 !important;
+        padding: 0;
+        margin-top: 4px;
+    }
+    .allOlders .el-dialog__header {
+        display: flex !important;
+        /* justify-content: center !important; */
+        align-items: center !important;
+        background: white !important;
+        padding: 4px !important;
+    }
+    .allOlders .el-dialog__headerbtn {
+        top: unset !important;
+        margin: 10px !important;
+    }
+    /* .el-table .cell {
         font-weight: bolder !important;
         font-size: x-small;
         padding: 0;
         white-space: nowrap;
         overflow: scroll;
         text-overflow: clip;
-    }
+    } */
     @media screen and (min-width: 600px) {
-        .el-table .cell {
+        /* .el-table .cell {
             font-weight: 600;
             font-size: unset;
             text-align: center;
@@ -201,6 +255,6 @@
             white-space: wrap;
             overflow: hidden;
             text-overflow: clip;
-        }
+        } */
     }
 </style>

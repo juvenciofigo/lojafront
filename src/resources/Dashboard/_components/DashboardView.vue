@@ -14,7 +14,7 @@
                 <div>
                     <div
                         class="login/logout cursor-pointer"
-                        v-if="isAuthenticated === false"
+                        v-if="!isAuthenticated"
                         @click="login()">
                         <div class="flex flex-row items-center gap-2 h-max">
                             <LogIn class="w-4 h-4" />
@@ -37,7 +37,7 @@
                             </router-link>
                             <p
                                 class="flex flex-row items-center h-3 text-red-400 cursor-pointer text-start"
-                                @click="store.dispatch('logout', router)">
+                                @click="logout()">
                                 <span class="block text-sm font-normal">Sair</span>
                                 <LogOut class="h-full" />
                             </p>
@@ -106,7 +106,7 @@
                         <AvatarFallback>{{ user.firstName.split(" ").at(0) }}</AvatarFallback>
                     </Avatar>
                     <button
-                        @click="store.dispatch('logout', router)"
+                        @click="logout()"
                         class="flex border p-1 rounded-md flex-row items-center gap-2 h-max w-max">
                         <LogOut class="w-4 h-4" />
                         <span class="text-[15px] font-normal">Sair</span>
@@ -147,6 +147,18 @@
         const paths = router.currentRoute.value.path.split("/").filter((path) => path !== "");
         return paths.slice(0, 2);
     });
+
+    function logout() {
+        if (isAuthenticated.value) {
+            store.dispatch("logout", router);
+        }
+    }
+
+    function login() {
+        if (!isAuthenticated.value) {
+            store.commit("SET_LOGIN_OVERLAY", true);
+        }
+    }
     window.addEventListener("resize", () => {
         if (window.innerWidth > 1279) {
             drawer.value = false;

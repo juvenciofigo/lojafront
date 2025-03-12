@@ -69,11 +69,11 @@
                                                 </button>
                                             </v-card-actions>
                                             <v-card-text class="bg-[#f3f3f9] 0 p-1 overflow-x-hidden">
-                                                <OrdersDetails :order="order">
+                                                <!-- <OrdersDetails :order="order">
                                                     <template #doPay>
                                                         <slot name="doPay"></slot>
                                                     </template>
-                                                </OrdersDetails>
+                                                </OrdersDetails> -->
                                             </v-card-text>
                                         </v-card>
                                     </template>
@@ -126,7 +126,7 @@
     import { Eye, Trash2, X } from "lucide-vue-next";
     import { Input } from "@/components/ui/input";
 
-    import OrdersDetails from "@/resources/_components/OrdersDetails.vue";
+    // import OrdersDetails from "@/resources/_components/OrdersDetails.vue";
     import DialogConfirmation from "@/components/partials/DialogConfirmation.vue";
 
     const store = useStore();

@@ -24,7 +24,7 @@
                     </router-link>
                     <p
                         class="flex flex-row items-center h-3 text-red-400 cursor-pointer text-start"
-                        @click="store.dispatch('logout', router)">
+                        @click="logout()">
                         <span class="block font-normal">Sair</span>
                         <LogOut class="h-full" />
                     </p>
@@ -97,7 +97,7 @@
                             <v-list>
                                 <v-list-item
                                     class="login/logout vListItem cursor-pointer"
-                                    @click="store.dispatch('logout', router)">
+                                    @click="logout()">
                                     <div class="flex flex-row items-center gap-2 h-max mx-[15px]">
                                         <p
                                             class="lg:hidden"
@@ -188,22 +188,9 @@
         store.dispatch("mySelfUserDetails", route.params.user);
     });
 
-    // const calculatePriceTotal = (cartPrices) => {
-    //     return cartPrices.reduce((total, product) => total + product, 0);
-    // };
-
-    // const priceTotal = computed(() => {
-    //     return calculatePriceTotal(store.getters.cartPrice);
-    // });
-
-    // Função para formatar valores monetários
-    // const formatCurrency = (value) => {
-    //     if (typeof value !== "number" || isNaN(value)) {
-    //         return "MZN 0.00";
-    //     }
-    //     return value.toLocaleString("pt-MZ", {
-    //         style: "currency",
-    //         currency: "MZN",
-    //     });
-    // };
+    function logout() {
+        if (isAuthenticated.value) {
+            store.dispatch("logout", router);
+        }
+    }
 </script>

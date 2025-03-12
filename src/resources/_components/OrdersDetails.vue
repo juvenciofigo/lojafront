@@ -1,107 +1,118 @@
 <template lang="">
-    <div class="flex flex-col md:flex-row gap-10">
-        <div class="flex-1 flex flex-col gap-5">
+    <div class="flex flex-col md:flex-row gap-2 justify-center p-1">
+        <div class="flex flex-col lg:w-[700px] gap-1">
             <div class="card">
                 <div class="">
-                    <div class="overflow-auto flex flex-col gap-5">
-                        <v-table class="">
-                            <thead class="">
-                                <tr>
-                                    <th class="text-center flex-1">Producto</th>
-                                    <th class="text-center">Preço unit.</th>
-                                    <th class="text-center">Quant.</th>
-                                    <th class="text-center">Espec.</th>
-                                    <th class="text-center">Subtotal</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr
-                                    v-for="(item, index) in order.cartPayd.length > 0 ? order.cartPayd : order.cart"
-                                    :key="index">
-                                    <td class="">
-                                        <div class="flex flex-row">
-                                            <div class="w-16 h-16 p-1">
-                                                <img
-                                                    :src="item.picture"
-                                                    alt=""
-                                                    class="" />
-                                            </div>
-
-                                            <div class="flex flex-col gap-2">
-                                                <h5 class="">
-                                                    <router-link :to="{ name: `details`, params: { id: `${item.productId}` } }">
-                                                        <span class="whitespace-nowrap">{{ item.productName }}</span>
-                                                    </router-link>
-                                                </h5>
-                                                <div class="">
-                                                    <p class="">Color: <span class="">Pink</span></p>
-                                                    <p class="">Size: <span class="">M</span></p>
-                                                </div>
-                                            </div>
+                    <div class="overflow-auto flex flex-col gap-1">
+                        <el-table
+                            stripe
+                            border
+                            max-height="400"
+                            :data="order.cartPayd"
+                            fit
+                            show-header
+                            size="small">
+                            <!-- ///////////////// -->
+                            <el-table-column
+                                align="center"
+                                fixed
+                                width="110"
+                                label="Produto">
+                                <template #default="scope">
+                                    <div class="flex flex-row justify-center">
+                                        <div class="w-14 h-14 p-1">
+                                            <img
+                                                :src="scope.row.picture"
+                                                :alt="scope.row.productName"
+                                                class="" />
                                         </div>
-                                    </td>
-                                    <td class="text-center">{{ formatCurrency(item.productPrice) }}</td>
-                                    <td class="text-center">{{ item.quantity }}</td>
-                                    <td class="text-center">
+
+                                        <div class="flex flex-col gap-2">
+                                            <h5 class="">
+                                                <router-link :to="{ name: `details`, params: { id: `${scope.row.productId}` } }">
+                                                    <span class="whitespace-nowrap">{{ scope.row.productName }}</span>
+                                                </router-link>
+                                            </h5>
+                                        </div>
+                                    </div>
+                                </template>
+                            </el-table-column>
+                            <!-- //////////////// -->
+                            <el-table-column
+                                align="center"
+                                label="Espec.">
+                                <template #default="scope">
+                                    <div class="text-[12px] leading-[15px]">
                                         <div
                                             class="color whitespace-nowrap"
-                                            v-if="item.variation && item.variation.color">
-                                            <span>Cor: </span>
-                                            <span>{{ item.variation.color.variationValue }}</span>
-                                        </div>
-                                        <div
-                                            class="model whitespace-nowrap"
-                                            v-if="item.variation && item.variation.model">
-                                            <span>Modelo: </span>
-                                            <span>{{ item.variation.model.variationValue }}</span>
+                                            v-if="scope.row.variation && scope.row.variation.color">
+                                            <span> Cor: </span>
+                                            <span class="font-normal">{{ scope.row.variation.color }}</span>
                                         </div>
                                         <div
                                             class="size whitespace-nowrap"
-                                            v-if="item.variation && item.variation.size">
+                                            v-if="scope.row.variation && scope.row.variation.size">
                                             <span>Tamanho: </span>
-                                            <span>{{ item.variation.size.variationValue }}</span>
+                                            <span class="font-normal">{{ scope.row.variation.size }}</span>
                                         </div>
                                         <div
                                             class="material whitespace-nowrap"
-                                            v-if="item.variation && item.variation.material">
+                                            v-if="scope.row.variation && scope.row.variation.material">
                                             <span>Material: </span>
-                                            <span>{{ item.variation.material.variationValue }}</span>
+                                            <span class="font-normal">{{ scope.row.variation.material }}</span>
                                         </div>
-                                    </td>
-                                    <td class="text-center">{{ formatCurrency(item.subtotal) }}</td>
-                                </tr>
-                            </tbody>
-                        </v-table>
-                        <hr />
-                        <tr>
-                            <td>
-                                <v-table class="">
-                                    <td></td>
-                                    <tbody>
-                                        <tr>
-                                            <td>Sub Total :</td>
-                                            <td class="">{{ formatCurrency(order.payment.totalProductsPrice) }}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Shipping Charge :</td>
-                                            <td class="">{{ formatCurrency(order.delivery.cost) }}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Iva</td>
-                                            <td class="text-sm text-muted-foreground">incluso</td>
-                                        </tr>
-                                        <tr>
-                                            <th>Total :</th>
-                                            <th>{{ formatCurrency(order.payment.amount) }}</th>
-                                        </tr>
-                                    </tbody>
-                                </v-table>
-                            </td>
-                        </tr>
+                                        <div
+                                            class="model whitespace-nowrap"
+                                            v-if="scope.row.variation && scope.row.variation.model">
+                                            <span>Modelo: </span>
+                                            <span class="font-normal">{{ scope.row.variation.model }}</span>
+                                        </div>
+                                    </div>
+                                </template>
+                            </el-table-column>
+                            <!-- //////////////// -->
+                            <el-table-column
+                                align="center"
+                                width="65"
+                                prop="quantity"
+                                label="Quant." />
+                            <!-- //////////////// -->
+                            <el-table-column
+                                align="center"
+                                width="100"
+                                label="Preço unit.">
+                                <template #default="scope">
+                                    <span class="whitespace-nowrap">{{ formatCurrency(scope.row.productPrice) }}</span>
+                                </template>
+                            </el-table-column>
+                            <!-- //////////////// -->
+                            <el-table-column
+                                align="center"
+                                label="Subtotal">
+                                <template #default="scope">
+                                    <span class="whitespace-nowrap">{{ formatCurrency(scope.row.subtotal) }}</span>
+                                </template>
+                            </el-table-column>
+                        </el-table>
+                        <!-- ///////////// -->
+                        <div class="shadow-md rounded-md text-center w-full md:max-w-[410px] flex flex-col gap-6 bg-white">
+                            <el-descriptions
+                                title=""
+                                direction="horizontal"
+                                :column="1"
+                                :size="5"
+                                border>
+                                <el-descriptions-item label="Sub Total:">{{ formatCurrency(order.payment.totalProductsPrice) }}</el-descriptions-item>
+                                <el-descriptions-item label="Taxa de envio:">{{ formatCurrency(order.delivery.cost) }}</el-descriptions-item>
+                                <el-descriptions-item label="Iva:">incluso</el-descriptions-item>
+                                <el-descriptions-item label="Total pago:">{{ formatCurrency(order.payment.amount) }}</el-descriptions-item>
+                            </el-descriptions>
+                        </div>
                     </div>
                 </div>
             </div>
             <!--end card-->
+
             <div class="card">
                 <div class="p-4">
                     <div class="flex flex-row justify-between">
@@ -113,10 +124,6 @@
                                 @click="makePayment(order.payment.status, order._id, order.payment.amount)">
                                 Fazer pagamento
                             </button>
-                            <slot
-                                name="doPay"
-                                v-if="order.payment.status !== `Pago`"
-                                @click="makePayment(order.payment.status, order._id, order.payment.amount)" />
                             <button class="bg-blue-100 text-blue-500 active:text-blue-100 duration-500 active:bg-blue-500 p-1 rounded-md w-max">Mudar Endereço</button>
 
                             <button
@@ -238,7 +245,7 @@
             <!--end card-->
         </div>
         <!--end col-->
-        <div class="flex flex-col gap-7">
+        <div class="flex flex-col gap-2 lg:w-[270px]">
             <div class="card">
                 <div class="p-4">
                     <div class="flex justify-between flex-row">
@@ -444,12 +451,14 @@
     import { useStore } from "vuex";
 
     const store = useStore();
+
     defineProps({
         order: {
             type: Object,
             required: true,
         },
     });
+
     function makePayment(status, orderId, amount) {
         if (status === "Pago") return;
 
@@ -459,6 +468,8 @@
     }
 
     const formatCurrency = (value) => {
+        console.log(typeof value);
+
         if (typeof value !== "number" || isNaN(value)) {
             return "MZN 0.00";
         }
