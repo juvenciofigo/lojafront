@@ -1,12 +1,14 @@
-<template >
+<template>
     <div class="flex flex-col h-full">
-        <HeaderPart class="header"/>
-        <router-view class="flex-1"></router-view>
-        <SignaturePart class="footer"/>
+        <HeaderComp class="header" />
+        <section class="flex-1">
+            <router-view></router-view>
+        </section>
+        <SignaturePart class="footer" />
     </div>
 </template>
 
 <script setup>
-    import HeaderPart from "@/components/partials/HeaderPart.vue";
-    import SignaturePart from "@/components/partials/SignaturePart.vue";
+    import HeaderComp from "@/resources/_components/HeaderComp.vue";
+    import SignaturePart from "@/components/partials/FoooterComp.vue";
 </script>

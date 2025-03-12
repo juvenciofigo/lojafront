@@ -1,5 +1,5 @@
 <template>
-    <div class="text-center min-h-[140px] sm:min-h-[300px] lg:min-h-96 w-full">
+    <div class="text-center min-h-[140px] sm:min-h-[300px] bg-white lg:min-h-96 w-full">
         <el-carousel
             :height="'auto'"
             direction="vertical"

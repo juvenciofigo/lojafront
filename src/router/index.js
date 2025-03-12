@@ -56,45 +56,46 @@ const routes = [
                 name: "cart",
                 component: () => import("@/resources/Store/_components/Store/_components/carts/CartProducts.vue"),
             },
-        ],
-    },
-    /// Profile ////
-    {
-        path: "/perfil/:user",
-        name: "profile",
-        redirect: { name: "myProfile" },
-        component: () => import("@/resources/_components/profile/ProfileComp.vue"),
-        meta: { requiresLogin: true },
-        props: { defaultProp: "defaultValue" },
-        children: [
+
+            /// Profile ////
             {
-                path: "",
-                name: "myProfile",
-                component: () => import("@/resources/_components/profile/MyProfile.vue"),
-            },
-            /*
+                path: "/perfil/:user",
+                name: "profile",
+                redirect: { name: "myProfile" },
+                component: () => import("@/resources/_components/profile/ProfileComp.vue"),
+                meta: { requiresLogin: true },
+                props: { defaultProp: "defaultValue" },
+                children: [
+                    {
+                        path: "",
+                        name: "myProfile",
+                        component: () => import("@/resources/_components/profile/MyProfile.vue"),
+                    },
+                    /*
              Compras
             */
-            {
-                path: "pedidos",
-                name: "selfOrders",
-                component: () => import("@/resources/Store/_components/Store/_components/orders/AllOrders.vue"),
-            },
-            /*
+                    {
+                        path: "pedidos",
+                        name: "selfOrders",
+                        component: () => import("@/resources/Store/_components/Store/_components/orders/AllOrders.vue"),
+                    },
+                    /*
              Pagamentos
             */
-            {
-                path: "pagamentos",
-                name: "selfPayments",
-                component: () => import("@/resources/Store/_components/Store/_components/payment/AllPayments.vue"),
-            },
-            /*
+                    {
+                        path: "pagamentos",
+                        name: "selfPayments",
+                        component: () => import("@/resources/Store/_components/Store/_components/payment/AllPayments.vue"),
+                    },
+                    /*
              Endereços
             */
-            {
-                path: "enderecos",
-                name: "selfAddresses",
-                component: () => import("@/resources/Store/_components/Store/_components/addresses/AllAddresses"),
+                    {
+                        path: "enderecos",
+                        name: "selfAddresses",
+                        component: () => import("@/resources/Store/_components/Store/_components/addresses/AllAddresses"),
+                    },
+                ],
             },
         ],
     },
@@ -271,7 +272,6 @@ router.beforeEach(async (to, from, next) => {
 
 router.afterEach(async () => {
     nextTick(() => {
-
         NProgress.done();
     });
 });
