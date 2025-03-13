@@ -49,11 +49,13 @@ function errorMessage(error) {
         console.error(error);
         return;
     } else if (error.response) {
+        console.log(error);
+        
         notification(error.response.data.message);
 
         return;
     } else {
-        // console.error(error);
+        console.error(error);
     }
 }
 

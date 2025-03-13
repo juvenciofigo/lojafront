@@ -1,5 +1,5 @@
 <script setup>
-    import { ElMessageBox, ElMessage, ElLoading } from "element-plus";
+    import { ElMessageBox, ElLoading } from "element-plus";
     import { watch, ref, computed } from "vue";
     import { useStore } from "vuex";
     const store = useStore();
@@ -10,7 +10,8 @@
     function fechar() {
         store.commit("SET_PAYMENT");
         store.commit("SET_ID_ORDER", null);
-        store.commit("updateSnackbar", { text: "Pagamento não relalizado", snackbarType: "warning" });
+
+        store.commit("SET_NOTIFICATION", { title: "Aviso", type: "warning", message: "Pagamento não relalizado" });
         store.commit("SET_AMOUTPAYMENT", 0);
     }
 
@@ -47,17 +48,13 @@
                             // Fazer o pagamento
                             await confirmePayment(value);
                         } catch (error) {
-                            console.log("erro 1");
-                            loadingInstance.close();
+                            console.error("Erro no pagamento:", error);
                         } finally {
-                            console.log("finally");
-                            loadingInstance.close();
+                            if (loadingInstance) loadingInstance.close();
                         }
                     })
                     .catch(() => {
-                        ElMessage.warning("Operação cancelada pelo usuário.");
-                        console.log("erro 2");
-                        fechar();
+                        fechar(); // Executado se o usuário cancelar o prompt
                     });
             }
         }

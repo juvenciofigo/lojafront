@@ -19,7 +19,6 @@
 <script setup>
     import { useStore } from "vuex";
     import { computed } from "vue";
-
     const store = useStore();
     const storeName = computed(() => store.state.storeName);
 </script>

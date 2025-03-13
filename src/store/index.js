@@ -17,14 +17,6 @@ function headers() {
     };
 }
 
-const notification = (payload) => {
-    ElNotification({
-        title: payload.title,
-        message: payload.message,
-        type: payload.type,
-    });
-};
-
 const user = JSON.parse(localStorage.getItem("userData"));
 
 async function sendAxio(method, url, data = null, headers = null, params = null) {
@@ -82,13 +74,11 @@ export default createStore({
         cartPrice: 0,
 
         /// snackbar
-        snackbarText: "",
-        snackbarType: "",
         redirectTo: null,
         authToken: null,
 
         // confirmation dialog
-        overlay: false,
+        // overlay: false,
         loadingPriceUpdate: false,
         // dialog
         payment: false,
@@ -133,11 +123,17 @@ export default createStore({
         loadingPriceUpdate: (state) => state.loadingPriceUpdate,
         payment: (state) => state.payment,
         loginOverlay: (state) => state.loginOverlay,
-        snackbarText: (state) => state.snackbarText,
-        snackbarType: (state) => state.snackbarType,
     },
 
     mutations: {
+        // Notificacao
+        SET_NOTIFICATION(_, date) {
+            ElNotification({
+                title: date.title,
+                type: date.type,
+                message: date.message,
+            });
+        },
         SET_loadingPriceUpdate(state) {
             state.loadingPriceUpdate = !state.loadingPriceUpdate;
         },
@@ -145,13 +141,7 @@ export default createStore({
         DETAILS_USER(state, data) {
             state.userDetails = data;
         },
-        updateSnackbar(state, payload) {
-            state.snackbarText = payload.text;
-            state.snackbarType = payload.snackbarType;
-            setTimeout(() => {
-                state.snackbarText = "";
-            }, 4000);
-        },
+
         // loginOverlay
         SET_LOGIN_OVERLAY(state, status) {
             state.loginOverlay = status;
@@ -162,9 +152,9 @@ export default createStore({
         },
 
         //  Overlay
-        SET_OVERLAY(state, data) {
-            state.overlay = data;
-        },
+        // SET_OVERLAY(state, data) {
+        //     state.overlay = data;
+        // },
         //  Payment
         SET_PAYMENT(state) {
             state.payment = !state.payment;
@@ -243,7 +233,7 @@ export default createStore({
             state.cartPrice = price;
         },
         CLEAR_CARTPRICE(state) {
-            state.cartPrice = null;
+            state.cartPrice = 0;
         },
 
         // categories
@@ -268,16 +258,14 @@ export default createStore({
         */
 
         //////////// add
-        async addProduct(_, payload) {
+        async addProduct({ commit }, payload) {
             try {
                 const res = await sendAxio("post", `/product`, payload, headers());
 
                 if (res.status === 200) {
-                    notification({
-                        title: "Sucesso",
-                        type: "success",
-                        message: res.data.message,
-                    });
+                    commit("SET_NOTIFICATION", { title: "Sucesso", type: "success", message: res.data.message });
+                    window.location.reload();
+
                     window.location.reload();
                 }
             } catch (error) {
@@ -299,14 +287,8 @@ export default createStore({
                 // });
 
                 if (res.status === 200) {
-                    const products = res.data;
-                    commit("SET_PRODUCTS", products);
-
-                    notification({
-                        title: "Sucesso",
-                        type: "success",
-                        message: res.data.message,
-                    });
+                    commit("SET_PRODUCTS", res.data);
+                    commit("SET_NOTIFICATION", { title: "Sucesso", type: "success", message: res.data.message });
                     window.location.reload();
                 }
             } catch (error) {
@@ -314,7 +296,7 @@ export default createStore({
             }
         },
 
-        async updateImage(_, { productId, formData }) {
+        async updateImage({ commit }, { productId, formData }) {
             try {
                 const res = await sendAxio("put", `/product/image/${productId}`, formData, { "Content-Type": "multipart/form-data", ...headers() });
 
@@ -326,12 +308,8 @@ export default createStore({
                 // data: formData,
                 // });
 
-                if (res.data) {
-                    notification({
-                        title: "Sucesso",
-                        type: "success",
-                        message: res.data.message,
-                    });
+                if (res.status === 200) {
+                    commit("SET_NOTIFICATION", { title: "Sucesso", type: "success", message: res.data.message });
                     window.location.reload();
                 }
             } catch (error) {
@@ -340,7 +318,7 @@ export default createStore({
         },
 
         ////////////// delete
-        async deleteProduct(_, { productId, router }) {
+        async deleteProduct({ commit }, { productId, router }) {
             try {
                 // await axios.request({
                 // method: "delete",
@@ -352,11 +330,8 @@ export default createStore({
                 const res = await sendAxio("delete", `/product/${productId}`, null, headers());
 
                 if (res.status === 200) {
-                    notification({
-                        title: "Sucesso",
-                        type: "success",
-                        message: res.data.message,
-                    });
+                    commit("SET_NOTIFICATION", { title: "Sucesso", type: "success", message: res.data.message });
+
                     router.push({ name: "produtos" });
                 }
             } catch (error) {
@@ -364,7 +339,7 @@ export default createStore({
             }
         },
 
-        async addVariation(_, payload) {
+        async addVariation({ commit }, payload) {
             try {
                 // const res = await axios.request({
                 //     method: "post",
@@ -377,11 +352,7 @@ export default createStore({
                 const res = await sendAxio("post", `/variation/${payload.product}`, payload.formData, { "Content-Type": "multipart/form-data", ...headers() });
 
                 if (res.status === 200) {
-                    notification({
-                        title: "Sucesso",
-                        type: "success",
-                        message: res.data.message,
-                    });
+                    commit("SET_NOTIFICATION", { title: "Sucesso", type: "success", message: res.data.message });
                     return true;
                 }
             } catch (error) {
@@ -401,7 +372,7 @@ export default createStore({
                 });
 
                 if (res.status === 200) {
-                    commit("updateSnackbar", { text: "Varição modificada", snackbarType: "success" });
+                    commit("SET_NOTIFICATION", { title: "Sucesso", type: "success", message: res.data.message });
                     return true;
                 }
             } catch (error) {
@@ -410,25 +381,23 @@ export default createStore({
             }
         },
 
-        async detailsVariation({ commit }, payload) {
+        async detailsVariation(_, payload) {
             try {
                 const res = await sendAxio("get", `/variation/${payload.variation}`, null, headers(), { product: payload.product });
                 if (res.status === 200) {
                     return res.data.variation;
                 }
-                commit("updateSnackbar", { text: "", snackbarType: "" });
             } catch (error) {
                 errorMessage(error);
             }
         },
 
-        async AllvariationsAdmin({ commit }, payload) {
+        async AllvariationsAdmin(_, payload) {
             try {
                 const res = await sendAxio("get", `/variations`, null, headers(), { product: payload });
                 if (res.status == 200) {
                     return res.data.variations;
                 }
-                commit("updateSnackbar", { text: "", snackbarType: "" });
             } catch (error) {
                 errorMessage(error);
             }
@@ -472,7 +441,7 @@ export default createStore({
             try {
                 const res = await sendAxio("patch", `/rating/${payload.rating}/delete`, null, headers(), null);
                 if (res.status === 200) {
-                    commit("updateSnackbar", { text: "Comentário apagado", snackbarType: "success" });
+                    commit("SET_NOTIFICATION", { title: "Sucesso", type: "success", message: res.data.message });
                 }
                 return;
             } catch (error) {
@@ -524,7 +493,7 @@ export default createStore({
                 });
 
                 if (res.status === 200) {
-                    commit("updateSnackbar", { text: "Categoria criada", snackbarType: "success" });
+                    commit("SET_NOTIFICATION", { title: "Sucesso!", type: "success", message: res.data.message });
                     dispatch("getAllCategory");
                     return;
                 }
@@ -544,7 +513,7 @@ export default createStore({
                 });
 
                 if (res.status === 200) {
-                    commit("updateSnackbar", { text: "SubCategoria criada", snackbarType: "success" });
+                    commit("SET_NOTIFICATION", { title: "Sucesso!", type: "success", message: res.data.message });
                     dispatch("getAllCategory");
                     return;
                 }
@@ -563,7 +532,7 @@ export default createStore({
                     data: payload,
                 });
                 if (res.status === 200) {
-                    commit("updateSnackbar", { text: "Sub_categoria criada", snackbarType: "success" });
+                    commit("SET_NOTIFICATION", { title: "Sucesso!", type: "success", message: res.data.message });
                     dispatch("getAllCategory");
                     return;
                 }
@@ -631,9 +600,9 @@ export default createStore({
             }
         },
 
-        /**
-         Estatistica
-         */
+        /*
+        Estatistica
+        */
         async estatistic({ commit }) {
             try {
                 const res = await sendAxio("get", `/estatistic`, null, headers());
@@ -743,8 +712,7 @@ export default createStore({
                 const res = await sendAxio("post", `${config.apiURL}/rating/${payload.productId}`, { ratingScore: payload.ratingScore, ratingText: payload.ratingText }, headers(), null);
 
                 if (res.status === 200) {
-                    commit("updateSnackbar", { text: "Avaliaçao adicionada!", snackbarType: "success" });
-                    window.location.reload();
+                    commit("SET_NOTIFICATION", { title: "Sucesso!", type: "success", message: res.data.message });
                 }
                 return;
             } catch (error) {
@@ -757,7 +725,7 @@ export default createStore({
        Carts cliente
        */
 
-        async addToCart(_, { isAuthenticated, item }) {
+        async addToCart({ commit }, { isAuthenticated, item }) {
             const itemProduct = item;
             const user = JSON.parse(localStorage.getItem("userData"));
 
@@ -805,21 +773,13 @@ export default createStore({
 
                     setCookie("tempCart", JSON.stringify(tempCart), 7);
 
-                    notification({
-                        title: "Successo",
-                        type: "success",
-                        message: "Produto adicionado ao carrinho ",
-                    });
+                    commit("SET_NOTIFICATION", { title: "Sucesso", type: "success", message: "Produto adicionado ao carrinho" });
 
                     return;
                 } else {
                     const res = await sendAxio("post", `/cart/${user.id}/addProduct`, item, headers());
 
-                    notification({
-                        title: "Successo",
-                        type: "success",
-                        message: res.data.message,
-                    });
+                    if (res.status === 200) commit("SET_NOTIFICATION", { title: "Sucesso", type: "success", message: res.data.message });
                     return;
                 }
             } catch (error) {
@@ -827,7 +787,7 @@ export default createStore({
             }
         },
 
-        async removeProductCart(_, payload) {
+        async removeProductCart({ commit }, payload) {
             const user = JSON.parse(localStorage.getItem("userData"));
 
             try {
@@ -842,29 +802,19 @@ export default createStore({
                         if (tempCart.length == 0) {
                             window.location.reload();
                         }
-                        notification({
-                            title: "Successo",
-                            type: "success",
-                            message: "Item removido",
-                        });
+
+                        commit("SET_NOTIFICATION", { title: "Sucesso", type: "success", message: "Item removido" });
                     } else {
-                        notification({
-                            title: "Successo",
-                            type: "success",
-                            message: "Carrinho vaZio",
-                        });
+                        commit("SET_NOTIFICATION", { title: "Sucesso", type: "success", message: "Carrinho vazio" });
+
                         window.location.reload();
                     }
 
                     return;
                 } else {
                     const res = await sendAxio("delete", `/cart/${user.id}/remove/${payload.item}`, null, headers());
+                    if (res.status === 200) commit("SET_NOTIFICATION", { title: "Sucesso", type: "success", message: res.data.message });
 
-                    notification({
-                        title: "Successo",
-                        type: "success",
-                        message: res.data.message,
-                    });
                     return;
                 }
             } catch (error) {
@@ -928,38 +878,37 @@ export default createStore({
             }
         },
 
-        async updateProductQuantity(_, payload) {
+        async updateProductQuantity({ commit }, payload) {
             const user = JSON.parse(localStorage.getItem("userData"));
 
-            if (payload.isAuthenticated === false) {
-                if (!tempCart) {
+            try {
+                if (!payload.isAuthenticated) {
+                    if (!tempCart) {
+                        return;
+                    } else {
+                        let tempCart = JSON.parse(getCookie("tempCart"));
+                        const existingProductIndex = tempCart.findIndex((product) => payload.item === product.item);
+
+                        if (existingProductIndex !== -1) {
+                            tempCart[existingProductIndex].quantity = Number(payload.quantity);
+
+                            setCookie("tempCart", JSON.stringify(tempCart), 1);
+                        }
+                    }
+
+                    commit("SET_NOTIFICATION", { title: "Sucesso", type: "success", message: "Produto adicionado ao carrinho" });
+
                     return;
                 } else {
-                    let tempCart = JSON.parse(getCookie("tempCart"));
-                    const existingProductIndex = tempCart.findIndex((product) => payload.item === product.item);
+                    const res = await sendAxio("put", `/cart/${user.id}/update/${payload.item}/${Number(payload.quantity)}`, null, headers());
 
-                    if (existingProductIndex !== -1) {
-                        tempCart[existingProductIndex].quantity = Number(payload.quantity);
-
-                        setCookie("tempCart", JSON.stringify(tempCart), 1);
+                    if (res.status === 200) {
+                        commit("SET_NOTIFICATION", { title: "Sucesso", type: "success", message: res.data.message });
+                        return;
                     }
                 }
-
-                notification({
-                    title: "Successo",
-                    type: "success",
-                    message: "Produto adicionado ao carrinho ",
-                });
-                return;
-            } else {
-                const res = await sendAxio("put", `/cart/${user.id}/update/${payload.item}/${Number(payload.quantity)}`, null, headers());
-
-                notification({
-                    title: "Successo",
-                    type: "success",
-                    message: res.data.message,
-                });
-                return;
+            } catch (error) {
+                errorMessage(error);
             }
         },
 
@@ -970,47 +919,42 @@ export default createStore({
         async sendOrder({ commit, state }, payload) {
             const user = JSON.parse(localStorage.getItem("userData"));
 
-            async function sendOrderRequest(data) {
-                const { cart, address } = data;
-
-                const delivery = { address };
+            // Função separada para envio do pedido
+            const sendOrderRequest = async (cart, address) => {
                 try {
-                    const res = await sendAxio("post", `/order`, { cart, delivery }, headers());
+                    const res = await sendAxio("post", "/order", { cart, delivery: { address } }, headers());
+
                     if (res.status === 200) {
                         const order = res.data.order;
-                        notification({
-                            title: "Successo",
-                            type: "success",
-                            message: res.data.message,
-                        });
+                        commit("CLEAR_CARTPRICE");
+                        commit("SET_NOTIFICATION", { title: "Sucesso", type: "success", message: res.data.message });
                         commit("SET_ID_ORDER", order._id);
                         commit("SET_AMOUTPAYMENT", order.totalPrice);
                         commit("SET_PAYMENT");
                         router.push({ name: "selfOrders", params: { user: `${user.id}` } });
+                        return true;
                     }
+
+                    throw new Error("Erro ao processar pedido.");
                 } catch (error) {
                     errorMessage(error);
                     return false;
                 }
-            }
+            };
 
             try {
-                if (state.selected === false) {
+                // Determinar o endereço antes de chamar `sendOrderRequest`
+                let addressId = payload.selectAddress.addressId;
+
+                if (!state.selected) {
                     const res = await sendAxio("post", `/customer/${user.id}/address`, payload.selectAddress, headers());
 
-                    if (res.status === 200) {
-                        const addressId = res.data.addressId;
-                        await sendOrderRequest({
-                            cart: payload.cart,
-                            address: addressId,
-                        });
-                    }
-                } else {
-                    await sendOrderRequest({
-                        cart: payload.cart,
-                        address: payload.selectAddress.addressId,
-                    });
+                    if (res.status !== 200) throw new Error("Falha ao cadastrar endereço.");
+
+                    addressId = res.data.addressId;
                 }
+
+                await sendOrderRequest(payload.cart, addressId);
             } catch (error) {
                 errorMessage(error);
             }
@@ -1061,34 +1005,26 @@ export default createStore({
             commit("SET_CARTPRODUCTS", cartProducts);
         },
 
-        async deleteOrderClient(_, payload) {
+        async deleteOrderClient({ commit }, payload) {
             try {
                 const res = await sendAxio("patch", `/order/${payload}`, null, headers());
 
                 if (res.status === 200) {
-                    notification({
-                        title: "Successo",
-                        type: "success",
-                        message: res.data.message,
-                    });
-
+                    commit("SET_NOTIFICATION", { title: "Sucesso", type: "success", message: res.data.message });
                     router.go(0);
                 }
+                throw new Error();
             } catch (error) {
                 errorMessage(error);
             }
         },
 
-        async orderToFalse(_, payload) {
+        async orderToFalse({ commit }, payload) {
             try {
                 const res = await sendAxio("patch", `/order/${payload}`, null, headers());
 
                 if (res.status === 200) {
-                    notification({
-                        title: "Successo",
-                        type: "success",
-                        message: res.data.message,
-                    });
+                    commit("SET_NOTIFICATION", { title: "Sucesso", type: "success", message: res.data.message });
                     router.go(0);
                 }
             } catch (error) {
@@ -1110,23 +1046,22 @@ export default createStore({
             try {
                 const res = await sendAxio("post", `/user`, values, null);
                 if (res.status === 200) {
-                    notification({
-                        title: "Successo",
-                        type: "success",
-                        message: "Conta criada, faça o login",
-                    });
-
+                    commit("SET_NOTIFICATION", { title: "Sucesso", type: "success", message: "Conta criada, faça o Login!" });
                     commit("SET_LOGIN_OVERLAY", true);
+                    return;
                 }
+                throw new Error();
             } catch (error) {
                 errorMessage(error);
             }
         },
+
         async novoVisitante({ commit }) {
             sendAxio("get", `/visitaReg`, null, null);
             commit("", false);
         },
         // auth
+
         async login({ commit, state }, payload) {
             try {
                 const res = await sendAxio("post", `/login`, payload.values, null);
@@ -1155,15 +1090,7 @@ export default createStore({
                         })
                     );
                 } else {
-                    // commit("updateSnackbar", { text: "Dados errados", snackbarType: "error" });
-                    console.log(res.data);
-
-                    notification({
-                        title: "Error",
-                        type: "error",
-                        message: res.data.message,
-                    });
-
+                    commit("SET_NOTIFICATION", { title: "Error", type: "error", message: res.data.message });
                     return;
                 }
 
@@ -1177,7 +1104,8 @@ export default createStore({
                     }
                 }
 
-                commit("updateSnackbar", { text: "Bem-vindo", snackbarType: "success" });
+                commit("SET_NOTIFICATION", { title: "Sucesso", type: "success", message: "Bem-vindo" });
+
                 let redirect = null;
                 if (state.redirectTo !== null) {
                     redirect = state.redirectTo;
@@ -1187,17 +1115,9 @@ export default createStore({
                     return;
                 }
                 window.location.reload();
-                return;
             } catch (error) {
-                console.log(error.response.data.message);
-                if (error.response.data.message) {
-                    notification({
-                        title: "Error",
-                        type: "error",
-                        message: error.response.data.message,
-                    });
-                }
                 errorMessage("resposta", error);
+                return;
             }
         },
 
@@ -1230,7 +1150,7 @@ export default createStore({
         },
 
         /*
-        /// addresses
+         addresses
         */
 
         async addresses({ commit }) {
@@ -1248,26 +1168,15 @@ export default createStore({
             }
         },
 
-        async deleteAddress(_, payload) {
+        async deleteAddress({ commit }, payload) {
             try {
                 const res = await sendAxio("put", `/customer/${payload}/address`, null, headers());
 
                 if (res.status === 200) {
-                    notification({
-                        title: "Sucesso",
-                        type: "success",
-                        message: res.data.message,
-                    });
-
-                    return;
-                } else {
-                    notification({
-                        title: "Erro!",
-                        type: "error",
-                        message: res.data.message,
-                    });
+                    commit("SET_NOTIFICATION", { title: "Sucesso", type: "success", message: res.data.message });
                     return;
                 }
+                throw new Error();
             } catch (error) {
                 errorMessage(error);
             }
@@ -1281,14 +1190,11 @@ export default createStore({
             try {
                 const res = await sendAxio("post", `/mpesaPay`, { ...payload, orderId: state.orderPaymentId }, headers());
                 if (res.status === 200 || res.status === 201) {
-                    notification({
-                        title: "Sucesso!",
-                        type: "success",
-                        message: res.data.message,
-                    });
+                    commit("SET_NOTIFICATION", { title: "Sucesso", type: "success", message: res.data.message });
                     commit("SET_PAYMENT");
                     window.location.href = `/perfil/${user.id}/pedidos`;
                 }
+                throw new Error();
             } catch (error) {
                 errorMessage(error);
                 return false;

@@ -240,7 +240,7 @@ router.beforeEach(async (to, from, next) => {
                 next();
             } else {
                 store.commit("setRedirectTo", to.fullPath);
-                store.commit("updateSnackbar", { text: "Faça Login", snackbarType: "warning" });
+                store.commit("SET_NOTIFICATION", { title: "Aviso!", type: "warning", message: "Faça Login" });
                 store.commit("SET_LOGIN_OVERLAY", true);
                 next(false);
             }
@@ -253,11 +253,12 @@ router.beforeEach(async (to, from, next) => {
             } else {
                 if (Number(tring) < 2) {
                     store.commit("Set_tringValue");
-                    store.commit("updateSnackbar", { text: "Sem permisão", snackbarType: "error" });
+                    store.commit("SET_NOTIFICATION", { title: "Erro!", type: "error", message: "Sem premisão para processeguir" });
+
                     store.commit("SET_LOGIN_OVERLAY", true);
                     next(false);
                 } else {
-                    store.commit("updateSnackbar", { text: "Página inicial", snackbarType: "warning" });
+                    store.commit("SET_NOTIFICATION", { title: "Erro!", type: "error", message: "Redirecionando para Página Inicial" });
                     next({ name: "home" });
                 }
             }

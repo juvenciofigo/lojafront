@@ -188,26 +188,43 @@
 
     const categories = computed(() => store.state.categories);
 
+    const notification = (message) => {
+        store.commit("SET_NOTIFICATION", { title: "Aviso", type: "warning", message: message });
+    };
+
     async function createCategory() {
         if (!categoryName.value) {
-            store.commit("updateSnackbar", { text: "Preencha o campo o nome da categoria", snackbarType: "warning" });
+            notification("Preencha o campo o nome da categoria");
             return;
         }
+
         await store.dispatch("createCategory", categoryName.value);
     }
 
     async function createSubCategory() {
-        if (!subCategoryName.value) store.commit("updateSnackbar", { text: "Preencha o campo o nome da subcategoria", snackbarType: "warning" });
+        if (!subCategoryName.value) {
+            notification("Preencha o campo o nome da subcategoria");
+            return;
+        }
 
-        if (!categoryName.value) store.commit("updateSnackbar", { text: "Escolha uma Categoria", snackbarType: "warning" });
+        if (!categoryName.value) {
+            notification("Escolha uma Categoria");
+            return;
+        }
 
         await store.dispatch("createSubCategory", { categoryID: selectedCategory.value, subCategoryName: subCategoryName.value });
     }
 
     async function createSub_category() {
-        if (!sub_categoryName.value) store.commit("updateSnackbar", { text: "Preencha o campo o nome da sub_categoria", snackbarType: "warning" });
+        if (!sub_categoryName.value) {
+            notification("Preencha o campo o nome da sub_categoria");
+            return;
+        }
 
-        if (!subCategoryName.value) store.commit("updateSnackbar", { text: "Escolha uma Subcategoria", snackbarType: "warning" });
+        if (!subCategoryName.value) {
+            notification("Escolha uma Subcategoria");
+            return;
+        }
 
         await store.dispatch("createSub_category", { subCategoryID: selectedSubcategory.value, sub_categoryName: sub_categoryName.value });
     }

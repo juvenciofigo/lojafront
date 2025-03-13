@@ -270,10 +270,10 @@
     import { useStore } from "vuex";
     import { ref, onMounted, computed } from "vue";
     import Editor from "@tinymce/tinymce-vue";
-    import { useForm } from "vee-validate";
-    import { toTypedSchema } from "@vee-validate/zod";
-    import * as z from "zod";
-    import { Input } from "@/components/ui/input";
+    // import { useForm } from "vee-validate";
+    // import { toTypedSchema } from "@vee-validate/zod";
+    // import * as z from "zod";
+    // import { Input } from "@/components/ui/input";
     import { Label } from "@/components/ui/label";
     import { useRoute } from "vue-router";
     import { Button } from "@/components/ui/button";
@@ -331,7 +331,7 @@
     // Função para criar uma nova categoria
     async function createCategory() {
         if (!newCategoryName.value) {
-            store.commit("updateSnackbar", { text: "Preencha o campo o nome da categoria", snackbarType: "warning" });
+            store.commit("SET_NOTIFICATION", { title: "Aviso", type: "warning", message: "Preencha o campo o nome da categoria" });
             return;
         }
         await store.dispatch("createCategory", newCategoryName.value);

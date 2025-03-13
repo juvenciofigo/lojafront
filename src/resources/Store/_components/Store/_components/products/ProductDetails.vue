@@ -208,6 +208,7 @@
     const submit = handleSubmit(async (values) => {
         ratingButtonLoading.value = true;
         await store.dispatch("sendRating", { ...values, productId: route.params.id });
+        store.dispatch("detailsProduct", route.params.id);
         handleReset();
         ratingDialog.value = false;
         ratingButtonLoading.value = false;
@@ -217,7 +218,7 @@
         const res = await verifyVaraiations();
 
         if (res) {
-            store.commit("updateSnackbar", { text: res.error, snackbarType: "error" });
+            store.commit("SET_NOTIFICATION", { title: "Erro!", type: "error", message: res.error });
             return;
         }
         router.push({ name: "makeOrder", query: { productsFrom: "payNow", product: route.params.id, quantity: quantity.value || 1, variation: toRaw(variation.value) } });
