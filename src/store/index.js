@@ -79,7 +79,6 @@ export default createStore({
         authToken: null,
 
         // confirmation dialog
-        // overlay: false,
         loadingPriceUpdate: false,
         // dialog
         payment: false,
@@ -151,10 +150,6 @@ export default createStore({
             state.redirectTo = route;
         },
 
-        //  Overlay
-        // SET_OVERLAY(state, data) {
-        //     state.overlay = data;
-        // },
         //  Payment
         SET_PAYMENT(state) {
             state.payment = !state.payment;
@@ -1076,6 +1071,17 @@ export default createStore({
                     console.log(res.data);
                 }
                 return;
+            } catch (error) {
+                errorMessage(error);
+            }
+        },
+
+        async updateMyProfile({ commit }, payload) {
+            try {
+                const res = await sendAxio("put", `/user/${payload.id}`, null, headers());
+                if (res.status === 200) {
+                    commit("SET_NOTIFICATION", { title: "Sucesso", type: "success", message: "Conta criada, faça o Login!" });
+                }
             } catch (error) {
                 errorMessage(error);
             }
