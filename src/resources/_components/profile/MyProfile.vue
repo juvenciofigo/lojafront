@@ -203,9 +203,9 @@
     });
 
     const submit = handleSignUpSubmit(
-        async (values) => {
+        async (value) => {
             loadbtn.value = true;
-            // await store.dispatch("newUser", values);
+            await store.dispatch("updateMyProfile",value);
             loadbtn.value = false;
             modifyDialog.value = false;
         },
