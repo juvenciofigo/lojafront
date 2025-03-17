@@ -140,6 +140,7 @@
     import { useRouter } from "vue-router";
     import { useStore } from "vuex";
     import { Trash2 } from "lucide-vue-next";
+    import { formatCurrency } from "@/util/functions";
 
     const router = useRouter();
     const store = useStore();
@@ -175,17 +176,6 @@
         await store.dispatch("updateProductQuantity", { item, quantity: quantity || 1, isAuthenticated: isAuthenticated.value, store });
         update();
     }
-
-    // Função para formatar valores monetários
-    const formatCurrency = (value) => {
-        if (typeof value !== "number" || isNaN(value)) {
-            return "MZN 0.00";
-        }
-        return value.toLocaleString("pt-MZ", {
-            style: "currency",
-            currency: "MZN",
-        });
-    };
 </script>
 <style>
     @media screen and (max-width: 600px) {

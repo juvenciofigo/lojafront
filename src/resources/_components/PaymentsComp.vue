@@ -122,9 +122,9 @@
     import { computed, watchEffect, ref, onBeforeUnmount, defineProps, defineEmits } from "vue";
     import { useStore } from "vuex";
     import { useRoute, useRouter } from "vue-router";
-    import { format } from "date-fns";
     import { Eye, Trash2, X } from "lucide-vue-next";
     import { Input } from "@/components/ui/input";
+    import { formatCurrency, formatDate } from "@/util/functions";
 
     // import OrdersDetails from "@/resources/_components/OrdersDetails.vue";
     import DialogConfirmation from "@/components/partials/DialogConfirmation.vue";
@@ -171,21 +171,7 @@
         store.dispatch(`${props.storeaction}`, { offset: offset.value, user: route.params.user });
     };
 
-    function formatDate(date) {
-        return format(new Date(date), "dd/MM/yyyy HH:mm");
-    }
-
     watchEffect(() => {
         fetchOrders();
     });
-
-    const formatCurrency = (value) => {
-        if (typeof value !== "number" || isNaN(value)) {
-            return "MZN 0.00";
-        }
-        return value.toLocaleString("pt-MZ", {
-            style: "currency",
-            currency: "MZN",
-        });
-    };
 </script>

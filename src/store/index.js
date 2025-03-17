@@ -1,7 +1,7 @@
 import { createStore } from "vuex";
 import axios from "axios";
 import config from "@/config/config";
-import { setCookie, getCookie, removeCookie, cookieExists, errorMessage } from "@/config/cookieUtils";
+import { setCookie, getCookie, removeCookie, cookieExists, errorMessage } from "@/util/cookieUtils";
 import router from "@/router";
 import { ElNotification } from "element-plus";
 
@@ -43,9 +43,10 @@ export default createStore({
         /// Loja
         storeName: process.env.VUE_APP_STORE_NAME,
         // users
-        userDetails: null,
         tring: 0,
         dashboard: "dashboard",
+        // profile
+        mySelf: null,
 
         /// products
         product: {},
@@ -91,8 +92,10 @@ export default createStore({
         // producs
         products: (state) => state.products,
 
+        // profile
+        mySelf: (state) => state.mySelf,
+
         ///user
-        userDetails: (state) => state.userDetails,
         isAuthenticated: () => (cookieName) => {
             return cookieExists(cookieName);
         },
@@ -107,8 +110,10 @@ export default createStore({
                 return false;
             }
         },
+
         /// payment
         amoutPayment: (state) => state.amoutPayment,
+
         ///cart
         cart: (state) => state.cart,
         tempCart: () => (cookieName) => {
@@ -137,11 +142,6 @@ export default createStore({
         SET_loadingPriceUpdate(state) {
             state.loadingPriceUpdate = !state.loadingPriceUpdate;
         },
-        // users
-        DETAILS_USER(state, data) {
-            state.userDetails = data;
-        },
-
         // loginOverlay
         SET_LOGIN_OVERLAY(state, status) {
             state.loginOverlay = status;
@@ -159,11 +159,11 @@ export default createStore({
         SET_PAYMENT(state) {
             state.payment = !state.payment;
         },
-        SET_AMOUTPAYMENT(state, amont) {
-            state.amoutPayment = amont;
+        SET_AMOUTPAYMENT(state, data) {
+            state.amoutPayment = data;
         },
-        SET_ID_ORDER(state, amont) {
-            state.orderPaymentId = amont;
+        SET_ID_ORDER(state, data) {
+            state.orderPaymentId = data;
         },
 
         // users
@@ -171,29 +171,29 @@ export default createStore({
             state.tring += 1;
         },
         //categories
-        categoryDetails(state, categoryDetails) {
-            state.category = categoryDetails;
+        categoryDetails(state, data) {
+            state.category = data;
         },
         CLEAR_CATEGORY(state) {
             state.category = {};
         },
         // products
-        productDetails(state, productDetails) {
-            state.product = productDetails;
+        productDetails(state, data) {
+            state.product = data;
         },
         CLEAR_PRODUCTS(state) {
             state.products = [];
         },
-        SET_PRODUCTS(state, products) {
-            state.products = products;
+        SET_PRODUCTS(state, data) {
+            state.products = data;
         },
 
         // orderes
         CLEAR_ORDERS(state) {
             state.orders = {};
         },
-        SET_ORDERS(state, orders) {
-            state.orders = orders;
+        SET_ORDERS(state, data) {
+            state.orders = data;
         },
         SET_ADDRESSES(state, data) {
             state.addresses = data;
@@ -218,27 +218,27 @@ export default createStore({
         CLEAR_CUSTOMERS(state) {
             state.customers = {};
         },
-        SET_CUSTOMERS(state, customers) {
-            state.customers = customers;
+        SET_CUSTOMERS(state, data) {
+            state.customers = data;
         },
 
         //carts
         CLEAR_CARTPRODUCTS(state) {
             state.cart = {};
         },
-        SET_CARTPRODUCTS(state, products) {
-            state.cart = products;
+        SET_CARTPRODUCTS(state, data) {
+            state.cart = data;
         },
-        SET_CARTPRICE(state, price) {
-            state.cartPrice = price;
+        SET_CARTPRICE(state, data) {
+            state.cartPrice = data;
         },
         CLEAR_CARTPRICE(state) {
             state.cartPrice = 0;
         },
 
         // categories
-        SET_CATEGORIES(state, payload) {
-            state.categories = payload;
+        SET_CATEGORIES(state, data) {
+            state.categories = data;
         },
         CLEAR_CATEGORIES(state) {
             state.categories = null;
@@ -247,6 +247,10 @@ export default createStore({
         // statistic
         SET_DATA_STATISTIC(state, data) {
             state.dataStatistic = data;
+        },
+        //
+        SET_MYSELF(state, data) {
+            state.mySelf = data;
         },
     },
 
@@ -1060,12 +1064,29 @@ export default createStore({
             sendAxio("get", `/visitaReg`, null, null);
             commit("", false);
         },
-        // auth
 
+        /*
+            Profile
+        */
+        async MyProfile({ commit }, payload) {
+            try {
+                const res = await sendAxio("get", `/user/${payload.id}`, null, headers());
+                if (res.status === 200) {
+                    commit("SET_MYSELF", res.data);
+                    console.log(res.data);
+                }
+                return;
+            } catch (error) {
+                errorMessage(error);
+            }
+        },
+
+        /*
+            Auth
+        */
         async login({ commit, state }, payload) {
             try {
                 const res = await sendAxio("post", `/login`, payload.values, null);
-                console.log(res);
 
                 if (res.status === 200) {
                     const auth = res.data.user;
@@ -1131,19 +1152,6 @@ export default createStore({
                 commit("CLEAR_CARTPRICE");
                 window.location.reload();
                 return;
-            } catch (error) {
-                errorMessage(error);
-            }
-        },
-
-        async mySelfUserDetails({ commit }, payload) {
-            try {
-                const res = await sendAxio("get", `user/${payload}`, null, headers());
-
-                if (res.status === 200) {
-                    commit("DETAILS_USER", res.data);
-                    return;
-                }
             } catch (error) {
                 errorMessage(error);
             }

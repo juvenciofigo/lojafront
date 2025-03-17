@@ -38,6 +38,7 @@
     import { computed, ref, defineEmits, onBeforeMount, watch } from "vue";
     import CartProductsComp from "@/resources/Store/_components/CartProductsComp.vue";
     import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
+    import { formatCurrency } from "@/util/functions";
 
     const store = useStore();
     const shippingPrice = ref(10);
@@ -46,16 +47,6 @@
     const totalPedido = computed(() => priceTotal.value + shippingPrice.value);
     const confirmationData = ref(null);
     const loadingPriceUpdate = ref(computed(() => store.getters.loadingPriceUpdate));
-
-    const formatCurrency = (value) => {
-        if (typeof value !== "number" || isNaN(value)) {
-            return "MZN 0.00";
-        }
-        return value.toLocaleString("pt-MZ", {
-            style: "currency",
-            currency: "MZN",
-        });
-    };
 
     const emit = defineEmits(["submit"]);
 
@@ -71,7 +62,8 @@
     watch(
         cart,
         (after) => {
-            if (!after.items || after.items.length === 0) { // esse codigo controla se o carrinho está vazio ou nao, se estiver atualiza a pagina
+            if (!after.items || after.items.length === 0) {
+                // esse codigo controla se o carrinho está vazio ou nao, se estiver atualiza a pagina
                 window.location.reload();
                 return;
             }

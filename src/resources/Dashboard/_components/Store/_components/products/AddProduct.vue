@@ -604,15 +604,5 @@
         background-color: white;
         border-radius: 4px;
     }
-    .error-message {
-        margin: 5px 0 0 0;
-        padding: 0 0 0 10px;
-        width: 100%;
-        height: 15px;
-        font-size: x-small;
-        line-height: 13px;
-        color: red;
-        display: flex;
-        align-items: center;
-    }
+
 </style>

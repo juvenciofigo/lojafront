@@ -1,6 +1,6 @@
 <template>
     <router-link :to="{ name: RouterName, params: { id: `${product._id}` } }">
-        <el-tooltip :content="product.productName ">
+        <el-tooltip :content="product.productName">
             <div class="h-full w-full product-card rounded-md group duration-700 bg-white">
                 <div class="p-3 h-full rounded-md duration-700 md:group-hover:bg-blue-400 flex flex-col justify-between">
                     <div class="title w-full">
@@ -46,19 +46,10 @@
 <script setup>
     import { defineProps } from "vue";
     import { Picture } from "@element-plus/icons-vue";
+    import { formatCurrency } from "@/util/functions";
 
     defineProps({
         product: Object,
         RouterName: String,
     });
-
-    const formatCurrency = (value) => {
-        if (typeof value !== "number" || isNaN(value)) {
-            return "MZN 0.00";
-        }
-        return value.toLocaleString("pt-MZ", {
-            style: "currency",
-            currency: "MZN",
-        });
-    };
 </script>

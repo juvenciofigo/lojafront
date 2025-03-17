@@ -45,6 +45,8 @@
 <script setup>
     import { useStore } from "vuex";
     import { ref, computed } from "vue";
+    import { formatCurrency } from "@/util/functions";
+
     const store = useStore();
     const number = ref("");
     const total = computed(() => store.getters.amoutPayment);
@@ -67,16 +69,6 @@
         const res = await store.dispatch("mpesapay", { client_number: `258${number.value}` });
         if (res === false) loading.value = false;
     }
-
-    const formatCurrency = (value) => {
-        if (typeof value !== "number" || isNaN(value)) {
-            return "MZN 0.00";
-        }
-        return value.toLocaleString("pt-MZ", {
-            style: "currency",
-            currency: "MZN",
-        });
-    };
 </script>
 
 <style scoped>

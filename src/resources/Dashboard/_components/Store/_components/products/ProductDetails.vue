@@ -77,6 +77,7 @@
     import DialogConfirmation from "@/components/partials/DialogConfirmation.vue";
     import ProductDetaislsSkeleton from "@/components/skeletons/ProductDetaislsSkeleton.vue";
     import { Receipt, Copy, Trash2 } from "lucide-vue-next";
+    import { formatCurrency } from "@/util/functions";
 
     const router = useRouter();
     const route = useRoute();
@@ -146,16 +147,6 @@
     function variations() {
         router.push({ name: "variations", params: { id: route.params.id } });
     }
-
-    const formatCurrency = (value) => {
-        if (typeof value !== "number" || isNaN(value)) {
-            return "MZN 0.00";
-        }
-        return value.toLocaleString("pt-MZ", {
-            style: "currency",
-            currency: "MZN",
-        });
-    };
 
     onBeforeMount(async () => {
         await store.dispatch("detailsProductAdmin", route.params.id);

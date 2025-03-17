@@ -221,6 +221,7 @@
     import { ref, computed, onBeforeMount } from "vue";
     import { useRoute } from "vue-router";
     import { useStore } from "vuex";
+    import { formatCurrency } from "@/util/functions";
 
     import { useField, useForm } from "vee-validate";
     import { toTypedSchema } from "@vee-validate/zod";
@@ -253,13 +254,6 @@
             variationImage.value.splice(index, 1);
         }
     }
-    // ///////////////
-    const formatCurrency = (value) => {
-        return Number(value).toLocaleString("pt-MZ", {
-            style: "currency",
-            currency: "MZN",
-        });
-    };
 
     const { handleSubmit, handleReset } = useForm({
         validationSchema: toTypedSchema(
@@ -390,16 +384,5 @@
         font-size: 13px;
         border-radius: 8px;
         outline: none;
-    }
-    .error-message {
-        margin: 5px 0 0 0;
-        padding: 0 0 0 10px;
-        width: 100%;
-        height: 15px;
-        font-size: x-small;
-        line-height: 13px;
-        color: red;
-        display: flex;
-        align-items: center;
     }
 </style>

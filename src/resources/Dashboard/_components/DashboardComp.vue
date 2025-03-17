@@ -75,4 +75,6 @@
     onBeforeMount(async () => {
         await store.dispatch("DataByMonth");
     });
+
+    
 </script>

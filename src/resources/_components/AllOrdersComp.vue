@@ -27,7 +27,7 @@
                     align="center"
                     prop="createdAt"
                     label="Data"
-                    :formatter="formatDate" />
+                    :formatter="format" />
                 <el-table-column
                     align="center"
                     prop="payment.amount"
@@ -119,8 +119,8 @@
     import { computed, watchEffect, watch, ref, onBeforeUnmount, defineProps, defineEmits, onMounted, onUnmounted } from "vue";
     import { useStore } from "vuex";
     import { useRoute, useRouter } from "vue-router";
-    import { format } from "date-fns";
     import { Input } from "@/components/ui/input";
+    import { formatCurrency, formatDate } from "@/util/functions";
 
     import OrdersDetails from "@/resources/_components/OrdersDetails.vue";
     import DialogConfirmation from "@/components/partials/DialogConfirmation.vue";
@@ -200,19 +200,9 @@
         console.log("Largura da janela:", newWidth);
     });
 
-    function formatDate(row) {
-        return row.createdAt ? format(new Date(row.createdAt), "dd/MM/yyyy HH:mm") : "";
+    function format(row) {
+        return row.createdAt ? formatDate(new Date(row.createdAt), "dd/MM/yyyy HH:mm") : "";
     }
-    const formatCurrency = (row) => {
-        const value = row.payment.amount;
-        if (typeof value !== "number" || isNaN(value)) {
-            return "MZN 0.00";
-        }
-        return value.toLocaleString("pt-MZ", {
-            style: "currency",
-            currency: "MZN",
-        });
-    };
 </script>
 <style>
     .allOlders .el-table .warning-row {

@@ -20,6 +20,7 @@
         </div>
 
         <div
+            v-if="cart && cart.items && cart.items.length > 0"
             v-loading="loadingPriceUpdate"
             class="shadow-md rounded-md text-center w-full md:max-w-[410px] flex flex-col gap-6 bg-white">
             <div>
@@ -50,6 +51,7 @@
     import { computed, ref, onBeforeMount, watch } from "vue";
     import { useStore } from "vuex";
     import { useRouter } from "vue-router";
+    import { formatCurrency } from "@/util/functions";
 
     const store = useStore();
     const router = useRouter();
@@ -67,16 +69,6 @@
         await store.dispatch("displayCartProducts", isAuthenticated.value);
         skeleton.value = false;
     });
-
-    const formatCurrency = (value) => {
-        if (typeof value !== "number" || isNaN(value)) {
-            return "MZN 0.00";
-        }
-        return value.toLocaleString("pt-MZ", {
-            style: "currency",
-            currency: "MZN",
-        });
-    };
 
     watch(cart, (newCartProducts) => {
         buttonStatus.value = !newCartProducts.items || newCartProducts.items.length === 0;

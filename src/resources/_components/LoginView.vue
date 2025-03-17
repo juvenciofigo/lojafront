@@ -350,17 +350,7 @@
         width: 100%;
         outline: none;
     }
-    .error-message {
-        margin: 5px 0 0 0;
-        padding: 0 0 0 10px;
-        width: 100%;
-        height: 15px;
-        font-size: x-small;
-        line-height: 13px;
-        color: red;
-        display: flex;
-        align-items: center;
-    }
+ 
     .input-field input::placeholder {
         color: #aaa;
         font-weight: 500;

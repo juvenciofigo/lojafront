@@ -2,6 +2,8 @@
     import { ElMessageBox, ElLoading } from "element-plus";
     import { watch, ref, computed } from "vue";
     import { useStore } from "vuex";
+    import { formatCurrency } from "@/util/functions";
+
     const store = useStore();
     const overlay = ref(computed(() => store.getters.payment));
 
@@ -59,14 +61,4 @@
             }
         }
     );
-
-    const formatCurrency = (value) => {
-        if (typeof value !== "number" || isNaN(value)) {
-            return "MZN 0.00";
-        }
-        return value.toLocaleString("pt-MZ", {
-            style: "currency",
-            currency: "MZN",
-        });
-    };
 </script>

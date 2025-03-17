@@ -447,8 +447,8 @@
 
 <script setup>
     import { defineProps } from "vue";
-    import { format } from "date-fns";
     import { useStore } from "vuex";
+    import { formatCurrency, formatDate } from "@/util/functions";
 
     const store = useStore();
 
@@ -465,22 +465,6 @@
         store.commit("SET_ID_ORDER", orderId);
         store.commit("SET_AMOUTPAYMENT", amount);
         store.commit("SET_PAYMENT");
-    }
-
-    const formatCurrency = (value) => {
-        console.log(typeof value);
-
-        if (typeof value !== "number" || isNaN(value)) {
-            return "MZN 0.00";
-        }
-        return value.toLocaleString("pt-MZ", {
-            style: "currency",
-            currency: "MZN",
-        });
-    };
-
-    function formatDate(date) {
-        return format(new Date(date), "dd/MM/yyyy HH:mm");
     }
 </script>
 <style scoped>

@@ -258,7 +258,6 @@
         validationSchema: toTypedSchema(
             z.object({
                 firstName: z.string().regex(/^[\p{L}\s'-]+$/u, { message: "O nome deve conter apenas letras, espaços, apóstrofos e hífens" }),
-                // .min(4, { message: "O nome deve ter no mínimo 4 caracteres" })
                 lastName: z
                     .string()
                     .regex(/^[\p{L}\s'-]+$/u, { message: "O apelido deve conter apenas letras, espaços, apóstrofos e hífens" })
@@ -380,6 +379,13 @@
         width: 100%;
         outline: none;
     }
+
+    .input-field input::placeholder {
+        color: #aaa;
+        font-weight: 500;
+    }
+</style>
+<style>
     .error-message {
         margin: 5px 0 0 0;
         padding: 0 0 0 10px;
@@ -391,8 +397,5 @@
         display: flex;
         align-items: center;
     }
-    .input-field input::placeholder {
-        color: #aaa;
-        font-weight: 500;
-    }
+    
 </style>

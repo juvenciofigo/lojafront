@@ -95,6 +95,8 @@
 <script setup>
     import { defineProps, watch, ref } from "vue";
     import { Picture } from "@element-plus/icons-vue";
+    import { formatCurrency } from "@/util/functions";
+
     // import ProductCard from "./ProductCard.vue";
     const props = defineProps({
         title: String,
@@ -109,16 +111,6 @@
             productsAnswer.value = true;
         }
     );
-
-    const formatCurrency = (value) => {
-        if (typeof value !== "number" || isNaN(value)) {
-            return "MZN 0.00";
-        }
-        return value.toLocaleString("pt-MZ", {
-            style: "currency",
-            currency: "MZN",
-        });
-    };
 </script>
 <style scoped>
     .product-card {

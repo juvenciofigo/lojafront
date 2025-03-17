@@ -664,9 +664,10 @@
 <script setup>
     import { useHead } from "@vueuse/head";
 
-    import { format, differenceInHours } from "date-fns";
+    import { differenceInHours } from "date-fns";
     import { useStore } from "vuex";
     import { ref, defineProps, computed, watch, defineEmits, watchEffect, onMounted } from "vue";
+    import { formatCurrency, formatDate } from "@/util/functions";
 
     defineProps({
         firstButton: { type: Function, required: true },
@@ -767,10 +768,6 @@
         imageLink.value = images.value[index];
     }
 
-    function formatDate(date) {
-        return format(new Date(date), "dd/MM/yyyy");
-    }
-
     function convertScoreToStars(score) {
         const stars = "★".repeat(score) + "☆".repeat(5 - score);
         return stars;
@@ -791,16 +788,6 @@
             }
         }
     );
-
-    function formatCurrency(value) {
-        if (typeof value !== "number" || isNaN(value)) {
-            return "MZN 0.00";
-        }
-        return value.toLocaleString("pt-MZ", {
-            style: "currency",
-            currency: "MZN",
-        });
-    }
 
     const finalPrice = computed(() => {
         let basePrice = product.value.productPrice;

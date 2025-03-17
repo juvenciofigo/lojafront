@@ -122,8 +122,8 @@
     import { onBeforeMount, computed, watchEffect, ref, onBeforeUnmount } from "vue";
     import { useStore } from "vuex";
     import { useRoute, useRouter } from "vue-router";
-    import { format } from "date-fns";
     import { Pen, Eye, Trash2 } from "lucide-vue-next";
+    import { formatDate } from "@/util/functions";
 
     import CustumerDetails from "@/resources/Dashboard/_components/Store/_components/customers/CustumerDetails.vue";
     const store = useStore();
@@ -154,10 +154,6 @@
         const offset = route.query.offset || 1;
         store.dispatch("getAllCustomers", offset);
     };
-
-    function formatDate(date) {
-        return format(new Date(date), "dd/MM/yyyy HH:mm");
-    }
 
     watchEffect(() => {
         fetchCustomrs();
