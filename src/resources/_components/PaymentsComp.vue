@@ -1,5 +1,7 @@
 <template lang="">
-    <div class="flex flex-col flex-1 gap-2">
+    <div
+        v-loading="loading"
+        class="flex flex-col flex-1 gap-2">
         <div
             class="relative flex-1"
             v-if="orderDocs && orderDocs.length > 0">
@@ -105,7 +107,7 @@
         <div
             v-else
             class="text-center">
-            <p>Sem pedidos</p>
+            <p>Sem Pagamentos</p>
         </div>
 
         <DialogConfirmation
@@ -119,7 +121,7 @@
     </div>
 </template>
 <script setup>
-    import { computed, watchEffect, ref, onBeforeUnmount, defineProps, defineEmits } from "vue";
+    import { computed, watch, ref, onBeforeUnmount, defineProps, defineEmits, onBeforeMount } from "vue";
     import { useStore } from "vuex";
     import { useRoute, useRouter } from "vue-router";
     import { Eye, Trash2, X } from "lucide-vue-next";
@@ -137,29 +139,50 @@
         route: String,
     });
     const orders = computed(() => store.state.orders);
-    const orderDocs = ref(computed(() => orders.value.docs));
+    const orderDocs = computed(() => orders.value.docs);
     const curentPage = ref(Number(route.query.offset) || 1);
-    const totalPages = ref(computed(() => orders.value.totalPages));
-    const offset = ref(computed(() => route.query.offset || 1));
+    const totalPages = computed(() => orders.value.totalPages);
+    const offset = computed(() => route.query.offset || 1);
+
+    const emits = defineEmits(["deleteButton"]);
 
     onBeforeUnmount(() => {
         store.commit("CLEAR_ORDERS");
     });
+
     function pageEvent(pageNumber) {
         router.push({ name: `${props.route}`, query: { offset: `${pageNumber}` } });
     }
-    const emits = defineEmits(["deleteButton"]);
 
     const id = ref("");
     const status = ref("");
     const showDialog = ref(false);
+    const loading = ref(true);
 
+    const fetchOrders = async () => {
+        loading.value = true;
+        await store.dispatch(`${props.storeaction}`, { offset: offset.value, user: route.params.user });
+        loading.value = false;
+    };
+
+    watch(
+        () => route.query.offset,
+        (newOffset) => {
+            offset.value = Number(newOffset) || 1;
+            fetchOrders();
+        }
+    );
+
+    onBeforeMount(() => {
+        fetchOrders();
+    });
+
+    // /////////////////////delete///////////
     function confirmDelete(idd, statuss) {
         showDialog.value = true;
         id.value = idd;
         status.value = statuss;
     }
-
     const handleConfirm = () => {
         emits("deleteButton", { id: id.value, status: status.value });
         showDialog.value = false;
@@ -167,11 +190,4 @@
     const handleCancel = () => {
         showDialog.value = false;
     };
-    const fetchOrders = () => {
-        store.dispatch(`${props.storeaction}`, { offset: offset.value, user: route.params.user });
-    };
-
-    watchEffect(() => {
-        fetchOrders();
-    });
 </script>

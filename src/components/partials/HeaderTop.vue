@@ -34,7 +34,7 @@
                         <el-dropdown-item class="login/logout">
                             <div
                                 @click="logout()"
-                                class="login/logout flex flex-row items-center gap-2 h-max">
+                                class="login/logout flex flex-row items-center gap-2 h-max min-w-[150px]">
                                 <p
                                     class="lg:hidden"
                                     v-if="user">
@@ -85,9 +85,9 @@
 
     const store = useStore();
     const router = useRouter();
-    const isAuthenticated = ref(computed(() => store.getters.isAuthenticated("authToken")));
+    const isAuthenticated = computed(() => store.getters.isAuthenticated("authToken"));
 
-    const loadingPriceUpdate = ref(computed(() => store.getters.loadingPriceUpdate));
+    const loadingPriceUpdate = computed(() => store.getters.loadingPriceUpdate);
     const priceTotal = computed(() => store.getters.cartPrice);
     const storeName = store.state.storeName;
     const user = computed(() => JSON.parse(localStorage.getItem("userData")));

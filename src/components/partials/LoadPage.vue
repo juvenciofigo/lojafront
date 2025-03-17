@@ -12,9 +12,9 @@
     </div>
 </template>
 <script setup>
-    import { computed, ref } from "vue";
+    import { computed } from "vue";
     import { useStore } from "vuex";
     const store = useStore();
 
-    const overlay = ref(computed(() => store.getters.overlay));
+    const overlay = computed(() => store.getters.overlay);
 </script>

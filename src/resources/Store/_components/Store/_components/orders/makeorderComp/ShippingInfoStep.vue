@@ -233,7 +233,7 @@
 <script setup>
     import { defineEmits, defineProps, ref, computed, watch, toRaw } from "vue";
     import { useStore } from "vuex";
-    import AddressComp from "@/resources/_components/_partials/AddressComp.vue";
+    import AddressComp from "@/resources/_components/_partials/AddressCard.vue";
     import AddressCompSkeleton from "@/components/skeletons/AddressCompSkeleton.vue";
     import { useField, useForm } from "vee-validate";
     import { toTypedSchema } from "@vee-validate/zod";
@@ -243,8 +243,8 @@
 
     const store = useStore();
 
-    const selectAddress = ref(computed(() => store.getters.selectAddress));
-    const addresses = ref(computed(() => store.getters.addresses));
+    const selectAddress = computed(() => store.getters.selectAddress);
+    const addresses = computed(() => store.state.addresses);
     const disabledTextarea = ref(false);
     const emit = defineEmits(["address"]);
     const divAddres = ref([]);
@@ -397,5 +397,4 @@
         display: flex;
         align-items: center;
     }
-    
 </style>

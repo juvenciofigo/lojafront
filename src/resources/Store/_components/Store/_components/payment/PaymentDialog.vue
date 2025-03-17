@@ -1,11 +1,11 @@
 <script setup>
     import { ElMessageBox, ElLoading } from "element-plus";
-    import { watch, ref, computed } from "vue";
+    import { watch, computed } from "vue";
     import { useStore } from "vuex";
     import { formatCurrency } from "@/util/functions";
 
     const store = useStore();
-    const overlay = ref(computed(() => store.getters.payment));
+    const overlay = computed(() => store.getters.payment);
 
     const total = computed(() => store.getters.amoutPayment);
 
@@ -56,7 +56,7 @@
                         }
                     })
                     .catch(() => {
-                        fechar(); // Executado se o usuário cancelar o prompt
+                        fechar();
                     });
             }
         }

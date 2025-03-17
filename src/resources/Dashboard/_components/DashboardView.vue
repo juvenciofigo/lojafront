@@ -132,7 +132,7 @@
     const store = useStore();
     const router = useRouter();
     const user = computed(() => JSON.parse(localStorage.getItem("userData")));
-    const isAuthenticated = ref(computed(() => store.getters.isAuthenticated("authToken")));
+    const isAuthenticated = computed(() => store.getters.isAuthenticated("authToken"));
     const drawer = ref(false);
 
     const items = [

@@ -112,7 +112,7 @@
     const store = useStore();
     const route = useRoute();
     const router = useRouter();
-    const isAuthenticated = ref(computed(() => store.getters.isAuthenticated("authToken")));
+    const isAuthenticated = computed(() => store.getters.isAuthenticated("authToken"));
     const product = computed(() => store.state.product);
     const loading_button = ref(false);
     const ratingButtonLoading = ref(false);

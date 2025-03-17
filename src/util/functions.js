@@ -1,4 +1,6 @@
 import { format } from "date-fns";
+
+
 const formatCurrency = (value) => {
     if (typeof value !== "number" || isNaN(value)) {
         return "MZN 0.00";

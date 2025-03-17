@@ -136,7 +136,7 @@
     </div>
 </template>
 <script setup>
-    import { defineProps, ref, computed } from "vue";
+    import { defineProps, computed } from "vue";
     import { useRouter } from "vue-router";
     import { useStore } from "vuex";
     import { Trash2 } from "lucide-vue-next";
@@ -156,8 +156,8 @@
         router.push({ name: "detailsClient", params: { id: product } });
     }
 
-    const isAuthenticated = ref(computed(() => store.getters.isAuthenticated("authToken")));
-    const loadingPriceUpdate = ref(computed(() => store.getters.loadingPriceUpdate));
+    const isAuthenticated = computed(() => store.getters.isAuthenticated("authToken"));
+    const loadingPriceUpdate = computed(() => store.getters.loadingPriceUpdate);
 
     async function update() {
         await store.dispatch("displayCartPrices", isAuthenticated.value);

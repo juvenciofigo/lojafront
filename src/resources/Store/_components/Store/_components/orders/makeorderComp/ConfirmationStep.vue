@@ -46,7 +46,7 @@
     const priceTotal = computed(() => store.getters.cart.totalProducts);
     const totalPedido = computed(() => priceTotal.value + shippingPrice.value);
     const confirmationData = ref(null);
-    const loadingPriceUpdate = ref(computed(() => store.getters.loadingPriceUpdate));
+    const loadingPriceUpdate = computed(() => store.getters.loadingPriceUpdate);
 
     const emit = defineEmits(["submit"]);
 

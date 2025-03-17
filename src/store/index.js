@@ -60,7 +60,7 @@ export default createStore({
 
         /// orders:
         orders: {},
-        addresses: [],
+        addresses: null,
         selectAddress: null,
         selected: false,
         /// payment
@@ -119,7 +119,6 @@ export default createStore({
             return getCookie(cookieName);
         },
         cartPrice: (state) => state.cartPrice,
-        addresses: (state) => state.addresses,
         selectAddress: (state) => state.selectAddress,
 
         // overlay
@@ -1068,7 +1067,6 @@ export default createStore({
                 const res = await sendAxio("get", `/user/${payload.id}`, null, headers());
                 if (res.status === 200) {
                     commit("SET_MYSELF", res.data);
-                    console.log(res.data);
                 }
                 return;
             } catch (error) {
@@ -1175,7 +1173,7 @@ export default createStore({
 
                 if (res.status === 200) {
                     commit("SET_ADDRESSES", res.data);
-                    return true;
+                    return res;
                 }
             } catch (error) {
                 errorMessage(error);

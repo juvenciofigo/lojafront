@@ -1,6 +1,6 @@
 <template lang="">
     <div>
-        meus pagamentos
+        <h1 class="text-xl">Meus pagamentos</h1>
         <PaymentsComp />
     </div>
 </template>

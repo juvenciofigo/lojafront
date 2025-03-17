@@ -63,7 +63,7 @@
     const totalPedido = computed(() => priceTotal.value + shippingPrice.value);
     const buttonStatus = ref(true);
     const skeleton = ref(true);
-    const loadingPriceUpdate = ref(computed(() => store.getters.loadingPriceUpdate));
+    const loadingPriceUpdate = computed(() => store.getters.loadingPriceUpdate);
 
     onBeforeMount(async () => {
         await store.dispatch("displayCartProducts", isAuthenticated.value);

@@ -74,9 +74,9 @@
     const router = useRouter();
     const store = useStore();
     const steps = ["Informações de Envio", "Confirmação"];
-    const isAuthenticated = ref(computed(() => store.getters.isAuthenticated("authToken")));
+    const isAuthenticated = computed(() => store.getters.isAuthenticated("authToken"));
     const addressRes = ref(false);
-    const loadingPriceUpdate = ref(computed(() => store.getters.loadingPriceUpdate));
+    const loadingPriceUpdate = computed(() => store.getters.loadingPriceUpdate);
 
     // before Unmount
     onBeforeUnmount(() => {
@@ -85,7 +85,7 @@
         store.commit("CLEAR_ADDRESS");
         store.commit("CLEAR_PROVIDE_ADDRESS");
     });
-    const cart = ref(computed(() => toRaw(store.getters.cart)));
+    const cart = computed(() => toRaw(store.getters.cart));
 
     // on Mount
     onBeforeMount(async () => {

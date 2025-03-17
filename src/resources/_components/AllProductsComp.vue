@@ -146,6 +146,8 @@
     import { useStore } from "vuex";
     import { useRouter, useRoute } from "vue-router";
     import { Plus } from "lucide-vue-next";
+    import { useHead } from "@vueuse/head";
+
 
     const props = defineProps({
         nameRoute: String,
@@ -175,10 +177,8 @@
 
     watch(
         () => route.query,
-        async (newRoute, oldRoute) => {
-            console.log("nova rota", newRoute);
-            console.log("antiga", oldRoute);
-            if (newRoute != oldRoute) {
+        async (newRoute) => {
+            if (newRoute) {
                 if (newRoute.search) {
                     await store.dispatch("searchProducts", { category: route.query.category, search: route.query.search });
                 } else {
@@ -229,7 +229,6 @@
         store.commit("CLEAR_PRODUCTS");
     });
 
-    import { useHead } from "@vueuse/head";
 
     onBeforeMount(async () => {
         if (route.query.search) {
