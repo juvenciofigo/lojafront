@@ -50,10 +50,6 @@
                         </el-button>
                     </div>
                 </router-link>
-
-                <!-- <ProductCard
-                    :product="product"
-                    :RouterName="RouterName" /> -->
             </template>
         </div>
     </div>
@@ -97,7 +93,6 @@
     import { Picture } from "@element-plus/icons-vue";
     import { formatCurrency } from "@/util/functions";
 
-    // import ProductCard from "./ProductCard.vue";
     const props = defineProps({
         title: String,
         products: Array,

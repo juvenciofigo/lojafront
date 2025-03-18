@@ -719,7 +719,7 @@
 
     const quantity = ref(1);
     const store = useStore();
-    const product = computed(() => store.state.product);
+    const product = computed(() => store.state.products.product);
     const imageLink = ref(null);
     const selectedImage = ref(null);
     const images = ref([]);

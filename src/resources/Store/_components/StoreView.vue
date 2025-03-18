@@ -15,7 +15,7 @@
                         <template
                             v-for="category in categories"
                             :key="category._id">
-                            <li class=" item-list">
+                            <li class="item-list">
                                 <v-menu
                                     transition="scroll-x-transition"
                                     location="end"
@@ -87,12 +87,12 @@
         <!-- Produtos e Promoções -->
         <div class="w-full flex lg:flex-row gap-3 p-2 flex-col-reverse">
             <div class="overflow-hidden flex-1 gap-2 flex flex-col">
-                <SelectdProducts
+                <SelectedProducts
                     :title="`Novidades`"
                     :products="products"
                     :link="`produtos`" />
 
-                <SelectdProducts
+                <SelectedProducts
                     :title="`Destaque`"
                     :products="products"
                     :link="`produtos`" />
@@ -119,13 +119,13 @@
     import { useStore } from "vuex";
     import { onBeforeMount, computed, ref } from "vue";
     import { useRouter } from "vue-router";
-    import SelectdProducts from "@/resources/_components/SelectdProducts.vue";
+    import SelectedProducts from "@/resources/_components/SelectedProducts.vue";
     import BannerComp from "@/resources/Store/_components/Store/_components/banners/BannerComp.vue";
 
     const store = useStore();
     const router = useRouter();
-    const categories = computed(() => store.state.categories);
-    const products = computed(() => store.getters.products.docs);
+    const categories = computed(() => store.state.categories.categories );
+    const products = computed(() => store.state.products.products.docs);
     const skeleton = ref(true);
     const promos = [
         {
@@ -160,7 +160,7 @@
     }
 
     onBeforeMount(async () => {
-        await store.dispatch("getAllProducts");
+        await store.dispatch("products/fetchProducts");
         skeleton.value = false;
         updateHead();
     });

@@ -45,16 +45,6 @@
                 </el-input>
             </div>
         </div>
-
-        <div class="flex flex-col gap-2 lg:flex-row lg:gap-5">
-            <router-link
-                v-for="link in Links"
-                :key="link"
-                :to="link"
-                class="text-[#333333] hover:scale-110 font-medium duration-700 hover:text-[#2196F3]">
-                {{ link }}
-            </router-link>
-        </div>
     </nav>
 
     <!-- end header-2 -->
@@ -94,7 +84,7 @@
 </template>
 
 <script setup>
-    import { computed, ref, onBeforeUnmount, onMounted } from "vue";
+    import { computed, ref, onBeforeUnmount, onBeforeMount } from "vue";
     import { useStore } from "vuex";
     import { useRouter } from "vue-router";
 
@@ -107,12 +97,12 @@
     const store = useStore();
     const router = useRouter();
 
-    const categories = computed(() => store.state.categories);
+    const categories = computed(() => store.state.categories.categories);
     const selectedCategory = ref(null);
     const textSearch = ref(null);
 
     function search() {
-        if (textSearch.value == null) return;
+        if (textSearch.value === null) return;
 
         const query = {
             search: textSearch.value,
@@ -134,7 +124,7 @@
             drawer.value = false;
         }
     });
- 
+
     function filterProduct(category) {
         drawer.value = false;
         let query;
@@ -151,8 +141,8 @@
         });
     }
 
-    onMounted(async () => {
-        await store.dispatch("getAllCategory");
+    onBeforeMount(async () => {
+        await store.dispatch("categories/fetchCategories");
     });
     onBeforeUnmount(() => {
         store.commit("CLEAR_CATEGORIES");

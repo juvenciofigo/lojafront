@@ -1,12 +1,4 @@
-import { ElNotification } from "element-plus";
-
-const notification = (message) => {
-    ElNotification({
-        title: "Erro!",
-        type: "error",
-        message: message,
-    });
-};
+import notification from "./notifications";
 
 const getCookie = (name) => {
     const cookieName = `${name}=`;
@@ -45,14 +37,12 @@ const cookieExists = (name) => {
 
 function errorMessage(error) {
     if (error.message === "Network Error") {
-        notification("Servidor fora do ar!");
         console.error(error);
+        notification({ title: "Erro!", type: "error", message: "Servidor fora do ar!" });
         return;
     } else if (error.response) {
         console.log(error);
-        
-        notification(error.response.data.message);
-
+        notification({ title: "Erro!", type: "error", message: error.response.data.message });
         return;
     } else {
         console.error(error);

@@ -99,7 +99,7 @@
     </v-dialog>
 </template>
 <script setup>
-    import { onMounted, ref, computed, toRaw } from "vue";
+    import { ref, computed, toRaw, onBeforeMount } from "vue";
     import { useStore } from "vuex";
     import { useRoute, useRouter } from "vue-router";
     import ProductDetailsComp from "@/resources/_components/ProductDetailsComp.vue";
@@ -113,7 +113,7 @@
     const route = useRoute();
     const router = useRouter();
     const isAuthenticated = computed(() => store.getters.isAuthenticated("authToken"));
-    const product = computed(() => store.state.product);
+    const product = computed(() => store.state.products.product);
     const loading_button = ref(false);
     const ratingButtonLoading = ref(false);
     const ratingDialog = ref(false);
@@ -224,8 +224,8 @@
         router.push({ name: "makeOrder", query: { productsFrom: "payNow", product: route.params.id, quantity: quantity.value || 1, variation: toRaw(variation.value) } });
     }
 
-    onMounted(async () => {
-        await store.dispatch("detailsProduct", route.params.id);
+    onBeforeMount(async () => {
+        await store.dispatch("products/fetchProductById", route.params.id);
         skeleton.value = false;
     });
 </script>

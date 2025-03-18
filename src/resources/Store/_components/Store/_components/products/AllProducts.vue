@@ -28,11 +28,11 @@
         skeleton.value = true;
 
         if (category) {
-            await store.dispatch("getAllProducts", value);
+            await store.dispatch("products/fetchProducts", value);
             skeleton.value = false;
             return;
         }
-        await store.dispatch("getAllProducts");
+        await store.dispatch("products/fetchProducts");
         skeleton.value = false;
     }
 

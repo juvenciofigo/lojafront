@@ -37,6 +37,9 @@ async function sendAxio(method, url, data = null, headers = null, params = null)
     }
 }
 
+import products from "./modules/products";
+import categories from "./modules/categories";
+
 export default createStore({
     namespaced: true,
     state: {
@@ -261,9 +264,11 @@ export default createStore({
                 const res = await sendAxio("post", `/product`, payload, headers());
 
                 if (res.status === 200) {
-                    commit("SET_NOTIFICATION", { title: "Sucesso", type: "success", message: res.data.message });
-                    window.location.reload();
-
+                    commit("SET_NOTIFICATION", {
+                        title: "Sucesso",
+                        type: "success",
+                        message: res.data.message,
+                    });
                     window.location.reload();
                 }
             } catch (error) {
@@ -654,53 +659,55 @@ export default createStore({
        Products cliente
        */
 
-        async getAllProducts({ commit }, payload) {
-            try {
-                const res = await axios.request({
-                    method: "get",
-                    baseURL: config.apiURL,
-                    url: "/products/",
-                    params: payload,
-                });
-                if (res.status === 200) {
-                    const products = res.data;
-                    commit("SET_PRODUCTS", products);
-                    return;
-                }
-            } catch (error) {
-                errorMessage(error);
-            }
-        },
+        // async getAllProducts({ commit }, payload) {
+        //     try {
+        //         const res = await axios.request({
+        //             method: "get",
+        //             baseURL: config.apiURL,
+        //             url: "/products/",
+        //             params: payload,
+        //         });
+        //         if (res.status === 200) {
+        //             const products = res.data;
+        //             commit("SET_PRODUCTS", products);
+        //             return;
+        //         }
+        //     } catch (error) {
+        //         errorMessage(error);
+        //     }
+        // },
 
-        async searchProducts({ commit }, payload) {
-            try {
-                const res = await axios.request({
-                    method: "get",
-                    baseURL: config.apiURL,
-                    url: `/products/search/${payload.search}`,
-                    params: { offset: payload, category: payload.category },
-                });
+        // async searchProducts({ commit }, payload) {
+        //     try {
+        //         const res = await axios.request({
+        //             method: "get",
+        //             baseURL: config.apiURL,
+        //             url: `/products/search/${payload.search}`,
+        //             params: { offset: payload, category: payload.category },
+        //         });
 
-                if (res.data) {
-                    const products = res.data;
-                    commit("SET_PRODUCTS", products);
-                }
-            } catch (error) {
-                errorMessage(error);
-            }
-        },
+        //         if (res.data) {
+        //             const products = res.data;
+        //             commit("SET_PRODUCTS", products);
+        //         }
+        //     } catch (error) {
+        //         errorMessage(error);
+        //     }
+        // },
 
-        async detailsProduct({ commit }, produtoId) {
-            try {
-                const res = await sendAxio("get", `${config.apiURL}/product/${produtoId}`, null, headers(), null);
-                if (res.status === 200) {
-                    commit("productDetails", res.data.product);
-                }
-                return;
-            } catch (error) {
-                errorMessage(error);
-            }
-        },
+        // async detailsProduct({ commit }, produtoId) {
+        //     try {
+        //         const res = await sendAxio("get", `${config.apiURL}/product/${produtoId}`, null, headers(), null);
+        //         console.log(res);
+
+        //         if (res.status === 200) {
+        //             commit("productDetails", res.data.product);
+        //         }
+        //         return;
+        //     } catch (error) {
+        //         errorMessage(error);
+        //     }
+        // },
 
         /*
        Rating cliente
@@ -1213,5 +1220,8 @@ export default createStore({
             }
         },
     },
-    modules: {},
+    modules: {
+        products,
+        categories,
+    },
 });

@@ -97,10 +97,9 @@
                 <div class="flex flex-row justify-between">
                     <h2>{{ category || "Todos Produtos" }}</h2>
                 </div>
-                <div>
+                <div :class="buttonShow">
                     <router-link :to="{ name: newProduct }">
                         <el-button
-                            :class="buttonShow"
                             link
                             type="primary"
                             size="small">
@@ -148,7 +147,6 @@
     import { Plus } from "lucide-vue-next";
     import { useHead } from "@vueuse/head";
 
-
     const props = defineProps({
         nameRoute: String,
         fetchRouteName: String,
@@ -162,8 +160,8 @@
     const route = useRoute();
     const store = useStore();
 
-    const products = computed(() => store.getters.products.docs);
-    const categories = computed(() => store.state.categories);
+    const products = computed(() => store.state.products.products.docs);
+    const categories = computed(() => store.state.categories.categories);
     const currentPage = ref(Number(route.query.offset) || 1);
     const category = ref(null);
 
@@ -177,14 +175,14 @@
 
     watch(
         () => route.query,
-        async (newRoute) => {
-            if (newRoute) {
-                if (newRoute.search) {
-                    await store.dispatch("searchProducts", { category: route.query.category, search: route.query.search });
+        async (newR, oldR) => {
+            if (newR !== oldR) {
+                if (newR.search) {
+                    await store.dispatch("products/filtreProducts", { category: route.query.category, search: route.query.search });
                 } else {
                     head();
                     category.value = route.query.category;
-                    await store.dispatch(props.getCategories || "getAllCategory");
+                    await store.dispatch(props.getCategories || "categories/fetchCategories");
                 }
             }
         }
@@ -229,20 +227,20 @@
         store.commit("CLEAR_PRODUCTS");
     });
 
-
     onBeforeMount(async () => {
         if (route.query.search) {
-            await store.dispatch("searchProducts", { category: route.query.category, search: route.query.search });
+            await store.dispatch("products/filtreProducts", { category: route.query.category, search: route.query.search });
         } else {
             head();
             category.value = route.query.category;
-            await store.dispatch(props.getCategories || "getAllCategory");
+            await store.dispatch(props.getCategories || "categories/fetchCategories");
         }
     });
 
     function head() {
         useHead({
-            title: ` ${store.state.storeName} - ${category.value || "Todos Produtos"}`,
+            // title: ` ${store.state.storeName} - ${category.value || "Todos Produtos"}`,
+            title: computed(() => `${store.state.storeName} - ${category.value || "Todos Produtos"}`),
             meta: [
                 {
                     name: "description",
