@@ -239,9 +239,9 @@ router.beforeEach(async (to, from, next) => {
             if (isAuthenticated === true) {
                 next();
             } else {
-                store.commit("setRedirectTo", to.fullPath);
+                store.commit("auth/setRedirectTo", to.fullPath);
                 store.commit("SET_NOTIFICATION", { title: "Aviso!", type: "warning", message: "Faça Login" });
-                store.commit("SET_LOGIN_OVERLAY", true);
+                store.commit("auth/SET_LOGIN_OVERLAY", true);
                 next(false);
             }
         } else if (to.matched.some((record) => record.meta.requiresAdmin)) {
@@ -255,7 +255,7 @@ router.beforeEach(async (to, from, next) => {
                     store.commit("Set_tringValue");
                     store.commit("SET_NOTIFICATION", { title: "Erro!", type: "error", message: "Sem premisão para processeguir" });
 
-                    store.commit("SET_LOGIN_OVERLAY", true);
+                    store.commit("auth/SET_LOGIN_OVERLAY", true);
                     next(false);
                 } else {
                     store.commit("SET_NOTIFICATION", { title: "Erro!", type: "error", message: "Redirecionando para Página Inicial" });

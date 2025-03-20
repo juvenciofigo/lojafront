@@ -2,12 +2,12 @@
     <div>carinho</div>
 </template>
 <script setup>
-    import { onBeforeMount } from "vue";
-    import { useStore } from "vuex";
+    // import { onBeforeMount } from "vue";
+    // import { useStore } from "vuex";
 
-    const store = useStore();
+    // const store = useStore();
 
-    onBeforeMount(async () => {
-        await store.dispatch("allCarts");
-    });
+    // onBeforeMount(async () => {
+    //     await store.dispatch("carts/allCartsAdmin");
+    // });
 </script>

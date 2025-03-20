@@ -9,7 +9,7 @@
     import Chart from "chart.js/auto";
     const store = useStore();
 
-    const Data = computed(() => store.state.dataStatistic);
+    const Data = computed(() => store.state.estatistic.dataStatistic);
     const UsersByMonth = ref([]);
     const OrdersByMonth = ref([]);
     const chartCanvas = ref(null);

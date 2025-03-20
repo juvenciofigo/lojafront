@@ -217,7 +217,7 @@
 
     const submit = handleSignInSubmit(
         async (values) => {
-            await store.dispatch("login", { values, router });
+            await store.dispatch("auth/signIn", { values, router });
             loadLoginBtn.value = false;
             toggleButtonLoad.value = false;
         },
@@ -250,7 +250,7 @@
 
     const submitSignUp = handleSignUpSubmit(
         async (values) => {
-            await store.dispatch("newUser", values);
+            await store.dispatch("auth/signUp", values);
             loadSignUpBtn.value = false;
             toggleButtonLoad.value = false;
         },

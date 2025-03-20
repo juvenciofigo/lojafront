@@ -65,8 +65,7 @@
 
     async function deleteAddress() {
         if (deleteIndex.value !== null) {
-            await store.dispatch("deleteAddress", deleteIndex.value);
-            await store.dispatch("addresses");
+            await store.dispatch("addresses/deleteAddress", deleteIndex.value);
             showDialog.value = false;
             deleteIndex.value = null;
         }

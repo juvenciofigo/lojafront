@@ -164,7 +164,7 @@
     const submit = handleSignUpSubmit(
         async (values) => {
             loadbtn.value = true;
-            await store.dispatch("updateMyProfile", values);
+            await store.dispatch("profile/updateMyProfile", values);
             loadbtn.value = false;
             modifyDialog.value = false;
         },
@@ -173,10 +173,10 @@
         }
     );
 
-    const mySelf = computed(() => store.state.mySelf);
+    const mySelf = computed(() => store.state.profile.mySelf);
 
     onBeforeMount(() => {
-        store.dispatch("MyProfile", { id: route.params.user });
+        store.dispatch("profile/myProfile", { id: route.params.user });
         loading.value = false;
     });
 </script>

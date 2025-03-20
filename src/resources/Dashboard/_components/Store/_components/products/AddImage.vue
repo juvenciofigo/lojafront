@@ -56,7 +56,7 @@
             formData.append("files", images.value[i]);
         }
 
-        await store.dispatch("updateImage", { productId, formData });
+        await store.dispatch("products/updateImage", { productId, formData });
         loading.value = false;
         images.value = [];
     }

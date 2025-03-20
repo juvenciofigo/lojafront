@@ -243,8 +243,8 @@
 
     const store = useStore();
 
-    const selectAddress = computed(() => store.getters.selectAddress);
-    const addresses = computed(() => store.state.addresses);
+    const selectAddress = computed(() => store.state.addresses.selectAddress);
+    const addresses = computed(() => store.state.addresses.addresses);
     const disabledTextarea = ref(false);
     const emit = defineEmits(["address"]);
     const divAddres = ref([]);
@@ -297,7 +297,7 @@
 
     function enableTextarea() {
         disabledTextarea.value = false;
-        store.commit("SET_PROVIDE_ADDRESS", false);
+        store.commit("addresses/SET_PROVIDE_ADDRESS", false);
 
         divAddres.value.forEach((item) => {
             item.classList.remove("bg-primary");
@@ -312,8 +312,8 @@
 
         function update() {
             disabledTextarea.value = true;
-            store.commit("SET_PROVIDE_ADDRESS", true);
-            store.commit("SET_ADDRESS", toRaw(addresses.value[index]));
+            store.commit("addresses/SET_PROVIDE_ADDRESS", true);
+            store.commit("addresses/SET_ADDRESS", toRaw(addresses.value[index]));
             submit();
         }
 
@@ -323,11 +323,11 @@
             if (contai === true && index === idx) {
                 // se o elemento clicado contem a class e se é igual a item iterrado
                 item.classList.remove("bg-primary");
-                store.commit("CLEAR_ADDRESS");
-                store.commit("CLEAR_PROVIDE_ADDRESS");
+                store.commit("addresses/CLEAR_ADDRESS");
+                store.commit("addresses/CLEAR_PROVIDE_ADDRESS");
                 handleReset();
                 enableTextarea();
-                store.commit("SET_PROVIDE_ADDRESS", false);
+                store.commit("addresses/SET_PROVIDE_ADDRESS", false);
             } else if (contai === true) {
                 // troca para o outro
                 item.classList.remove("bg-primary");

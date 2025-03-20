@@ -462,9 +462,9 @@
     function makePayment(status, orderId, amount) {
         if (status === "Pago") return;
 
-        store.commit("SET_ID_ORDER", orderId);
-        store.commit("SET_AMOUTPAYMENT", amount);
-        store.commit("SET_PAYMENT");
+        store.commit("payments/SET_ID_ORDER", orderId);
+        store.commit("payments/SET_AMOUT_PAYMENT", amount);
+        store.commit("payments/SET_PAYMENT_DIALOG");
     }
 </script>
 <style scoped>

@@ -38,7 +38,7 @@
                 <el-button
                     :disabled="active !== 1"
                     :loading="loading || loadingPriceUpdate || !addressRes"
-                    @click="sendOrder()">
+                    @click="createOrder()">
                     Fazer Pagamento
                 </el-button>
             </span>
@@ -74,25 +74,25 @@
     const router = useRouter();
     const store = useStore();
     const steps = ["Informações de Envio", "Confirmação"];
-    const isAuthenticated = computed(() => store.getters.isAuthenticated("authToken"));
     const addressRes = ref(false);
     const loadingPriceUpdate = computed(() => store.getters.loadingPriceUpdate);
+    const cart = computed(() => store.state.carts.cart);
+    const isAuthenticated = computed(() => store.getters.isAuthenticated("authToken"));
 
     // before Unmount
     onBeforeUnmount(() => {
-        store.commit("CLEAR_CARTPRODUCTS");
-        store.commit("CLEAR_ADDRESSES");
-        store.commit("CLEAR_ADDRESS");
-        store.commit("CLEAR_PROVIDE_ADDRESS");
+        store.commit("carts/CLEAR_CARTPRODUCTS");
+        store.commit("addresses/CLEAR_ADDRESSES");
+        store.commit("addresses/CLEAR_ADDRESS");
+        store.commit("addresses/CLEAR_PROVIDE_ADDRESS");
     });
-    const cart = computed(() => toRaw(store.getters.cart));
 
     // on Mount
     onBeforeMount(async () => {
         const from = route.query.productsFrom;
         if (from) {
             if (from === "cartProducts") {
-                await store.dispatch("displayCartProducts", isAuthenticated.value);
+                await store.dispatch("carts/displayCartProducts", isAuthenticated.value);
 
                 if (!cart.value.items || cart.value.items.length <= 0) {
                     router.push({ name: "home" });
@@ -105,7 +105,7 @@
             }
 
             if (from === "payNow") {
-                await store.dispatch("buyNow", { product: { id: route.query.product, quantity: route.query.quantity } });
+                await store.dispatch("orders/buyNow", { product: { id: route.query.product, quantity: route.query.quantity } });
 
                 if (isAuthenticated.value === true) {
                     userAddresses();
@@ -117,10 +117,10 @@
         router.push({ name: "home" });
     });
 
-    async function userAddresses() {
-        await store.dispatch("addresses");
+    const userAddresses = async () => {
+        await store.dispatch("addresses/fetchAddresses");
         addressRes.value = true;
-    }
+    };
 
     // Finalizar o pedido
     let selectAddress = ref(null);
@@ -136,7 +136,7 @@
 
     const loading = ref(false);
 
-    async function sendOrder() {
+    async function createOrder() {
         loading.value = true;
         if (!selectAddress.value) {
             ElNotification.error({
@@ -153,17 +153,26 @@
             return;
         }
 
-        const res = await store.dispatch("sendOrder", {
+        const res = await store.dispatch("orders/createOrder", {
             selectAddress: toRaw(selectAddress.value),
             cart: cart.value.cartId,
         });
 
+        console.log(res);
+
         if (!res || res === false) {
             loading.value = false;
+            return;
+        } else {
+            const user = JSON.parse(localStorage.getItem("userData"));
+            store.commit("carts/CLEAR_CART_PRICE");
+            store.commit("payments/SET_ID_ORDER", res.order._id);
+            store.commit("payments/SET_AMOUT_PAYMENT", res.order.totalPrice);
+            store.commit("payments/SET_PAYMENT_DIALOG");
+            router.push({ name: "selfOrders", params: { user: `${user.id}` } });
         }
     }
 </script>
-
 <style scoped>
     .button {
         background-color: #2da848;

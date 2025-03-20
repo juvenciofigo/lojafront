@@ -145,7 +145,7 @@
         await store.dispatch("categories/fetchCategories");
     });
     onBeforeUnmount(() => {
-        store.commit("CLEAR_CATEGORIES");
+        store.commit("categories/CLEAR_CATEGORIES");
     });
 </script>
 <style scoped>

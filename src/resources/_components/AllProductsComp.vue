@@ -224,7 +224,7 @@
     }
 
     onBeforeUnmount(() => {
-        store.commit("CLEAR_PRODUCTS");
+        store.commit("products/CLEAR_PRODUCTS");
     });
 
     onBeforeMount(async () => {

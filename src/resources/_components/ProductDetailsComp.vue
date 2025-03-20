@@ -571,7 +571,7 @@
                     </v-list>
                 </div>
                 <div>
-                    <h2 class="mb-4 font-semibold text-lg flex flex-row flex-wrap justify-between">
+                    <h2 class="my-4 font-semibold text-lg flex flex-row flex-wrap justify-between">
                         <span>Avaliações:</span>
                         <el-button
                             @click="emits(`rating-dialog`)"

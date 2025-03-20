@@ -229,7 +229,7 @@
 
     const route = useRoute();
     const store = useStore();
-    const product = computed(() => store.state.product);
+    const product = computed(() => store.state.products.product);
     const selectedVariation = route.params.variation;
 
     const loadSubmitButton = ref(true);
@@ -322,9 +322,9 @@
             }
 
             if (selectedVariation) {
-                response = await store.dispatch("updateVariation", { id: route.params.variation, formData });
+                response = await store.dispatch("products/updateVariation", { id: route.params.variation, formData });
             } else {
-                response = await store.dispatch("addVariation", { product: route.params.id, formData });
+                response = await store.dispatch("products/addVariation", { product: route.params.id, formData });
             }
 
             if (response === true) {
@@ -342,10 +342,10 @@
     );
 
     onBeforeMount(async () => {
-        await store.dispatch("detailsProductAdmin", route.params.id);
+        await store.dispatch("products/fetchProductByIdAdmin", route.params.id);
 
         if (selectedVariation) {
-            const res = await store.dispatch("detailsVariation", { variation: selectedVariation, product: route.params.id });
+            const res = await store.dispatch("products/detailsVariation", { variation: selectedVariation, product: route.params.id });
 
             variationType.value.value = res.variationType;
             variationValue.value.value = res.variationValue;

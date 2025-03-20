@@ -130,7 +130,7 @@
     const route = useRoute();
     const router = useRouter();
 
-    const customers = computed(() => store.state.customers.docs);
+    const customers = computed(() => store.state.auth.customers.docs);
     const curentPage = ref(Number(route.query.offset) || 1);
     const totalPages = computed(() => {
         const customers = store.state.customers || {};
@@ -139,11 +139,11 @@
 
     onBeforeMount(async () => {
         const offset = route.query.offset || 1;
-        await store.dispatch("getAllCustomers", offset);
+        await store.dispatch("auth/fetchCustomers", offset);
     });
 
     onBeforeUnmount(() => {
-        store.commit("CLEAR_CUSTOMERS");
+        store.commit("auth/CLEAR_CUSTOMERS");
     });
 
     function pageEvent(e) {
@@ -152,7 +152,7 @@
 
     const fetchCustomrs = () => {
         const offset = route.query.offset || 1;
-        store.dispatch("getAllCustomers", offset);
+        store.dispatch("auth/fetchCustomers", offset);
     };
 
     watchEffect(() => {

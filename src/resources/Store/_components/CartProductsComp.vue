@@ -152,28 +152,28 @@
         actionButton: String,
     });
 
-    function goTo(product) {
-        router.push({ name: "detailsClient", params: { id: product } });
-    }
-
     const isAuthenticated = computed(() => store.getters.isAuthenticated("authToken"));
     const loadingPriceUpdate = computed(() => store.getters.loadingPriceUpdate);
 
     async function update() {
-        await store.dispatch("displayCartPrices", isAuthenticated.value);
-        await store.dispatch("displayCartProducts", isAuthenticated.value);
+        await store.dispatch("carts/displayCartPrices", isAuthenticated.value);
+        await store.dispatch("carts/displayCartProducts", isAuthenticated.value);
         store.commit("SET_loadingPriceUpdate");
     }
 
     async function removeProduct(item) {
         store.commit("SET_loadingPriceUpdate");
-        await store.dispatch("removeProductCart", { isAuthenticated: isAuthenticated.value, item });
+        await store.dispatch("carts/removeFromCart", { isAuthenticated: isAuthenticated.value, item });
         update();
+    }
+
+    function goTo(product) {
+        router.push({ name: "detailsClient", params: { id: product } });
     }
 
     async function updateQuantity(item, quantity) {
         store.commit("SET_loadingPriceUpdate");
-        await store.dispatch("updateProductQuantity", { item, quantity: quantity || 1, isAuthenticated: isAuthenticated.value, store });
+        await store.dispatch("carts/updateProductQuantity", { item, quantity: quantity || 1, isAuthenticated: isAuthenticated.value, store });
         update();
     }
 </script>

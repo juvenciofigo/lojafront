@@ -6,7 +6,7 @@
         :skeleton="skeleton"
         :newProduct="`novoproduto`"
         :fetchRouteName="fetchRouteName"
-        :getCategories="'getAllCategoryAdmin'" />
+        :getCategories="'categories/fetchCategoriesAdmin'" />
 </template>
 
 <script setup>
@@ -33,11 +33,11 @@
     async function fetchProducts(payload) {
         skeleton.value = true;
         if (category) {
-            await store.dispatch("getAllProductsAdmin", payload);
+            await store.dispatch("products/fetchAllProductsAdmin", payload);
             skeleton.value = false;
             return;
         }
-        await store.dispatch("getAllProductsAdmin");
+        await store.dispatch("products/fetchAllProductsAdmin");
         skeleton.value = false;
     }
 
@@ -54,7 +54,7 @@
     );
 
     onBeforeUnmount(() => {
-        store.commit("CLEAR_CATEGORY");
+        store.commit("categories/CLEAR_CATEGORY");
     });
 
     onBeforeMount(() => {

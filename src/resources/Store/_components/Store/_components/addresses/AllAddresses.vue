@@ -19,7 +19,10 @@
                             }
                         "
                         class="col-span-1 md:flex flex-col flex-wrap gap-4 p-4 rounded-md cursor-pointer border hover:-translate-y-1 duration-500 border-[#e5e7eb] bg-[#f9fafb] hover:border-[#e0a9a9] shadow-md address">
-                        <AddressComp :address="address" />
+                        <AddressComp :address="address" 
+                        
+                        
+                        />
                     </li>
                 </ul>
 
@@ -98,15 +101,14 @@
     import AddressComp from "@/resources/_components/_partials/AddressCard.vue";
 
     const store = useStore();
-    const addresses = computed(() => store.state.addresses);
+    const addresses = computed(() => store.state.addresses.addresses);
     const loading = ref(true);
     const addressSelected = ref(null);
     const modifyDialog = ref(false);
 
-    const fetchAddresses = () => {
+    const fetchAddresses = async () => {
         loading.value = true;
-        store.dispatch("addresses");
-
+        await store.dispatch("addresses/fetchAddresses");
         loading.value = false;
     };
     onBeforeMount(() => {

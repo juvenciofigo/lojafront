@@ -84,7 +84,7 @@
     const store = useStore();
     const totalOrders = ref(0);
     const totalRevenue = ref(0);
-    const product = computed(() => store.state.product);
+    const product = computed(() => store.state.products.product);
     const skeleton = ref(true);
     const itemDelete = ref("");
     const text = ref("");
@@ -117,12 +117,12 @@
     }
 
     async function deleteProduct() {
-        await store.dispatch("deleteProduct", { productId: route.params.id, router });
+        await store.dispatch("products/deleteProduct", { productId: route.params.id, router });
         showDialog.value = false;
     }
 
     async function deleteRating() {
-        await store.dispatch("deleteRating", { rating: deleteIndex.value });
+        await store.dispatch("rating/deleteRating", { rating: deleteIndex.value });
         showDialog.value = false;
     }
 
@@ -149,11 +149,11 @@
     }
 
     onBeforeMount(async () => {
-        await store.dispatch("detailsProductAdmin", route.params.id);
+        await store.dispatch("products/fetchProductByIdAdmin", route.params.id);
         skeleton.value = false;
     });
 
     onBeforeUnmount(() => {
-        store.commit("productDetails", {});
+        store.commit("products/CLEAR_PRODUCT", {});
     });
 </script>

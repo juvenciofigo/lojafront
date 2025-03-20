@@ -26,12 +26,14 @@ const actions = {
     // Admin
     async addProduct(_, payload) {
         try {
-            const res = await sendAxio("post", `/product`, payload);
+            const res = await sendAxio({ method: "post", url: `/product`, data: payload });
 
             if (res.status === 200) {
                 notification({ title: "erro", message: res.data.message, type: "success" });
                 window.location.reload();
+                return;
             }
+            throw new Error();
         } catch (error) {
             errorMessage(error);
         }
@@ -39,42 +41,31 @@ const actions = {
 
     async updateProduct({ commit }, payload) {
         try {
-            const res = await sendAxio("put", `/product/${payload.productSeleted}`, payload.formData);
-
-            // const res = await axios.request({
-            //     method: "put",
-            //     baseURL: config.apiURL,
-            //     url: `/product/${payload.productSeleted}`,
-            //     headers: headers(),
-            //     data: payload.formData,
-            // });
+            const res = await sendAxio({ method: "put", url: `/product/${payload.productSeleted}`, data: payload.formData });
 
             if (res.status === 200) {
                 commit("SET_PRODUCTS", res.data);
                 notification({ title: "Sucesso", type: "success", message: res.data.message });
                 window.location.reload();
+                return true;
             }
+            throw new Error();
         } catch (error) {
             errorMessage(error);
+            return false;
         }
     },
 
     async updateImage(_, { productId, formData }) {
         try {
-            const res = await sendAxio("put", `/product/image/${productId}`, formData, { "Content-Type": "multipart/form-data" });
-
-            // const res = await axios.request({
-            // method: "put",
-            // baseURL: config.apiURL,
-            // url: `${config.apiURL}/product/image/${productId}`,
-            // headers: { "Content-Type": "multipart/form-data", ...headers() },
-            // data: formData,
-            // });
+            const res = await sendAxio({ method: "put", url: `/product/image/${productId}`, data: formData, customHeaders: { "Content-Type": "multipart/form-data" } });
 
             if (res.status === 200) {
                 notification({ title: "Sucesso", type: "success", message: res.data.message });
                 window.location.reload();
+                return;
             }
+            throw new Error();
         } catch (error) {
             errorMessage(error);
         }
@@ -82,20 +73,14 @@ const actions = {
 
     async deleteProduct(_, { productId, router }) {
         try {
-            // await axios.request({
-            // method: "delete",
-            // baseURL: config.apiURL,
-            // url: `${config.apiURL}/product/${productId}`,
-            // headers: headers(),
-            // });
-
-            const res = await sendAxio("delete", `/product/${productId}`);
+            const res = await sendAxio({ method: "delete", url: `/product/${productId}` });
 
             if (res.status === 200) {
                 notification({ title: "Sucesso", type: "success", message: res.data.message });
-
                 router.push({ name: "produtos" });
+                return;
             }
+            throw new Error();
         } catch (error) {
             errorMessage(error);
         }
@@ -103,20 +88,18 @@ const actions = {
 
     async addVariation(_, payload) {
         try {
-            // const res = await axios.request({
-            //     method: "post",
-            //     baseURL: config.apiURL,
-            //     url: `/variation/${payload.product}`,
-            //     data: payload.formData,
-            //     headers: { "Content-Type": "multipart/form-data", ...headers() },
-            // });
-
-            const res = await sendAxio("post", `/variation/${payload.product}`, payload.formData, { "Content-Type": "multipart/form-data" });
+            const res = await sendAxio({
+                method: "post",
+                url: `/variation/${payload.product}`,
+                data: payload.formData,
+                customHeaders: { "Content-Type": "multipart/form-data" },
+            });
 
             if (res.status === 200) {
                 notification({ title: "Sucesso", type: "success", message: res.data.message });
                 return true;
             }
+            throw new Error();
         } catch (error) {
             errorMessage(error);
             return false;
@@ -125,19 +108,13 @@ const actions = {
 
     async updateVariation(_, payload) {
         try {
-            // const res = await axios.request({
-            //     method: "put",
-            //     baseURL: config.apiURL,
-            //     url: `/variation/${payload.id}`,
-            //     data: payload.formData,
-            //     headers: { "Content-Type": "multipart/form-data", ...headers() },
-            // });
-            const res = await sendAxio("put", `/variation/${payload.id}`, payload.formData, { "Content-Type": "multipart/form-data" });
+            const res = await sendAxio({ method: "put", url: `/variation/${payload.id}`, data: payload.formData, customHeaders: { "Content-Type": "multipart/form-data" } });
 
             if (res.status === 200) {
                 notification({ title: "Sucesso", type: "success", message: res.data.message });
                 return true;
             }
+            throw new Error();
         } catch (error) {
             errorMessage(error);
             return false;
@@ -146,55 +123,51 @@ const actions = {
 
     async detailsVariation(_, payload) {
         try {
-            const res = await sendAxio("get", `/variation/${payload.variation}`, null, {}, { product: payload.product });
+            const res = await sendAxio({ method: "get", url: `/variation/${payload.variation}`, params: { product: payload.product } });
             if (res.status === 200) {
                 return res.data.variation;
             }
+            throw new Error();
         } catch (error) {
             errorMessage(error);
         }
     },
 
-    async AllvariationsAdmin(_, payload) {
-        // fetchVariationsAdmin
+    async fetchVariationsAdmin(_, payload) {
         try {
-            const res = await sendAxio("get", `/variations`, null, {}, { product: payload });
+            const res = await sendAxio({ method: "get", url: `/variations`, params: { product: payload } });
             if (res.status === 200) {
                 return res.data.variations;
             }
+            throw new Error();
         } catch (error) {
             errorMessage(error);
         }
     },
 
-    async getAllProductsAdmin({ commit }, payload) {
-        //fetchAllProductsAdmin
+    async fetchAllProductsAdmin({ commit }, payload) {
         try {
-            const res = await sendAxio("get", "/products/admin", null, {}, payload);
+            const res = await sendAxio({ method: "get", url: "/products/admin", params: payload });
 
-            if (res.status === 200) {
+            if (res.data) {
                 commit("SET_PRODUCTS", res.data);
+                return;
             }
+            throw new Error();
         } catch (error) {
             errorMessage(error);
         }
     },
 
-    async detailsProductAdmin({ commit }, produtoId) {
-        //fetchProductByIdAdmin
+    async fetchProductByIdAdmin({ commit }, produtoId) {
         try {
-            // const res = await axios.request({
-            //     method: "get",
-            //     baseURL: config.apiURL,
-            //     url: `/product/admin/${produtoId}`,
-            //     headers: headers(),
-            // });
-            const res = await sendAxio("get", `/product/admin/${produtoId}`);
+            const res = await sendAxio({ method: "get", url: `/product/admin/${produtoId}` });
 
             if (res.status === 200) {
                 commit("SET_PRODUCT", res.data.product);
                 return;
             }
+            throw new Error();
         } catch (error) {
             errorMessage(error);
             return true;
@@ -208,8 +181,9 @@ const actions = {
             const res = await sendAxio({ method: "get", url: "/products", params: payload });
             if (res.status === 200) {
                 commit("SET_PRODUCTS", res.data);
+                return;
             }
-            return;
+            throw new Error();
         } catch (error) {
             errorMessage(error);
         }
@@ -222,6 +196,7 @@ const actions = {
                 commit("SET_PRODUCT", res.data.product);
                 return res;
             }
+            throw new Error();
         } catch (error) {
             errorMessage(error);
         }
@@ -239,6 +214,7 @@ const actions = {
                 commit("SET_PRODUCTS", res.data);
                 return;
             }
+            throw new Error();
         } catch (error) {
             errorMessage(error);
         }

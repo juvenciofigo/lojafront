@@ -1,6 +1,6 @@
 <template lang="">
     <div
-        v-loading="loading"
+        v-loading="loading || pageloadLoading"
         class="flex flex-col flex-1 gap-2 overflow-auto allOlders">
         <div>
             <div v-if="orderDocs && orderDocs.length > 0 && loading === false">
@@ -135,9 +135,10 @@
     const props = defineProps({
         storeaction: String,
         route: String,
+        pageloadLoading: Boolean,
     });
 
-    const orders = computed(() => store.state.orders);
+    const orders = computed(() => store.state.orders.orders);
     const orderDocs = computed(() => orders.value.docs);
     const totalPages = computed(() => orders.value.totalPages);
     const currentPage = ref(Number(route.query.offset) || 1);
@@ -175,7 +176,7 @@
 
     const fetchOrders = async () => {
         loading.value = true;
-        await store.dispatch(`${props.storeaction}`, { offset: offset.value, user: route.params.user });
+        await store.dispatch(`orders/${props.storeaction}`, { offset: offset.value, user: route.params.user });
         loading.value = false;
     };
 
@@ -192,12 +193,12 @@
     });
 
     onBeforeUnmount(() => {
-        store.commit("CLEAR_ORDERS");
+        store.commit("orders/CLEAR_ORDERS");
     });
 
     ///////////////////// delete //////////
     const handleConfirm = () => {
-        emits("deleteButton", { id: id.value, status: status.value });
+        emits("deleteButton", { orderId: id.value, user: route.params.user, status: status.value });
         showDialog.value = false;
     };
     const handleCancel = () => {

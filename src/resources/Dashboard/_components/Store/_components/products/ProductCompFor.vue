@@ -307,7 +307,7 @@
     const productBrand = ref("");
 
     // Computação da lista de categorias
-    const categories = computed(() => store.state.categories);
+    const categories = computed(() => store.state.categories.categories);
 
     // Função para pré-visualizar as imagens
     function previewImages(event) {
@@ -334,8 +334,8 @@
             store.commit("SET_NOTIFICATION", { title: "Aviso", type: "warning", message: "Preencha o campo o nome da categoria" });
             return;
         }
-        await store.dispatch("createCategory", newCategoryName.value);
-        store.dispatch("getAllCategory");
+        await store.dispatch("categories/createCategory", newCategoryName.value);
+        store.dispatch("categories/fetchCategoriesAdmin");
     }
 
     async function updateProduct() {
@@ -357,9 +357,9 @@
         const formData = new FormData();
         formData.append("productImage", productImage.value);
 
-        await store.dispatch("updateImage", { productId: route.params.id, formData });
+        await store.dispatch("products/updateImage", { productId: route.params.id, formData });
 
-        // await store.dispatch("updateProduct", {
+        // await store.dispatch("products/updateProduct", {
         //     productId: route.params.id,
         //     updatedProductData: {
         //         productName: productName.value,
@@ -384,7 +384,7 @@
 
     // Obter os detalhes do produto do store ao montar o componente
     onMounted(async () => {
-        await store.dispatch("detailsProductAdmin", route.params.id);
+        await store.dispatch("products/fetchProductByIdAdmin", route.params.id);
         const productData = store.state.product;
         if (productData) {
             productName.value = productData.productName;
@@ -404,6 +404,6 @@
     });
     // Carregar categorias ao montar o componente
     onMounted(() => {
-        store.dispatch("getAllCategory");
+        store.dispatch("categories/fetchCategoriesAdmin");
     });
 </script>

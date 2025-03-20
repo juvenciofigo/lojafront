@@ -49,7 +49,7 @@
     );
 
     onBeforeUnmount(() => {
-        store.commit("CLEAR_CATEGORY");
+        store.commit("categories/CLEAR_CATEGORY");
     });
 
     onBeforeMount(() => {

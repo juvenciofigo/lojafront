@@ -34,7 +34,8 @@
     <v-dialog
         persistent
         v-model="ratingDialog"
-        width="auto">
+        width="auto"
+        >
         <div class="p-4 flex flex-col gap-4 border rounded-md bg-white sm:w-[400px]">
             <div class="flex flex-row">
                 <h1 class="text-xl font-semibold">Avaliação:</h1>
@@ -45,7 +46,7 @@
                 </button>
             </div>
             <div class="">
-                <form @submit.prevent="submit">
+                <div>
                     <div class="mb-7 mt-5 flex flex-col gap-4">
                         <label>
                             <h2 class="text-lg">Comentário:</h2>
@@ -76,24 +77,24 @@
                     </div>
 
                     <div class="flex-row flex flex-wrap gap-2">
-                        <v-btn
+                        <el-button
                             :loading="ratingButtonLoading"
-                            size="x-small"
-                            theme="primary"
-                            variant="tonal"
-                            color="#5865f2"
+                            @click="submit()"
+                            size="small"
                             type="submit"
-                            class="bg-[#5865f2] text-white">
+                            color="#5865f2">
                             Submit
-                        </v-btn>
-                        <v-btn
-                            size="x-small"
-                            variant="tonal"
-                            @click="handleReset()"
-                            >Limpar</v-btn
-                        >
+                        </el-button>
+
+                        <el-button
+                            :loading="ratingButtonLoading"
+                            size="small"
+                            color="#f00"
+                            @click="handleReset()">
+                            Limpar
+                        </el-button>
                     </div>
-                </form>
+                </div>
             </div>
         </div>
     </v-dialog>
@@ -101,7 +102,8 @@
 <script setup>
     import { ref, computed, toRaw, onBeforeMount } from "vue";
     import { useStore } from "vuex";
-    import { useRoute, useRouter } from "vue-router";
+    // import { useRoute, useRouter } from "vue-router";
+    import { useRoute } from "vue-router";
     import ProductDetailsComp from "@/resources/_components/ProductDetailsComp.vue";
     import ProductDetaislsSkeleton from "@/components/skeletons/ProductDetaislsSkeleton.vue";
     import { X } from "lucide-vue-next";
@@ -111,7 +113,7 @@
 
     const store = useStore();
     const route = useRoute();
-    const router = useRouter();
+    // const router = useRouter();
     const isAuthenticated = computed(() => store.getters.isAuthenticated("authToken"));
     const product = computed(() => store.state.products.product);
     const loading_button = ref(false);
@@ -178,9 +180,9 @@
         loading_button.value = true;
         store.commit("SET_loadingPriceUpdate");
 
-        await store.dispatch("addToCart", { isAuthenticated: isAuthenticated.value, item: { productId: route.params.id, variation: toRaw(variation.value), quantity: quantity.value || 1 } });
+        await store.dispatch("carts/addToCart", { isAuthenticated: isAuthenticated.value, item: { productId: route.params.id, variation: toRaw(variation.value), quantity: quantity.value || 1 } });
 
-        await store.dispatch("displayCartPrices", isAuthenticated.value);
+        await store.dispatch("carts/displayCartPrices", isAuthenticated.value);
         loading_button.value = false;
         store.commit("SET_loadingPriceUpdate");
     }
@@ -193,6 +195,23 @@
         window.open(url, "_blank");
     }
 
+    onBeforeMount(async () => {
+        await store.dispatch("products/fetchProductById", route.params.id);
+        skeleton.value = false;
+    });
+
+    // ////////////////buy now//////////////
+    async function buyNow() {
+        // const res = await verifyVaraiations();
+
+        // if (res) {
+        store.commit("SET_NOTIFICATION", { title: "Aviso!", type: "warning", message: "Adicione ao carrinho para comprar!" });
+        //     return;
+        // }
+        // router.push({ name: "makeOrder", query: { productsFrom: "payNow", product: route.params.id, quantity: quantity.value || 1, variation: toRaw(variation.value) } });
+    }
+
+    // ///////////////rating /////////////
     const { handleSubmit, handleReset } = useForm({
         validationSchema: toTypedSchema(
             z.object({
@@ -207,26 +226,11 @@
 
     const submit = handleSubmit(async (values) => {
         ratingButtonLoading.value = true;
-        await store.dispatch("sendRating", { ...values, productId: route.params.id });
-        store.dispatch("detailsProduct", route.params.id);
+        await store.dispatch("rating/sendRating", { ...values, productId: route.params.id });
+        store.dispatch("products/fetchProductById", route.params.id);
         handleReset();
         ratingDialog.value = false;
         ratingButtonLoading.value = false;
-    });
-
-    async function buyNow() {
-        const res = await verifyVaraiations();
-
-        if (res) {
-            store.commit("SET_NOTIFICATION", { title: "Erro!", type: "error", message: res.error });
-            return;
-        }
-        router.push({ name: "makeOrder", query: { productsFrom: "payNow", product: route.params.id, quantity: quantity.value || 1, variation: toRaw(variation.value) } });
-    }
-
-    onBeforeMount(async () => {
-        await store.dispatch("products/fetchProductById", route.params.id);
-        skeleton.value = false;
     });
 </script>
 <style>

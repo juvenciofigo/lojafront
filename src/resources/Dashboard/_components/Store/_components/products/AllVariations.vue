@@ -76,6 +76,6 @@
     const route = useRoute();
 
     onBeforeMount(async () => {
-        variations.value = await store.dispatch("AllvariationsAdmin", route.params.id);
+        variations.value = await store.dispatch("products/fetchVariationsAdmin", route.params.id);
     });
 </script>

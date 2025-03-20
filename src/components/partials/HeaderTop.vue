@@ -77,7 +77,7 @@
     <!-- end Header-1 -->
 </template>
 <script setup>
-    import { computed, ref, onMounted } from "vue";
+    import { computed, ref, onBeforeMount } from "vue";
     import { useStore } from "vuex";
     import { useRouter } from "vue-router";
     import { ArrowDown } from "@element-plus/icons-vue";
@@ -88,7 +88,7 @@
     const isAuthenticated = computed(() => store.getters.isAuthenticated("authToken"));
 
     const loadingPriceUpdate = computed(() => store.getters.loadingPriceUpdate);
-    const priceTotal = computed(() => store.getters.cartPrice);
+    const priceTotal = computed(() => store.state.carts.cartPrice);
     const storeName = store.state.storeName;
     const user = computed(() => JSON.parse(localStorage.getItem("userData")));
     const drawer = ref(false);
@@ -100,7 +100,7 @@
     };
     function login() {
         if (!isAuthenticated.value) {
-            store.commit("SET_LOGIN_OVERLAY", true);
+            store.commit("auth/SET_LOGIN_OVERLAY", true);
         }
     }
 
@@ -112,19 +112,18 @@
 
     function logout() {
         if (isAuthenticated.value) {
-            store.dispatch("logout", router);
+            store.dispatch("auth/logout", router);
         }
     }
 
     function novoVisitante() {
         if (!localStorage.getItem("registoDeVisita")) {
             localStorage.setItem("registoDeVisita", "true");
-            store.dispatch("novoVisitante");
+            store.dispatch("auth/novoVisitante");
         }
     }
-
-    onMounted(async () => {
-        await store.dispatch("displayCartPrices", isAuthenticated.value);
+    onBeforeMount(async () => {
+        await store.dispatch("carts/displayCartPrices", isAuthenticated.value);
         novoVisitante();
     });
 </script>

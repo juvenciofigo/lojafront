@@ -1,7 +1,7 @@
 <template lang="">
     <AllOldersComp
         class="p-2"
-        :storeaction="`getAllOrders`"
+        :storeaction="`fetchOrders`"
         :route="`allOrders`">
         
     </AllOldersComp>

@@ -150,13 +150,13 @@
 
     function logout() {
         if (isAuthenticated.value) {
-            store.dispatch("logout", router);
+            store.dispatch("auth/logout", router);
         }
     }
 
     function login() {
         if (!isAuthenticated.value) {
-            store.commit("SET_LOGIN_OVERLAY", true);
+            store.commit("auth/SET_LOGIN_OVERLAY", true);
         }
     }
     window.addEventListener("resize", () => {

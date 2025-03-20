@@ -49,7 +49,7 @@
 
     const store = useStore();
     const number = ref("");
-    const total = computed(() => store.getters.amoutPayment);
+    const total = computed(() => store.state.payments.amoutPayment);
     const errorDialog = ref(false);
     const errorMessage = ref("");
     const loading = ref(false);
@@ -66,7 +66,7 @@
             return;
         }
 
-        const res = await store.dispatch("mpesapay", { client_number: `258${number.value}` });
+        const res = await store.dispatch("payments/mpesapay", { client_number: `258${number.value}` });
         if (res === false) loading.value = false;
     }
 </script>

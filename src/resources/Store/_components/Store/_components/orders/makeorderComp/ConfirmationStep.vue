@@ -42,8 +42,8 @@
 
     const store = useStore();
     const shippingPrice = ref(10);
-    const cart = computed(() => store.getters.cart);
-    const priceTotal = computed(() => store.getters.cart.totalProducts);
+    const cart = computed(() => store.state.carts.cart);
+    const priceTotal = computed(() => store.getters["carts/totalProducts"]);
     const totalPedido = computed(() => priceTotal.value + shippingPrice.value);
     const confirmationData = ref(null);
     const loadingPriceUpdate = computed(() => store.getters.loadingPriceUpdate);
@@ -63,7 +63,6 @@
         cart,
         (after) => {
             if (!after.items || after.items.length === 0) {
-                // esse codigo controla se o carrinho está vazio ou nao, se estiver atualiza a pagina
                 window.location.reload();
                 return;
             }

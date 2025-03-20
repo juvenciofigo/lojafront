@@ -33,10 +33,10 @@
     import LoginView from "./resources/_components/LoginView.vue";
     const store = useStore();
 
-    const loginOverlay = computed(() => store.getters.loginOverlay);
+    const loginOverlay = computed(() => store.state.auth.loginOverlay);
 
     function dialogLogClose() {
-        store.commit("SET_LOGIN_OVERLAY", false);
+        store.commit("auth/SET_LOGIN_OVERLAY", false);
     }
 </script>
 <style scoped>

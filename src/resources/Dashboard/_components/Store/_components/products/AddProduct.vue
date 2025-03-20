@@ -237,13 +237,13 @@
                         </div>
 
                         <!-- Categories -->
-                        <div>
+                        <div class="">
                             <Label>Categoria:</Label>
 
                             <!-- Create Categories -->
                             <Dialog>
                                 <DialogTrigger as-child>
-                                    <el-button> Criar categoria </el-button>
+                                    <el-button size="small"> Criar categoria </el-button>
                                 </DialogTrigger>
                                 <DialogContent class="sm:max-w-[425px] grid-rows-[auto_minmax(0,1fr)_auto] p-0 max-h-[90dvh]">
                                     <DialogHeader class="p-6 pb-0">
@@ -386,6 +386,7 @@
             <!-- Bottons -->
             <div class="mt-2">
                 <el-button
+                    size="small"
                     :loading="loadSubmitButton"
                     @click="
                         () => {
@@ -397,6 +398,7 @@
                     >Criar</el-button
                 >
                 <el-button
+                    size="small"
                     :loading="loadSubmitButton"
                     @click="
                         () => {
@@ -412,7 +414,8 @@
 <script setup>
     import { useStore } from "vuex";
     import { useRoute } from "vue-router";
-    import { ref, onMounted, computed, toRaw } from "vue";
+    import { ref, onBeforeMount, computed, toRaw } from "vue";
+
     // import Editor from "@tinymce/tinymce-vue";
     import { useField, useForm } from "vee-validate";
     import { toTypedSchema } from "@vee-validate/zod";
@@ -433,7 +436,7 @@
     const store = useStore();
     const route = useRoute();
 
-    const categories = computed(() => store.state.categories);
+    const categories = computed(() => store.state.categories.categories);
     const productSeleted = route.params.productID;
 
     const textAreaDisabled = ref(false);
@@ -532,14 +535,12 @@
             }
 
             if (productSeleted) {
-                await store.dispatch("updateProduct", { productSeleted, formData });
+                await store.dispatch("products/updateProduct", { productSeleted, formData });
             } else {
-                // let result;
-                // result = await store.dispatch("addProduct", formData);
-                await store.dispatch("addProduct", formData);
-                // if (result === true) {
-                //     handleReset();
-                // }
+                const result = await store.dispatch("products/addProduct", formData);
+                if (result === true) {
+                    handleReset();
+                }
             }
 
             loadSubmitButton.value = false;
@@ -551,33 +552,33 @@
         }
     );
 
-    onMounted(async () => {
+    onBeforeMount(async () => {
         loadSubmitButton.value = true;
         textAreaDisabled.value = true;
-        store.dispatch("getAllCategoryAdmin");
+        await store.dispatch("categories/fetchCategoriesAdmin");
 
         if (productSeleted) {
-            await store.dispatch("detailsProductAdmin", productSeleted);
-            const productData = store.state.product;
+            await store.dispatch("products/fetchProductByIdAdmin", productSeleted);
+            const product = computed(() => store.state.products.product).value;
 
-            productName.value.value = productData.productName;
-            productDescription.value.value = productData.productDescription;
-            productAvailability.value.value = productData.productAvailability;
-            productPrice.value.value = productData.productPrice;
-            productStock.value.value = productData.productStock;
-            productImage.value = productData.productImage;
-            productCategory.value.value = productData.productCategory;
-            productSubcategory.value.value = productData.productSubcategory;
-            productSub_category.value.value = productData.productSub_category;
-            productPromotion.value.value = productData.productPromotion;
-            sku.value.value = productData.sku;
-            productVendor.value.value = productData.productVendor;
-            productModel.value.value = productData.productModel;
-            productBrand.value.value = productData.productBrand;
-            productWeight.value.value = productData.productWeight;
-            productLength.value.value = productData.productLength;
-            productWidth.value.value = productData.productWidth;
-            productHeight.value.value = productData.productHeight;
+            productName.value.value = product.productName;
+            productDescription.value.value = product.productDescription;
+            productAvailability.value.value = product.productAvailability;
+            productPrice.value.value = product.productPrice;
+            productStock.value.value = product.productStock;
+            productImage.value = product.productImage;
+            productCategory.value.value = product.productCategory;
+            productSubcategory.value.value = product.productSubcategory;
+            productSub_category.value.value = product.productSub_category;
+            productPromotion.value.value = product.productPromotion;
+            sku.value.value = product.sku;
+            productVendor.value.value = product.productVendor;
+            productModel.value.value = product.productModel;
+            productBrand.value.value = product.productBrand;
+            productWeight.value.value = product.productWeight;
+            productLength.value.value = product.productLength;
+            productWidth.value.value = product.productWidth;
+            productHeight.value.value = product.productHeight;
         }
         loadSubmitButton.value = false;
         textAreaDisabled.value = false;
@@ -604,5 +605,4 @@
         background-color: white;
         border-radius: 4px;
     }
-
 </style>

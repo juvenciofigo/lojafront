@@ -65,16 +65,13 @@
     const results = ref({});
     const recentOrders = ref([]);
 
-    store.dispatch("estatistic").then((data) => {
-        results.value = data;
-    });
-
-    store.dispatch("recentOrders").then((data) => {
-        recentOrders.value = data;
-    });
     onBeforeMount(async () => {
-        await store.dispatch("DataByMonth");
+        await store.dispatch("estatistic/DataByMonth");
+        store.dispatch("estatistic/recentOrders").then((data) => {
+            recentOrders.value = data;
+        });
+        store.dispatch("estatistic/estatistic").then((data) => {
+            results.value = data;
+        });
     });
-
-    
 </script>

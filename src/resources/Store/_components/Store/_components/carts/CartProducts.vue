@@ -55,18 +55,19 @@
 
     const store = useStore();
     const router = useRouter();
-    const cart = computed(() => store.state.cart);
     const isAuthenticated = computed(() => store.getters.isAuthenticated("authToken"));
+    
+    const cart = computed(() => store.state.carts.cart);
+    const priceTotal = computed(() => store.getters["carts/totalProducts"]);
+    const loadingPriceUpdate = computed(() => store.getters.loadingPriceUpdate);
 
-    const priceTotal = computed(() => store.getters.cart.totalProducts);
     const shippingPrice = ref(10);
     const totalPedido = computed(() => priceTotal.value + shippingPrice.value);
     const buttonStatus = ref(true);
     const skeleton = ref(true);
-    const loadingPriceUpdate = computed(() => store.getters.loadingPriceUpdate);
 
     onBeforeMount(async () => {
-        await store.dispatch("displayCartProducts", isAuthenticated.value);
+        await store.dispatch("carts/displayCartProducts", isAuthenticated.value);
         skeleton.value = false;
     });
 

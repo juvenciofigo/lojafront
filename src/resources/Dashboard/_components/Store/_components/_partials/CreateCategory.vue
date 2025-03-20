@@ -3,21 +3,20 @@
         <div class="grid gap-2 bg-slate-100 p-2 rounded-md">
             <div class="flex flex-col gap-2">
                 <Label for="categoria">Criar Categoria:</Label>
-                <v-text-field
+                <el-input
+                    v-model="categoryName"
+                    :disabled="loadingBtn"
+                    autocomplete="off"
+                    id="categoria"
                     type="text"
                     placeholder="Digite o nome da categoria"
-                    v-model="categoryName"
-                    id="categoria"
-                    density="compact"
-                    flat
-                    clearable
-                    variant="outlined"></v-text-field>
-                <Button
-                    @click="createCategory"
-                    class="w-max"
-                    variant="outline"
-                    >Criar</Button
-                >
+                    aria-label="Digite o nome da categoria" />
+                <el-button
+                    size="small"
+                    :loading="loadingBtn"
+                    @click="createCategory()">
+                    Criar Categoria
+                </el-button>
             </div>
         </div>
 
@@ -25,16 +24,15 @@
         <div class="grid gap-2 bg-slate-100 p-2 rounded-md">
             <div class="flex flex-col gap-2">
                 <Label for="subcategoria">Criar Subcategoria:</Label>
-                <v-text-field
+
+                <el-input
+                    v-model="subCategoryName"
+                    :disabled="loadingBtn"
+                    autocomplete="off"
+                    id="subcategoria"
                     type="text"
                     placeholder="Digite o nome da subcategoria"
-                    v-model="subCategoryName"
-                    id="subcategoria"
-                    density="compact"
-                    flat
-                    clearable
-                    variant="outlined">
-                </v-text-field>
+                    aria-label="Digite o nome da subcategoria" />
 
                 <SelectRoot
                     class="bg-black"
@@ -78,12 +76,12 @@
                     </SelectPortal>
                 </SelectRoot>
 
-                <Button
-                    @click="createSubCategory"
-                    class="w-max"
-                    variant="outline"
-                    >Criar</Button
-                >
+                <el-button
+                    size="small"
+                    :loading="loadingBtn"
+                    @click="createSubCategory()">
+                    Criar Subcategoria
+                </el-button>
             </div>
         </div>
 
@@ -91,16 +89,14 @@
         <div class="grid gap-2 bg-slate-100 p-2 rounded-md">
             <div class="flex flex-col gap-2">
                 <Label for="categoria">Criar sub_categoria:</Label>
-                <v-text-field
+                <el-input
+                    v-model="sub_categoryName"
+                    :disabled="loadingBtn"
+                    autocomplete="off"
+                    id="categoria"
                     type="text"
                     placeholder="Digite o nome da sub_categoria"
-                    v-model="sub_categoryName"
-                    id="categoria"
-                    density="compact"
-                    flat
-                    clearable
-                    variant="outlined">
-                </v-text-field>
+                    aria-label="Digite o nome da sub_categoria" />
 
                 <SelectRoot
                     class="bg-black"
@@ -145,12 +141,12 @@
                     </SelectPortal>
                 </SelectRoot>
 
-                <Button
-                    @click="createSub_category"
-                    class="w-max"
-                    variant="outline"
-                    >Criar</Button
-                >
+                <el-button
+                    size="small"
+                    :loading="loadingBtn"
+                    @click="createSub_category()">
+                    Criar Sub_Categoria
+                </el-button>
             </div>
         </div>
     </div>
@@ -175,57 +171,71 @@
         SelectValue,
         SelectViewport,
     } from "radix-vue";
-    import { Button } from "@/components/ui/button";
 
     const store = useStore();
 
-    const categoryName = ref("");
-    const subCategoryName = ref("");
-    const sub_categoryName = ref("");
+    const categoryName = ref(null);
+    const subCategoryName = ref(null);
+    const sub_categoryName = ref(null);
 
-    const selectedCategory = ref("");
-    const selectedSubcategory = ref("");
+    const selectedCategory = ref(null);
+    const selectedSubcategory = ref(null);
+    const loadingBtn = ref(false);
 
-    const categories = computed(() => store.state.categories);
+    const categories = computed(() => store.state.categories.categories);
 
     const notification = (message) => {
         store.commit("SET_NOTIFICATION", { title: "Aviso", type: "warning", message: message });
     };
 
     async function createCategory() {
+        loadingBtn.value = true;
+
         if (!categoryName.value) {
+            //nome
             notification("Preencha o campo o nome da categoria");
+            loadingBtn.value = false;
             return;
         }
 
-        await store.dispatch("createCategory", categoryName.value);
+        await store.dispatch("categories/createCategory", categoryName.value);
+        loadingBtn.value = false;
     }
 
     async function createSubCategory() {
+        loadingBtn.value = true;
+        if (!selectedCategory.value) {
+            notification("Escolha uma Categoria!");
+            loadingBtn.value = false;
+            return;
+        }
         if (!subCategoryName.value) {
+            // nome
+            loadingBtn.value = false;
             notification("Preencha o campo o nome da subcategoria");
             return;
         }
 
-        if (!categoryName.value) {
-            notification("Escolha uma Categoria");
-            return;
-        }
-
-        await store.dispatch("createSubCategory", { categoryID: selectedCategory.value, subCategoryName: subCategoryName.value });
+        await store.dispatch("categories/createSubCategory", { categoryID: selectedCategory.value, subCategoryName: subCategoryName.value });
+        loadingBtn.value = false;
     }
 
     async function createSub_category() {
+        loadingBtn.value = true;
         if (!sub_categoryName.value) {
+            //nome
             notification("Preencha o campo o nome da sub_categoria");
+            loadingBtn.value = false;
             return;
         }
 
-        if (!subCategoryName.value) {
+        if (!selectedSubcategory.value) {
             notification("Escolha uma Subcategoria");
+            loadingBtn.value = false;
             return;
         }
 
-        await store.dispatch("createSub_category", { subCategoryID: selectedSubcategory.value, sub_categoryName: sub_categoryName.value });
+        await store.dispatch("categories/createSub_category", { subCategoryID: selectedSubcategory.value, sub_categoryName: sub_categoryName.value });
+        loadingBtn.value = false;
     }
 </script>

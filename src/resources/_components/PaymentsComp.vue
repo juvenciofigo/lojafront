@@ -138,7 +138,7 @@
         storeaction: String,
         route: String,
     });
-    const orders = computed(() => store.state.orders);
+    const orders = computed(() => store.state.orders.orders);
     const orderDocs = computed(() => orders.value.docs);
     const curentPage = ref(Number(route.query.offset) || 1);
     const totalPages = computed(() => orders.value.totalPages);
@@ -147,7 +147,7 @@
     const emits = defineEmits(["deleteButton"]);
 
     onBeforeUnmount(() => {
-        store.commit("CLEAR_ORDERS");
+        store.commit("orders/CLEAR_ORDERS");
     });
 
     function pageEvent(pageNumber) {
@@ -160,8 +160,6 @@
     const loading = ref(true);
 
     const fetchOrders = async () => {
-        loading.value = true;
-        await store.dispatch(`${props.storeaction}`, { offset: offset.value, user: route.params.user });
         loading.value = false;
     };
 

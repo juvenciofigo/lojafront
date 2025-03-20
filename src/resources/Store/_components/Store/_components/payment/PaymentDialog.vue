@@ -3,22 +3,23 @@
     import { watch, computed } from "vue";
     import { useStore } from "vuex";
     import { formatCurrency } from "@/util/functions";
+    import notification from "@/util/notifications";
+    // import notification from "@/util/notifications";
 
     const store = useStore();
-    const overlay = computed(() => store.getters.payment);
+    const overlay = computed(() => store.state.payments.paymentDialog);
 
-    const total = computed(() => store.getters.amoutPayment);
+    const total = computed(() => store.state.payments.amoutPayment);
 
     function fechar() {
-        store.commit("SET_PAYMENT");
-        store.commit("SET_ID_ORDER", null);
-
-        store.commit("SET_NOTIFICATION", { title: "Aviso", type: "warning", message: "Pagamento não relalizado" });
-        store.commit("SET_AMOUTPAYMENT", 0);
+        store.commit("payments/SET_PAYMENT_DIALOG");
+        store.commit("payments/SET_ID_ORDER", null);
+        store.commit("payments/SET_AMOUT_PAYMENT", 0);
+        notification({ title: "Aviso", type: "warning", message: "Pagamento não relalizado" });
     }
 
     async function confirmePayment(value) {
-        const res = await store.dispatch("mpesapay", { client_number: `258${value}` });
+        const res = await store.dispatch("payments/mpesapay", { client_number: `258${value}` });
         if (res === false) {
             return true;
         }
