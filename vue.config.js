@@ -1,9 +1,10 @@
 const { defineConfig } = require("@vue/cli-service");
 const webpack = require("webpack");
-const path = require("path");
-const TerserPlugin = require("terser-webpack-plugin"); // Adicione esta linha
+const TerserPlugin = require("terser-webpack-plugin");
 
 module.exports = defineConfig({
+    productionSourceMap: false, // Remove os Source Maps (evita que o código original apareça)
+
     transpileDependencies: true,
 
     configureWebpack: {
@@ -11,30 +12,28 @@ module.exports = defineConfig({
             new webpack.DefinePlugin({
                 __VUE_PROD_HYDRATION_MISMATCH_DETAILS__: "true",
             }),
-            require("unplugin-vue-components/webpack").default({
-                /* options */
-            }),
+            require("unplugin-vue-components/webpack").default(),
         ],
-        resolve: {
-            alias: {
-                "@": path.resolve(__dirname, "src"),
-            },
-        },
-        // Adicione esta seção para minificação e ofuscação
         optimization: {
             minimize: true,
             minimizer: [
                 new TerserPlugin({
                     terserOptions: {
                         compress: {
-                            drop_console: true, // Remove console.log em produção
+                            drop_console: true, // Remove console.log() no ambiente de produção
+                            drop_debugger: true, // Remove debugger
                         },
                         output: {
-                            comments: false, // Remove comentários
+                            comments: false, // Remove comentários no código
                         },
                     },
                 }),
             ],
+        },
+        resolve: {
+            alias: {
+                "@": require("path").resolve(__dirname, "src"),
+            },
         },
     },
 
@@ -45,7 +44,6 @@ module.exports = defineConfig({
             .loader("vue-loader")
             .tap((options) => {
                 options.compilerOptions = {
-                    // Adicione as opções necessárias aqui
                     isCustomElement: (tag) => tag.startsWith("custom-"),
                 };
                 return options;
@@ -53,8 +51,6 @@ module.exports = defineConfig({
     },
 
     pluginOptions: {
-        vuetify: {
-            // https://github.com/vuetifyjs/vuetify-loader/tree/next/packages/vuetify-loader
-        },
+        vuetify: {},
     },
 });
