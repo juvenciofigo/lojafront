@@ -64,6 +64,7 @@
         "nuxt": "^0.10.2",
         "sass": "^1.32.7",
         "sass-loader": "^12.0.0",
+        "terser-webpack-plugin": "^5.3.14",
         "unplugin-vue-components": "^0.27.2",
         "vue-cli-plugin-tailwind": "^3.0.0",
         "vue-cli-plugin-vuetify": "^2.5.8",

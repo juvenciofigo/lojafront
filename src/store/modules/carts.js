@@ -48,8 +48,6 @@ const actions = {
 
     /////////////////Client ///////////
     async addToCart(_, { isAuthenticated, item }) {
-        console.log(true);
-
         const itemProduct = item;
         const user = JSON.parse(localStorage.getItem("userData"));
 
