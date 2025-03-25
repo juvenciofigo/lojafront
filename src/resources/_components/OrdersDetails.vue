@@ -353,14 +353,6 @@
                         </div>
                         <div class="flex flex-row gap-1">
                             <div class="text-muted-foreground">
-                                <p class=" ">País:</p>
-                            </div>
-                            <div class=" ">
-                                <h6 class="">{{ order.address.country }}</h6>
-                            </div>
-                        </div>
-                        <div class="flex flex-row gap-1">
-                            <div class="text-muted-foreground">
                                 <p class=" ">Notas de entrega:</p>
                             </div>
                             <div class=" ">

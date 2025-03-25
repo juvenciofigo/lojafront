@@ -1,5 +1,5 @@
 import sendAxio from "@/util/sendAxio";
-import { setCookie, removeCookie, getCookie, errorMessage, cookieExists } from "@/util/cookieUtils";
+import { setCookie, removeCookie, getCookie, errorMessage, cookieExists, getTempCart } from "@/util/cookieUtils";
 import notification from "@/util/notifications";
 
 const state = {
@@ -73,7 +73,6 @@ const actions = {
     },
     /////////////////////Client/////////////////////
     async signIn({ commit, state }, payload) {
-        let tempCart = getCookie("tempCart");
         try {
             const res = await sendAxio({ method: "post", url: `/signIn`, data: payload.values });
 
@@ -105,8 +104,10 @@ const actions = {
             }
 
             const user = JSON.parse(localStorage.getItem("userData"));
+            const tempCart = getTempCart("tempCart");
 
-            if (tempCart) {
+            if (tempCart && tempCart.length > 0) { 
+                
                 const res = await sendAxio({ method: "post", url: `/cart/${user.id}/addProduct`, data: JSON.parse(tempCart) });
                 if (res.status === 200) {
                     // Limpar o cookie do carrinho

@@ -68,55 +68,19 @@ export default createStore({
         // users
         tring: 0,
         dashboard: "dashboard",
+        completeProfile: false,
         // profile
         mySelf: null,
-
-        /// products
-        // product: {},
-        // products: [],
-
-        /// categories
-        // categories: null,
-        // category: {},
-        // subCategories: [],
-        // sub_categories: [],
-
-        /// orders:
-        // orders: {},
-        // addresses: null,
-        // selectAddress: null,
-        // selected: false,
-        /// payment
-        // amoutPayment: null,
-        // orderPaymentId: null,
-
-        /// customers
         customers: {},
-
-        ///carts
-        // cart: {},
-        // cartPrice: 0,
-
-        /// snackbar
-        // redirectTo: null,
-        // authToken: null,
 
         // confirmation dialog
         loadingPriceUpdate: false,
         // dialog
         payment: false,
         loginOverlay: false,
-        // statistic
-        // dataStatistic: {},
     },
 
     getters: {
-        // producs
-        // products: (state) => state.products,
-
-        // profile
-        // mySelf: (state) => state.mySelf,
-
         ///user
         isAuthenticated: () => (cookieName) => {
             return cookieExists(cookieName);
@@ -133,22 +97,20 @@ export default createStore({
             }
         },
 
-            cartPrice: (state) => state.cartPrice,
+        cartPrice: (state) => state.cartPrice,
         selectAddress: (state) => state.selectAddress,
 
         // overlay
-        // overlay: (state) => state.overlay,
         loadingPriceUpdate: (state) => state.loadingPriceUpdate,
-        // loginOverlay: (state) => state.loginOverlay,
     },
 
     mutations: {
         // Notificacao
-        SET_NOTIFICATION(_, date) {
+        SET_NOTIFICATION(_, data) {
             ElNotification({
-                title: date.title,
-                type: date.type,
-                message: date.message,
+                title: data.title,
+                type: data.type,
+                message: data.message,
             });
         },
         SET_loadingPriceUpdate(state) {
@@ -157,7 +119,10 @@ export default createStore({
         Set_tringValue(state) {
             state.tring += 1;
         },
-   
+        SET_COMPLETE_PROFILE(state, data) {
+            state.mySelf = data;
+            state.completeProfile = !state.completeProfile;
+        },
     },
 
     actions: {
@@ -173,6 +138,5 @@ export default createStore({
                 errorMessage(error);
             }
         },
-  
     },
 });

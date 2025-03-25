@@ -5,7 +5,6 @@ import notification from "@/util/notifications";
 const state = {
     addresses: null,
     selectAddress: null,
-    selected: false,
 };
 
 const getters = {};
@@ -18,17 +17,12 @@ const mutations = {
         state.addresses = null;
     },
     SET_ADDRESS(state, data) {
+        console.log(data);
+        
         state.selectAddress = data;
     },
     CLEAR_ADDRESS(state) {
         state.selectAddress = null;
-    },
-
-    SET_PROVIDE_ADDRESS(state, data) {
-        state.selected = data;
-    },
-    CLEAR_PROVIDE_ADDRESS(state) {
-        state.selected = false;
     },
 };
 
@@ -53,13 +47,51 @@ const actions = {
             const res = await sendAxio({ method: "delete", url: `/customer/${payload}/address` });
 
             if (res.status === 200) {
-                commit("SET_ADDRESSES", res.data.addresses);
+                commit("SET_ADDRESS", res.data.addresses);
                 notification({ title: "Sucesso", type: "success", message: res.data.message });
                 return;
             }
             throw new Error();
         } catch (error) {
             errorMessage(error);
+        }
+    },
+    async addAddress({ commit }, payload) {
+        const user = JSON.parse(localStorage.getItem("userData"));
+
+        try {
+            const res = await sendAxio({ method: "post", url: `/customer/${user.id}/address`, data: payload });
+
+            if (res.status === 200) {
+                commit("SET_ADDRESSES", res.data.addresses);
+                commit("SET_ADDRESS", res.data.address);
+                notification({ title: "Sucesso", type: "success", message: res.data.message });
+                return;
+            }
+            if (res.status === 202) {
+                notification({ title: "Erro", type: "error", message: "Complete seu perfil!" });
+                commit("SET_COMPLETE_PROFILE", res.data.user, { root: true });
+                return;
+            }
+            throw new Error();
+        } catch (error) {
+            errorMessage(error);
+        }
+    },
+    async completeProfile({ commit }, payload) {
+        const user = JSON.parse(localStorage.getItem("userData"));
+        try {
+            const res = await sendAxio({ method: "post", url: `/customer/${user.id}`, data: payload });
+
+            if (res.status === 200) {
+                notification({ title: "Sucesso", type: "success", message: res.data.message });
+                commit("SET_COMPLETE_PROFILE", {}, { root: true });
+                return true;
+            }
+            throw new Error();
+        } catch (error) {
+            errorMessage(error);
+            return false;
         }
     },
 };

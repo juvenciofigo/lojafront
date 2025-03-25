@@ -1,4 +1,4 @@
-import { setCookie, removeCookie, getCookie, errorMessage } from "@/util/cookieUtils";
+import { setCookie, removeCookie, getCookie, errorMessage,getTempCart } from "@/util/cookieUtils";
 import notification from "@/util/notifications";
 import sendAxio from "@/util/sendAxio";
 
@@ -211,7 +211,7 @@ const actions = {
 
     async displayCartPrices({ commit }, isAuthenticated) {
         const user = JSON.parse(localStorage.getItem("userData"));
-        const tempCart = getCookie("tempCart");
+        const tempCart = getTempCart("tempCart");
 
         try {
             if (isAuthenticated) {

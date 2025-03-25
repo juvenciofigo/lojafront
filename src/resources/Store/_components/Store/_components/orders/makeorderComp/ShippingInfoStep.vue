@@ -22,13 +22,15 @@
                             v-for="(address, index) in addresses"
                             :key="index"
                             :value="address._id"
-                            @click="select(index)"
+                            @click="selelectingAddress(index)"
                             class="col-span-1 md:flex flex-col flex-wrap gap-4 p-4 rounded-md cursor-pointer border hover:-translate-y-1 duration-500 border-[#e5e7eb] bg-[#f9fafb] hover:border-[#e0a9a9] shadow-md address">
                             <AddressComp :address="address" />
                         </li>
                     </ul>
                 </el-collapse-item>
             </el-collapse>
+
+            <!-- Novo -->
             <el-collapse
                 class="flex flex-col p-2"
                 v-model="activeName"
@@ -92,57 +94,44 @@
 
                             <!-- informacoes de endereço -->
                             <div class="flex flex-row gap-4">
-                                <div class="">
-                                    <!-- Bairro -->
+                                <div class="flex-1">
+                                    <!-- Província -->
                                     <div class="w-full">
-                                        <el-input
-                                            name="neighborhood"
+                                        <el-select
+                                            filterable
+                                            placeholder="Província"
+                                            @change="selectedProvice"
+                                            v-model="province.value.value"
                                             :disabled="disabledTextarea || addressSkeleton == false"
-                                            type="text"
-                                            autocomplete="address"
-                                            v-model="neighborhood.value.value"
-                                            placeholder="Bairro" />
-                                        <span class="error-message">{{ neighborhood.errorMessage.value }}</span>
+                                            autocomplete="Província">
+                                            <el-option
+                                                v-for="province in provinces"
+                                                :key="province"
+                                                :label="province"
+                                                :value="province" />
+                                        </el-select>
+
+                                        <span class="error-message">{{ province.errorMessage.value }}</span>
                                     </div>
 
                                     <!-- Cidade -->
                                     <div class="w-full">
-                                        <el-input
-                                            name="City"
-                                            :disabled="disabledTextarea || addressSkeleton == false"
-                                            type="text"
-                                            autocomplete="Cidade"
+                                        <el-select
+                                            filterable
+                                            placeholder=" Selecione a Cidade"
                                             v-model="city.value.value"
-                                            placeholder="Cidade" />
+                                            :disabled="disabledTextarea || addressSkeleton == false">
+                                            <el-option
+                                                v-for="city in cities"
+                                                :key="city"
+                                                :label="city.label || city"
+                                                :value="city"
+                                                :disabled="city.disabled" />
+                                        </el-select>
+
                                         <span class="error-message">{{ city.errorMessage.value }}</span>
                                     </div>
 
-                                    <!-- Província -->
-                                    <div class="w-full">
-                                        <el-input
-                                            name="Província"
-                                            :disabled="disabledTextarea || addressSkeleton == false"
-                                            type="text"
-                                            autocomplete="Província"
-                                            v-model="province.value.value"
-                                            placeholder="Província" />
-                                        <span class="error-message">{{ province.errorMessage.value }}</span>
-                                    </div>
-
-                                    <!-- País -->
-                                    <div class="w-full">
-                                        <el-input
-                                            name="País"
-                                            :disabled="disabledTextarea || addressSkeleton == false"
-                                            type="text"
-                                            autocomplete="contry"
-                                            v-model="country.value.value"
-                                            placeholder="País" />
-                                        <span class="error-message">{{ country.errorMessage.value }}</span>
-                                    </div>
-                                </div>
-
-                                <div>
                                     <!-- Endereço completo -->
                                     <div class="w-full">
                                         <el-input
@@ -151,21 +140,23 @@
                                             type="text"
                                             autocomplete="Address "
                                             v-model="complete.value.value"
-                                            placeholder="Enderenço completo" />
+                                            placeholder="Bairro, Rua, Quarteirão" />
                                         <span class="error-message">{{ complete.errorMessage.value }}</span>
                                     </div>
+                                </div>
 
+                                <div class="flex-1">
                                     <!-- Postal -->
                                     <div class="w-full">
-                                        <el-input
-                                            name="Código postal"
-                                            :disabled="disabledTextarea || addressSkeleton == false"
-                                            type="text"
-                                            autocomplete="postalCode"
+                                        <el-input-number
+                                            :controls="false"
                                             v-model="postalCode.value.value"
+                                            :disabled="disabledTextarea || addressSkeleton == false"
+                                            autocomplete="postalCode"
                                             placeholder="Código postal" />
                                         <span class="error-message">{{ postalCode.errorMessage.value }}</span>
                                     </div>
+
                                     <!-- Referencia -->
                                     <div class="w-full">
                                         <el-input
@@ -191,16 +182,15 @@
                                     </div>
                                 </div>
                             </div>
-
-                            <input
-                                v-model="addressId.value.value"
-                                type="text"
-                                readonly
-                                hidden />
                         </div>
 
                         <!-- Botões -->
                         <div class="flex flex-row gap-1">
+                            <!-- <input
+                                v-model="addressId.value.value"
+                                type="text"
+                                readonly
+                                hidden /> -->
                             <el-button
                                 size="small"
                                 type="success"
@@ -227,11 +217,12 @@
                 </el-collapse-item>
             </el-collapse>
         </template>
+        <CompleteProfile />
     </div>
 </template>
 
 <script setup>
-    import { defineEmits, defineProps, ref, computed, watch, toRaw } from "vue";
+    import { defineProps, ref, computed, toRaw } from "vue";
     import { useStore } from "vuex";
     import AddressComp from "@/resources/_components/_partials/AddressCard.vue";
     import AddressCompSkeleton from "@/components/skeletons/AddressCompSkeleton.vue";
@@ -240,13 +231,12 @@
     import * as z from "zod";
 
     import { Plus } from "@element-plus/icons-vue";
+    import CompleteProfile from "@/resources/_components/CompleteProfile.vue";
 
     const store = useStore();
 
-    const selectAddress = computed(() => store.state.addresses.selectAddress);
     const addresses = computed(() => store.state.addresses.addresses);
     const disabledTextarea = ref(false);
-    const emit = defineEmits(["address"]);
     const divAddres = ref([]);
     defineProps({
         addressSkeleton: {
@@ -254,25 +244,30 @@
         },
     });
 
+    import { provinces, locations } from "@/util/functions";
+    const cities = ref([
+        {
+            label: "Selecione a Provincia antes da cidade",
+            disabled: true,
+        },
+    ]);
+    function selectedProvice(province = province.value.value) {
+        cities.value = locations[province];
+    }
+
     const { handleSubmit, handleReset } = useForm({
         validationSchema: toTypedSchema(
             z.object({
                 firstName: z.string().regex(/^[\p{L}\s'-]+$/u, { message: "O nome deve conter apenas letras, espaços, apóstrofos e hífens" }),
-                lastName: z
-                    .string()
-                    .regex(/^[\p{L}\s'-]+$/u, { message: "O apelido deve conter apenas letras, espaços, apóstrofos e hífens" })
-                    .min(4, { message: "O apelido deve ter no mínimo 4 caracteres" }),
+                lastName: z.string().regex(/^[\p{L}\s'-]+$/u, { message: "O apelido deve conter apenas letras, espaços, apóstrofos e hífens" }),
                 email: z.string().email({ message: "E-mail inválido" }).optional(),
                 cellNumber: z.string().regex(/^(\+258)?\d{9}$/, { message: "O número de celular deve começar com +258 e ter exatamente 13 dígitos" }),
                 complete: z.string(),
-                country: z.string(),
-                province: z.string(),
-                city: z.string(),
-                neighborhood: z.string(),
+                province: z.string().regex(/^[\p{L}\s'-]+$/u, { message: "O nome deve conter apenas letras, espaços, apóstrofos e hífens" }),
+                city: z.string().regex(/^[\p{L}\s'-]+$/u, { message: "O nome deve conter apenas letras, espaços, apóstrofos e hífens" }),
                 reference: z.string(),
-                postalCode: z.string(),
+                postalCode: z.number(),
                 note: z.string().optional(),
-                addressId: z.string().optional(),
             })
         ),
     });
@@ -281,38 +276,32 @@
         lastName = useField("lastName"),
         email = useField("email"),
         cellNumber = useField("cellNumber"),
-        neighborhood = useField("neighborhood"),
         complete = useField("complete"),
         province = useField("province"),
         city = useField("city"),
         postalCode = useField("postalCode"),
-        country = useField("country"),
         reference = useField("reference"),
-        note = useField("note"),
-        addressId = useField("addressId");
+        note = useField("note");
 
     const submit = handleSubmit(async (values) => {
-        emit("address", { ...values });
+        disabledTextarea.value = true;
+        await store.dispatch("addresses/addAddress", values);
+        disabledTextarea.value = false;
     });
 
     function enableTextarea() {
         disabledTextarea.value = false;
-        store.commit("addresses/SET_PROVIDE_ADDRESS", false);
-
         divAddres.value.forEach((item) => {
             item.classList.remove("bg-primary");
         });
-
-        emit("address", null);
     }
 
-    function select(index) {
+    function selelectingAddress(index) {
+        store.commit("addresses/CLEAR_ADDRESS");
         divAddres.value = Array.from(document.querySelectorAll(".address"));
-        emit("address", null);
 
         function update() {
             disabledTextarea.value = true;
-            store.commit("addresses/SET_PROVIDE_ADDRESS", true);
             store.commit("addresses/SET_ADDRESS", toRaw(addresses.value[index]));
             submit();
         }
@@ -323,46 +312,22 @@
             if (contai === true && index === idx) {
                 // se o elemento clicado contem a class e se é igual a item iterrado
                 item.classList.remove("bg-primary");
-                store.commit("addresses/CLEAR_ADDRESS");
-                store.commit("addresses/CLEAR_PROVIDE_ADDRESS");
                 handleReset();
                 enableTextarea();
-                store.commit("addresses/SET_PROVIDE_ADDRESS", false);
+                return;
             } else if (contai === true) {
                 // troca para o outro
                 item.classList.remove("bg-primary");
                 update();
+                return;
             } else if (index === idx) {
                 // se nenhum tiver, adicona
                 divAddres.value[index].classList.add("bg-primary");
                 update();
+                return;
             }
         });
     }
-
-    watch(selectAddress, async () => {
-        if (selectAddress.value !== null) {
-            const address = toRaw(selectAddress.value);
-
-            firstName.value.value = address.firstName;
-            lastName.value.value = address.lastName;
-            email.value.value = address.email;
-            cellNumber.value.value = address.cellNumber;
-            complete.value.value = address.complete;
-            country.value.value = address.country;
-            province.value.value = address.province;
-            postalCode.value.value = address.postalCode;
-            neighborhood.value.value = address.neighborhood;
-            city.value.value = address.city;
-            reference.value.value = address.reference;
-            if (address.note) {
-                note.value.value = address.note;
-            }
-            if (address._id) {
-                addressId.value.value = address._id;
-            }
-        }
-    });
 </script>
 <style scoped>
     .input-field {

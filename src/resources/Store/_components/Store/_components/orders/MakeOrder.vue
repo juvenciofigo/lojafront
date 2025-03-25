@@ -13,8 +13,7 @@
 
             <ShippingInfoStep
                 v-if="active === 0"
-                :addressSkeleton="addressRes"
-                @address="handleDeliveryData" />
+                :addressSkeleton="addressRes" />
             <ConfirmationStep
                 v-if="active === 1"
                 @submit="handleConfirmationData" />
@@ -78,67 +77,83 @@
     const loadingPriceUpdate = computed(() => store.getters.loadingPriceUpdate);
     const cart = computed(() => store.state.carts.cart);
     const isAuthenticated = computed(() => store.getters.isAuthenticated("authToken"));
+    const selectedAddres = computed(() => store.state.addresses.selectAddress);
 
     // before Unmount
     onBeforeUnmount(() => {
         store.commit("carts/CLEAR_CARTPRODUCTS");
         store.commit("addresses/CLEAR_ADDRESSES");
         store.commit("addresses/CLEAR_ADDRESS");
-        store.commit("addresses/CLEAR_PROVIDE_ADDRESS");
     });
 
     // on Mount
     onBeforeMount(async () => {
-        const from = route.query.productsFrom;
-        if (from) {
-            if (from === "cartProducts") {
-                await store.dispatch("carts/displayCartProducts", isAuthenticated.value);
+        try {
+            const routeQuery = route.query.productsFrom;
 
-                if (!cart.value.items || cart.value.items.length <= 0) {
-                    router.push({ name: "home" });
-                    window.location.href = "/";
-                }
-                if (isAuthenticated.value === true) {
-                    userAddresses();
-                }
+            if (!routeQuery) {
+                handleRedirect();
                 return;
             }
 
-            if (from === "payNow") {
-                await store.dispatch("orders/buyNow", { product: { id: route.query.product, quantity: route.query.quantity } });
-
-                if (isAuthenticated.value === true) {
-                    userAddresses();
-                }
+            if (routeQuery === "cartProducts") {
+                await handleCartProducts();
                 return;
             }
+
+            if (routeQuery === "payNow") {
+                await handlePayNow();
+                return;
+            }
+
+            handleRedirect();
+        } catch (error) {
+            console.error("Error during component initialization:", error);
+            handleRedirect();
         }
-
-        router.push({ name: "home" });
     });
 
-    const userAddresses = async () => {
-        await store.dispatch("addresses/fetchAddresses");
-        addressRes.value = true;
+    // Funções auxiliares
+    const handleCartProducts = async () => {
+        await store.dispatch("carts/displayCartProducts", isAuthenticated.value);
+
+        if (!cart.value?.items?.length) {
+            handleRedirect();
+            return;
+        }
+
+        await handleUserAddresses();
+    };
+
+    const handlePayNow = async () => {
+        const productData = {
+            product: {
+                id: route.query.product,
+                quantity: route.query.quantity,
+            },
+        };
+
+        await store.dispatch("orders/buyNow", productData);
+        await handleUserAddresses();
+    };
+
+    const handleUserAddresses = async () => {
+        if (isAuthenticated.value) {
+            await store.dispatch("addresses/fetchAddresses");
+            addressRes.value = true;
+        }
+    };
+
+    const handleRedirect = () => {
+        router.push({ name: "home" });
     };
 
     // Finalizar o pedido
-    let selectAddress = ref(null);
-    const confirmationData = ref(null);
-
-    const handleDeliveryData = (data) => {
-        selectAddress.value = data;
-    };
-
-    const handleConfirmationData = (data) => {
-        confirmationData.value = data;
-    };
-
     const loading = ref(false);
 
     async function createOrder() {
         loading.value = true;
-        if (!selectAddress.value) {
+        if (!selectedAddres.value) {
             ElNotification.error({
                 title: "Erro",
                 message: "Preencha o endereço de envio",
@@ -147,14 +162,8 @@
             loading.value = false;
             return;
         }
-
-        if (!confirmationData.value) {
-            window.location.reload();
-            return;
-        }
-
         const res = await store.dispatch("orders/createOrder", {
-            selectAddress: toRaw(selectAddress.value),
+            selectedAddres: toRaw(selectedAddres.value._id),
             cart: cart.value.cartId,
         });
 

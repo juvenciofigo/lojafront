@@ -3,10 +3,9 @@
         <div class="flex flex-col gap-1 text-center text-gray-700">
             <div class="font-medium text-lg">{{ address.firstName.split(" ").at(0) }} {{ address.lastName.split(" ").at(-1) }}</div>
             <div class="text-sm">
-                <div>{{ address.neighborhood }}</div>
+                <div>{{ address.complete }}</div>
                 <div>{{ address.city }}</div>
                 <div>{{ address.province }}</div>
-                <div>{{ address.country }}</div>
             </div>
         </div>
 
@@ -65,6 +64,7 @@
 
     async function deleteAddress() {
         if (deleteIndex.value !== null) {
+            store.commit("addresses/CLEAR_ADDRESS");
             await store.dispatch("addresses/deleteAddress", deleteIndex.value);
             showDialog.value = false;
             deleteIndex.value = null;

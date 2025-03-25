@@ -3,14 +3,34 @@ import notification from "./notifications";
 const getCookie = (name) => {
     const cookieName = `${name}=`;
     const decodedCookie = decodeURIComponent(document.cookie);
+
     const cookieArray = decodedCookie.split(";");
     for (let i = 0; i < cookieArray.length; i++) {
         let cookie = cookieArray[i].trim();
         if (cookie.indexOf(cookieName) === 0) {
-            return decodeURIComponent(cookie.substring(cookieName.length, cookie.length));
+            return decodeURIComponent(cookie.substring(cookieName.length));
         }
     }
     return null;
+};
+
+const getTempCart = (name) => {
+    const cookies = document.cookie.split("; ");
+
+    for (let cookie of cookies) {
+        let [key, value] = cookie.split("=");
+
+        if (key === name) {
+            try {
+                return JSON.parse(decodeURIComponent(value)); // Converte de JSON para array
+            } catch (e) {
+                console.error("Erro ao converter o cookie para array:", e);
+                return [];
+            }
+        }
+    }
+
+    return []; // Retorna array vazio se não encontrar o cookie
 };
 
 const setCookie = (name, value, days) => {
@@ -49,4 +69,4 @@ function errorMessage(error) {
     }
 }
 
-export { setCookie, getCookie, removeCookie, cookieExists, errorMessage };
+export { setCookie, getCookie, removeCookie, cookieExists, errorMessage, getTempCart };

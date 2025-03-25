@@ -66,11 +66,7 @@
                                     <p class="font-semibold mb-1">Completo:</p>
                                     <p>{{ addressSelected.complete }}</p>
                                 </div>
-                                <div v-if="addressSelected.country">
-                                    <p class="font-semibold mb-1">País:</p>
-                                    <p>{{ addressSelected.country }}</p>
-                                </div>
-                                <div v-if="addressSelected.neighborhood">
+                                <div v-if="addressSelected.complete">
                                     <p class="font-semibold mb-1">Bairo:</p>
                                     <p>{{ addressSelected.neighborhood }}</p>
                                 </div>
