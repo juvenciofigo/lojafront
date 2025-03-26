@@ -157,6 +157,7 @@
             ElNotification.error({
                 title: "Erro",
                 message: "Preencha o endereço de envio",
+                position: 'top-left',
             });
             active.value = 0;
             loading.value = false;

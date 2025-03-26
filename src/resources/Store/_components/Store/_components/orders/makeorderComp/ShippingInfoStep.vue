@@ -41,7 +41,7 @@
                             Novo Endereço <el-icon class="el-icon--upload"><Plus class="w-4 h-4" /></el-icon
                         ></span>
                     </template>
-                    <form @submit.stop>
+                    <div>
                         <div class="md:flex mb-2 p-2 flex-row gap-4 justify-center bg-blue-200">
                             <!-- informacoes pessoais -->
                             <div class="md:flex flex-row gap-4">
@@ -213,7 +213,7 @@
                                 Limpar
                             </el-button>
                         </div>
-                    </form>
+                    </div>
                 </el-collapse-item>
             </el-collapse>
         </template>
@@ -283,11 +283,16 @@
         reference = useField("reference"),
         note = useField("note");
 
-    const submit = handleSubmit(async (values) => {
-        disabledTextarea.value = true;
-        await store.dispatch("addresses/addAddress", values);
-        disabledTextarea.value = false;
-    });
+    const submit = handleSubmit(
+        async (values) => {
+            disabledTextarea.value = true;
+            await store.dispatch("addresses/addAddress", values);
+            disabledTextarea.value = false;
+        },
+        () => {
+            disabledTextarea.value = false;
+        }
+    );
 
     function enableTextarea() {
         disabledTextarea.value = false;

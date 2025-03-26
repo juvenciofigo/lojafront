@@ -17,8 +17,6 @@ const mutations = {
         state.addresses = null;
     },
     SET_ADDRESS(state, data) {
-        console.log(data);
-        
         state.selectAddress = data;
     },
     CLEAR_ADDRESS(state) {
@@ -57,6 +55,7 @@ const actions = {
         }
     },
     async addAddress({ commit }, payload) {
+        console.log("Mandar endereço")
         const user = JSON.parse(localStorage.getItem("userData"));
 
         try {

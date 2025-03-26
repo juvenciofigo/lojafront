@@ -5,5 +5,7 @@ export default function notification({ title, message, type }) {
         title,
         message,
         type,
+        position: "top-left",
+        duration:3000
     });
 }

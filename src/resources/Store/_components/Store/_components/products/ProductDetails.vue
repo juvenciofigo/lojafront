@@ -145,6 +145,7 @@
             title: "Erro!",
             message: message,
             type: "error",
+            position: 'top-left',
         });
     };
     const verifyVaraiations = async () => {
