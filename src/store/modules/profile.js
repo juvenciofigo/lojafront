@@ -28,6 +28,8 @@ const actions = {
     },
 
     async updateMyProfile(_, payload) {
+        console.log(payload);
+        
         try {
             // const res = await sendAxio({ method: "put", url: `/user/${payload.id}` });
             // if (res.status === 200) {
