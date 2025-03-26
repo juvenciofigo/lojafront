@@ -1,9 +1,9 @@
 <template lang="">
-    <section class="flex-1 bg-slate-100">
-        <div class="mt-6 mx-2 flex flex-row">
+    <section class="flex-1">
+        <div class="flex flex-row gap-2">
             <!-- Categorias -->
-            <div class="m-2 categories-card hidden lg:block flex-col w-72 rounded-lg bg-white pb-1">
-                <p class="bg-yellow-300 p-2 rounded-t-lg font-semibold">Categorias</p>
+            <div class="categories-card hidden lg:block flex-col w-72 bg-white pb-1">
+                <p class="bg-yellow-300 p-2 font-semibold">Categorias</p>
 
                 <div
                     v-if="categories && categories.length > 0"
@@ -85,8 +85,8 @@
         </div>
 
         <!-- Produtos e Promoções -->
-        <div class="w-full flex lg:flex-row gap-3 p-2 flex-col-reverse">
-            <div class="overflow-hidden flex-1 gap-2 flex flex-col">
+        <div class="w-full flex lg:flex-row gap-1 flex-col-reverse mt-2">
+            <div class="overflow-hidden flex-1 gap-3 flex flex-col">
                 <SelectedProducts
                     :title="`Novidades`"
                     :products="products"
@@ -103,7 +103,7 @@
                     :key="index">
                     <div class="ads-content bg-slate-100">
                         <img
-                            class="object-contain rounded-md h-full w-full"
+                            class="object-contain h-full w-full"
                             :src="item.image"
                             :alt="`Promoção ${index + 1}`" />
                     </div>

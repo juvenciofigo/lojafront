@@ -2,8 +2,8 @@
     <AllProductsComp
         :nameRoute="`detailsClient`"
         :inputShow="`hidden`"
-        :buttonShow="`hidden`"
-        :skeleton="skeleton" />
+        :skeleton="skeleton">
+    </AllProductsComp>
 </template>
 
 <script setup>

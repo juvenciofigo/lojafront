@@ -1,6 +1,7 @@
 <template>
-    <div class="flex flex-row flex-1 gap-1 m-2 rounded-md bg-slate-100">
-        <section class="w-[274px] hidden lg:flex flex-col gap-4 p-2">
+    <div class="flex flex-row flex-1 gap-1 rounded-md bg-slate-100">
+        <!-- Filtrar -->
+        <section class="w-[274px] hidden lg:flex flex-col gap-4">
             <div class="w-full p-3 bg-white categories-list indent-4 overflow-auto">
                 <h2 class="bg-[#3a7ebe] p-2 font-semibold">Categorias</h2>
 
@@ -91,79 +92,86 @@
                 </div>
             </div>
         </section>
+        <!-- Filtrar -->
 
         <section class="flex-1 flex flex-col h-full">
-            <div class="h-[40px] mt-2 p-2 sticky bg-white justify-between flex flex-row">
+            <div class="h-[40px] p-2 bg-white justify-between flex flex-row items-center">
                 <div class="flex flex-row justify-between">
                     <h2>{{ category || "Todos Produtos" }}</h2>
                 </div>
-                <div :class="buttonShow">
-                    <router-link :to="{ name: newProduct }">
-                        <el-button
-                            link
-                            type="primary"
-                            size="small">
-                            <Plus />Novo Produto
-                        </el-button>
-                    </router-link>
-                </div>
+
+                <slot name="addProduct"></slot>
             </div>
 
             <ProductSkeleton v-if="skeleton" />
-            <div v-else>
+            <div
+                v-if="products?.docs?.length > 0 && !skeleton"
+                class="bottom-0 top-[58px] right-0 flex-1 w-full flex flex-col overflow-auto">
+                <!-- /////////////////////// -->
                 <div
-                    v-if="products?.length > 0"
-                    class="bottom-0 top-[58px] right-0 flex-1 w-full flex flex-col overflow-auto">
-                    <ProductViewComp
-                        :products="products"
-                        :RouterName="nameRoute" />
-                    <div>
-                        <v-pagination
-                            @update:model-value="pushWithQuery"
-                            density="compact"
-                            variant="flat"
-                            v-model="currentPage"
-                            class="my-4"
-                            :length="totalPages">
-                        </v-pagination>
-                    </div>
+                    class="products"
+                    v-if="products && products.docs.length > 0">
+                    <ProductCard
+                        v-for="(product, index) in products.docs"
+                        :key="index"
+                        :product="product"
+                        :RouterName="props.nameRoute || 'detailsClient'" />
                 </div>
-                <div
-                    v-else
-                    class="self-center">
-                    <p>Sem produtos para mostrar!!!</p>
+                <!-- /////////////////////// -->
+                <div>
+                    <el-pagination
+                        v-model:current-page="products.page"
+                        :total="products.totalDocs"
+                        :page-size="products.limit"
+                        :pager-count="5"
+                        layout="prev, total, pager, next"
+                        prev-text="Voltar"
+                        next-text="Próxima"
+                        background
+                        :disabled="loading"
+                        hide-on-single-page
+                        small
+                        @current-change="pageEvent" />
                 </div>
+            </div>
+            <div
+                v-if="!products || (products.docs?.length === 0 && !skeleton)"
+                class="self-center">
+                <p>Sem produtos para mostrar!!!</p>
             </div>
         </section>
     </div>
 </template>
 
 <script setup>
-    import ProductViewComp from "./ProductViewComp.vue";
     import ProductSkeleton from "@/components/skeletons/ProductSkeleton.vue";
-    import { defineProps, computed, ref, onBeforeUnmount, onBeforeMount, watch } from "vue";
+    import { defineProps, computed, ref, onBeforeUnmount, onBeforeMount, watch, defineEmits } from "vue";
     import { useStore } from "vuex";
     import { useRouter, useRoute } from "vue-router";
-    import { Plus } from "lucide-vue-next";
     import { useHead } from "@vueuse/head";
+    import ProductCard from "@/resources/_components/ProductCard.vue";
 
     const props = defineProps({
         nameRoute: String,
         fetchRouteName: String,
-        buttonShow: String,
         newProduct: String,
         skeleton: Boolean,
         getCategories: String,
     });
 
+    const emit = defineEmits(["ca"]);
+    console.log(emit);
+    
+
     const router = useRouter();
     const route = useRoute();
     const store = useStore();
 
-    const products = computed(() => store.state.products.products.docs);
+    const products = computed(() => store.state.products.products);
     const categories = computed(() => store.state.categories.categories);
-    const currentPage = ref(Number(route.query.offset) || 1);
     const category = ref(null);
+
+    const loading = true;
 
     watch(
         () => route.query.category,
@@ -187,16 +195,7 @@
             }
         }
     );
-
-    const totalPages = computed(() => {
-        if (store.state.products.products) {
-            return Math.ceil(store.state.products.quantity / 10);
-        } else {
-            return 0;
-        }
-    });
-
-    const pushWithQuery = (offset) => {
+    const pageEvent = (offset) => {
         router.push({ name: props.fetchRouteName || "allProductsClient", query: { offset: offset } });
     };
 
@@ -259,5 +258,29 @@
     .slider-demo-block .el-slider {
         margin-top: 10px;
         margin: 0 15px;
+    }
+
+    /* //////// */
+    .products {
+        margin: 5px;
+        display: grid;
+        gap: 10px;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    @media (min-width: 425px) {
+        .products {
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+    }
+    @media (min-width: 768px) {
+        .products {
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+        }
+    }
+    @media (min-width: 1247px) {
+        .products {
+            grid-template-columns: repeat(5, minmax(0, 1fr));
+        }
     }
 </style>

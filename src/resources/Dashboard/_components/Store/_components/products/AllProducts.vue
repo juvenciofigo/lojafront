@@ -4,9 +4,19 @@
         :inputShow="`flex`"
         :category="categorySelected || 'Todos Produtos'"
         :skeleton="skeleton"
-        :newProduct="`novoproduto`"
-        :fetchRouteName="fetchRouteName"
-        :getCategories="'categories/fetchCategoriesAdmin'" />
+        fetchRouteName="productsAdmin"
+        :x="'categories/fetchCategoriesAdmin'">
+        <template #addProduct>
+            <router-link :to="{ name: 'novoproduto' }">
+                <el-button
+                    link
+                    type="primary"
+                    size="small">
+                    <Plus />Novo Produto
+                </el-button>
+            </router-link>
+        </template>
+    </AllProductsComp>
 </template>
 
 <script setup>
@@ -14,12 +24,11 @@
     import { onBeforeUnmount, onBeforeMount, watch, ref } from "vue";
     import { useStore } from "vuex";
     import { useRoute, useRouter } from "vue-router";
-
+    import { Plus } from "lucide-vue-next";
     const router = useRouter();
     const route = useRoute();
     const store = useStore();
     const skeleton = ref(true);
-    const fetchRouteName = "productsAdmin";
 
     const categorySelected = route.query.category;
 

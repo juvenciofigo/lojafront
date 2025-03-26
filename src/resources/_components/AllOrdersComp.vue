@@ -73,14 +73,19 @@
                     </el-table-column>
                 </el-table>
                 <div class="flex items-center space-x-2 py-4">
-                    <v-pagination
-                        v-model="currentPage"
-                        @update:modelValue="pageEvent"
-                        :length="totalPages"
-                        :total-visible="4"
-                        density="compact"
-                        variant="flat">
-                    </v-pagination>
+                    <el-pagination
+                        v-model:current-page="orders.page"
+                        :total="orders.totalDocs"
+                        :page-size="orders.limit"
+                        :pager-count="5"
+                        layout="total,prev, pager, next"
+                        prev-text="Voltar"
+                        next-text="Próxima"
+                        background
+                        :disabled="loading"
+                        hide-on-single-page
+                        small
+                        @current-change="pageEvent" />
                 </div>
             </div>
             <div
@@ -140,8 +145,6 @@
 
     const orders = computed(() => store.state.orders.orders);
     const orderDocs = computed(() => orders.value.docs);
-    const totalPages = computed(() => orders.value.totalPages);
-    const currentPage = ref(Number(route.query.offset) || 1);
     const offset = ref(route.query.offset || 1);
     const loading = ref(true);
 
