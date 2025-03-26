@@ -168,8 +168,6 @@
             cart: cart.value.cartId,
         });
 
-        console.log(res);
-
         if (!res || res === false) {
             loading.value = false;
             return;

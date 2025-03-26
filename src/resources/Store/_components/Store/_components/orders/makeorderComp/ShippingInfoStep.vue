@@ -252,6 +252,8 @@
         },
     ]);
     function selectedProvice(province = province.value.value) {
+        city.value.value = null;
+        
         cities.value = locations[province];
     }
 

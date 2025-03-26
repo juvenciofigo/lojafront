@@ -55,7 +55,6 @@ const actions = {
         }
     },
     async addAddress({ commit }, payload) {
-        console.log("Mandar endereço")
         const user = JSON.parse(localStorage.getItem("userData"));
 
         try {
