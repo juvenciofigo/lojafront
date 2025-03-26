@@ -297,34 +297,47 @@
     }
 
     function selelectingAddress(index) {
+        // Limpa estado e obtém elementos
         store.commit("addresses/CLEAR_ADDRESS");
-        divAddres.value = Array.from(document.querySelectorAll(".address"));
+        const addressElements = Array.from(document.querySelectorAll(".address"));
 
-        function update() {
+        // Valida índice
+        if (index < 0 || index >= addressElements.length) return;
+
+        // Controla a classe ativa
+        const toggleActiveClass = (element, add) => {
+            element.classList.toggle("bg-primary", add);
+        };
+
+        // Atualiza estado e submete
+        const updateSelection = () => {
             disabledTextarea.value = true;
             store.commit("addresses/SET_ADDRESS", toRaw(addresses.value[index]));
             submit();
-        }
+        };
 
-        divAddres.value.forEach((item, idx) => {
-            let contai = item.classList.contains("bg-primary");
+        // Lógica principal de seleção
+        addressElements.forEach((element, idx) => {
+            const isSelected = element.classList.contains("bg-primary");
+            const isCurrent = idx === index;
 
-            if (contai === true && index === idx) {
-                // se o elemento clicado contem a class e se é igual a item iterrado
-                item.classList.remove("bg-primary");
+            if (isSelected && isCurrent) {
+                // Desselecionar item atual
+                toggleActiveClass(element, false);
                 handleReset();
                 enableTextarea();
                 return;
-            } else if (contai === true) {
-                // troca para o outro
-                item.classList.remove("bg-primary");
-                update();
-                return;
-            } else if (index === idx) {
-                // se nenhum tiver, adicona
-                divAddres.value[index].classList.add("bg-primary");
-                update();
-                return;
+            }
+
+            if (isSelected) {
+                // Remover seleção anterior
+                toggleActiveClass(element, false);
+            }
+
+            if (isCurrent) {
+                // Selecionar novo item
+                toggleActiveClass(element, true);
+                updateSelection();
             }
         });
     }
