@@ -13,10 +13,10 @@
             <template
                 v-for="(product, index) in products"
                 :key="index">
+                <el-tooltip :content="product.productName">
                 <router-link
                     :to="{ name: 'detailsClient', params: { id: `${product._id}` } }"
                     class="product-card">
-                    <el-tooltip :content="product.productName">
                         <el-image
                             class="flex-1"
                             v-if="product.productImage && product.productImage.length > 0"
@@ -50,8 +50,8 @@
                                 Detalhes
                             </el-button>
                         </div>
-                    </el-tooltip>
-                </router-link>
+                    </router-link>
+                </el-tooltip>
             </template>
         </div>
     </div>
