@@ -165,12 +165,12 @@ const actions = {
 
             if (res.status === 200) {
                 commit("SET_PRODUCT", res.data.product);
-                return;
+                return true;
             }
             throw new Error();
         } catch (error) {
             errorMessage(error);
-            return true;
+            return false;
         }
     },
 
@@ -202,12 +202,34 @@ const actions = {
         }
     },
 
-    async filtreProducts({ commit }, payload) {
+    async searchProducts({ commit }, payload) {
+        if (!payload.query.search) {
+            return;
+        }
+
         try {
             const res = await sendAxio({
                 method: "get",
-                url: `/products/search/${payload.search}`,
-                params: { offset: payload, category: payload.category },
+                url: `/products/search/`,
+                query: payload.query,
+            });
+
+            if (res.data) {
+                commit("SET_PRODUCTS", res.data);
+                return;
+            }
+            throw new Error();
+        } catch (error) {
+            errorMessage(error);
+        }
+    },
+
+    async filterProducts({ commit }, payload) {
+        try {
+            const res = await sendAxio({
+                method: "get",
+                url: `/products`,
+                query: payload.query,
             });
 
             if (res.data) {

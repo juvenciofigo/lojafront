@@ -3,7 +3,8 @@
 
     <!-- prettier-ignore -->
     <ProductDetailsComp
-        v-else
+    
+        v-if="!skeletone && res && product.productName"
         :firstButton="delProduct"
         :secondButton="navigateTo"
         :thirdButton="addImage"
@@ -147,9 +148,10 @@
     function variations() {
         router.push({ name: "variations", params: { id: route.params.id } });
     }
-
+    const res = ref(false);
     onBeforeMount(async () => {
-        await store.dispatch("products/fetchProductByIdAdmin", route.params.id);
+        res.value = await store.dispatch("products/fetchProductByIdAdmin", route.params.id);
+
         skeleton.value = false;
     });
 

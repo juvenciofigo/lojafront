@@ -21,11 +21,11 @@
                                     clearable
                                     v-model="selectedCategory"
                                     placeholder="Ver por categoria"
-                                    style="width: 150px; padding: 0">
+                                    style="width: 250px; padding: 0">
                                     <el-option
                                         v-for="category in categories"
                                         :key="category._id"
-                                        :value="category.categoryName"
+                                        :value="category"
                                         :label="category.categoryName" />
                                 </el-select>
                             </div>
@@ -67,7 +67,7 @@
                     <el-tag
                         size="small"
                         class="cursor-pointer w-full">
-                        <router-link :to="{ name: 'allProductsClient' }">Todos produtos</router-link>
+                        <router-link :to="{ name: 'allProducts' }">Todos produtos</router-link>
                     </el-tag>
                     <el-tag
                         class="cursor-pointer w-full"
@@ -108,12 +108,16 @@
             search: textSearch.value,
         };
 
-        if (selectedCategory.value !== null) {
-            query.category = selectedCategory.value;
+        if (selectedCategory.value) {
+            console.log(selectedCategory.value);
+            
+            query.categoryName = selectedCategory.value.categoryName;
+            query.category = selectedCategory.value._id;
         }
         router.push({
-            name: "allProductsClient",
+            name: "allProducts",
             query: query,
+            params: { by: "search" },
         });
     }
 
@@ -127,17 +131,16 @@
 
     function filterProduct(category) {
         drawer.value = false;
-        let query;
-        if (!drawer.value) {
-            query = {
-                _id: category._id,
-                category: category.categoryName,
-            };
+        const query = {};
+        if (category) {
+            query.categoryName = category.categoryName;
+            query.category = category._id;
         }
 
         router.push({
-            name: "allProductsClient",
+            name: "allProducts",
             query: query,
+            params: { by: "filter" },
         });
     }
 
@@ -171,9 +174,9 @@
         font-size: 10px !important;
     }
     .search .el-select__wrapper {
-        padding: 8px;
+        /* padding: 8px; */
     }
     .search .el-input-group__prepend {
-        padding: 0px !important;
+        /* padding: 0px !important; */
     }
 </style>

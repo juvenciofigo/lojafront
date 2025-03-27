@@ -10,7 +10,7 @@
                     class="categories-list indent-4 overflow-auto p-1">
                     <ul class="list-none">
                         <li class="duration-75 item-list">
-                            <router-link :to="{ name: 'allProductsClient' }">Todos produtos</router-link>
+                            <router-link :to="{ name: 'allProducts' }">Todos produtos</router-link>
                         </li>
                         <template
                             v-for="category in categories"
@@ -124,7 +124,7 @@
 
     const store = useStore();
     const router = useRouter();
-    const categories = computed(() => store.state.categories.categories );
+    const categories = computed(() => store.state.categories.categories);
     const products = computed(() => store.state.products.products.docs);
     const skeleton = ref(true);
     const promos = [
@@ -141,8 +141,8 @@
 
     function filterProduct(category, subCategory, sub_category) {
         const query = {
-            _id: category._id,
-            category: category.categoryName,
+            categoryName: category.categoryName,
+            category: category._id,
         };
 
         if (subCategory) {
@@ -154,8 +154,9 @@
         }
 
         router.push({
-            name: "allProductsClient",
+            name: "allProducts",
             query: query,
+            params: { by: "filter" },
         });
     }
 

@@ -33,8 +33,8 @@ const routes = [
             },
             {
                 // all products
-                path: "produtos",
-                name: "allProductsClient",
+                path: "produtos/:by?",
+                name: "allProducts",
                 component: () => import("@/resources/Store/_components/Store/_components/products/AllProducts.vue"),
             },
 
@@ -117,11 +117,11 @@ const routes = [
                 name: "dashboard",
                 component: () => import("@/resources/Dashboard/_components/DashboardComp.vue"),
             },
-            {
-                path: "produto",
-                name: "produto",
-                redirect: { name: "produtos" },
-            },
+            // {
+            //     path: "produto",
+            //     name: "produto",
+            //     redirect: { name: "produtos" },
+            // },
             {
                 // all product
                 path: "produtos",

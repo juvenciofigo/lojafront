@@ -6,7 +6,7 @@
                 <h2 class="bg-[#3a7ebe] p-2 font-semibold">Categorias</h2>
 
                 <ul class="list-none">
-                    <li class="whitespace-nowrap hover:text-[#0062bd] duration-500"><router-link :to="{ name: 'allProductsClient' }">Todos produtos</router-link></li>
+                    <li class="whitespace-nowrap hover:text-[#0062bd] duration-500"><router-link :to="{ name: 'allProducts' }">Todos produtos</router-link></li>
                     <template
                         v-for="category in categories"
                         :key="category._id">
@@ -110,28 +110,12 @@
                 <!-- /////////////////////// -->
                 <div
                     class="products"
-                    v-if="products && products.docs.length > 0">
+                    v-if="products && products.docs.length > 0" >
                     <ProductCard
                         v-for="(product, index) in products.docs"
                         :key="index"
                         :product="product"
-                        :RouterName="props.nameRoute || 'detailsClient'" />
-                </div>
-                <!-- /////////////////////// -->
-                <div>
-                    <el-pagination
-                        v-model:current-page="products.page"
-                        :total="products.totalDocs"
-                        :page-size="products.limit"
-                        :pager-count="5"
-                        layout="prev, total, pager, next"
-                        prev-text="Voltar"
-                        next-text="Próxima"
-                        background
-                        :disabled="loading"
-                        hide-on-single-page
-                        small
-                        @current-change="pageEvent" />
+                        :RouterName="nameRoute" />
                 </div>
             </div>
             <div
@@ -145,23 +129,19 @@
 
 <script setup>
     import ProductSkeleton from "@/components/skeletons/ProductSkeleton.vue";
-    import { defineProps, computed, ref, onBeforeUnmount, onBeforeMount, watch, defineEmits } from "vue";
+    import { defineProps, computed, ref, onBeforeUnmount, onBeforeMount, watch } from "vue";
     import { useStore } from "vuex";
     import { useRouter, useRoute } from "vue-router";
-    import { useHead } from "@vueuse/head";
     import ProductCard from "@/resources/_components/ProductCard.vue";
+    import { useHead } from "@vueuse/head";
 
     const props = defineProps({
         nameRoute: String,
         fetchRouteName: String,
-        newProduct: String,
+        fetchCategories: String,
+        fetchProducts: String,
         skeleton: Boolean,
-        getCategories: String,
     });
-
-    const emit = defineEmits(["ca"]);
-    console.log(emit);
-    
 
     const router = useRouter();
     const route = useRoute();
@@ -171,41 +151,20 @@
     const categories = computed(() => store.state.categories.categories);
     const category = ref(null);
 
-    const loading = true;
-
-    watch(
-        () => route.query.category,
-        (newRoute) => {
-            category.value = newRoute;
-            head();
-        }
-    );
-
     watch(
         () => route.query,
-        async (newR, oldR) => {
-            if (newR !== oldR) {
-                if (newR.search) {
-                    await store.dispatch("products/filtreProducts", { category: route.query.category, search: route.query.search });
-                } else {
-                    head();
-                    category.value = route.query.category;
-                    await store.dispatch(props.getCategories || "categories/fetchCategories");
-                }
-            }
+        () => {
+            fetchProducts();
         }
     );
-    const pageEvent = (offset) => {
-        router.push({ name: props.fetchRouteName || "allProductsClient", query: { offset: offset } });
-    };
 
     const priceValue = ref(0);
     const pricelimit = ref(200000);
 
     function filterProduct(category, subCategory, sub_category) {
         const query = {
-            _id: category._id,
-            category: category.categoryName,
+            categoryName: category.categoryName,
+            category: category._id,
         };
 
         if (subCategory) {
@@ -217,8 +176,8 @@
         }
 
         router.push({
-            name: props.fetchRouteName || "allProductsClient",
             query: query,
+            params: { by: "filter" },
         });
     }
 
@@ -226,19 +185,38 @@
         store.commit("products/CLEAR_PRODUCTS");
     });
 
-    onBeforeMount(async () => {
-        if (route.query.search) {
-            await store.dispatch("products/filtreProducts", { category: route.query.category, search: route.query.search });
-        } else {
-            head();
-            category.value = route.query.category;
-            await store.dispatch(props.getCategories || "categories/fetchCategories");
+    async function fetchProducts() {
+        const query = {};
+
+        if (route.query.category) {
+            query.category = route.query.category;
         }
+        if (route.query.subcategory) {
+            query.subcategory = route.query.subcategory;
+        }
+        if (route.query.sub_category) {
+            query.sub_category = route.query.sub_category;
+        }
+
+        if (route.params?.by === "search") {
+            query.search = route.query.search;
+            await store.dispatch("products/searchProducts", { query });
+        } else if (route.params?.by === "filter") {
+            await store.dispatch("products/filterProducts", { query });
+        } else {
+            await store.dispatch(props.fetchProducts || "products/fetchProducts");
+        }
+        head();
+        return;
+    }
+
+    onBeforeMount(async () => {
+        await store.dispatch(props.fetchCategories || "categories/fetchCategories");
+        await fetchProducts();
     });
 
     function head() {
         useHead({
-            // title: ` ${store.state.storeName} - ${category.value || "Todos Produtos"}`,
             title: computed(() => `${store.state.storeName} - ${category.value || "Todos Produtos"}`),
             meta: [
                 {
@@ -249,6 +227,7 @@
         });
     }
 </script>
+
 <style scoped>
     .slider-demo-block {
         display: flex;
