@@ -10,6 +10,7 @@
         <div class="search flex-1 flex flex-row md:gap-[10%] justify-end">
             <div class="ml-3 w-full md:m-0 border-[#2196F3] flex flex-1 max-w-[700px] flex-row">
                 <el-input
+                    @keyup.enter="search"
                     v-model="textSearch"
                     style="max-width: 600px"
                     placeholder="Pesquise pelo nome do produto"
@@ -110,7 +111,7 @@
 
         if (selectedCategory.value) {
             console.log(selectedCategory.value);
-            
+
             query.categoryName = selectedCategory.value.categoryName;
             query.category = selectedCategory.value._id;
         }
