@@ -20,8 +20,8 @@
                                 style="width: 100%; height: 100%" />
                         </template>
                         <template #error>
-                            <div class="image-slot h-full flex justify-center items-center w-full">
-                                <el-icon><Picture /></el-icon>
+                            <div class="image-slot min-h-40 h-full flex justify-center items-center w-full">
+                                <el-icon><icon-picture /></el-icon>
                             </div>
                         </template>
                     </el-image>
@@ -45,8 +45,8 @@
 
 <script setup>
     import { defineProps } from "vue";
-    import { Picture } from "@element-plus/icons-vue";
     import { formatCurrency } from "@/util/functions";
+    import { Picture as IconPicture } from "@element-plus/icons-vue";
 
     defineProps({
         product: Object,
