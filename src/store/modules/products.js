@@ -3,16 +3,21 @@ import { errorMessage } from "@/util/cookieUtils";
 import notification from "@/util/notifications";
 
 const state = {
-    products: [],
+    products: {},
     product: {},
 };
 
 const mutations = {
-    SET_PRODUCTS(state, products) {
-        state.products = products;
+    SET_PRODUCTS(state, data) {
+        if (data.page === 1) {
+            state.products = data;
+        } else {
+            state.products.docs = [...state.products.docs, ...data.docs];
+            state.products.hasNextPage = data.hasNextPage;
+        }
     },
-    SET_PRODUCT(state, product) {
-        state.product = product;
+    SET_PRODUCT(state, data) {
+        state.product = data;
     },
     CLEAR_PRODUCTS(state) {
         state.products = [];
@@ -178,7 +183,7 @@ const actions = {
 
     async fetchProducts({ commit }, payload) {
         try {
-            const res = await sendAxio({ method: "get", url: "/products", params: payload });
+            const res = await sendAxio({ method: "get", url: "/products", query: payload?.query });
             if (res.status === 200) {
                 commit("SET_PRODUCTS", res.data);
                 return;
