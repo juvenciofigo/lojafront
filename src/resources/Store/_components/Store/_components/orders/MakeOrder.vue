@@ -10,10 +10,11 @@
                     <el-step :title="step" />
                 </template>
             </el-steps>
-
-            <ShippingInfoStep
-                v-if="active === 0"
-                :addressSkeleton="addressRes" />
+            <KeepAlive>
+                <ShippingInfoStep
+                    v-if="active === 0"
+                    :addressSkeleton="addressRes" />
+            </KeepAlive>
             <ConfirmationStep
                 v-if="active === 1"
                 @submit="handleConfirmationData" />
@@ -22,14 +23,14 @@
         <div class="mt-2 flex flex-row justify-end gap-3">
             <div>
                 <el-button
-                    :disabled="active === 1 || !addressRes"
-                    @click="next"
-                    >Próximo</el-button
-                >
-                <el-button
                     :disabled="active === 0 || loading || !addressRes"
                     @click="previous"
                     >Anterior</el-button
+                >
+                <el-button
+                    :disabled="active === 1 || !addressRes"
+                    @click="next"
+                    >Próximo</el-button
                 >
             </div>
 
@@ -157,7 +158,7 @@
             ElNotification.error({
                 title: "Erro",
                 message: "Preencha o endereço de envio",
-                position: 'top-left',
+                position: "top-left",
             });
             active.value = 0;
             loading.value = false;
