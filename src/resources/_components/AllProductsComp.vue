@@ -104,13 +104,19 @@
             </div>
 
             <ProductSkeleton v-if="skeleton" />
+            <!-- v-loading="loading" -->
             <div
                 v-if="products?.docs?.length > 0 && !skeleton"
-                class="bottom-0 top-[58px] right-0 flex-1 w-full flex flex-col overflow-auto">
+                class="bottom-0 top-[58px] right-0 flex-1 w-full flex flex-col overflow-hidden">
                 <!-- /////////////////////// -->
+                class="infinite-list"
+
                 <div
-                    class="products"
-                    v-if="products && products.docs.length > 0" >
+                    class="products overflow-auto"
+                    v-infinite-scroll="load"
+                    :infinite-scroll-disabled="!products.hasNextPage || loading"
+                    style="overflow: auto"
+                    v-if="products && products.docs.length > 0">
                     <ProductCard
                         v-for="(product, index) in products.docs"
                         :key="index"
@@ -188,7 +194,7 @@
     const offset = ref(route.query.subcategory || 1);
 
     async function fetchProducts() {
-        const query = {};
+        const query = { offset: offset.value };
 
         if (route.query.category) {
             query.category = route.query.category;
@@ -206,7 +212,7 @@
         } else if (route.params?.by === "filter") {
             await store.dispatch("products/filterProducts", { query });
         } else {
-            await store.dispatch(props.fetchProducts || "products/fetchProducts");
+            await store.dispatch(props.fetchProducts || "products/fetchProducts", { query });
         }
         head();
         return;
@@ -216,6 +222,15 @@
         await store.dispatch(props.fetchCategories || "categories/fetchCategories");
         await fetchProducts();
     });
+    const loading = ref(false);
+    const load = async () => {
+        loading.value = true;
+        if (!products.value.hasNextPage) return;
+        offset.value += 1;
+        console.log("feito");
+        await fetchProducts();
+        loading.value = false;
+    };
 
     function head() {
         useHead({
@@ -241,8 +256,18 @@
         margin: 0 15px;
     }
 
+    .infinite-list {
+        height: 400px;
+        padding: 0;
+        margin: 0;
+        list-style: none;
+    }
     /* //////// */
     .products {
+        height: calc(100% - 100px);
+        padding: 5px;
+        background: #000;
+        overflow: auto;
         margin: 5px;
         display: grid;
         gap: 10px;
