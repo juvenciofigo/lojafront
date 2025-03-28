@@ -185,6 +185,8 @@
         store.commit("products/CLEAR_PRODUCTS");
     });
 
+    const offset = ref(route.query.subcategory || 1);
+
     async function fetchProducts() {
         const query = {};
 
