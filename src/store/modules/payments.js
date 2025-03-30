@@ -27,7 +27,12 @@ const mutations = {
 const actions = {
     async mpesapay({ state }, payload) {
         try {
-            const res = await sendAxio({ method: "post", url: `/mpesaPay`, data: { ...payload, orderId: state.orderPaymentId } });
+            const res = await sendAxio({
+                method: "post",
+                url: `/mpesaPay`,
+                data: { ...payload, orderId: state.orderPaymentId },
+                query: { paymentMode: "Mpesa" },
+            });
             if (res.status === 200 || res.status === 201) {
                 notification({ title: "Sucesso", type: "success", message: res.data.message });
                 window.location.href = `/perfil/${state.user.id}/pedidos`;

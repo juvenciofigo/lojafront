@@ -27,7 +27,6 @@
                             <Trash2
                                 color="red"
                                 size="14" />
-                            <span>Remover</span>
                         </div>
                     </el-button>
                     <button

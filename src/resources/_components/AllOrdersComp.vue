@@ -3,7 +3,7 @@
         v-loading="loading || pageloadLoading"
         class="flex flex-col flex-1 gap-2 overflow-auto allOlders">
         <div>
-            <div v-if="orderDocs && orderDocs.length > 0 && loading === false">
+            <div v-if="orders && orders?.docs?.length > 0 && loading === false">
                 <div class="p-4">
                     <Input
                         class="max-w-sm"
@@ -13,7 +13,7 @@
                     border
                     align="center"
                     :row-class-name="tableRowClassName"
-                    :data="orderDocs"
+                    :data="orders.docs"
                     fit
                     show-header
                     size="small">
@@ -30,16 +30,17 @@
                         align="center"
                         prop="createdAt"
                         label="Data"
-                        :formatter="format" />
+                        :formatter="(row) => formatDate(row.createdAt)" />
                     <el-table-column
                         align="center"
                         prop="payment.amount"
                         label="Total"
-                        :formatter="formatCurrency" />
+                        :formatter="(row) => formatCurrency(row.payment.amount)" />
                     <el-table-column
                         align="center"
                         prop="payment.paymentMethod"
-                        label="Forma de pagamento" />
+                        label="Forma de pagamento"
+                        :formatter="(row) => (row.payment.paymentMethod ? row.payment?.paymentMethod : row.payment?.status)" />
                     <el-table-column
                         align="center"
                         prop="payment.status"
@@ -144,7 +145,7 @@
     });
 
     const orders = computed(() => store.state.orders.orders);
-    const orderDocs = computed(() => orders.value.docs);
+    // const orderDocs = computed(() => orders.value.docs);
     const offset = ref(route.query.offset || 1);
     const loading = ref(true);
 
@@ -167,6 +168,12 @@
         router.push({ name: `${props.route}`, query: { offset: `${pageNumber}` } });
     }
 
+    watch(
+        () => orders.value,
+        (d) => {
+            console.log(d);
+        }
+    );
     const id = ref("");
     const status = ref("");
     const showDialog = ref(false);
@@ -207,10 +214,6 @@
     const handleCancel = () => {
         showDialog.value = false;
     };
-
-    function format(row) {
-        return row.createdAt ? formatDate(new Date(row.createdAt), "dd/MM/yyyy HH:mm") : "";
-    }
 
     ////////////////resize///////////////////
     const windowWidth = ref(window.innerWidth);

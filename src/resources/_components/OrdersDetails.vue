@@ -8,7 +8,7 @@
                             stripe
                             border
                             max-height="400"
-                            :data="order.cartPayd"
+                            :data="order.cart"
                             fit
                             show-header
                             size="small">
@@ -47,25 +47,25 @@
                                             class="color whitespace-nowrap"
                                             v-if="scope.row.variation && scope.row.variation.color">
                                             <span> Cor: </span>
-                                            <span class="font-normal">{{ scope.row.variation.color }}</span>
+                                            <span class="font-normal">{{ scope.row.variation.color.variationValue }}</span>
                                         </div>
                                         <div
                                             class="size whitespace-nowrap"
                                             v-if="scope.row.variation && scope.row.variation.size">
                                             <span>Tamanho: </span>
-                                            <span class="font-normal">{{ scope.row.variation.size }}</span>
+                                            <span class="font-normal">{{ scope.row.variation.size.variationValue }}</span>
                                         </div>
                                         <div
                                             class="material whitespace-nowrap"
                                             v-if="scope.row.variation && scope.row.variation.material">
                                             <span>Material: </span>
-                                            <span class="font-normal">{{ scope.row.variation.material }}</span>
+                                            <span class="font-normal">{{ scope.row.variation.material.variationValue }}</span>
                                         </div>
                                         <div
                                             class="model whitespace-nowrap"
                                             v-if="scope.row.variation && scope.row.variation.model">
                                             <span>Modelo: </span>
-                                            <span class="font-normal">{{ scope.row.variation.model }}</span>
+                                            <span class="font-normal">{{ scope.row.variation.model.variationValue }}</span>
                                         </div>
                                     </div>
                                 </template>
@@ -80,18 +80,14 @@
                             <el-table-column
                                 align="center"
                                 width="100"
-                                label="Preço unit.">
-                                <template #default="scope">
-                                    <span class="whitespace-nowrap">{{ formatCurrency(scope.row.productPrice) }}</span>
-                                </template>
+                                label="Preço unit."
+                                :formatter="(row) => formatCurrency(row.itemPrice)">
                             </el-table-column>
                             <!-- //////////////// -->
                             <el-table-column
                                 align="center"
-                                label="Subtotal">
-                                <template #default="scope">
-                                    <span class="whitespace-nowrap">{{ formatCurrency(scope.row.subtotal) }}</span>
-                                </template>
+                                label="Subtotal"
+                                :formatter="(row) => formatCurrency(row.subtotal)">
                             </el-table-column>
                         </el-table>
                         <!-- ///////////// -->

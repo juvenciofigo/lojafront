@@ -94,7 +94,7 @@
         </section>
         <!-- Filtrar -->
 
-        <section class="flex-1 flex flex-col h-full">
+        <section class="flex-1 flex flex-col gap-1">
             <div class="h-[40px] p-2 bg-white justify-between flex flex-row items-center">
                 <div class="flex flex-row justify-between">
                     <h2>{{ category || "Todos Produtos" }}</h2>
@@ -104,15 +104,13 @@
             </div>
 
             <ProductSkeleton v-if="skeleton" />
-            <!-- v-loading="loading" -->
             <div
+                v-loading="loading"
                 v-if="products?.docs?.length > 0 && !skeleton"
-                class="bottom-0 top-[58px] right-0 flex-1 w-full flex flex-col overflow-hidden">
+                class="flex-1 w-full flex flex-col overflow-hidden">
                 <!-- /////////////////////// -->
-                class="infinite-list"
-
                 <div
-                    class="products overflow-auto"
+                    class="products"
                     v-infinite-scroll="load"
                     :infinite-scroll-disabled="!products.hasNextPage || loading"
                     style="overflow: auto"
@@ -197,6 +195,7 @@
         const query = { offset: offset.value };
 
         if (route.query.category) {
+            category.value = route.query.categoryName;
             query.category = route.query.category;
         }
         if (route.query.subcategory) {
@@ -222,12 +221,13 @@
         await store.dispatch(props.fetchCategories || "categories/fetchCategories");
         await fetchProducts();
     });
+
     const loading = ref(false);
+
     const load = async () => {
-        loading.value = true;
         if (!products.value.hasNextPage) return;
+        loading.value = true;
         offset.value += 1;
-        console.log("feito");
         await fetchProducts();
         loading.value = false;
     };
@@ -246,29 +246,10 @@
 </script>
 
 <style scoped>
-    .slider-demo-block {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-    }
-    .slider-demo-block .el-slider {
-        margin-top: 10px;
-        margin: 0 15px;
-    }
-
-    .infinite-list {
-        height: 400px;
-        padding: 0;
-        margin: 0;
-        list-style: none;
-    }
-    /* //////// */
     .products {
-        height: calc(100% - 100px);
-        padding: 5px;
-        background: #000;
+        height: 90vh;
         overflow: auto;
-        margin: 5px;
+        margin: 0 5px;
         display: grid;
         gap: 10px;
         grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -281,11 +262,14 @@
     }
     @media (min-width: 768px) {
         .products {
+            margin: 0;
             grid-template-columns: repeat(4, minmax(0, 1fr));
         }
     }
     @media (min-width: 1247px) {
         .products {
+            margin:0;
+
             grid-template-columns: repeat(5, minmax(0, 1fr));
         }
     }

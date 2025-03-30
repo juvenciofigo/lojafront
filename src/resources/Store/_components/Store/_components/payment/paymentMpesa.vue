@@ -4,6 +4,7 @@
         <hr />
         <div class="p-5">
             <v-text-field
+            @keyup.enter="confirmePayment"
                 v-model="number"
                 type="number"
                 variant="outlined"
@@ -53,6 +54,7 @@
     const errorDialog = ref(false);
     const errorMessage = ref("");
     const loading = ref(false);
+
     async function confirmePayment() {
         loading.value = true;
         if (!number.value) {

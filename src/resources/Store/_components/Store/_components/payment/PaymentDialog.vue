@@ -57,6 +57,7 @@
                         }
                     })
                     .catch(() => {
+                        store.commit("payments/SET_PAYMENT_DIALOG");
                         fechar();
                     });
             }

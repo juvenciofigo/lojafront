@@ -1,8 +1,8 @@
 <template>
     <router-link :to="{ name: RouterName || 'detailsClient', params: { id: `${product._id}` } }">
         <el-tooltip :content="product.productName">
-            <div class="h-full w-full product-card rounded-md group duration-700 bg-white">
-                <div class="p-3 h-full rounded-md duration-700 md:group-hover:bg-blue-400 flex flex-col justify-between">
+            <div class="h-full w-full product-card group duration-700 bg-white">
+                <div class="p-3 h-full duration-700 md:group-hover:bg-blue-400 flex flex-col justify-between">
                     <div class="title w-full">
                         <p class="text-center md:hover: md:group-hover:text-white duration-700 text-[#0062bd] truncate mb-2">{{ product.productName }}</p>
                     </div>
