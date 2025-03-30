@@ -152,7 +152,7 @@ const actions = {
 
     async fetchAllProductsAdmin({ commit }, payload) {
         try {
-            const res = await sendAxio({ method: "get", url: "/products/admin", params: payload });
+            const res = await sendAxio({ method: "get", url: "/products/admin", query: payload.query });
 
             if (res.data) {
                 commit("SET_PRODUCTS", res.data);
