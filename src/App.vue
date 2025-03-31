@@ -61,6 +61,17 @@
     }
 </style>
 <style>
+    .error-message {
+        /* margin: 5px 0 0 0; */
+        padding: 5px 0 10px 5px;
+        width: 100%;
+        height: 15px;
+        font-size: small;
+        line-height: 13px;
+        color: red;
+        display: flex;
+        align-items: center;
+    }
     /* Estilizando a barra de rolagem */
     /* ::-webkit-scrollbar {
         height: 7px; /* Altura da barra de rolagem */

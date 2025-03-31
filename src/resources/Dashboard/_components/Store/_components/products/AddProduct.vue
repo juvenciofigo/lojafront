@@ -6,6 +6,7 @@
         </div>
 
         <form
+            v-loading="textAreaDisabled"
             @submit.prevent="submit"
             enctype="multipart/form-data">
             <div class="flex flex-col md:flex-row gap-8">
@@ -28,27 +29,16 @@
                             <!-- Description -->
                             <div class="input-field descr">
                                 <Label><span class="text-red-500">*</span> Descriçao:</Label>
-                                <el-input
-                                    v-model="productDescription.value.value"
-                                    :disabled="textAreaDisabled"
-                                    style="width: 100%"
-                                    :rows="5"
-                                    autocomplete="off"
-                                    type="textarea"
-                                    placeholder="Descrição do produto!" />
+                                <div class="bg-white">
+                                    <!-- :disable="true" -->
+                                    <QuillEditor
+                                    v-model:content="productDescription.value.value"
+                                    contentType="html"
+                                    :options="editorOptions"
+                                          />
+                                </div>
+
                                 <span class="error-message">{{ productDescription.errorMessage.value }}</span>
-                                <!-- <Editor
-                                        api-key="ssfrraviw37cj9z3wax894wog697jdzmxq9dist4pmo51054"
-                                        :init="{
-                                            toolbar_mode: 'sliding',
-                                            plugins: 'charmap emoticons lists searchreplace table visualblocks wordcount',
-                                            language: 'pt_PT',
-                                            toolbar:
-                                                'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat',
-                                        }"
-                                        placeholder="Faça uma descrição do produto"
-                                        v-model="productDescription"
-                                        value="productDescription" /> -->
                             </div>
                         </div>
                     </div>
@@ -442,6 +432,22 @@
     const textAreaDisabled = ref(false);
     const loadSubmitButton = ref(false);
 
+    import { QuillEditor } from "@vueup/vue-quill";
+    import "@vueup/vue-quill/dist/vue-quill.snow.css"; // Estilo do editor
+
+    const editorOptions = {
+        placeholder: "Descrição do produto...",
+        modules: {
+            toolbar: [
+                ["bold", "italic", "underline"], // Formatação básica
+                [{ header: [1, 2, 3, false] }], // Títulos
+                ["blockquote", "code-block"], // Blocos
+                [{ list: "ordered" }, { list: "bullet" }, { list: "check" }], // Listas
+                ["link", "image"], // Mídia
+            ],
+        },
+        theme: "snow",
+    };
     // Função para pré-visualizar as imagens
 
     import { Plus } from "@element-plus/icons-vue";
@@ -486,23 +492,23 @@
         ),
     });
 
-    const productName = useField("productName");
-    const productDescription = useField("productDescription");
-    const productAvailability = useField("productAvailability");
-    const productPrice = useField("productPrice");
-    const productStock = useField("productStock");
-    const productCategory = useField("productCategory");
-    const productSubcategory = useField("productSubcategory");
-    const productSub_category = useField("productSub_category");
-    const productPromotion = useField("productPromotion");
-    const sku = useField("sku");
-    const productVendor = useField("productVendor");
-    const productBrand = useField("productBrand");
-    const productWeight = useField("productWeight");
-    const productModel = useField("productModel");
-    const productLength = useField("productLength");
-    const productWidth = useField("productWidth");
-    const productHeight = useField("productHeight");
+    const productName = useField("productName"),
+        productDescription = useField("productDescription"),
+        productAvailability = useField("productAvailability"),
+        productPrice = useField("productPrice"),
+        productStock = useField("productStock"),
+        productCategory = useField("productCategory"),
+        productSubcategory = useField("productSubcategory"),
+        productSub_category = useField("productSub_category"),
+        productPromotion = useField("productPromotion"),
+        sku = useField("sku"),
+        productVendor = useField("productVendor"),
+        productBrand = useField("productBrand"),
+        productWeight = useField("productWeight"),
+        productModel = useField("productModel"),
+        productLength = useField("productLength"),
+        productWidth = useField("productWidth"),
+        productHeight = useField("productHeight");
 
     const submit = handleSubmit(
         async (values) => {
