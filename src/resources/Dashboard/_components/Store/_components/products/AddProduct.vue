@@ -533,14 +533,15 @@
                     }
                 }
             }
-
+            const result = ref(null);
             if (productSeleted) {
                 await store.dispatch("products/updateProduct", { productSeleted, formData });
             } else {
-                const result = await store.dispatch("products/addProduct", formData);
-                if (result === true) {
-                    handleReset();
-                }
+                result.value = await store.dispatch("products/addProduct", formData);
+            }
+
+            if (result.value) {
+                handleReset();
             }
 
             loadSubmitButton.value = false;
