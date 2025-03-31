@@ -49,9 +49,8 @@ const actions = {
             const res = await sendAxio({ method: "put", url: `/product/${payload.productSeleted}`, data: payload.formData });
 
             if (res.status === 200) {
-                commit("SET_PRODUCTS", res.data);
+                commit("SET_PRODUCT", res.data.product);
                 notification({ title: "Sucesso", type: "success", message: res.data.message });
-                window.location.reload();
                 return true;
             }
             throw new Error();
