@@ -34,7 +34,7 @@ const actions = {
             const res = await sendAxio({ method: "post", url: `/product`, data: payload });
 
             if (res.status === 200) {
-                notification({ title: "erro", message: res.data.message, type: "success" });
+                notification({ title: "Sucesso", message: res.data.message, type: "success" });
                 window.location.reload();
                 return;
             }
