@@ -85,19 +85,20 @@
         </div>
 
         <!-- Produtos e Promoções -->
-        <div class="w-full flex lg:flex-row gap-1 flex-col-reverse mt-2">
-            <div class="overflow-hidden flex-1 gap-3 flex flex-col">
+        <div class="w-full flex lg:flex-row gap-1 flex-col-reverse mt-">
+                
+            <div v-if="products" class="overflow-hidden flex-1 gap-3 flex flex-col">
                 <SelectedProducts
                     :title="`Novidades`"
-                    :products="products"
+                    :products="products.docs"
                     :link="`produtos`" />
 
                 <SelectedProducts
                     :title="`Destaque`"
-                    :products="products"
+                    :products="products.docs"
                     :link="`produtos`" />
             </div>
-            <div class="ads slider gap-2 self-center">
+            <div class="ads slider gap-2">
                 <template
                     v-for="(item, index) in promos"
                     :key="index">
@@ -125,7 +126,7 @@
     const store = useStore();
     const router = useRouter();
     const categories = computed(() => store.state.categories.categories);
-    const products = computed(() => store.state.products.products.docs);
+    const products = computed(() => store.state.products.products);
     const skeleton = ref(true);
     const promos = [
         {

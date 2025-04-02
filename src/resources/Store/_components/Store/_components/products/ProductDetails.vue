@@ -2,7 +2,7 @@
     <ProductDetaislsSkeleton v-if="skeleton"></ProductDetaislsSkeleton>
     <!-- prettier-ignore -->
     <ProductDetailsComp
-        v-else
+        v-if="!skeletone && product"
         :firstButton="addToCart"
         :secondButton="buyNow"
         :thirdButton="callWhatsapp"

@@ -109,18 +109,35 @@
                 v-if="products?.docs?.length > 0 && !skeleton"
                 class="flex-1 w-full flex flex-col overflow-hidden">
                 <!-- /////////////////////// -->
+                <!-- v-infinite-scroll="load" -->
+                <!-- :infinite-scroll-disabled="!products.hasNextPage || loading" -->
+
                 <div
                     class="products"
-                    v-infinite-scroll="load"
-                    :infinite-scroll-disabled="!products.hasNextPage || loading"
-                    style="overflow: auto"
                     v-if="products && products.docs.length > 0">
                     <ProductCard
+                        class="productCard"
                         v-for="(product, index) in products.docs"
                         :key="index"
                         :product="product"
                         :RouterName="nameRoute" />
+                    <div class="w-full min-h-2 productCard self-center mt-2">
+                        <el-button
+                            v-if="products.hasNextPage === true"
+                            @click="load"
+                            class="w-full"
+                            type="primary"
+                            plain>
+                            {{ loading ? "Processando" : "Ver mais..." }}</el-button
+                        >
+                    </div>
                 </div>
+                <el-backtop
+                    target=".products"
+                    :right="30"
+                    :bottom="50">
+                    <div class="custom-backtop">Voltar</div>
+                </el-backtop>
             </div>
             <div
                 v-if="!products || (products.docs?.length === 0 && !skeleton)"
@@ -246,13 +263,23 @@
 </script>
 
 <style scoped>
+    .productCard {
+        max-height: 270px;
+    }
+    .productCard:last-child {
+        grid-column: 1 / -1;
+    }
+
     .products {
+        position: relative;
         height: 90vh;
         overflow: auto;
         margin: 0 5px;
         display: grid;
-        gap: 10px;
+        gap: 5px;
         grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-auto-rows: min-content;
+        padding: 5px;
     }
 
     @media (min-width: 425px) {
@@ -268,9 +295,26 @@
     }
     @media (min-width: 1247px) {
         .products {
-            margin:0;
+            margin: 0;
 
             grid-template-columns: repeat(5, minmax(0, 1fr));
         }
     }
+
+    .custom-backtop {
+        width: max-content;
+        background-color: #409eff;
+        color: white;
+        text-align: center;
+        font-weight: 300;
+        padding: 5px;
+        font-size: medium;
+        border-radius: 5px;
+    }
+    .el-backtop {
+        height: max-content !important;
+        width: max-content !important;
+        border-radius: 0% !important;
+    }
 </style>
+<style></style>

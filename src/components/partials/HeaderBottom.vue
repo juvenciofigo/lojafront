@@ -22,7 +22,7 @@
                                     clearable
                                     v-model="selectedCategory"
                                     placeholder="Ver por categoria"
-                                    style="width: 250px; padding: 0">
+                                    style="width: 200px; padding: 0">
                                     <el-option
                                         v-for="category in categories"
                                         :key="category._id"
@@ -173,11 +173,5 @@
         height: auto !important;
         padding: 5px !important;
         font-size: 10px !important;
-    }
-    .search .el-select__wrapper {
-        /* padding: 8px; */
-    }
-    .search .el-input-group__prepend {
-        /* padding: 0px !important; */
     }
 </style>

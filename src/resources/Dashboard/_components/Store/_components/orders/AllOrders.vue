@@ -3,7 +3,6 @@
         class="p-2"
         :storeaction="`fetchOrders`"
         :route="`allOrders`">
-        
     </AllOldersComp>
 </template>
 <script setup>

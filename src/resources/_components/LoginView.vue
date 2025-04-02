@@ -32,6 +32,11 @@
                     <!-- Password Input -->
                     <div class="input-field">
                         <el-input
+                            @keyup.enter="() => {
+                                    submit();
+                                    loadLoginBtn = true;
+                                    toggleButtonLoad = true;
+                                }"
                             clearable
                             v-model="password.value.value"
                             autocomplete="current-password"
@@ -61,7 +66,12 @@
                         >
                     </div>
                     <p class="mt-4">
-                        Esqueceu sua senha? Clique em <a target="_blank" :href="url"><span class="text-decoration-underline">Aqui</span></a>
+                        Esqueceu sua senha? Clique em
+                        <a
+                            target="_blank"
+                            :href="url"
+                            ><span class="text-decoration-underline">Aqui</span></a
+                        >
                     </p>
                 </form>
 
@@ -350,7 +360,7 @@
         width: 100%;
         outline: none;
     }
- 
+
     .input-field input::placeholder {
         color: #aaa;
         font-weight: 500;

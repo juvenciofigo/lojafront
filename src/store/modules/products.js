@@ -3,15 +3,16 @@ import { errorMessage } from "@/util/cookieUtils";
 import notification from "@/util/notifications";
 
 const state = {
-    products: {},
-    product: {},
+    products: null,
+    product: null,
 };
 
 const mutations = {
     SET_PRODUCTS(state, data) {
         if (data.page === 1) {
             state.products = data;
-        } else {
+        }
+         else {
             state.products.docs = [...state.products.docs, ...data.docs];
             state.products.hasNextPage = data.hasNextPage;
         }
@@ -66,7 +67,7 @@ const actions = {
 
             if (res.status === 200) {
                 notification({ title: "Sucesso", type: "success", message: res.data.message });
-                window.location.reload();
+                // window.location.reload();
                 return;
             }
             throw new Error();
@@ -181,6 +182,7 @@ const actions = {
     /////////// Client ////////
 
     async fetchProducts({ commit }, payload) {
+        
         try {
             const res = await sendAxio({ method: "get", url: "/products", query: payload?.query });
             if (res.status === 200) {
@@ -198,11 +200,13 @@ const actions = {
             const res = await sendAxio({ method: "get", url: `/product/${productId}` });
             if (res.status === 200) {
                 commit("SET_PRODUCT", res.data.product);
-                return res;
+                return true;
             }
+            
             throw new Error();
         } catch (error) {
             errorMessage(error);
+            return false;
         }
     },
 

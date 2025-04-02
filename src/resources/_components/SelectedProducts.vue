@@ -1,6 +1,6 @@
 <template lang="">
     <div
-        v-if="productsAnswer"
+        v-if="products"
         class="flex flex-col">
         <div class="bg-white flex flex-row justify-between p-2">
             <h1 class="text-xl">{{ title }}</h1>
@@ -91,23 +91,17 @@
     </div>
 </template>
 <script setup>
-    import { defineProps, watch, ref } from "vue";
+    import { defineProps, } from "vue";
     import { Picture } from "@element-plus/icons-vue";
     import { formatCurrency } from "@/util/functions";
 
-    const props = defineProps({
+    defineProps({
         title: String,
         products: Array,
         link: String,
     });
 
-    const productsAnswer = ref(false);
-    watch(
-        () => props.products,
-        () => {
-            productsAnswer.value = true;
-        }
-    );
+   
 </script>
 <style scoped>
     .product-card {
