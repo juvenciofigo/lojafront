@@ -44,7 +44,7 @@
                             </template>
                             <template #error>
                                 <div class="image-slot h-full flex justify-center items-center w-full">
-                                    <el-icon><Picture /></el-icon>
+                                    <el-icon><icon-picture /></el-icon>
                                 </div>
                             </template>
                         </el-image>
@@ -140,6 +140,7 @@
     import { useStore } from "vuex";
     import { Trash2 } from "lucide-vue-next";
     import { formatCurrency } from "@/util/functions";
+    import { Picture as IconPicture } from "@element-plus/icons-vue";
 
     const router = useRouter();
     const store = useStore();
@@ -147,7 +148,6 @@
     defineProps({
         cart: Object,
         image: String,
-        tableRowHeight: String,
         actionButton: String,
     });
 
@@ -177,12 +177,6 @@
     }
 </script>
 <style>
-    @media screen and (max-width: 600px) {
-        .v-stepper-window {
-            margin: 2px !important;
-        }
-    }
-
     input::-webkit-inner-spin-button,
     input::-webkit-outer-spin-button {
         appearance: none;

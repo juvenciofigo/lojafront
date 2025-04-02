@@ -5,7 +5,7 @@
                 <!-- Seção de imagens do produto -->
                 <div class="images rounded-md lg:p-2 flex flex-col-reverse lg:flex-row lg:w-max gap-3">
                     <div
-                        class="changeImage sm:flex sm:flex-nowrap lg:flex-col lg:p-1 gap-2 overflow-auto max-w-[360px] lg:w-max"
+                        class="changeImage mx-auto sm:mx-0 sm:flex sm:flex-nowrap lg:flex-col lg:p-1 gap-2 overflow-auto max-w-[360px] lg:w-max"
                         v-if="images && images.length > 1">
                         <button
                             v-for="(image, index) in images"
@@ -192,7 +192,7 @@
                                 class="materials chips_div"
                                 v-if="materials.length > 0">
                                 <p>
-                                    <sapn class="font-semibold">Materiais: </sapn><span v-if="selectedMaterial">{{ selectedMaterial.variationValue }}</span>
+                                    <span class="font-semibold">Materiais: </span><span v-if="selectedMaterial">{{ selectedMaterial.variationValue }}</span>
                                 </p>
                                 <div class=" ">
                                     <v-chip-group
@@ -784,8 +784,6 @@
         () => product.value.productImage,
         (newValue) => {
             if (newValue.length > 0) {
-                console.log(false);
-                
                 updateImageLink();
             }
         }

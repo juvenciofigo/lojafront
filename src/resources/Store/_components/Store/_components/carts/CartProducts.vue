@@ -12,11 +12,8 @@
         class="flex flex-col lg:items-start lg:flex-row lg:pr-5 gap-4 p-3">
         <div
             v-if="cart"
-            class="w-full flex justify-center"
-            style="width: calc(100% - 1px)">
-            <CartProductsComp
-                :cart="cart"
-                :TableRowHeight="'h-40'" />
+            class="w-full flex justify-center">
+            <CartProductsComp :cart="cart" />
         </div>
 
         <div
@@ -35,7 +32,7 @@
                     <el-descriptions-item label="Total">{{ formatCurrency(totalPedido) }}</el-descriptions-item>
                 </el-descriptions>
                 <el-button
-                    class="w-full m-1"
+                    class="w-full my-1"
                     :disabled="buttonStatus"
                     size="small"
                     @click="makeOrder()">
@@ -56,7 +53,7 @@
     const store = useStore();
     const router = useRouter();
     const isAuthenticated = computed(() => store.getters.isAuthenticated("authToken"));
-    
+
     const cart = computed(() => store.state.carts.cart);
     const priceTotal = computed(() => store.getters["carts/totalProducts"]);
     const loadingPriceUpdate = computed(() => store.getters.loadingPriceUpdate);

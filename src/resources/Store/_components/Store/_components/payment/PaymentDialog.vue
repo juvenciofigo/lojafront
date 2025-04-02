@@ -1,3 +1,7 @@
+<template>
+    <div></div>
+</template>
+
 <script setup>
     import { ElMessageBox, ElLoading } from "element-plus";
     import { watch, computed } from "vue";

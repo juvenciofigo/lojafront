@@ -104,7 +104,7 @@ const routes = [
 
     {
         path: "/dashboard",
-        name: "dashboard",
+        // name: "dashboardd",
         redirect: { name: "dashboard" },
         component: () => import("@/resources/Dashboard/_components/DashboardView.vue"),
         meta: { requiresAdmin: true },

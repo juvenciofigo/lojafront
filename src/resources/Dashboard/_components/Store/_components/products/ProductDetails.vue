@@ -4,7 +4,7 @@
     <!-- prettier-ignore -->
     <ProductDetailsComp
     
-        v-if="!skeletone && product"
+        v-if="!skeleton && product"
         :firstButton="delProduct"
         :secondButton="navigateTo"
         :thirdButton="addImage"

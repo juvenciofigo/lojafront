@@ -82,6 +82,7 @@
     import { useRouter } from "vue-router";
     import { ArrowDown } from "@element-plus/icons-vue";
     import { formatCurrency } from "@/util/functions";
+    import { LogOut } from "lucide-vue-next";
 
     const store = useStore();
     const router = useRouter();

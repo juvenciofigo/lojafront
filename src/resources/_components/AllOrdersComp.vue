@@ -168,12 +168,7 @@
         router.push({ name: `${props.route}`, query: { offset: `${pageNumber}` } });
     }
 
-    watch(
-        () => orders.value,
-        (d) => {
-            console.log(d);
-        }
-    );
+ 
     const id = ref("");
     const status = ref("");
     const showDialog = ref(false);

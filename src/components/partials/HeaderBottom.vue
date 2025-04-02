@@ -110,8 +110,6 @@
         };
 
         if (selectedCategory.value) {
-            console.log(selectedCategory.value);
-
             query.categoryName = selectedCategory.value.categoryName;
             query.category = selectedCategory.value._id;
         }
