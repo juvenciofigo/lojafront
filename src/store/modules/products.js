@@ -3,8 +3,8 @@ import { errorMessage } from "@/util/cookieUtils";
 import notification from "@/util/notifications";
 
 const state = {
-    products: null,
-    product: null,
+    products: {},
+    product: {},
 };
 
 const mutations = {

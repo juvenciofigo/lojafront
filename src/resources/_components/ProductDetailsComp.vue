@@ -43,7 +43,7 @@
                     <el-rate
                         disabled
                         allow-half
-                        v-model="product.productStatistc.ratingAverage"
+                        v-model="product.ratingAverage"
                         :colors="colorsRate" />
 
                     <div class="compra-mobile lg:hidden flex flex-col gap-4 bg-white rounded-md">
@@ -531,13 +531,13 @@
 
                     <div class="d-flex align-center flex-column">
                         <div class="text-h6 flex-row flex">
-                            <span>{{ product.productStatistc.ratingAverage.toFixed(1) }} de 5</span>
+                            <span>{{ product.ratingAverage.toFixed(1) }} de 5</span>
                         </div>
 
                         <el-rate
                             show-score
                             allow-half
-                            v-model="product.productStatistc.ratingAverage" />
+                            v-model="product.ratingAverage" />
 
                         <div class="px-3">{{ product.productRatings.length }}</div>
                     </div>
@@ -546,7 +546,7 @@
                         class="d-flex flex-column"
                         density="compact">
                         <v-list-item
-                            v-for="(rating, i) in product.productStatistc.ratingStats"
+                            v-for="(rating, i) in product.ratingStats"
                             :key="i">
                             <v-progress-linear
                                 :model-value="rating.percentage"
@@ -666,7 +666,7 @@
 
     import { differenceInHours } from "date-fns";
     import { useStore } from "vuex";
-    import { ref, defineProps, computed, watch, defineEmits, watchEffect, onMounted } from "vue";
+    import { ref, defineProps, computed, watch, defineEmits, watchEffect, onBeforeMount } from "vue";
     import { formatCurrency, formatDate } from "@/util/functions";
 
     defineProps({
@@ -784,6 +784,8 @@
         () => product.value.productImage,
         (newValue) => {
             if (newValue.length > 0) {
+                console.log(false);
+                
                 updateImageLink();
             }
         }
@@ -821,7 +823,7 @@
         });
     });
 
-    onMounted(() => {
+    onBeforeMount(() => {
         if (product.value.productImage && product.value.productImage.length > 0) {
             images.value = product.value.productImage;
             updateImageLink();
