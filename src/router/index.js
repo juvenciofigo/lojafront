@@ -107,7 +107,7 @@ const routes = [
         // name: "dashboardd",
         redirect: { name: "dashboard" },
         component: () => import("@/resources/Dashboard/_components/DashboardView.vue"),
-        meta: { requiresAdmin: true },
+        meta: { requiresLogin: true, requiresAdmin: true },
         children: [
             /*
             Produtos
@@ -226,8 +226,15 @@ const routes = [
 ];
 
 const router = createRouter({
-    history: createWebHistory(process.env.BASE_URL),
+    history: createWebHistory(),
     routes,
+    scrollBehavior(to, from, savedPosition) {
+        if (savedPosition) {
+            return savedPosition; 
+        } else {
+            return { top: 0, behavior: "smooth" }; 
+        }
+    },
 });
 
 router.beforeEach(async (to, from, next) => {
