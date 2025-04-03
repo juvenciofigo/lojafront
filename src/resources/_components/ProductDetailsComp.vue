@@ -1,5 +1,5 @@
 <template>
-    <div class="mt-3 flex flex-col gap-4 px-1">
+    <div class="flex flex-col gap-4">
         <div class="flex flex-row justify-between gap-3">
             <div class="flex flex-col sm:flex-row flex-1 bg-white p-2 lg:p-4 gap-4 lg:max-h-[380px]">
                 <!-- Seção de imagens do produto -->

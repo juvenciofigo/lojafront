@@ -1,5 +1,5 @@
 <template lang="">
-    <section class="flex-1">
+    <section class="flex-1 flex flex-col gap-3">
         <div class="flex flex-row gap-2">
             <!-- Categorias -->
             <div class="categories-card hidden lg:block flex-col w-72 bg-white pb-1">

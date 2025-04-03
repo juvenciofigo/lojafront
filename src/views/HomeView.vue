@@ -1,7 +1,7 @@
 <template>
-    <div class="flex flex-col h-full">
+    <div class="flex flex-col h-full gap-2">
         <HeaderComp class="header" />
-        <section class="flex-1 my-2 mx-2 md:mx-0">
+        <section class="flex-1 px-1">
             <router-view></router-view>
         </section>
         <SignaturePart class="footer" />
