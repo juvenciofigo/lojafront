@@ -167,7 +167,7 @@
     }
 
     function goTo(product) {
-        router.push({ name: "detailsClient", params: { id: product } });
+        router.push({ name: "product-details", params: { id: product } });
     }
 
     async function updateQuantity(item, quantity) {

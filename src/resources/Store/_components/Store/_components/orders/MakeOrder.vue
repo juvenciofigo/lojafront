@@ -178,7 +178,7 @@
             store.commit("payments/SET_ID_ORDER", res.order._id);
             store.commit("payments/SET_AMOUT_PAYMENT", res.order.totalPrice);
             store.commit("payments/SET_PAYMENT_DIALOG");
-            router.push({ name: "selfOrders", params: { user: `${user.id}` } });
+            router.push({ name: "profile-orders", params: { user: `${user.id}` } });
         }
     }
 </script>

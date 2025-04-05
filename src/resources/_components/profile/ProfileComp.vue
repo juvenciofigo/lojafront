@@ -34,15 +34,15 @@
 
     const items = [
         { name: "Visão geral", link: "profile" },
-        { name: "Pedidos", link: "selfOrders" },
-        { name: "Pagamentos", link: "selfPayments" },
-        { name: "Endereço de entrega", link: "selfAddresses" },
+        { name: "Pedidos", link: "profile-orders" },
+        { name: "Pagamentos", link: "profile-payments" },
+        { name: "Endereço de entrega", link: "profile-addresses" },
     ];
 
     
     onBeforeMount(() => {
         if (user.value.id !== route.params.user) {
-            router.push({ name: `myProfile`, params: { user: user.value.id } });
+            router.push({ name: `profile-overview`, params: { user: user.value.id } });
         }
     });
 </script>

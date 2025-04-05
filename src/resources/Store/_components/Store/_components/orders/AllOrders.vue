@@ -1,7 +1,7 @@
 <template lang="">
     <AllOldersComp
         :storeaction="`getOldersCustomer`"
-        :route="`selfOrders`"
+        :route="`profile-orders`"
         @deleteButton="handleDeleteButton"
         :pageloadLoading="pageloadLoading">
     </AllOldersComp>

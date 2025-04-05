@@ -73,6 +73,6 @@
     });
 
     function makeOrder() {
-        router.push({ name: "makeOrder", query: { productsFrom: "cartProducts" } });
+        router.push({ name: "order-create", query: { productsFrom: "cartProducts" } });
     }
 </script>

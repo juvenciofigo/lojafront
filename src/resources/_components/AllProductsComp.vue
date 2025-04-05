@@ -6,7 +6,7 @@
                 <h2 class="bg-[#3a7ebe] p-2 font-semibold">Categorias</h2>
 
                 <ul class="list-none">
-                    <li class="whitespace-nowrap hover:text-[#0062bd] duration-500"><router-link :to="{ name: 'allProducts' }">Todos produtos</router-link></li>
+                    <li class="whitespace-nowrap hover:text-[#0062bd] duration-500"><router-link :to="{ name: 'products-list' }">Todos produtos</router-link></li>
                     <template
                         v-for="category in categories"
                         :key="category._id">

@@ -34,8 +34,7 @@
     <v-dialog
         persistent
         v-model="ratingDialog"
-        width="auto"
-        >
+        width="auto">
         <div class="p-4 flex flex-col gap-4 border rounded-md bg-white sm:w-[400px]">
             <div class="flex flex-row">
                 <h1 class="text-xl font-semibold">Avaliação:</h1>
@@ -145,7 +144,7 @@
             title: "Erro!",
             message: message,
             type: "error",
-            position: 'top-left',
+            position: "top-left",
         });
     };
     const verifyVaraiations = async () => {
@@ -209,7 +208,7 @@
         store.commit("SET_NOTIFICATION", { title: "Aviso!", type: "warning", message: "Adicione ao carrinho para comprar!" });
         //     return;
         // }
-        // router.push({ name: "makeOrder", query: { productsFrom: "payNow", product: route.params.id, quantity: quantity.value || 1, variation: toRaw(variation.value) } });
+        // router.push({ name: "order-create", query: { productsFrom: "payNow", product: route.params.id, quantity: quantity.value || 1, variation: toRaw(variation.value) } });
     }
 
     // ///////////////rating /////////////

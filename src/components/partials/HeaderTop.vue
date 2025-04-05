@@ -1,15 +1,19 @@
 <template lang="">
     <!-- Header-1 -->
-    <nav class="desHheader-1 flex flex-row justify-between items-center px-1 py-0 lg:p-2 bg-white">
-        <div class="text-center hidden lg:block">
-            <span>Bem-vindo ao {{ storeName }}</span>
+    <nav class="desHheader-1 flex flex-row justify-between items-center p-2 lg:p-2 bg-white">
+        <!-- esquerda -->
+        <div>
+            <div class="text-center hidden lg:block">
+                <span>Bem-vindo ao {{ storeName }}</span>
+            </div>
+            
+            <slot name="left">
+                
+            </slot>
         </div>
-
-        <div class="lg:hidden flex flex-col h-max">
-            <LogoPart />
-        </div>
-
-        <div class="flex flex-col md:flex-row items-center gap-1">
+        
+        <!-- direita -->
+        <div class="flex flex-col md:flex-col items-end gap-1 justify-between h-full">
             <el-dropdown
                 v-if="isAuthenticated"
                 @command="navigate"
@@ -49,22 +53,8 @@
                 </template>
             </el-dropdown>
 
-            <div>
-                <router-link
-                    v-loading="loadingPriceUpdate"
-                    to="/carrinho"
-                    class="flex flex-row items-center gap-1">
-                    <lord-icon
-                        class="w-6 md:w-10"
-                        src="https://cdn.lordicon.com/odavpkmb.json"
-                        trigger="hover">
-                    </lord-icon>
-                    <div class="">
-                        <p class="font-medium text-[10px] md:text-[12px]">Carrinho de compras</p>
-                        <p class="text-[8px] md:text-[10px]">{{ formatCurrency(priceTotal) }}</p>
-                    </div>
-                </router-link>
-
+            <div class="">
+                <slot name="right"></slot>
                 <div
                     v-if="!isAuthenticated"
                     @click="login()"
@@ -81,15 +71,12 @@
     import { useStore } from "vuex";
     import { useRouter } from "vue-router";
     import { ArrowDown } from "@element-plus/icons-vue";
-    import { formatCurrency } from "@/util/functions";
     import { LogOut } from "lucide-vue-next";
 
     const store = useStore();
     const router = useRouter();
     const isAuthenticated = computed(() => store.getters.isAuthenticated("authToken"));
 
-    const loadingPriceUpdate = computed(() => store.getters.loadingPriceUpdate);
-    const priceTotal = computed(() => store.state.carts.cartPrice);
     const storeName = store.state.storeName;
     const user = computed(() => JSON.parse(localStorage.getItem("userData")));
     const drawer = ref(false);

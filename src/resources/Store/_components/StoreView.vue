@@ -10,7 +10,7 @@
                     class="categories-list indent-4 overflow-auto p-1">
                     <ul class="list-none">
                         <li class="duration-75 item-list">
-                            <router-link :to="{ name: 'allProducts' }">Todos produtos</router-link>
+                            <router-link :to="{ name: 'products-list' }">Todos produtos</router-link>
                         </li>
                         <template
                             v-for="category in categories"
@@ -86,8 +86,9 @@
 
         <!-- Produtos e Promoções -->
         <div class="w-full flex lg:flex-row gap-1 flex-col-reverse mt-">
-                
-            <div v-if="products" class="overflow-hidden flex-1 gap-3 flex flex-col">
+            <div
+                v-if="products"
+                class="overflow-hidden flex-1 gap-3 flex flex-col">
                 <SelectedProducts
                     :title="`Novidades`"
                     :products="products.docs"
@@ -155,7 +156,7 @@
         }
 
         router.push({
-            name: "allProducts",
+            name: "products-list",
             query: query,
             params: { by: "filter" },
         });

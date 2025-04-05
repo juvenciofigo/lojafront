@@ -29,7 +29,7 @@
 
                                         <div class="flex flex-col gap-2">
                                             <h5 class="">
-                                                <router-link :to="{ name: `details`, params: { id: `${scope.row.productId}` } }">
+                                                <router-link :to="{ name: `admin-product-details`, params: { id: `${scope.row.productId}` } }">
                                                     <span class="whitespace-nowrap">{{ scope.row.productName }}</span>
                                                 </router-link>
                                             </h5>

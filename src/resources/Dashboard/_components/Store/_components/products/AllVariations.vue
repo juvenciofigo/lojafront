@@ -1,7 +1,7 @@
 <template lang="">
     <div>
         <div>
-            <v-btn :to="{ name: `addVariation` }">Adicionar variações</v-btn>
+            <v-btn :to="{ name: `admin-product-variation-add` }">Adicionar variações</v-btn>
         </div>
         <br />
         <br />
@@ -11,7 +11,7 @@
                 <template
                     v-for="variation in variations"
                     :key="variation._id">
-                    <router-link :to="{ name: `editVariation`, params: { variation: `${variation._id}` } }">
+                    <router-link :to="{ name: `admin-product-variation-edit`, params: { variation: `${variation._id}` } }">
                         <v-card class="w-max p-4">
                             <div class="flex flex-row justify-between">
                                 <div>
@@ -20,7 +20,7 @@
                                 </div>
                                 <div>
                                     <v-btn
-                                        :to="{ name: `editVariation`, params: { variation: `${variation._id}` } }"
+                                        :to="{ name: `admin-product-variation-edit`, params: { variation: `${variation._id}` } }"
                                         variant="tonal"
                                         class="bg-primary"
                                         size="x-small"

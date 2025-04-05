@@ -68,7 +68,7 @@
                     <el-tag
                         size="small"
                         class="cursor-pointer w-full">
-                        <router-link :to="{ name: 'allProducts' }">Todos produtos</router-link>
+                        <router-link :to="{ name: 'products-list' }">Todos produtos</router-link>
                     </el-tag>
                     <el-tag
                         class="cursor-pointer w-full"
@@ -114,7 +114,7 @@
             query.category = selectedCategory.value._id;
         }
         router.push({
-            name: "allProducts",
+            name: "products-list",
             query: query,
             params: { by: "search" },
         });
@@ -137,7 +137,7 @@
         }
 
         router.push({
-            name: "allProducts",
+            name: "products-list",
             query: query,
             params: { by: "filter" },
         });

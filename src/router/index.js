@@ -13,211 +13,154 @@ const routes = [
     {
         path: "/",
         name: "home",
-        redirect: { name: "store" },
+        redirect: { name: "store-home" },
         component: () => import("../views/HomeView.vue"),
         children: [
             //////// STORE ///////////
             {
                 path: "",
-                name: "store",
+                name: "store-home",
                 component: () => import("@/resources/Store/_components/StoreView.vue"),
             },
-            /*
-            Produtos
-           */
             {
-                // details
                 path: "produto/:id/detalhes",
-                name: "detailsClient",
+                name: "product-details",
                 component: () => import("@/resources/Store/_components/Store/_components/products/ProductDetails.vue"),
             },
             {
-                // all products
                 path: "produtos/:by?",
-                name: "allProducts",
+                name: "products-list",
                 component: () => import("@/resources/Store/_components/Store/_components/products/AllProducts.vue"),
             },
-
-            /*
-            Pedidos
-            */
             {
                 path: "pedido",
-                name: "makeOrder",
+                name: "order-create",
                 component: () => import("@/resources/Store/_components/Store/_components/orders/MakeOrder.vue"),
                 meta: { requiresLogin: true },
             },
-
-            /*
-            Carrinhos
-            */
             {
                 path: "carrinho",
-                name: "cart",
+                name: "cart-view",
                 component: () => import("@/resources/Store/_components/Store/_components/carts/CartProducts.vue"),
             },
-
-            /// Profile ////
             {
                 path: "/perfil/:user",
                 name: "profile",
-                redirect: { name: "myProfile" },
+                redirect: { name: "profile-overview" },
                 component: () => import("@/resources/_components/profile/ProfileComp.vue"),
                 meta: { requiresLogin: true },
                 props: { defaultProp: "defaultValue" },
                 children: [
                     {
                         path: "",
-                        name: "myProfile",
+                        name: "profile-overview",
                         component: () => import("@/resources/_components/profile/MyProfile.vue"),
                     },
-                    /*
-             Compras
-            */
                     {
                         path: "pedidos",
-                        name: "selfOrders",
+                        name: "profile-orders",
                         component: () => import("@/resources/Store/_components/Store/_components/orders/AllOrders.vue"),
                     },
-                    /*
-             Pagamentos
-            */
                     {
                         path: "pagamentos",
-                        name: "selfPayments",
+                        name: "profile-payments",
                         component: () => import("@/resources/Store/_components/Store/_components/payment/AllPayments.vue"),
                     },
-                    /*
-             Endereços
-            */
                     {
                         path: "enderecos",
-                        name: "selfAddresses",
+                        name: "profile-addresses",
                         component: () => import("@/resources/Store/_components/Store/_components/addresses/AllAddresses"),
                     },
                 ],
             },
         ],
     },
-
-    /*/////////////DASHBOARD///////////////////*/
-
     {
         path: "/dashboard",
-        // name: "dashboardd",
-        redirect: { name: "dashboard" },
+        name: "admin",
         component: () => import("@/resources/Dashboard/_components/DashboardView.vue"),
         meta: { requiresLogin: true, requiresAdmin: true },
         children: [
-            /*
-            Produtos
-            */
             {
                 path: "",
-                name: "dashboard",
+                name: "admin-home",
                 component: () => import("@/resources/Dashboard/_components/DashboardComp.vue"),
             },
-            // {
-            //     path: "produto",
-            //     name: "produto",
-            //     redirect: { name: "produtos" },
-            // },
             {
-                // all product
+                path: "pedidos",
+                name: "admin-orders",
+                component: () => import("@/resources/Dashboard/_components/Store/_components/orders/AllOrders.vue"),
+            },
+            {
                 path: "produtos",
-                name: "productsAdmin",
-                component: () => import("@/resources/Dashboard/_components/Store/_components/products/AllProducts.vue"),
-            },
-            {
-                //add producc
-                path: "produto/novo",
-                name: "novoproduto",
-                component: () => import("@/resources/Dashboard/_components/Store/_components/products/AddProduct.vue"),
-            },
-            {
-                // variations
-                path: "produto/:id",
-                name: "vatiations",
-                redirect: { name: "variations" },
+                name: "admin-products",
                 children: [
                     {
-                        path: "variacoes",
-                        name: "variations",
-                        component: () => import("@/resources/Dashboard/_components/Store/_components/products/AllVariations.vue"),
+                        path: "",
+                        name: "admin-products-list",
+                        component: () => import("@/resources/Dashboard/_components/Store/_components/products/AllProducts.vue"),
                     },
                     {
-                        path: "addVariacoes",
-                        name: "addVariation",
-                        component: () => import("@/resources/Dashboard/_components/Store/_components/products/AddVariation3.vue"),
+                        path: "novo",
+                        name: "admin-product-create",
+                        component: () => import("@/resources/Dashboard/_components/Store/_components/products/AddProduct.vue"),
                     },
                     {
-                        path: ":variation/modificar",
-                        name: "editVariation",
-                        component: () => import("@/resources/Dashboard/_components/Store/_components/products/AddVariation3.vue"),
+                        path: "produto/:id",
+                        name: "admin-product",
+                        redirect: { name: "admin-product-variations" },
+                        children: [
+                            {
+                                path: "variacoes",
+                                name: "admin-product-variations",
+                                component: () => import("@/resources/Dashboard/_components/Store/_components/products/AllVariations.vue"),
+                            },
+                            {
+                                path: "addVariacoes",
+                                name: "admin-product-variation-add",
+                                component: () => import("@/resources/Dashboard/_components/Store/_components/products/AddVariation3.vue"),
+                            },
+                            {
+                                path: ":variation/modificar",
+                                name: "admin-product-variation-edit",
+                                component: () => import("@/resources/Dashboard/_components/Store/_components/products/AddVariation3.vue"),
+                            },
+                        ],
+                    },
+                    {
+                        path: "produto/:id/fotos",
+                        name: "admin-product-images",
+                        component: () => import("@/resources/Dashboard/_components/Store/_components/products/AddImage.vue"),
+                    },
+                    {
+                        path: "produto/:id/detalhes",
+                        name: "admin-product-details",
+                        component: () => import("@/resources/Dashboard/_components/Store/_components/products/ProductDetails.vue"),
+                    },
+                    {
+                        path: "produto/:productID/actualizar",
+                        name: "admin-product-update",
+                        component: () => import("@/resources/Dashboard/_components/Store/_components/products/AddProduct.vue"),
                     },
                 ],
             },
             {
-                // Add image
-                path: "produto/:id/fotos",
-                name: "addImage",
-                component: () => import("@/resources/Dashboard/_components/Store/_components/products/AddImage.vue"),
-            },
-            {
-                // details
-                path: "produto/:id/detalhes",
-                name: "details",
-                component: () => import("@/resources/Dashboard/_components/Store/_components/products/ProductDetails.vue"),
-            },
-            {
-                // update product
-                path: "produto/:productID/actualizar",
-                name: "update",
-                component: () => import("@/resources/Dashboard/_components/Store/_components/products/AddProduct.vue"),
-            },
-
-            /*
-            Pedidos
-            */
-
-            {
-                path: "pedidos",
-                name: "allOrders",
-                component: () => import("@/resources/Dashboard/_components/Store/_components/orders/AllOrders.vue"),
-            },
-
-            /*
-            Clientes
-            */
-
-            {
                 path: "clientes",
-                name: "allCustomers",
+                name: "admin-customers",
                 component: () => import("@/resources/Dashboard/_components/Store/_components/customers/AllCustomers.vue"),
             },
-
-            /*
-            Carrinhos
-            */
-
             {
                 path: "carrinhos",
-                name: "carts",
+                name: "admin-carts",
                 component: () => import("@/resources/Dashboard/_components/Store/_components/carts/CartsComp.vue"),
             },
-
-            /*
-            Compras
-            */
-
             {
                 path: "compras",
-                name: "sellers",
+                name: "admin-purchases",
                 component: () => import("@/resources/Dashboard/_components/Store/_components/shopping/ShoppingComp.vue"),
             },
         ],
     },
-
     {
         path: "/about",
         name: "about",
@@ -230,9 +173,9 @@ const router = createRouter({
     routes,
     scrollBehavior(to, from, savedPosition) {
         if (savedPosition) {
-            return savedPosition; 
+            return savedPosition;
         } else {
-            return { top: 0, behavior: "smooth" }; 
+            return { top: 0, behavior: "smooth" };
         }
     },
 });

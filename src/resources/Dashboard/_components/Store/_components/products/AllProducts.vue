@@ -1,10 +1,10 @@
 <template>
     <AllProductsComp
-        :nameRoute="`details`"
+        :nameRoute="`admin-product-details`"
         fetchProducts="products/fetchAllProductsAdmin"
         fetchCategories="categories/fetchCategoriesAdmin">
         <template #addProduct>
-            <router-link :to="{ name: 'novoproduto' }">
+            <router-link :to="{ name: 'admin-product-create' }">
                 <el-button
                     link
                     type="primary"

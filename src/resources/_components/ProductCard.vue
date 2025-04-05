@@ -33,7 +33,7 @@
                         <el-button
                             size="small"
                             class="w-full self-center"
-                            :to="{ name: 'detailsClient', params: { id: `${product._id}` } }">
+                            :to="{ name: 'product-details', params: { id: `${product._id}` } }">
                             Detalhes
                         </el-button>
                     </div>

@@ -14,9 +14,9 @@
                 v-for="(product, index) in products"
                 :key="index">
                 <el-tooltip :content="product.productName">
-                <router-link
-                    :to="{ name: 'detailsClient', params: { id: `${product._id}` } }"
-                    class="product-card">
+                    <router-link
+                        :to="{ name: 'product-details', params: { id: `${product._id}` } }"
+                        class="product-card">
                         <el-image
                             class="flex-1"
                             v-if="product.productImage && product.productImage.length > 0"
@@ -46,7 +46,7 @@
                             <el-button
                                 size="small"
                                 class="w-full self-center"
-                                :to="{ name: 'detailsClient', params: { id: `${product._id}` } }">
+                                :to="{ name: 'product-details', params: { id: `${product._id}` } }">
                                 Detalhes
                             </el-button>
                         </div>
@@ -91,7 +91,7 @@
     </div>
 </template>
 <script setup>
-    import { defineProps, } from "vue";
+    import { defineProps } from "vue";
     import { Picture } from "@element-plus/icons-vue";
     import { formatCurrency } from "@/util/functions";
 
@@ -100,8 +100,6 @@
         products: Array,
         link: String,
     });
-
-   
 </script>
 <style scoped>
     .product-card {

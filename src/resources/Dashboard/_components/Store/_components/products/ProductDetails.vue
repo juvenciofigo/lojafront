@@ -140,13 +140,13 @@
     };
 
     function navigateTo() {
-        router.push({ name: "update", params: { productID: route.params.id } });
+        router.push({ name: "admin-product-update", params: { productID: route.params.id } });
     }
     function addImage() {
-        router.push({ name: "addImage", params: { id: route.params.id } });
+        router.push({ name: "admin-product-images", params: { id: route.params.id } });
     }
     function variations() {
-        router.push({ name: "variations", params: { id: route.params.id } });
+        router.push({ name: "admin-product-variations", params: { id: route.params.id } });
     }
     onBeforeMount(async () => {
         await store.dispatch("products/fetchProductByIdAdmin", route.params.id);
