@@ -100,7 +100,7 @@
                                 border>
                                 <el-descriptions-item label="Sub Total:">{{ formatCurrency(order.payment.totalProductsPrice) }}</el-descriptions-item>
                                 <el-descriptions-item label="Taxa de envio:">{{ formatCurrency(order.delivery.cost) }}</el-descriptions-item>
-                                <el-descriptions-item label="Iva:">incluso</el-descriptions-item>
+                                <!-- <el-descriptions-item label="Iva:">incluso</el-descriptions-item> -->
                                 <el-descriptions-item label="Total pago:">{{ formatCurrency(order.payment.amount) }}</el-descriptions-item>
                             </el-descriptions>
                         </div>
