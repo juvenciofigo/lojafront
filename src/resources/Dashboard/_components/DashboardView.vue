@@ -1,42 +1,43 @@
 <template lang="">
     <div class="flex flex-col h-full gap-2 lg:p-2 relative">
-        <HeaderTop class="">
+        <HeaderTop>
             <!-- esquerda -->
             <template #left>
                 <LogoPart class="mb-2" />
-
-                <el-dropdown
-                    size="large"
-                    type="primary"
-                    :persistent="false"
-                    trigger="click"
-                    :hide-on-click="true"
-                    role="navigation"
-                    popper-class="el-menu-vertical-demo"
-                    class="md:hidden el-menu-vertical-demo">
-                    <span class="el-dropdown-link flex flex-row items-center ">
-                        Menu
-                        <el-icon class="el-icon--right ">
-                            <Grid/>
-                        </el-icon>
-                    </span>
-                    <template #dropdown>
-                        <el-dropdown-menu>
-                            <el-dropdown-item
-                                v-for="(item, index) in items"
-                                :key="index">
-                                <template #default>
-                                    <router-link
-                                        :to="{ name: item.link }"
-                                        exact-active-class="text-blue-400">
-                                        <el-icon><component :is="item.icon" /></el-icon>
-                                        <span class="whitespace-nowrap">{{ item.name }} </span>
-                                    </router-link>
-                                </template>
-                            </el-dropdown-item>
-                        </el-dropdown-menu>
-                    </template>
-                </el-dropdown>
+                <div class="md:hidden">
+                    <el-dropdown
+                        size="large"
+                        type="primary"
+                        :persistent="false"
+                        trigger="click"
+                        :hide-on-click="true"
+                        role="navigation"
+                        popper-class="el-menu-vertical-demo "
+                        >
+                        <span class="el-dropdown-link flex flex-row items-center">
+                            Menu
+                            <el-icon class="el-icon--right">
+                                <Grid />
+                            </el-icon>
+                        </span>
+                        <template #dropdown>
+                            <el-dropdown-menu>
+                                <el-dropdown-item
+                                    v-for="(item, index) in items"
+                                    :key="index">
+                                    <template #default>
+                                        <router-link
+                                            :to="{ name: item.link }"
+                                            exact-active-class="text-blue-400">
+                                            <el-icon><component :is="item.icon" /></el-icon>
+                                            <span class="whitespace-nowrap">{{ item.name }} </span>
+                                        </router-link>
+                                    </template>
+                                </el-dropdown-item>
+                            </el-dropdown-menu>
+                        </template>
+                    </el-dropdown>
+                </div>
             </template>
 
             <!-- direita -->
@@ -93,6 +94,7 @@
     import LogoPart from "@/components/partials/LogoPart.vue";
     import FoooterComp from "@/components/partials/FoooterComp.vue";
     import { ShoppingCart, User, Goods, ShoppingBag, TakeawayBox, Grid, ArrowLeft } from "@element-plus/icons-vue";
+    
     const route = useRoute();
 
     const items = [
@@ -107,24 +109,21 @@
     const isCollapse = ref(false);
     const breadcrumb = computed(() => {
         const seen = new Set();
-
         return route.matched
             .map((r) => {
-                const el = r.path.split("/");
-                return { name: el[el.length - 1].toUpperCase(), route: r.path };
+                const el = r.path.split("/").filter(Boolean); // Filtro para evitar uma string vazia
+                return { name: el[el.length - 1]?.toUpperCase(), route: r.path };
             })
             .filter((item) => {
                 // Se já vimos este nome, filtra fora
                 if (seen.has(item.name)) return false;
-
                 seen.add(item.name);
-
                 return true;
             });
     });
 </script>
 
-<style>
+<style scoped>
     .el-menu-vertical-demo:not(.el-menu--collapse) {
         width: 200px;
     }
