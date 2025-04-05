@@ -75,6 +75,8 @@ const routes = [
             },
         ],
     },
+
+    // Dashboard
     {
         path: "/dashboard",
         name: "admin",
