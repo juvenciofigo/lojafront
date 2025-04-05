@@ -9,7 +9,9 @@
                     link
                     type="primary"
                     size="small">
-                    <Plus />Novo Produto
+                    <el-icon class="el-icon--right"> <Plus /></el-icon>
+
+                    Novo Produto
                 </el-button>
             </router-link>
         </template>
@@ -18,4 +20,5 @@
 
 <script setup>
     import AllProductsComp from "@/resources/_components/AllProductsComp.vue";
+    import { Plus } from "@element-plus/icons-vue";
 </script>
