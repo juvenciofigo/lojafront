@@ -73,28 +73,28 @@
         align-items: center;
     }
     /* Estilizando a barra de rolagem */
-    /* ::-webkit-scrollbar {
-        height: 7px; /* Altura da barra de rolagem */
-    /* width: 7px;
-    } */
+    ::-webkit-scrollbar {
+        /* Altura da barra de rolagem */
+        /* height: 7px;  */
+        width: 5px;
+    }
 
     /* Cor do track (fundo da barra de rolagem) */
-    /* ::-webkit-scrollbar-track {
-        background: #6187b8;
+    ::-webkit-scrollbar-track {
+        background: #40a0ff31;
         border-radius: 10px;
-    } */
+    }
 
     /* Cor da thumb (a parte que se move da barra de rolagem) */
-    /* ::-webkit-scrollbar-thumb {
-        background: #70a0df3d;
-
+    ::-webkit-scrollbar-thumb {
+        background: #409eff;
         border-radius: 10px;
-        border: 2px solid #f1f1f1; */
+        /* border: 2px solid #f1f1f1; */
+    }
     /* Espaçamento entre thumb e track */
-    /* } */
 
     /* Cor da thumb ao passar o mouse */
-    /* ::-webkit-scrollbar-thumb:hover {
+    ::-webkit-scrollbar-thumb:hover {
         background-color: #1c5caf;
-    } */
+    }
 </style>

@@ -108,10 +108,6 @@
                 v-loading="loading"
                 v-if="products?.docs?.length > 0 && !skeleton"
                 class="flex-1 w-full flex flex-col overflow-hidden">
-                <!-- /////////////////////// -->
-                <!-- v-infinite-scroll="load" -->
-                <!-- :infinite-scroll-disabled="!products.hasNextPage || loading" -->
-
                 <div
                     class="products"
                     v-if="products && products.docs.length > 0">
@@ -181,6 +177,7 @@
 
     const priceValue = ref(0);
     const pricelimit = ref(200000);
+    const loading = ref(true);
 
     function filterProduct(category, subCategory, sub_category) {
         const query = {
@@ -237,9 +234,8 @@
     onBeforeMount(async () => {
         await store.dispatch(props.fetchCategories || "categories/fetchCategories");
         await fetchProducts();
+        loading.value = false;
     });
-
-    const loading = ref(false);
 
     const load = async () => {
         if (!products.value.hasNextPage) return;
