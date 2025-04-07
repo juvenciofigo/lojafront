@@ -75,7 +75,7 @@
     /* Estilizando a barra de rolagem */
     ::-webkit-scrollbar {
         /* Altura da barra de rolagem */
-        /* height: 7px;  */
+        height: 5px; 
         width: 5px;
     }
 

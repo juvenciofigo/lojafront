@@ -58,7 +58,7 @@
     const priceTotal = computed(() => store.getters["carts/totalProducts"]);
     const loadingPriceUpdate = computed(() => store.getters.loadingPriceUpdate);
 
-    const shippingPrice = ref(10);
+    const shippingPrice = ref(0);
     const totalPedido = computed(() => priceTotal.value + shippingPrice.value);
     const buttonStatus = ref(true);
     const skeleton = ref(true);

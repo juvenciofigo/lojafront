@@ -41,7 +41,7 @@
     import { formatCurrency } from "@/util/functions";
 
     const store = useStore();
-    const shippingPrice = ref(10);
+    const shippingPrice = ref(0);
     const cart = computed(() => store.state.carts.cart);
     const priceTotal = computed(() => store.getters["carts/totalProducts"]);
     const totalPedido = computed(() => priceTotal.value + shippingPrice.value);

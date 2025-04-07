@@ -30,8 +30,7 @@ const actions = {
     },
 
     //////////////////////Cliente/////////////////
-    async createOrder(_, payload) {
-        // const user = JSON.parse(localStorage.getItem("userData"));
+    async createOrder({ dispatch }, payload) {
         let addressId = payload.selectedAddres;
 
         // Função separada para envio do pedido
@@ -44,26 +43,16 @@ const actions = {
                 return { order: order, status: 200 };
             }
 
+            if (res.status === 202) {
+                notification({ title: "Erro", type: "error", message: "Complete seu perfil!" });
+                dispatch("addresses/COMPLETE_PROFILE", res.data.user, { root: true });
+                return;
+            }
             throw new Error("Erro ao processar pedido.");
         } catch (error) {
             errorMessage(error);
             return false;
         }
-
-        // try {
-
-        //     if (!state.selected) {
-        //         const res = await sendAxio({ method: "post", url: `/customer/${user.id}/address`, data: payload.selectAddress });
-
-        //         if (res.status !== 200) throw new Error("Falha ao cadastrar endereço.");
-
-        //         addressId = res.data.addressId;
-        //     }
-
-        //     return await sendOrderRequest(payload.cart, addressId);
-        // } catch (error) {
-        //     errorMessage(error);
-        // }
     },
 
     async buyNow({ dispatch }, { product }) {

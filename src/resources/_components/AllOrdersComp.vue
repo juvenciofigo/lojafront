@@ -19,7 +19,6 @@
                     size="small">
                     <el-table-column
                         align="center"
-                        fixed
                         prop="referenceOrder"
                         label="Referência" />
                     <el-table-column
@@ -54,7 +53,8 @@
                         fixed="right"
                         width="110"
                         label="Ações"
-                        min-width="120">
+                        min-width="120"
+                        class-name="bg-white">
                         <template #default="scope">
                             <el-button
                                 link
@@ -168,7 +168,6 @@
         router.push({ name: `${props.route}`, query: { offset: `${pageNumber}` } });
     }
 
- 
     const id = ref("");
     const status = ref("");
     const showDialog = ref(false);

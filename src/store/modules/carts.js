@@ -1,6 +1,7 @@
-import { setCookie, removeCookie, getCookie, errorMessage,getTempCart } from "@/util/cookieUtils";
+import { setCookie, removeCookie, getCookie, errorMessage, getTempCart } from "@/util/cookieUtils";
 import notification from "@/util/notifications";
 import sendAxio from "@/util/sendAxio";
+
 
 const state = {
     cart: {},
@@ -62,19 +63,12 @@ const actions = {
                 }
 
                 const existingProductIndex = tempCart.findIndex((item) => {
-                    if (item.productId == itemProduct.productId) {
-                        if (item.variation.snackbarType == itemProduct.variation.snackbarType) {
-                            if (item.variation.model == itemProduct.variation.model) {
-                                if (item.variation.material == itemProduct.variation.material) {
-                                    return item.variation.size == itemProduct.variation.size;
-                                }
-                                return false;
-                            }
-                            return false;
-                        }
-                        return false;
-                    }
-                    return false;
+                    item.productId == itemProduct.productId &&
+                    item.variation.color == itemProduct.variation.color &&
+                    item.variation.model == itemProduct.variation.model &&
+                    item.variation.material == itemProduct.variation.material &&
+                    item.variation.size == itemProduct.variation.size,
+                    item.deliveryEstimate == itemProduct.deliveryEstimate;
                 });
 
                 if (existingProductIndex !== -1) {
@@ -84,11 +78,12 @@ const actions = {
                         productId: itemProduct.productId,
                         quantity: Number(itemProduct.quantity) || 1,
                         variation: {
-                            snackbarType: itemProduct.variation.snackbarType,
+                            color: itemProduct.variation.color,
                             model: itemProduct.variation.model,
                             size: itemProduct.variation.size,
                             material: itemProduct.variation.material,
                         },
+                        deliveryEstimate: itemProduct.deliveryEstimate,
                         item: Date.now(),
                     });
                 }
@@ -219,7 +214,7 @@ const actions = {
                 commit("SET_CART_PRICE", res.data.totalProducts);
             } else {
                 if (tempCart) {
-                    const res = await sendAxio({ method: "post", url: `/cart/${false}/prices`, data: JSON.parse(tempCart) });
+                    const res = await sendAxio({ method: "post", url: `/cart/${false}/prices`, data: tempCart });
                     commit("SET_CART_PRICE", res.data.totalProducts);
                     return;
                 }

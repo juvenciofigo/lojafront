@@ -35,6 +35,12 @@ const actions = {
                 commit("SET_ADDRESSES", res.data);
                 return res;
             }
+
+            if (res.status === 202) {
+                notification({ title: "Erro", type: "error", message: "Complete seu perfil!" });
+                commit("SET_COMPLETE_PROFILE", res.data.user, { root: true });
+                return;
+            }
         } catch (error) {
             errorMessage(error);
         }
@@ -91,6 +97,10 @@ const actions = {
             errorMessage(error);
             return false;
         }
+    },
+
+    COMPLETE_PROFILE({ commit }, payload) {
+        commit("SET_COMPLETE_PROFILE", payload, { root: true });
     },
 };
 

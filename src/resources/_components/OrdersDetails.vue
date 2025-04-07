@@ -8,36 +8,49 @@
                             stripe
                             border
                             max-height="400"
-                            :data="order.cart"
                             fit
+                            element-loading-text="Processando"
+                            style="width: max-content"
+                            size="small"
                             show-header
-                            size="small">
-                            <!-- ///////////////// -->
+                            :data="order.cart">
                             <el-table-column
                                 align="center"
-                                fixed
-                                width="110"
+                                width="300"
                                 label="Produto">
                                 <template #default="scope">
-                                    <div class="flex flex-row justify-center">
-                                        <div class="w-14 h-14 p-1">
-                                            <img
-                                                :src="scope.row.picture"
-                                                :alt="scope.row.productName"
-                                                class="" />
-                                        </div>
-
-                                        <div class="flex flex-col gap-2">
-                                            <h5 class="">
-                                                <router-link :to="{ name: `admin-product-details`, params: { id: `${scope.row.productId}` } }">
-                                                    <span class="whitespace-nowrap">{{ scope.row.productName }}</span>
-                                                </router-link>
-                                            </h5>
-                                        </div>
-                                    </div>
+                                    <button class="flex flex-row justify-center items-center gap-2">
+                                        <el-image
+                                            style="width: 60px; height: 60px; border-radius: 5px"
+                                            :src="scope.row.picture"
+                                            alt="Imagem do Produto">
+                                            <template #placeholder>
+                                                <el-skeleton-item
+                                                    animeted
+                                                    variant="image"
+                                                    style="width: 60px; height: 60px" />
+                                            </template>
+                                            <template #error>
+                                                <div class="image-slot h-full flex justify-center items-center w-full">
+                                                    <el-icon><icon-picture /></el-icon>
+                                                </div>
+                                            </template>
+                                        </el-image>
+                                        <span class="font-semibold">{{ scope.row.product }}</span>
+                                    </button>
                                 </template>
                             </el-table-column>
-                            <!-- //////////////// -->
+
+                            <el-table-column
+                                header-align="center"
+                                width="110"
+                                align="center"
+                                label="Entrega">
+                                <template #default="scope">
+                                    <span>{{ scope.row.deliveryEstimate?.estimatedTime }} </span>
+                                </template>
+                            </el-table-column>
+
                             <el-table-column
                                 align="center"
                                 label="Espec.">
@@ -70,27 +83,27 @@
                                     </div>
                                 </template>
                             </el-table-column>
-                            <!-- //////////////// -->
+
                             <el-table-column
                                 align="center"
                                 width="65"
                                 prop="quantity"
                                 label="Quant." />
-                            <!-- //////////////// -->
+
                             <el-table-column
                                 align="center"
                                 width="100"
                                 label="Preço unit."
                                 :formatter="(row) => formatCurrency(row.itemPrice)">
                             </el-table-column>
-                            <!-- //////////////// -->
+
                             <el-table-column
                                 align="center"
                                 label="Subtotal"
                                 :formatter="(row) => formatCurrency(row.subtotal)">
                             </el-table-column>
                         </el-table>
-                        <!-- ///////////// -->
+
                         <div class="shadow-md rounded-md text-center w-full md:max-w-[410px] flex flex-col gap-6 bg-white">
                             <el-descriptions
                                 title=""
@@ -440,13 +453,14 @@
 
     const store = useStore();
 
-    defineProps({
+    const props = defineProps({
         order: {
             type: Object,
             required: true,
         },
     });
 
+    console.log(props.order);
     function makePayment(status, orderId, amount) {
         if (status === "Pago") return;
 

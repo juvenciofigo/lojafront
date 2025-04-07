@@ -15,9 +15,7 @@
                     v-if="active === 0"
                     :addressSkeleton="addressRes" />
             </KeepAlive>
-            <ConfirmationStep
-                v-if="active === 1"
-                @submit="handleConfirmationData" />
+            <ConfirmationStep v-if="active === 1" />
         </div>
 
         <div class="mt-2 flex flex-row justify-end gap-3">
@@ -44,6 +42,7 @@
             </span>
         </div>
     </div>
+    <CompleteProfile />
 </template>
 
 <script setup>
@@ -69,6 +68,8 @@
     import ShippingInfoStep from "@/resources/Store/_components/Store/_components/orders/makeorderComp/ShippingInfoStep.vue";
     import ConfirmationStep from "@/resources/Store/_components/Store/_components/orders/makeorderComp/ConfirmationStep.vue";
     import { ElNotification } from "element-plus";
+
+    import CompleteProfile from "@/resources/_components/CompleteProfile.vue";
 
     const route = useRoute();
     const router = useRouter();

@@ -1,30 +1,51 @@
 <template lang="">
     <ProductDetaislsSkeleton v-if="skeleton"></ProductDetaislsSkeleton>
-
-    <!-- prettier-ignore -->
     <ProductDetailsComp
-    
-        v-if="!skeleton && product"
-        :firstButton="delProduct"
-        :secondButton="navigateTo"
-        :thirdButton="addImage"
-        :fourthButton="variations"
         :fifthButton="delRating"
+        v-if="!skeleton && product">
+        <template #opcoes>
+            <!-- Botões de ação -->
+            <div
+                ref="buttons"
+                class="buttons flex-row flex flex-nowrap">
+                <el-button
+                    size="small"
+                    :loading="loading_button"
+                    type="danger"
+                    @click="delProduct">
+                    Apagar
+                    <el-icon><Delete /></el-icon>
+                </el-button>
 
-        :titleFirst="`Apagar`"
-        :titleSecond="`Actualizar`"
-        :titleThird="`Fotos`"
-        :titleFourth="`Variações `"
-        
-        :styl_firstbutton="`danger`"
-        :styl_secondbutton="`primary`"
-        :styl_thirdbutton="`success`"
-        :styl_fourthbutton="`info`">
+                <el-button
+                    size="small"
+                    :loading="loading_button"
+                    type="primary"
+                    @click="navigateTo">
+                    Actualizar
+                </el-button>
+
+                <el-button
+                    size="small"
+                    :loading="loading_button"
+                    type="success"
+                    @click="addImage">
+                    Fotos
+                </el-button>
+
+                <el-button
+                    size="small"
+                    :loading="loading_button"
+                    type="info"
+                    @click="variations">
+                    Variações
+                </el-button>
+            </div>
+        </template>
 
         <template #product-statistic>
             <div class="border border-slate-50 p-1 rounded-md">
-                <div class="flex flex-row justify-center flex-wrap gap-4 my-3">
-
+                <div class="flex flex-row justify-center flex-nowrap gap-4 my-3">
                     <div class="flex flex-row shadow-md items-center p-2 rounded-md border-[0.6px] border-slate-50 gap-2">
                         <div class="flex items-center p-1">
                             <Copy />
@@ -51,13 +72,6 @@
                 </div>
             </div>
         </template>
-
-        <template #fifth-icon>
-            <Trash2
-                class="text-red-600"
-                stroke-width="1" />
-        </template>
-
     </ProductDetailsComp>
 
     <DialogConfirmation
@@ -77,8 +91,9 @@
     import { useRoute, useRouter } from "vue-router";
     import DialogConfirmation from "@/components/partials/DialogConfirmation.vue";
     import ProductDetaislsSkeleton from "@/components/skeletons/ProductDetaislsSkeleton.vue";
-    import { Receipt, Copy, Trash2 } from "lucide-vue-next";
+    import { Receipt, Copy } from "lucide-vue-next";
     import { formatCurrency } from "@/util/functions";
+    import { Delete } from "@element-plus/icons-vue";
 
     const router = useRouter();
     const route = useRoute();

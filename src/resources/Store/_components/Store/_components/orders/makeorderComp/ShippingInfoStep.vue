@@ -8,7 +8,6 @@
             <el-collapse
                 v-if="addresses && addresses.length > 0"
                 class="flex flex-col p-2"
-                v-model="activeName"
                 accordion>
                 <el-collapse-item>
                     <template #title>
@@ -33,7 +32,6 @@
             <!-- Novo -->
             <el-collapse
                 class="flex flex-col p-2"
-                v-model="activeName"
                 accordion>
                 <el-collapse-item>
                     <template #title>
@@ -217,7 +215,6 @@
                 </el-collapse-item>
             </el-collapse>
         </template>
-        <CompleteProfile />
     </div>
 </template>
 
@@ -231,7 +228,6 @@
     import * as z from "zod";
 
     import { Plus } from "@element-plus/icons-vue";
-    import CompleteProfile from "@/resources/_components/CompleteProfile.vue";
 
     const store = useStore();
 

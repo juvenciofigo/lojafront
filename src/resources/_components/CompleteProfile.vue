@@ -2,12 +2,11 @@
     <div>
         <el-dialog
             v-model="completeProfile"
-            max-width="800px"
-            class="bg-transparent"
+            width="600px"
             :show-close="false"
             align-center
             destroy-on-close>
-            <div class="informations border p-3 m-3 rounded-md bg-white">
+            <div class="informations border p-3 m-3 rounded-md">
                 <h2 class="font-semibold text-lg">Informações pessoais</h2>
                 <hr class="my-3" />
                 <div
@@ -87,7 +86,7 @@
                     size="small"
                     :icon="Edit"
                     :loading="loadbtn">
-                    Complentar perfil
+                    Completar perfil
                 </el-button>
             </div>
         </el-dialog>
@@ -99,6 +98,7 @@
     import { useField, useForm } from "vee-validate";
     import { toTypedSchema } from "@vee-validate/zod";
     import * as z from "zod";
+    import {Edit, } from "@element-plus/icons-vue";
 
     const store = useStore();
     const loadbtn = ref(false);

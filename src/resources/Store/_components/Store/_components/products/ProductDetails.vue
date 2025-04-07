@@ -1,36 +1,214 @@
 <template lang="">
     <ProductDetaislsSkeleton v-if="skeleton"></ProductDetaislsSkeleton>
-    <!-- prettier-ignore -->
     <ProductDetailsComp
         v-if="!skeleton && product"
-        :firstButton="addToCart"
-        :secondButton="buyNow"
-        :thirdButton="callWhatsapp"
-        :first-icon="`Delete`"
+        :price="finalPrice"
+        @rating-dialog="ratingDialog = true">
+        <template #opcoes>
+            <div class="flex flex-col gap-3">
+                <div>
+                    <label
+                        class="font-semibold"
+                        for="quant">
+                        Quantidade:
+                    </label>
+                    <el-input-number
+                        :disabled="loading_button"
+                        v-model="quantity"
+                        :min="1"
+                        size="small"
+                        controls-position="right" />
+                </div>
 
-        :titleFirst="`Adicionar`"
-        :titleSecond="`Comprar Agora`"
-        :titleThird="`Whatsapp`"
+                <div v-if="deliveryEstimateOptions.length > 0">
+                    <p class="text-xs mb-1">Tempo estimado de entrega:</p>
+                    <el-select-v2
+                        :disabled="deliveryEstimateOptions.length === 1 ? true : false"
+                        v-model="selectedEstimate"
+                        @change="selectEstimateDelivery"
+                        :options="deliveryEstimateOptions"
+                        placeholder="Selecione uma estimativa"
+                        size="small"
+                        style="width: 150px" />
+                </div>
+            </div>
 
-        :styl_thirdbutton="`primary`"
-        :styl_firstbutton="`primary`"
-        :styl_secondbutton="`success`"
-        :styl_fourthbutton="`hidden`"
-        :styl_fifthbutton="`hidden`"
+            <!-- Seção de seleção de variações -->
+            <div class="buttons-chips flex flex-col lg:flex-row flex-wrap gap-1">
+                <!-- Cores -->
+                <div
+                    class="color chips_div"
+                    v-if="colors.length > 0">
+                    <p>
+                        <span class="font-semibold">Cores: </span><span v-if="selectedColor">{{ selectedColor.variationValue }}</span>
+                    </p>
+                    <div>
+                        <v-chip-group
+                            selected-class="bg-primary"
+                            @update:model-value="colorValue"
+                            mandatory>
+                            <v-chip
+                                v-for="(item, index) in colors"
+                                :key="index"
+                                :value="item._id">
+                                <template v-slot:default>
+                                    <el-tooltip :content="item.variationValue">
+                                        <div v-if="item?.variationImage && item?.variationImage?.length > 0">
+                                            <img
+                                                :src="item.variationImage[0]"
+                                                alt="Imagem da variacao do produto"
+                                                class="chip-image object-contain" />
+                                        </div>
+                                        <div v-else>
+                                            {{ item.variationValue }}
+                                        </div>
+                                    </el-tooltip>
+                                </template>
+                            </v-chip>
+                        </v-chip-group>
+                    </div>
+                </div>
+                <!--Fim Cores -->
 
-        :loading_button="loading_button"
+                <!-- Tamanhos -->
+                <div
+                    class="sizes chips_div"
+                    v-if="sizes?.length > 0">
+                    <p>
+                        <span class="font-semibold">Tamanhos: </span><span v-if="selectedSize">{{ selectedSize.variationValue }}</span>
+                    </p>
+                    <div class=" ">
+                        <v-chip-group
+                            selected-class="bg-primary"
+                            @update:model-value="sizesValue"
+                            mandatory>
+                            <v-chip
+                                v-for="(item, index) in sizes"
+                                :key="index"
+                                :value="item._id">
+                                <template v-slot:default>
+                                    <el-tooltip :content="item?.variationValue"> </el-tooltip>
+                                    <div v-if="item?.variationImage && item?.variationImage?.length > 0">
+                                        <img
+                                            :src="item.variationImage[0]"
+                                            alt="Imagem da variacao do produto"
+                                            class="chip-image object-contain" />
+                                    </div>
+                                    <div v-else>
+                                        {{ item.variationValue }}
+                                    </div>
+                                    <el-tooltip :content="item.variationValue"> </el-tooltip>
+                                </template>
+                            </v-chip>
+                        </v-chip-group>
+                    </div>
+                </div>
+                <!--Fim Tamanhos -->
 
-        @value-updated="handleValueUpdate"
-        @material-Value="materialValue"
-        @sizes-Value="sizesValue"
-        @color-Value="colorValue"
-        @rating-dialog="ratingDialog = true"
-        @model-Value="modelValue">
+                <!-- Modelos -->
+                <div
+                    class="model chips_div"
+                    v-if="models.length > 0">
+                    <p>
+                        <span class="font-semibold">Modelos: </span><span v-if="selectedModel">{{ selectedModel.variationValue }}</span>
+                    </p>
+                    <div>
+                        <v-chip-group
+                            selected-class="bg-primary"
+                            @update:model-value="modelValue"
+                            mandatory>
+                            <v-chip
+                                v-for="(item, index) in models"
+                                :key="index"
+                                :value="item._id">
+                                <template v-slot:default>
+                                    <el-tooltip :content="item.variationValue"> </el-tooltip>
+                                    <div v-if="item.variationImage && item.variationImage.length > 0">
+                                        <img
+                                            :src="item.variationImage[0]"
+                                            alt="Imagem da variacao do produto"
+                                            class="chip-image object-contain" />
+                                    </div>
+                                    <div v-else>
+                                        {{ item.variationValue }}
+                                    </div>
+                                    <el-tooltip :content="item.variationValue"> </el-tooltip>
+                                </template>
+                            </v-chip>
+                        </v-chip-group>
+                    </div>
+                </div>
+                <!-- Fim Modelos -->
 
-       >
+                <!-- Material -->
+                <div
+                    class="materials chips_div"
+                    v-if="materials.length > 0">
+                    <p>
+                        <span class="font-semibold">Materiais: </span><span v-if="selectedMaterial">{{ selectedMaterial.variationValue }}</span>
+                    </p>
+                    <div class=" ">
+                        <v-chip-group
+                            selected-class="bg-primary"
+                            @update:model-value="materialValue"
+                            mandatory>
+                            <v-chip
+                                v-for="(item, index) in materials"
+                                :key="index"
+                                :value="item._id">
+                                <template v-slot:default>
+                                    <el-tooltip :content="item.variationValue"> </el-tooltip>
+                                    <div v-if="item.variationImage && item.variationImage.length > 0">
+                                        <img
+                                            :src="item.variationImage[0]"
+                                            alt="Imagem da variacao do produto"
+                                            class="chip-image object-contain" />
+                                    </div>
+                                    <div v-else>
+                                        {{ item.variationValue }}
+                                    </div>
+                                    <el-tooltip :content="item.variationValue"> </el-tooltip>
+                                </template>
+                            </v-chip>
+                        </v-chip-group>
+                    </div>
+                </div>
+                <!--Fim Material -->
+            </div>
 
+            <!-- Botões de ação -->
+            <div
+                ref="buttons"
+                class="buttons flex-row flex flex-nowrap">
+                <el-button
+                    size="small"
+                    :loading="loading_button"
+                    type="primary"
+                    @click="addToCart">
+                    Adicionar
+                    <el-icon><ShoppingCart /></el-icon>
+                </el-button>
+
+                <el-button
+                    size="small"
+                    :loading="loading_button"
+                    type="success"
+                    @click="buyNow">
+                    Comprar Agora
+                </el-button>
+
+                <el-button
+                    size="small"
+                    :loading="loading_button"
+                    type="primary"
+                    @click="callWhatsapp">
+                    Whatsapp
+                </el-button>
+            </div>
+        </template>
     </ProductDetailsComp>
 
+    <!-- criar avaliacao -->
     <v-dialog
         persistent
         v-model="ratingDialog"
@@ -99,9 +277,8 @@
     </v-dialog>
 </template>
 <script setup>
-    import { ref, computed, toRaw, onBeforeMount } from "vue";
+    import { ref, computed, onBeforeMount, toRaw, watch } from "vue";
     import { useStore } from "vuex";
-    // import { useRoute, useRouter } from "vue-router";
     import { useRoute } from "vue-router";
     import ProductDetailsComp from "@/resources/_components/ProductDetailsComp.vue";
     import ProductDetaislsSkeleton from "@/components/skeletons/ProductDetaislsSkeleton.vue";
@@ -110,9 +287,11 @@
     import { toTypedSchema } from "@vee-validate/zod";
     import * as z from "zod";
 
+    import { ShoppingCart } from "@element-plus/icons-vue";
+
     const store = useStore();
     const route = useRoute();
-    // const router = useRouter();
+
     const isAuthenticated = computed(() => store.getters.isAuthenticated("authToken"));
     const product = computed(() => store.state.products.product);
     const loading_button = ref(false);
@@ -122,9 +301,56 @@
     const variation = ref({});
     const quantity = ref(1);
 
-    function handleValueUpdate(value) {
-        quantity.value = value;
-    }
+    const materials = computed(() => product.value?.productVariations?.filter((item) => item.variationType === "Modelo") || []);
+    const models = computed(() => product.value?.productVariations?.filter((item) => item.variationType === "Modelo") || []);
+    const colors = computed(() => product.value?.productVariations?.filter((item) => item.variationType === "Cor") || []);
+    const sizes = computed(() => product.value?.productVariations?.filter((item) => item.variationType === "Tamanho") || []);
+
+    let selectedEstimate = ref(null);
+    const selectedMaterial = ref(null);
+    const selectedModel = ref(null);
+    const selectedColor = ref(null);
+    const selectedSize = ref(null);
+
+    const deliveryEstimateOptions = computed(
+        () =>
+            product.value?.deliveryEstimate?.map((item) => ({
+                label: `${item.estimatedTime}${item.additionalCost > 0 ? ` (+${item.additionalCost} MZN)` : ""}`,
+                value: item._id,
+            })) || []
+    );
+
+    watch(deliveryEstimateOptions, (data) => {
+        if (data.length === 1) {
+            selectedEstimate.value = deliveryEstimateOptions.value[0].value;
+            selectEstimateDelivery();
+        }
+    });
+
+    const finalPrice = computed(() => {
+        let basePrice = product.value.productPrice;
+
+        if (selectedEstimate.value) {
+            const selected = product.value.deliveryEstimate.find((item) => item._id === selectedEstimate.value);
+            basePrice += selected.additionalCost;
+        }
+        if (selectedColor.value) {
+            basePrice += selectedColor.value.variationPrice || 0;
+        }
+        if (selectedSize.value) {
+            basePrice += selectedSize.value.variationPrice || 0;
+        }
+        if (selectedModel.value) {
+            basePrice += selectedModel.value.variationPromotion || selectedModel.value.variationPrice || 0;
+        }
+        if (selectedMaterial.value) {
+            basePrice += selectedMaterial.value.variationPrice || 0;
+        }
+        return basePrice;
+    });
+
+    // ///////////////////
+
     function materialValue(value) {
         variation.value.material = value;
     }
@@ -137,50 +363,50 @@
     function modelValue(value) {
         variation.value.model = value;
     }
-    import { ElNotification } from "element-plus";
+    function selectEstimateDelivery() {
+        variation.value.deliveryEstimate = selectedEstimate.value;
+    }
 
-    const notification = (message) => {
-        ElNotification({
-            title: "Erro!",
-            message: message,
-            type: "error",
-            position: "top-left",
-        });
-    };
     const verifyVaraiations = async () => {
         let error = null;
-        const colors = await computed(() => product.value.productVariations.filter((item) => item.variationType === "Cor"));
-        const sizes = await computed(() => product.value.productVariations.filter((item) => item.variationType === "Tamanho"));
-        const models = await computed(() => product.value.productVariations.filter((item) => item.variationType === "Modelo"));
-        const materials = await computed(() => product.value.productVariations.filter((item) => item.variationType === "Material"));
-
-        if (colors.value.length && !variation.value.color) {
+        if (colors.value.length > 0 && !variation.value.color) {
             return "Selecione a cor";
         }
-        if (sizes.value.length && !variation.value.size) {
+        if (sizes.value.length > 0 && !variation.value.size) {
             return "Selecione o tamanho";
         }
-        if (models.value.length && !variation.value.model) {
+        if (models.value.length > 0 && !variation.value.model) {
             return "Selecione o modelo";
         }
-        if (materials.value.length && !variation.value.material) {
+        if (materials.value.length > 0 && !variation.value.material) {
             return "Selecione o material";
+        }
+        if (deliveryEstimateOptions.value.length > 0 && !variation.value.deliveryEstimate) {
+            return "Selecione o tempo de entrega";
         }
         return error;
     };
 
     async function addToCart() {
+        const item = {
+            productId: route.params.id,
+            variation: toRaw(variation.value),
+            quantity: quantity.value || 1,
+            deliveryEstimate: selectedEstimate.value,
+        };
+
         const res = await verifyVaraiations();
 
         if (res) {
-            notification(res);
+            store.commit("SET_NOTIFICATION", { title: "Aviso!", type: "warning", message: res });
+            // notification(res);
             loading_button.value = false;
             return;
         }
         loading_button.value = true;
         store.commit("SET_loadingPriceUpdate");
 
-        await store.dispatch("carts/addToCart", { isAuthenticated: isAuthenticated.value, item: { productId: route.params.id, variation: toRaw(variation.value), quantity: quantity.value || 1 } });
+        await store.dispatch("carts/addToCart", { isAuthenticated: isAuthenticated.value, item });
 
         await store.dispatch("carts/displayCartPrices", isAuthenticated.value);
         loading_button.value = false;

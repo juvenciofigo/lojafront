@@ -5,14 +5,14 @@
         border
         max-height="400"
         fit
-        show-header
         element-loading-text="Processando"
         style="width: max-content"
-        :data="cart.items"
         size="small"
+        :data="cart.items"
+        show-header
         v-if="cart.items && cart.items.length > 0">
         <el-table-column
-            width="350"
+            width="300"
             header-align="center"
             align="center"
             label="Produto">
@@ -33,14 +33,14 @@
                         @click="goTo(scope.row.productId)"
                         class="flex flex-row justify-center items-center gap-2">
                         <el-image
-                            style="width: 80px; height: 80px; border-radius: 5px"
+                            style="width: 60px; height: 60px; border-radius: 5px"
                             :src="scope.row.picture"
                             alt="Imagem do Produto">
                             <template #placeholder>
                                 <el-skeleton-item
                                     animeted
                                     variant="image"
-                                    style="width: 70px; height: 70px" />
+                                    style="width: 60px; height: 60px" />
                             </template>
                             <template #error>
                                 <div class="image-slot h-full flex justify-center items-center w-full">
@@ -53,30 +53,7 @@
                 </div>
             </template>
         </el-table-column>
-        <el-table-column
-            header-align="center"
-            width="110"
-            align="center"
-            label="Preço unit.">
-            <template #default="scope">
-                <span class="whitespace-nowrap">{{ formatCurrency(scope.row.productPrice) }}</span>
-            </template>
-        </el-table-column>
-        <el-table-column
-            header-align="center"
-            width="110"
-            align="center"
-            label="Quant.">
-            <template #default="scope">
-                <input
-                    class="text-center w-9 border"
-                    type="number"
-                    placeholder="Digite a quantidade"
-                    v-model.number="scope.row.quantity"
-                    @change="updateQuantity(scope.row.item, scope.row.quantity)"
-                    min="1" />
-            </template>
-        </el-table-column>
+
         <el-table-column
             header-align="center"
             align="center"
@@ -118,6 +95,44 @@
                 <span v-else> Sem dados</span>
             </template>
         </el-table-column>
+
+        <el-table-column
+            header-align="center"
+            width="110"
+            align="center"
+            prop="estimate.estimatedTime"
+            label="Entrega">
+            <template #default="scope">
+                <span>{{ scope.row.estimate?.estimatedTime }}</span>
+            </template>
+        </el-table-column>
+
+        <el-table-column
+            header-align="center"
+            width="110"
+            align="center"
+            label="Preço unit.">
+            <template #default="scope">
+                <span class="whitespace-nowrap">{{ formatCurrency(scope.row.productPrice) }}</span>
+            </template>
+        </el-table-column>
+
+        <el-table-column
+            header-align="center"
+            width="110"
+            align="center"
+            label="Quant.">
+            <template #default="scope">
+                <input
+                    class="text-center w-9 border"
+                    type="number"
+                    placeholder="Digite a quantidade"
+                    v-model.number="scope.row.quantity"
+                    @change="updateQuantity(scope.row.item, scope.row.quantity)"
+                    min="1" />
+            </template>
+        </el-table-column>
+
         <el-table-column
             header-align="center"
             width="100"
