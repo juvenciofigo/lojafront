@@ -460,7 +460,6 @@
         },
     });
 
-    console.log(props.order);
     function makePayment(status, orderId, amount) {
         if (status === "Pago") return;
 

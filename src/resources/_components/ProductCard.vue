@@ -1,5 +1,5 @@
 <template>
-    <router-link :to="{ name: RouterName || 'products-list', params: { id: `${product._id}` } }">
+    <router-link :to="{ name: RouterName || 'product-details', params: { id: `${product._id}` } }">
         <el-tooltip :content="product.productName">
             <div class="h-full w-full product-card group duration-700 bg-white">
                 <div class="p-3 h-full duration-700 md:group-hover:bg-blue-400 flex flex-col justify-between">

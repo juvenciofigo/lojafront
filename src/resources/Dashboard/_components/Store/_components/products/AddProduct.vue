@@ -32,10 +32,9 @@
                                 <div class="bg-white">
                                     <!-- :disable="true" -->
                                     <QuillEditor
-                                    v-model:content="productDescription.value.value"
-                                    contentType="html"
-                                    :options="editorOptions"
-                                          />
+                                        v-model:content="productDescription.value.value"
+                                        contentType="html"
+                                        :options="editorOptions" />
                                 </div>
 
                                 <span class="error-message">{{ productDescription.errorMessage.value }}</span>
@@ -205,6 +204,58 @@
                             </el-select>
                             <span class="error-message">{{ productAvailability.errorMessage.value }}</span>
                         </div>
+
+                        <!-- Delivery Estimate Time -->
+                        <div class="input-field">
+                            <Label>Estimativa de entrega</Label>
+                            <el-form :model="form">
+                                <div
+                                    v-for="(item, index) in form.deliveryEstimate"
+                                    :key="index"
+                                    class="flex items-center gap-2 mb-2">
+                                    <el-select
+                                        size="small"
+                                        v-model="item.estimatedTime"
+                                        placeholder="Tempo de entrega"
+                                        style="width: 150px">
+                                        <el-option
+                                            label="Imediata"
+                                            value="Imediata" />
+                                        <el-option
+                                            label="7 dias"
+                                            value="7 dias" />
+                                        <el-option
+                                            label="30 dias"
+                                            value="30 dias" />
+                                    </el-select>
+
+                                    <el-input-number
+                                        :controls="false"
+                                        size="small"
+                                        v-model="item.additionalCost"
+                                        :min="0"
+                                        :step="10"
+                                        placeholder="Custo adicional"
+                                        style="width: 100px" />
+
+                                    <el-button
+                                        size="small"
+                                        type="danger"
+                                        :icon="Delete"
+                                        circle
+                                        @click="removeEstimate(index)" />
+                                </div>
+
+                                <el-button
+                                    size="small"
+                                    type="primary"
+                                    @click="addEstimate">
+                                    <el-icon><Plus /></el-icon> Adicionar Estimativa
+                                </el-button>
+                            </el-form>
+                            <span class="error-message">{{ productAvailability.errorMessage.value }}</span>
+                        </div>
+                        <!-- Fim Delivery Estimate Time -->
 
                         <!-- Stock -->
                         <div class="input-field">
@@ -385,7 +436,7 @@
                             submit();
                         }
                     "
-                    >Criar</el-button
+                    >{{ productSeleted ? "Atualizar" : "Criar" }}</el-button
                 >
                 <el-button
                     size="small"
@@ -432,6 +483,23 @@
     const textAreaDisabled = ref(false);
     const loadSubmitButton = ref(false);
 
+    // Estimative Delivery
+    import { Plus, Delete } from "@element-plus/icons-vue";
+
+    const form = ref({
+        deliveryEstimate: [],
+    });
+
+    const addEstimate = () => {
+        form.value.deliveryEstimate.push({ estimatedTime: "", additionalCost: 0 });
+    };
+
+    const removeEstimate = (index) => {
+        form.value.deliveryEstimate.splice(index, 1);
+    };
+
+    // ///////////
+
     import { QuillEditor } from "@vueup/vue-quill";
     import "@vueup/vue-quill/dist/vue-quill.snow.css"; // Estilo do editor
 
@@ -450,7 +518,6 @@
     };
     // Função para pré-visualizar as imagens
 
-    import { Plus } from "@element-plus/icons-vue";
     const fileList = ref([]);
     const productImage = ref([]);
 
@@ -509,24 +576,37 @@
         productLength = useField("productLength"),
         productWidth = useField("productWidth"),
         productHeight = useField("productHeight");
-
     const submit = handleSubmit(
         async (values) => {
+            // Garante que deliveryEstimate seja um array puro (sem reatividade)
+            values = { ...values, deliveryEstimate: toRaw(form.value.deliveryEstimate) };
+
+            // Garante também que as imagens sejam valores puros
             if (Array.isArray(productImage.value) && productImage.value.length > 0) {
                 values.productImage = toRaw(productImage.value);
             }
 
             const formData = new FormData();
 
+            // Anexa as imagens (arquivos) ao FormData
             if (fileList.value && fileList.value.length > 0) {
                 fileList.value.forEach((file) => {
                     formData.append("files", file.raw);
                 });
             }
 
+            // Adiciona os outros dados ao FormData
             for (const key in values) {
                 if (Object.prototype.hasOwnProperty.call(values, key)) {
-                    if (Array.isArray(values[key])) {
+                    if (key === "deliveryEstimate" && Array.isArray(values[key])) {
+                        values[key].forEach((item, index) => {
+                            for (const prop in item) {
+                                if (item[prop] !== undefined && item[prop] !== null) {
+                                    formData.append(`deliveryEstimate[${index}][${prop}]`, item[prop]);
+                                }
+                            }
+                        });
+                    } else if (Array.isArray(values[key])) {
                         values[key].forEach((item) => {
                             if (item !== undefined && item !== null) {
                                 formData.append(`${key}[]`, item);
@@ -539,6 +619,7 @@
                     }
                 }
             }
+
             const result = ref(null);
             if (productSeleted) {
                 await store.dispatch("products/updateProduct", { productSeleted, formData });
@@ -568,24 +649,25 @@
             await store.dispatch("products/fetchProductByIdAdmin", productSeleted);
             const product = computed(() => store.state.products.product).value;
 
-            productName.value.value = product.productName;
-            productDescription.value.value = product.productDescription;
-            productAvailability.value.value = product.productAvailability;
-            productPrice.value.value = product.productPrice;
-            productStock.value.value = product.productStock;
-            productImage.value = product.productImage;
-            productCategory.value.value = product.productCategory;
-            productSubcategory.value.value = product.productSubcategory;
-            productSub_category.value.value = product.productSub_category;
-            productPromotion.value.value = product.productPromotion;
-            sku.value.value = product.sku;
-            productVendor.value.value = product.productVendor;
-            productModel.value.value = product.productModel;
-            productBrand.value.value = product.productBrand;
-            productWeight.value.value = product.productWeight;
-            productLength.value.value = product.productLength;
-            productWidth.value.value = product.productWidth;
-            productHeight.value.value = product.productHeight;
+            form.value.deliveryEstimate = product?.deliveryEstimate;
+            productName.value.value = product?.productName;
+            productDescription.value.value = product?.productDescription;
+            productAvailability.value.value = product?.productAvailability;
+            productPrice.value.value = product?.productPrice;
+            productStock.value.value = product?.productStock;
+            productImage.value = product?.productImage;
+            productCategory.value.value = product?.productCategory;
+            productSubcategory.value.value = product?.productSubcategory;
+            productSub_category.value.value = product?.productSub_category;
+            productPromotion.value.value = product?.productPromotion;
+            sku.value.value = product?.sku;
+            productVendor.value.value = product?.productVendor;
+            productModel.value.value = product?.productModel;
+            productBrand.value.value = product?.productBrand;
+            productWeight.value.value = product?.productWeight;
+            productLength.value.value = product?.productLength;
+            productWidth.value.value = product?.productWidth;
+            productHeight.value.value = product?.productHeight;
         }
         loadSubmitButton.value = false;
         textAreaDisabled.value = false;

@@ -1,38 +1,40 @@
 <template lang="">
     <div>
-        <div v-if="customers && customers.length > 0">
+        <div v-if="customers.docs && customers.docs.length > 0">
             <el-table
                 stripe
                 border
-                :data="customers"
+                max-height="400"
                 fit
+                element-loading-text="Processando"
+                style="width: max-content"
+                size="small"
                 show-header
-                size="small">
+                :data="customers.docs">
                 <!-- ///////////////// -->
-                <el-table-column
-                    align="center"
-                    width="55"
-                    label="#">
-                </el-table-column>
-                <!-- //////////// -->
                 <el-table-column
                     align="center"
                     width="170"
                     prop="name"
                     label="Cliente">
+                    <template #default="scope">
+                        <span class="whitespace-nowrap">{{ scope.row.user.lastName }}, {{ scope.row.user.firstName }}</span>
+                    </template>
                 </el-table-column>
                 <!-- //////////// -->
                 <el-table-column
                     align="center"
                     width="170"
-                    prop="email"
                     label="Email">
+                    <template #default="scope">
+                        <span class="whitespace-nowrap">{{ scope.row.user.email }}</span>
+                    </template>
                 </el-table-column>
                 <!-- //////////// -->
                 <el-table-column
                     align="center"
                     width="170"
-                    prop="contacts"
+                    prop="cellNumber"
                     label="Telefone">
                 </el-table-column>
                 <!-- //////////// -->
@@ -51,7 +53,7 @@
                     label="Estado">
                     <template #default="scope">
                         <span v-if="scope.row.deleted === false"> Activo </span>
-                        <span v-else> Apadado </span>
+                        <span v-else> Apagado </span>
                     </template>
                 </el-table-column>
                 <!-- //////////// -->
@@ -130,7 +132,7 @@
     const route = useRoute();
     const router = useRouter();
 
-    const customers = computed(() => store.state.auth.customers.docs);
+    const customers = computed(() => store.state.auth.customers);
     const curentPage = ref(Number(route.query.offset) || 1);
     const totalPages = computed(() => {
         const customers = store.state.customers || {};

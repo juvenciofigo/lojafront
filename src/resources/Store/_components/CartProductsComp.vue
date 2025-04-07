@@ -8,8 +8,8 @@
         element-loading-text="Processando"
         style="width: max-content"
         size="small"
-        :data="cart.items"
         show-header
+        :data="cart.items"
         v-if="cart.items && cart.items.length > 0">
         <el-table-column
             width="300"
