@@ -453,7 +453,7 @@
 
     const store = useStore();
 
-    const props = defineProps({
+    defineProps({
         order: {
             type: Object,
             required: true,
