@@ -16,13 +16,13 @@
 
                     <ul
                         v-if="addresses && addresses.length > 0"
-                        class="grid grid-cols-2 flex-row flex-wrap gap-1 md:flex">
+                        class="grid grid-cols-2 md:flex flex-row flex-wrap gap-1">
                         <li
                             v-for="(address, index) in addresses"
                             :key="index"
                             :value="address._id"
                             @click="selelectingAddress(index)"
-                            class="address col-span-1 cursor-pointer flex-col flex-wrap gap-4 rounded-md border border-[#e5e7eb] bg-[#f9fafb] p-4 shadow-md duration-500 hover:-translate-y-1 hover:border-[#e0a9a9] md:flex">
+                            class="col-span-1 md:flex flex-col flex-wrap gap-4 p-4 rounded-md cursor-pointer border hover:-translate-y-1 duration-500 border-[#e5e7eb] bg-[#f9fafb] hover:border-[#e0a9a9] shadow-md address">
                             <AddressComp :address="address" />
                         </li>
                     </ul>
@@ -36,13 +36,13 @@
                 <el-collapse-item>
                     <template #title>
                         <span class="ml-2 flex flex-row items-center gap-1">
-                            Novo Endereço <el-icon class="el-icon--upload"><Plus class="h-4 w-4" /></el-icon
+                            Novo Endereço <el-icon class="el-icon--upload"><Plus class="w-4 h-4" /></el-icon
                         ></span>
                     </template>
                     <div>
-                        <div class="mb-2 flex-row justify-center gap-4 bg-blue-200 p-2 md:flex">
+                        <div class="md:flex mb-2 p-2 flex-row gap-4 justify-center bg-blue-200">
                             <!-- informacoes pessoais -->
-                            <div class="flex-row gap-4 md:flex">
+                            <div class="md:flex flex-row gap-4">
                                 <div>
                                     <!-- Nome -->
                                     <div class="w-full">
@@ -249,7 +249,7 @@
     ]);
     function selectedProvice(province = province.value.value) {
         city.value.value = null;
-
+        
         cities.value = locations[province];
     }
 
@@ -366,3 +366,4 @@
         font-weight: 500;
     }
 </style>
+

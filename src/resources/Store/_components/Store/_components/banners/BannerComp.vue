@@ -1,5 +1,5 @@
 <template>
-    <div class="min-h-[140px] w-full text-center sm:min-h-[300px] lg:min-h-96">
+    <div class="text-center min-h-[140px] sm:min-h-[300px] lg:min-h-96 w-full">
         <el-carousel
             :height="'auto'"
             direction="vertical"
@@ -18,7 +18,7 @@
                             style="width: 100%; height: 100%" />
                     </template>
                     <template #error>
-                        <div class="flex h-48 w-full items-center justify-center bg-gray-200 text-red-500">
+                        <div class="w-full h-48 bg-gray-200 flex items-center justify-center text-red-500">
                             <i class="el-icon-picture-outline"></i>
                             <span>Imagem não pôde ser carregada</span>
                         </div>

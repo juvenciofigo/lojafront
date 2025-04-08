@@ -1,15 +1,15 @@
 <template>
-    <div class="rounded-sm bg-white p-6 shadow-md">
+    <div class="bg-white shadow-md rounded p-6">
         <form @submit.prevent="submitVariation">
             <div class="mb-4">
                 <label
-                    class="mb-2 block text-sm font-bold text-gray-700"
+                    class="block text-gray-700 text-sm font-bold mb-2"
                     for="colors">
                     Cores:
                 </label>
                 <input
                     v-model="newColor"
-                    class="focus:shadow-outline w-full appearance-none rounded-sm border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none"
+                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                     type="text"
                     placeholder="Adicionar cor"
                     @keyup.enter="addColor" />
@@ -17,11 +17,11 @@
                     <span
                         v-for="(color, index) in variation.colors"
                         :key="index"
-                        class="rounded-sm-full mr-2 mb-2 inline-block bg-gray-200 px-3 py-1 text-sm font-semibold text-gray-700"
+                        class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2"
                         >{{ color }}
                         <button
                             @click.prevent="removeColor(index)"
-                            class="ml-1 text-red-500">
+                            class="text-red-500 ml-1">
                             x
                         </button></span
                     >
@@ -30,13 +30,13 @@
 
             <div class="mb-4">
                 <label
-                    class="mb-2 block text-sm font-bold text-gray-700"
+                    class="block text-gray-700 text-sm font-bold mb-2"
                     for="sizes"
                     >Tamanhos:</label
                 >
                 <input
                     v-model="newSize"
-                    class="focus:shadow-outline w-full appearance-none rounded-sm border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none"
+                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                     type="text"
                     placeholder="Adicionar tamanho"
                     @keyup.enter="addSize" />
@@ -44,11 +44,11 @@
                     <span
                         v-for="(size, index) in variation.sizes"
                         :key="index"
-                        class="mr-2 mb-2 inline-block rounded-full bg-gray-200 px-3 py-1 text-sm font-semibold text-gray-700"
+                        class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2"
                         >{{ size }}
                         <button
                             @click.prevent="removeSize(index)"
-                            class="ml-1 text-red-500">
+                            class="text-red-500 ml-1">
                             x
                         </button></span
                     >
@@ -57,13 +57,13 @@
 
             <div class="mb-4">
                 <label
-                    class="mb-2 block text-sm font-bold text-gray-700"
+                    class="block text-gray-700 text-sm font-bold mb-2"
                     for="materials"
                     >Materiais:</label
                 >
                 <input
                     v-model="newMaterial"
-                    class="focus:shadow-outline w-full appearance-none rounded-sm border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none"
+                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                     type="text"
                     placeholder="Adicionar material"
                     @keyup.enter="addMaterial" />
@@ -71,11 +71,11 @@
                     <span
                         v-for="(material, index) in variation.materials"
                         :key="index"
-                        class="mr-2 mb-2 inline-block rounded-full bg-gray-200 px-3 py-1 text-sm font-semibold text-gray-700"
+                        class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2"
                         >{{ material }}
                         <button
                             @click.prevent="removeMaterial(index)"
-                            class="ml-1 text-red-500">
+                            class="text-red-500 ml-1">
                             x
                         </button></span
                     >
@@ -84,13 +84,13 @@
 
             <div class="mb-4">
                 <label
-                    class="mb-2 block text-sm font-bold text-gray-700"
+                    class="block text-gray-700 text-sm font-bold mb-2"
                     for="models"
                     >Modelos:</label
                 >
                 <input
                     v-model="newModel"
-                    class="focus:shadow-outline w-full appearance-none rounded-sm border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none"
+                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                     type="text"
                     placeholder="Adicionar modelo"
                     @keyup.enter="addModel" />
@@ -98,11 +98,11 @@
                     <span
                         v-for="(model, index) in variation.models"
                         :key="index"
-                        class="mr-2 mb-2 inline-block rounded-full bg-gray-200 px-3 py-1 text-sm font-semibold text-gray-700"
+                        class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2"
                         >{{ model }}
                         <button
                             @click.prevent="removeModel(index)"
-                            class="ml-1 text-red-500">
+                            class="text-red-500 ml-1">
                             x
                         </button></span
                     >
@@ -111,59 +111,59 @@
 
             <div class="mb-4">
                 <label
-                    class="mb-2 block text-sm font-bold text-gray-700"
+                    class="block text-gray-700 text-sm font-bold mb-2"
                     for="additionalPrice"
                     >Preço Adicional:</label
                 >
                 <input
                     v-model.number="variation.additionalPrice"
-                    class="focus:shadow-outline w-full appearance-none rounded-sm border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none"
+                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                     type="number"
                     placeholder="Preço adicional" />
             </div>
 
             <div class="mb-4">
                 <label
-                    class="mb-2 block text-sm font-bold text-gray-700"
+                    class="block text-gray-700 text-sm font-bold mb-2"
                     for="stock"
                     >Estoque:</label
                 >
                 <input
                     v-model.number="variation.stock"
-                    class="focus:shadow-outline w-full appearance-none rounded-sm border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none"
+                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                     type="number"
                     placeholder="Quantidade em estoque" />
             </div>
 
             <div class="mb-4">
                 <label
-                    class="mb-2 block text-sm font-bold text-gray-700"
+                    class="block text-gray-700 text-sm font-bold mb-2"
                     for="sku"
                     >SKU:</label
                 >
                 <input
                     v-model="variation.sku"
-                    class="focus:shadow-outline w-full appearance-none rounded-sm border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none"
+                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                     type="text"
                     placeholder="SKU" />
             </div>
 
             <div class="mb-4">
                 <label
-                    class="mb-2 block text-sm font-bold text-gray-700"
+                    class="block text-gray-700 text-sm font-bold mb-2"
                     for="image"
                     >URL da Imagem:</label
                 >
                 <input
                     v-model="variation.image"
-                    class="focus:shadow-outline w-full appearance-none rounded-sm border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none"
+                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                     type="text"
                     placeholder="URL da imagem" />
             </div>
 
             <div class="flex items-center justify-between">
                 <button
-                    class="focus:shadow-outline rounded-sm bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700 focus:outline-none"
+                    class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                     type="submit">
                     Criar Variação
                 </button>
@@ -194,6 +194,7 @@
         image: "",
     });
 
+    
     function addColor() {
         if (newColor.value && !variation.value.colors.includes(newColor.value)) {
             variation.value.colors.push(newColor.value);
@@ -242,7 +243,7 @@
         try {
             // Supondo que o ID do produto seja passado como uma propriedade (prop)
             const productId = route.params.productId; // ou passe como uma prop
-            await axios.post(`/api/products/${productId}/variations`, variation.value);
+            const response = await axios.post(`/api/products/${productId}/variations`, variation.value);
             // Limpar o formulário após a submissão
             variation.value = {
                 colors: [],

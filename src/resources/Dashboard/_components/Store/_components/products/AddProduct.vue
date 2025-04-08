@@ -1,5 +1,5 @@
 <template lang="">
-    <div class="top-[4px] right-0 bottom-0 flex w-full flex-1 flex-col flex-nowrap gap-2 overflow-auto bg-white p-4">
+    <div class="bottom-0 top-[4px] p-4 right-0 flex-1 w-full flex flex-col overflow-auto bg-white gap-2 flex-nowrap">
         <div>
             <h1 class="text-lg font-semibold">Informações Básicas</h1>
             <p class="indent-2">Preencha as informações abaixo</p>
@@ -9,8 +9,8 @@
             v-loading="textAreaDisabled"
             @submit.prevent="submit"
             enctype="multipart/form-data">
-            <div class="flex flex-col gap-8 md:flex-row">
-                <div class="Left flex flex-[2] flex-col gap-8 rounded-md bg-blue-500 p-2 md:p-4">
+            <div class="flex flex-col md:flex-row gap-8">
+                <div class="Left flex-[2] flex flex-col gap-8 bg-blue-500 p-2 md:p-4 rounded-md">
                     <div class="TIT_Desc">
                         <div class="Tit-Des flex flex-col gap-4">
                             <!-- Title Product -->
@@ -69,15 +69,15 @@
                         v-if="productImage && productImage.length > 0">
                         <label> Imagens EXISTENTES:</label>
 
-                        <div class="gap- flex">
+                        <div class="flex gap-">
                             <div
                                 @click="removeImage(index)"
-                                class="relative m-1"
+                                class="m-1 relative"
                                 v-for="(image, index) in productImage"
                                 :key="index"
                                 :closable="true">
                                 <img
-                                    class="h-20 w-20 object-cover"
+                                    class="w-20 h-20 object-cover"
                                     :src="image"
                                     alt="" />
                             </div>
@@ -185,7 +185,7 @@
                     </div>
                 </div>
 
-                <div class="Right flex-1 rounded-md bg-blue-500 p-2 md:p-4">
+                <div class="Right flex-1 bg-blue-500 p-2 md:p-4 rounded-md">
                     <div class="Pub-Cat">
                         <!-- Available -->
                         <div class="input-field">
@@ -212,7 +212,7 @@
                                 <div
                                     v-for="(item, index) in form.deliveryEstimate"
                                     :key="index"
-                                    class="mb-2 flex items-center gap-2">
+                                    class="flex items-center gap-2 mb-2">
                                     <el-select
                                         size="small"
                                         v-model="item.estimatedTime"
@@ -286,12 +286,12 @@
                                 <DialogTrigger as-child>
                                     <el-button size="small"> Criar categoria </el-button>
                                 </DialogTrigger>
-                                <DialogContent class="max-h-[90dvh] grid-rows-[auto_minmax(0,1fr)_auto] p-0 sm:max-w-[425px]">
+                                <DialogContent class="sm:max-w-[425px] grid-rows-[auto_minmax(0,1fr)_auto] p-0 max-h-[90dvh]">
                                     <DialogHeader class="p-6 pb-0">
                                         <DialogTitle>Criar categoria </DialogTitle>
                                         <DialogDescription> Aqui pode criar categoria, subCategoria da categoria e subCategoria da subCategoria! </DialogDescription>
                                     </DialogHeader>
-                                    <div class="grid gap-4 overflow-y-auto px-6 py-4">
+                                    <div class="grid gap-4 py-4 overflow-y-auto px-6">
                                         <CreateCategoryVue />
                                     </div>
                                     <DialogFooter class="p-6 pt-0"> </DialogFooter>
@@ -336,11 +336,11 @@
                                             v-for="(category, index1) in categories"
                                             :key="index1"
                                             :label="category.categoryName"
-                                            class="el-select-dropdown__group__wrap text-red-500">
+                                            class="text-red-500 el-select-dropdown__group__wrap">
                                             <el-option
                                                 v-for="(subCategory, index2) in category.subCategories"
                                                 :key="index2"
-                                                class="el-select-dropdown__item text-yellow-200"
+                                                class="text-yellow-200 el-select-dropdown__item"
                                                 :label="subCategory.subCategoryName"
                                                 :value="subCategory._id" />
                                         </el-option-group>
@@ -362,11 +362,11 @@
                                         <el-option-group
                                             v-for="(category, index1) in categories"
                                             :key="index1">
-                                            <span class="text-lg text-red-400">{{ category.categoryName }}</span>
+                                            <span class="text-red-400 text-lg">{{ category.categoryName }}</span>
                                             <el-option-group
                                                 v-for="(subCategory, index2) in category.subCategories"
                                                 :key="index2">
-                                                <span class="pl-1 text-sm text-red-700">{{ subCategory.subCategoryName }}</span>
+                                                <span class="text-red-700 pl-1 text-sm">{{ subCategory.subCategoryName }}</span>
                                                 <el-option
                                                     v-for="(sub_category, index3) in subCategory.sub_categories"
                                                     :key="index3"

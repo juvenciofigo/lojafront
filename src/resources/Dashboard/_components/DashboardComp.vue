@@ -1,5 +1,5 @@
 <template lang="">
-    <div class="flex w-full flex-col justify-center gap-4 md:flex-col md:flex-nowrap">
+    <div class="flex flex-col md:flex-col w-full justify-center md:flex-nowrap gap-4">
         <el-row class="bg-white">
             <!--  -->
             <el-col :span="6">
@@ -30,7 +30,7 @@
             <!--  -->
         </el-row>
 
-        <div class="flex-1 rounded-md bg-white p-2">
+        <div class="flex-1 bg-white p-2 rounded-md">
             <ChartComp />
         </div>
     </div>

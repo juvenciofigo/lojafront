@@ -21,7 +21,7 @@
                 </div>
 
                 <div v-if="deliveryEstimateOptions.length > 0">
-                    <p class="mb-1 text-xs">Tempo estimado de entrega:</p>
+                    <p class="text-xs mb-1">Tempo estimado de entrega:</p>
                     <el-select-v2
                         :disabled="deliveryEstimateOptions.length === 1 ? true : false"
                         v-model="selectedEstimate"
@@ -34,7 +34,7 @@
             </div>
 
             <!-- Seção de seleção de variações -->
-            <div class="buttons-chips flex flex-col flex-wrap gap-1 lg:flex-row">
+            <div class="buttons-chips flex flex-col lg:flex-row flex-wrap gap-1">
                 <!-- Cores -->
                 <div
                     class="color chips_div"
@@ -179,7 +179,7 @@
             <!-- Botões de ação -->
             <div
                 ref="buttons"
-                class="buttons flex flex-row flex-nowrap">
+                class="buttons flex-row flex flex-nowrap">
                 <el-button
                     size="small"
                     :loading="loading_button"
@@ -213,7 +213,7 @@
         persistent
         v-model="ratingDialog"
         width="auto">
-        <div class="flex flex-col gap-4 rounded-md border bg-white p-4 sm:w-[400px]">
+        <div class="p-4 flex flex-col gap-4 border rounded-md bg-white sm:w-[400px]">
             <div class="flex flex-row">
                 <h1 class="text-xl font-semibold">Avaliação:</h1>
                 <button
@@ -224,7 +224,7 @@
             </div>
             <div class="">
                 <div>
-                    <div class="mt-5 mb-7 flex flex-col gap-4">
+                    <div class="mb-7 mt-5 flex flex-col gap-4">
                         <label>
                             <h2 class="text-lg">Comentário:</h2>
                         </label>
@@ -253,7 +253,7 @@
                         </div>
                     </div>
 
-                    <div class="flex flex-row flex-wrap gap-2">
+                    <div class="flex-row flex flex-wrap gap-2">
                         <el-button
                             :loading="ratingButtonLoading"
                             @click="submit()"

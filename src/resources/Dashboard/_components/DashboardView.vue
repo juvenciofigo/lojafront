@@ -1,5 +1,5 @@
 <template lang="">
-    <div class="relative flex h-full flex-col gap-2 lg:p-2">
+    <div class="flex flex-col h-full gap-2 lg:p-2 relative">
         <HeaderTop>
             <!-- esquerda -->
             <template #left>
@@ -12,7 +12,8 @@
                         trigger="click"
                         :hide-on-click="true"
                         role="navigation"
-                        popper-class="el-menu-vertical-demo ">
+                        popper-class="el-menu-vertical-demo "
+                        >
                         <span class="el-dropdown-link flex flex-row items-center">
                             Menu
                             <el-icon class="el-icon--right">
@@ -52,12 +53,12 @@
             </template>
         </HeaderTop>
 
-        <div class="flex flex-1 flex-row">
+        <div class="flex flex-row flex-1">
             <div class="flex flex-col">
                 <span class="hidden md:block">
                     <el-button
                         @click="isCollapse = !isCollapse"
-                        class="w-full duration-300">
+                        class="duration-300 w-full">
                         <el-icon :class="['transition-transform duration-300', isCollapse ? 'rotate-180' : 'rotate-0']">
                             <ArrowLeft />
                         </el-icon>
@@ -72,7 +73,7 @@
                             <router-link
                                 :to="{ name: item.link }"
                                 exact-active-class="text-blue-400"
-                                class="duration-500 hover:text-blue-300">
+                                class="hover:text-blue-300 duration-500">
                                 <el-icon><component :is="item.icon" /></el-icon>
                                 <span :class="[isCollapse ? 'hidden' : '', 'whitespace-nowrap']">{{ item.name }}</span>
                             </router-link>
@@ -93,7 +94,7 @@
     import LogoPart from "@/components/partials/LogoPart.vue";
     import FoooterComp from "@/components/partials/FoooterComp.vue";
     import { ShoppingCart, User, Goods, ShoppingBag, TakeawayBox, Grid, ArrowLeft } from "@element-plus/icons-vue";
-
+    
     const route = useRoute();
 
     const items = [

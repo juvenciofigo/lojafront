@@ -1,5 +1,5 @@
 <template lang="">
-    <div class="flex flex-1 flex-col">
+    <div class="flex-1 flex flex-col">
         <router-view></router-view>
     </div>
 </template>

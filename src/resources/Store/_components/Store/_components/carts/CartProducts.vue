@@ -1,7 +1,7 @@
 <template lang="">
     <div
         v-if="skeleton"
-        class="mx-auto w-full">
+        class="w-full mx-auto">
         <v-skeleton-loader
             class="w-full"
             type="table,">
@@ -9,19 +9,19 @@
     </div>
     <div
         v-else
-        class="flex flex-col gap-4 p-3 lg:flex-row lg:items-start lg:pr-5">
+        class="flex flex-col lg:items-start lg:flex-row lg:pr-5 gap-4 p-3">
         <div
             v-if="cart"
-            class="flex w-full justify-center">
+            class="w-full flex justify-center">
             <CartProductsComp :cart="cart" />
         </div>
 
         <div
             v-if="cart && cart.items && cart.items.length > 0"
             v-loading="loadingPriceUpdate"
-            class="flex w-full flex-col gap-6 rounded-md bg-white text-center shadow-md md:max-w-[410px]">
+            class="shadow-md rounded-md text-center w-full md:max-w-[410px] flex flex-col gap-6 bg-white">
             <div>
-                <p class="my-1 text-lg font-semibold">Resumo do pedido</p>
+                <p class="my-1 font-semibold text-lg">Resumo do pedido</p>
                 <el-descriptions
                     title=""
                     direction="horizontal"
@@ -32,7 +32,7 @@
                     <el-descriptions-item label="Total">{{ formatCurrency(totalPedido) }}</el-descriptions-item>
                 </el-descriptions>
                 <el-button
-                    class="my-1 w-full"
+                    class="w-full my-1"
                     :disabled="buttonStatus"
                     size="small"
                     @click="makeOrder()">

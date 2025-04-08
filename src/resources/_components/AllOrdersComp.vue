@@ -145,6 +145,7 @@
     });
 
     const orders = computed(() => store.state.orders.orders);
+    // const orderDocs = computed(() => orders.value.docs);
     const offset = ref(route.query.offset || 1);
     const loading = ref(true);
 

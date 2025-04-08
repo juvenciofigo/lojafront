@@ -1,5 +1,5 @@
 <template>
-    <v-app class="dark text-text13 mt-1 overflow-hidden bg-[#f4f4f4]">
+    <v-app class="mt-1 dark bg-[#f4f4f4] overflow-hidden text-text13">
         <!--  main -->
         <v-main class="main-vier overflow-hidden">
             <router-view class="principal-viewr" />
@@ -75,7 +75,7 @@
     /* Estilizando a barra de rolagem */
     ::-webkit-scrollbar {
         /* Altura da barra de rolagem */
-        height: 5px;
+        height: 5px; 
         width: 5px;
     }
 

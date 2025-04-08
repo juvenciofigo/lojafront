@@ -2,6 +2,7 @@ import { setCookie, removeCookie, getCookie, errorMessage, getTempCart } from "@
 import notification from "@/util/notifications";
 import sendAxio from "@/util/sendAxio";
 
+
 const state = {
     cart: {},
     cartPrice: 0,
@@ -63,11 +64,11 @@ const actions = {
 
                 const existingProductIndex = tempCart.findIndex((item) => {
                     item.productId == itemProduct.productId &&
-                        item.variation.color == itemProduct.variation.color &&
-                        item.variation.model == itemProduct.variation.model &&
-                        item.variation.material == itemProduct.variation.material &&
-                        item.variation.size == itemProduct.variation.size,
-                        item.deliveryEstimate == itemProduct.deliveryEstimate;
+                    item.variation.color == itemProduct.variation.color &&
+                    item.variation.model == itemProduct.variation.model &&
+                    item.variation.material == itemProduct.variation.material &&
+                    item.variation.size == itemProduct.variation.size,
+                    item.deliveryEstimate == itemProduct.deliveryEstimate;
                 });
 
                 if (existingProductIndex !== -1) {

@@ -1,10 +1,10 @@
 <template>
-    <div class="flex flex-col rounded-md bg-white">
-        <h2 class="rounded-t-[inherit] bg-[#ff0000] p-5 text-3xl font-normal">Pagamento por m-Pesa</h2>
+    <div class="flex flex-col bg-white rounded-md">
+        <h2 class="bg-[#ff0000] rounded-t-[inherit] p-5 font-normal text-3xl">Pagamento por m-Pesa</h2>
         <hr />
         <div class="p-5">
             <v-text-field
-                @keyup.enter="confirmePayment"
+            @keyup.enter="confirmePayment"
                 v-model="number"
                 type="number"
                 variant="outlined"
@@ -15,10 +15,10 @@
             </v-text-field>
             <div>
                 <p class="text-muted-foreground">Valor a pagar:</p>
-                <h2 class="text-xl font-bold">{{ formatCurrency(total) }}</h2>
+                <h2 class="font-bold text-xl">{{ formatCurrency(total) }}</h2>
             </div>
         </div>
-        <div class="mb-2 text-center">
+        <div class="text-center mb-2">
             <v-btn
                 :loading="loading"
                 @click="confirmePayment"
@@ -34,7 +34,7 @@
                 <v-card-actions>
                     <v-btn
                         color="primary"
-                        @click="((errorDialog = false), (loading = false))"
+                        @click="(errorDialog = false), (loading = false)"
                         >OK</v-btn
                     >
                 </v-card-actions>

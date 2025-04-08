@@ -1,6 +1,6 @@
 <template>
     <div class="container mx-auto p-4">
-        <h1 class="mb-4 text-2xl font-bold">{{ product.productName }}</h1>
+        <h1 class="text-2xl font-bold mb-4">{{ product.productName }}</h1>
         <div class="mb-4">
             <p>{{ product.productDescription }}</p>
             <p class="text-lg font-semibold">Base Price: {{ product.productPrice }} $</p>
@@ -11,7 +11,7 @@
             <select
                 v-model="selectedColor"
                 @change="updateVariation"
-                class="mt-1 block w-full rounded-md border border-gray-300 p-2">
+                class="mt-1 block w-full p-2 border border-gray-300 rounded-md">
                 <option
                     v-for="color in colors"
                     :key="color"
@@ -25,7 +25,7 @@
             <select
                 v-model="selectedSize"
                 @change="updateVariation"
-                class="mt-1 block w-full rounded-md border border-gray-300 p-2">
+                class="mt-1 block w-full p-2 border border-gray-300 rounded-md">
                 <option
                     v-for="size in sizes"
                     :key="size"
@@ -39,7 +39,7 @@
             <select
                 v-model="selectedModel"
                 @change="updateVariation"
-                class="mt-1 block w-full rounded-md border border-gray-300 p-2">
+                class="mt-1 block w-full p-2 border border-gray-300 rounded-md">
                 <option
                     v-for="model in models"
                     :key="model"
@@ -50,7 +50,7 @@
         </div>
         <button
             @click="E"
-            class="rounded-md bg-blue-500 px-4 py-2 text-white">
+            class="bg-blue-500 text-white px-4 py-2 rounded-md">
             Add to Cart
         </button>
     </div>
@@ -165,3 +165,4 @@
         },
     };
 </script>
+

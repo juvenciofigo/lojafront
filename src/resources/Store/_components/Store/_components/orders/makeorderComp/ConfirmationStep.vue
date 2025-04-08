@@ -10,19 +10,19 @@
             <Table v-loading="loadingPriceUpdate">
                 <TableBody>
                     <TableRow>
-                        <TableCell class="flex h-10 flex-row items-center justify-between">
+                        <TableCell class="h-10 items-center flex flex-row justify-between">
                             <div>Total de produtos:</div>
                             <div>{{ formatCurrency(priceTotal) }}</div>
                         </TableCell>
                     </TableRow>
                     <TableRow>
-                        <TableCell class="flex h-10 flex-row items-center justify-between">
+                        <TableCell class="items-center h-10 flex flex-row justify-between">
                             <div>Taxa de envio</div>
                             <div>{{ formatCurrency(shippingPrice) }}</div>
                         </TableCell>
                     </TableRow>
                     <TableRow>
-                        <TableCell class="flex h-10 flex-row items-center justify-between">
+                        <TableCell class="items-center h-10 flex flex-row justify-between">
                             <div>Total</div>
                             <div>{{ formatCurrency(totalPedido) }}</div>
                         </TableCell>

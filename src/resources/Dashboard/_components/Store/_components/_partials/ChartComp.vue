@@ -1,5 +1,5 @@
 <template lang="">
-    <div class="chart-container relative mx-auto mt-5 h-[300px] w-[99%] max-w-[800px] bg-white lg:h-[400px]">
+    <div class="chart-container relative w-[99%] h-[300px] bg-white lg:h-[400px] max-w-[800px] mx-auto mt-5">
         <canvas ref="chartCanvas"></canvas>
     </div>
 </template>

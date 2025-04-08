@@ -7,7 +7,7 @@
         <br />
         <div v-if="variations && variations.length > 0">
             <div>Todas</div>
-            <div class="flex flex-wrap justify-center gap-5">
+            <div class="flex flex-wrap gap-5 justify-center">
                 <template
                     v-for="variation in variations"
                     :key="variation._id">
@@ -15,7 +15,7 @@
                         <v-card class="w-max p-4">
                             <div class="flex flex-row justify-between">
                                 <div>
-                                    <span class="text-lg font-semibold text-blue-700">{{ variation.variationType }}</span
+                                    <span class="text-lg text-blue-700 font-semibold">{{ variation.variationType }}</span
                                     >: {{ variation.variationValue }}
                                 </div>
                                 <div>
@@ -29,7 +29,7 @@
                                 </div>
                             </div>
 
-                            <div class="flex flex-row gap-5 rounded-md bg-slate-100 p-3 lg:ml-6">
+                            <div class="flex flex-row gap-5 lg:ml-6 bg-slate-100 p-3 rounded-md">
                                 <div>
                                     <div><span class="font-medium">Sku:</span> {{ variation.sku }}</div>
                                     <div>

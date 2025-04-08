@@ -1,14 +1,14 @@
 <template>
-    <div class="flex flex-col rounded-sm bg-white p-6 shadow-md">
-        <div class="flex flex-col items-center gap-2 self-center rounded-md border-2 border-slate-600 p-2">
-            <div class="h-24 w-24">
+    <div class="bg-white shadow-md rounded p-6 flex flex-col">
+        <div class="rounded-md self-center p-2 border-2 border-slate-600 flex flex-col gap-2 items-center">
+            <div class="w-24 h-24">
                 <v-img
                     v-if="product.productImage && product.productImage.length > 0"
                     :src="product.productImage[0]"></v-img>
             </div>
             <div class="text-center">
                 <p class="font-semibold text-slate-500">{{ product.productName }}</p>
-                <p class="text-sm font-semibold text-slate-500">{{ formatCurrency(product.productPrice) }}</p>
+                <p class="font-semibold text-slate-500 text-sm">{{ formatCurrency(product.productPrice) }}</p>
             </div>
         </div>
         <form enctype="multipart/form-data">
@@ -105,16 +105,16 @@
                 <label> Imagens EXISTENTES:</label>
 
                 <div
-                    class="gap- flex"
+                    class="flex gap-"
                     v-if="variationImage && variationImage.length > 0">
                     <div
                         @click="removeImage(index)"
-                        class="relative m-1"
+                        class="m-1 relative"
                         v-for="(image, index) in variationImage"
                         :key="index"
                         :closable="true">
                         <img
-                            class="h-20 w-20 object-cover"
+                            class="w-20 h-20 object-cover"
                             :src="image"
                             alt="" />
                     </div>
@@ -122,9 +122,9 @@
             </div>
             <!-- /////////////////////////// -->
             <div class="mb-4">
-                <h2 class="mb-2 block text-sm font-bold text-gray-700">Detalhes de Entrega:</h2>
+                <h2 class="block text-gray-700 text-sm font-bold mb-2">Detalhes de Entrega:</h2>
                 <div class="mb-2">
-                    <h3 class="mb-1 block text-sm font-bold text-gray-700">Dimensões (cm):</h3>
+                    <h3 class="block text-gray-700 text-sm font-bold mb-1">Dimensões (cm):</h3>
                     <div class="flex items-center">
                         <!-- /////////Height/////////////// -->
                         <div class="input-field">

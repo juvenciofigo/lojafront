@@ -66,7 +66,7 @@
                             <template v-slot:activator="{ props: activatorProps }">
                                 <button
                                     v-bind="activatorProps"
-                                    class="rounded-md p-[3px]">
+                                    class="p-[3px] rounded-md">
                                     <Eye size="18" />
                                 </button>
                             </template>
@@ -91,8 +91,8 @@
                             </template>
                         </v-dialog>
 
-                        <button class="rounded-md p-[3px]"><Pen size="18" /></button>
-                        <button class="rounded-md p-[3px]">
+                        <button class="p-[3px] rounded-md"><Pen size="18" /></button>
+                        <button class="p-[3px] rounded-md">
                             <Trash2
                                 color="red"
                                 size="18" />

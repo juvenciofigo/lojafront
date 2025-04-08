@@ -1,7 +1,7 @@
 <template lang="">
     <div
         v-loading="loading"
-        class="flex flex-1 flex-col gap-2">
+        class="flex flex-col flex-1 gap-2">
         <div
             class="relative flex-1"
             v-if="orderDocs && orderDocs.length > 0">
@@ -10,7 +10,7 @@
                     class="max-w-sm"
                     placeholder="Filter emails..." />
             </div>
-            <div class="absolute top-[60px] bottom-0 left-0 flex w-full max-w-[1400px] flex-1 flex-col items-center overflow-auto">
+            <div class="absolute bottom-0 items-center top-[60px] left-0 flex-1 w-full max-w-[1400px] flex flex-col overflow-auto">
                 <v-table
                     density="comfortable "
                     fixed-header>
@@ -29,7 +29,7 @@
                     </thead>
                     <tbody>
                         <tr
-                            class="cursor-pointer duration-500 hover:bg-slate-200"
+                            class="cursor-pointer hover:bg-slate-200 duration-500"
                             v-for="(order, index) in orderDocs"
                             :key="order._id">
                             <td class="text-center font-bold">{{ index + 1 }}</td>
@@ -55,28 +55,34 @@
                                     <template v-slot:activator="{ props: activatorProps }">
                                         <button
                                             v-bind="activatorProps"
-                                            class="rounded-md p-[3px]">
+                                            class="p-[3px] rounded-md">
                                             <Eye size="20" />
                                         </button>
                                     </template>
 
                                     <template v-slot:default="{ isActive }">
                                         <v-card>
-                                            <v-card-actions class="flex flex-row justify-between p-0 text-end">
+                                            <v-card-actions class="flex flex-row justify-between text-end p-0">
                                                 <p class="ml-3 text-2xl font-bold">Pedido {{ order.referenceOrder }}</p>
                                                 <button
-                                                    class="mr-3 rounded-md bg-red-100 text-red-500 duration-500 active:bg-red-500 active:text-red-100"
+                                                    class="text-red-500 bg-red-100 active:text-red-100 active:bg-red-500 duration-500 rounded-md mr-3"
                                                     @click="isActive.value = false">
                                                     <X />
                                                 </button>
                                             </v-card-actions>
-                                            <v-card-text class="0 overflow-x-hidden bg-[#f3f3f9] p-1"> </v-card-text>
+                                            <v-card-text class="bg-[#f3f3f9] 0 p-1 overflow-x-hidden">
+                                                <!-- <OrdersDetails :order="order">
+                                                    <template #doPay>
+                                                        <slot name="doPay"></slot>
+                                                    </template>
+                                                </OrdersDetails> -->
+                                            </v-card-text>
                                         </v-card>
                                     </template>
                                 </v-dialog>
 
                                 <button
-                                    class="rounded-md p-[3px]"
+                                    class="p-[3px] rounded-md"
                                     @click="confirmDelete(order._id, order.payment.status)">
                                     <Trash2
                                         color="red"
@@ -122,6 +128,7 @@
     import { Input } from "@/components/ui/input";
     import { formatCurrency, formatDate } from "@/util/functions";
 
+    // import OrdersDetails from "@/resources/_components/OrdersDetails.vue";
     import DialogConfirmation from "@/components/partials/DialogConfirmation.vue";
 
     const store = useStore();

@@ -1,15 +1,15 @@
 <template lang="">
-    <section class="flex flex-1 flex-col gap-3">
+    <section class="flex-1 flex flex-col gap-3">
         <div class="flex flex-row gap-2">
             <!-- Categorias -->
-            <div class="categories-card hidden w-72 flex-col bg-white pb-1 lg:block">
+            <div class="categories-card hidden lg:block flex-col w-72 bg-white pb-1">
                 <p class="bg-yellow-300 p-2 font-semibold">Categorias</p>
 
                 <div
                     v-if="categories && categories.length > 0"
-                    class="categories-list overflow-auto p-1 indent-4">
+                    class="categories-list indent-4 overflow-auto p-1">
                     <ul class="list-none">
-                        <li class="item-list duration-75">
+                        <li class="duration-75 item-list">
                             <router-link :to="{ name: 'products-list' }">Todos produtos</router-link>
                         </li>
                         <template
@@ -25,7 +25,7 @@
                                     <template v-slot:activator="{ props }">
                                         <button
                                             @click="filterProduct(category)"
-                                            class="w-[calc(100%-16px)] justify-between text-start"
+                                            class="w-[calc(100%-16px)] text-start justify-between"
                                             v-bind="props">
                                             {{ category.categoryName }}
                                         </button>
@@ -44,7 +44,7 @@
                                                     <template v-slot:activator="{ props }">
                                                         <button
                                                             @click="filterProduct(category, subCategory)"
-                                                            class="w-full justify-between text-start"
+                                                            class="w-full text-start justify-between"
                                                             v-bind="props">
                                                             {{ subCategory.subCategoryName }}
                                                         </button>
@@ -85,10 +85,10 @@
         </div>
 
         <!-- Produtos e Promoções -->
-        <div class="mt- flex w-full flex-col-reverse gap-1 lg:flex-row">
+        <div class="w-full flex lg:flex-row gap-1 flex-col-reverse mt-">
             <div
                 v-if="products"
-                class="flex flex-1 flex-col gap-3 overflow-hidden">
+                class="overflow-hidden flex-1 gap-3 flex flex-col">
                 <SelectedProducts
                     :title="`Novidades`"
                     :products="products.docs"
@@ -105,7 +105,7 @@
                     :key="index">
                     <div class="ads-content bg-slate-100">
                         <img
-                            class="h-full w-full object-contain"
+                            class="object-contain h-full w-full"
                             :src="item.image"
                             :alt="`Promoção ${index + 1}`" />
                     </div>
