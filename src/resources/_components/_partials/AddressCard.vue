@@ -10,14 +10,14 @@
         </div>
 
         <div class="flex flex-row gap-2">
-            <button class="p-[4px] rounded-md bg-green-100 hover:bg-green-200 shadow-sm transition">
+            <button class="p-[4px] rounded-md bg-green-100 hover:bg-green-200 shadow-xs transition">
                 <PencilLine
                     color="#059669"
                     size="15" />
             </button>
             <button
                 @click.stop="confirmDelete(address._id)"
-                class="p-[4px] rounded-md bg-red-100 hover:bg-red-200 shadow-sm transition">
+                class="p-[4px] rounded-md bg-red-100 hover:bg-red-200 shadow-xs transition">
                 <Trash2
                     color="#dc2626"
                     size="15" />

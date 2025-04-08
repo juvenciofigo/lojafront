@@ -1,6 +1,6 @@
 <template>
     <div class="flex flex-col gap-2">
-        <div class="grid gap-2 bg-slate-100 p-2 rounded-md">
+        <div class="grid gap-2 rounded-md bg-slate-100 p-2">
             <div class="flex flex-col gap-2">
                 <Label for="categoria">Criar Categoria:</Label>
                 <el-input
@@ -21,7 +21,7 @@
         </div>
 
         <!-- Criar Subcategoria -->
-        <div class="grid gap-2 bg-slate-100 p-2 rounded-md">
+        <div class="grid gap-2 rounded-md bg-slate-100 p-2">
             <div class="flex flex-col gap-2">
                 <Label for="subcategoria">Criar Subcategoria:</Label>
 
@@ -38,7 +38,7 @@
                     class="bg-black"
                     v-model="selectedCategory">
                     <SelectTrigger
-                        class="flex border items-center justify-between w-32 px-[15px] text-[13px] gap-[5px]"
+                        class="flex w-32 items-center justify-between gap-[5px] border px-[15px] text-[13px]"
                         aria-label="Customise options">
                         <SelectValue placeholder="Categoria" />
                         <ChevronDown class="h-3.5 w-3.5" />
@@ -46,9 +46,9 @@
 
                     <SelectPortal>
                         <SelectContent
-                            class="bg-white rounded shadow-[0px_10px_38px_-10px_rgba(22,_23,_24,_0.35),_0px_10px_20px_-15px_rgba(22,_23,_24,_0.2)] z-[100]"
+                            class="z-[100] rounded-sm bg-white shadow-[0px_10px_38px_-10px_rgba(22,_23,_24,_0.35),_0px_10px_20px_-15px_rgba(22,_23,_24,_0.2)]"
                             :side-offset="5">
-                            <SelectScrollUpButton class="flex items-center justify-center h-[25px] bg-white text-violet11 cursor-default">
+                            <SelectScrollUpButton class="text-violet11 flex h-[25px] cursor-default items-center justify-center bg-white">
                                 <ChevronUp class="h-3.5 w-3.5" />
                             </SelectScrollUpButton>
 
@@ -57,9 +57,9 @@
                                     <SelectItem
                                         v-for="(category, index) in categories"
                                         :key="index"
-                                        class="text-[13px] leading-none flex items-center h-[25px] pr-[35px] pl-[25px] relative select-none"
+                                        class="relative flex h-[25px] items-center pr-[35px] pl-[25px] text-[13px] leading-none select-none"
                                         :value="category._id">
-                                        <SelectItemIndicator class="absolute left-0 w-[25px] inline-flex items-center justify-center">
+                                        <SelectItemIndicator class="absolute left-0 inline-flex w-[25px] items-center justify-center">
                                             <Check class="h-3.5 w-3.5" />
                                         </SelectItemIndicator>
                                         <SelectItemText class="cursor-pointer">
@@ -69,7 +69,7 @@
                                 </SelectGroup>
                             </SelectViewport>
 
-                            <SelectScrollDownButton class="flex items-center justify-center h-[25px] bg-white text-violet11 cursor-default">
+                            <SelectScrollDownButton class="text-violet11 flex h-[25px] cursor-default items-center justify-center bg-white">
                                 <ChevronDown class="h-3.5 w-3.5" />
                             </SelectScrollDownButton>
                         </SelectContent>
@@ -86,7 +86,7 @@
         </div>
 
         <!-- Criar Subcategoria de Subcategoria -->
-        <div class="grid gap-2 bg-slate-100 p-2 rounded-md">
+        <div class="grid gap-2 rounded-md bg-slate-100 p-2">
             <div class="flex flex-col gap-2">
                 <Label for="categoria">Criar sub_categoria:</Label>
                 <el-input
@@ -102,7 +102,7 @@
                     class="bg-black"
                     v-model="selectedSubcategory">
                     <SelectTrigger
-                        class="flex border items-center justify-between w-32 px-[15px] text-[13px] gap-[5px]"
+                        class="flex w-32 items-center justify-between gap-[5px] border px-[15px] text-[13px]"
                         aria-label="Customise options">
                         <SelectValue placeholder="Subcategoria" />
                         <ChevronDown class="h-3.5 w-3.5" />
@@ -110,9 +110,9 @@
 
                     <SelectPortal>
                         <SelectContent
-                            class="bg-white rounded shadow-[0px_10px_38px_-10px_rgba(22,_23,_24,_0.35),_0px_10px_20px_-15px_rgba(22,_23,_24,_0.2)] z-[100]"
+                            class="z-[100] rounded-sm bg-white shadow-[0px_10px_38px_-10px_rgba(22,_23,_24,_0.35),_0px_10px_20px_-15px_rgba(22,_23,_24,_0.2)]"
                             :side-offset="5">
-                            <SelectScrollUpButton class="flex items-center justify-center h-[25px] bg-white text-violet11 cursor-default">
+                            <SelectScrollUpButton class="text-violet11 flex h-[25px] cursor-default items-center justify-center bg-white">
                                 <ChevronUp class="h-3.5 w-3.5" />
                             </SelectScrollUpButton>
 
@@ -134,7 +134,7 @@
                                 </template>
                             </SelectViewport>
 
-                            <SelectScrollDownButton class="flex items-center justify-center h-[25px] bg-white text-violet11 cursor-default">
+                            <SelectScrollDownButton class="text-violet11 flex h-[25px] cursor-default items-center justify-center bg-white">
                                 <ChevronDown class="h-3.5 w-3.5" />
                             </SelectScrollDownButton>
                         </SelectContent>

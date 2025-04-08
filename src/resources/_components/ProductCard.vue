@@ -1,10 +1,10 @@
 <template>
     <router-link :to="{ name: RouterName || 'product-details', params: { id: `${product._id}` } }">
         <el-tooltip :content="product.productName">
-            <div class="h-full w-full product-card group duration-700 bg-white">
-                <div class="p-3 h-full duration-700 md:group-hover:bg-blue-400 flex flex-col justify-between">
+            <div class="product-card group h-full w-full bg-white duration-700">
+                <div class="flex h-full flex-col justify-between p-3 duration-700 md:group-hover:bg-blue-400">
                     <div class="title w-full">
-                        <p class="text-center md:hover: md:group-hover:text-white duration-700 text-[#0062bd] truncate mb-2">{{ product.productName }}</p>
+                        <p class="md:hover: mb-2 truncate text-center text-[#0062bd] duration-700 md:group-hover:text-white">{{ product.productName }}</p>
                     </div>
 
                     <el-image
@@ -20,7 +20,7 @@
                                 style="width: 100%; height: 100%" />
                         </template>
                         <template #error>
-                            <div class="image-slot min-h-40 h-full flex justify-center items-center w-full">
+                            <div class="image-slot flex h-full min-h-40 w-full items-center justify-center">
                                 <el-icon><icon-picture /></el-icon>
                             </div>
                         </template>

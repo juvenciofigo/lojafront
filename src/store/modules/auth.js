@@ -106,8 +106,7 @@ const actions = {
             const user = JSON.parse(localStorage.getItem("userData"));
             const tempCart = getTempCart("tempCart");
 
-            if (tempCart && tempCart.length > 0) { 
-                
+            if (tempCart && tempCart.length > 0) {
                 const res = await sendAxio({ method: "post", url: `/cart/${user.id}/addProduct`, data: JSON.parse(tempCart) });
                 if (res.status === 200) {
                     // Limpar o cookie do carrinho

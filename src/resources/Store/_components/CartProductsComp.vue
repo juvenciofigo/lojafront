@@ -31,7 +31,7 @@
                     </el-button>
                     <button
                         @click="goTo(scope.row.productId)"
-                        class="flex flex-row justify-center items-center gap-2">
+                        class="flex flex-row items-center justify-center gap-2">
                         <el-image
                             style="width: 60px; height: 60px; border-radius: 5px"
                             :src="scope.row.picture"
@@ -43,7 +43,7 @@
                                     style="width: 60px; height: 60px" />
                             </template>
                             <template #error>
-                                <div class="image-slot h-full flex justify-center items-center w-full">
+                                <div class="image-slot flex h-full w-full items-center justify-center">
                                     <el-icon><icon-picture /></el-icon>
                                 </div>
                             </template>
@@ -124,7 +124,7 @@
             label="Quant.">
             <template #default="scope">
                 <input
-                    class="text-center w-9 border"
+                    class="w-9 border text-center"
                     type="number"
                     placeholder="Digite a quantidade"
                     v-model.number="scope.row.quantity"

@@ -111,7 +111,7 @@ export default createStore({
                 title: data.title,
                 type: data.type,
                 message: data.message,
-                position: 'top-left',
+                position: "top-left",
             });
         },
         SET_loadingPriceUpdate(state) {

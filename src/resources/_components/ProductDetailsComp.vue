@@ -3,7 +3,7 @@
         <div class="flex flex-row justify-between gap-3">
             <div class="flex flex-col sm:flex-row flex-1 bg-white p-2 lg:p-4 gap-4 lg:max-h-[380px]">
                 <!-- Seção de imagens do produto -->
-                <div class="images rounded-md lg:p-2 flex flex-col-reverse lg:flex-row lg:w-max gap-3">
+                <div class="images rounded-md w-ma lg:p-2 flex flex-col-reverse lg:flex-row lg:w-max gap-3">
                     <div
                         class="changeImage mx-auto sm:mx-0 flex flex-nowrap md:flex-col md:p-1 gap-2 overflow-auto max-w-[360px] lg:w-min"
                         v-if="images && images.length > 1">
@@ -11,11 +11,11 @@
                             v-for="(image, index) in images"
                             :key="index"
                             @click="updateImageLink(index)"
-                            class="select rounded-md w-10 h-10 lg:w-[60px] lg:h-[60px] flex-shrink-0 outline outline-1 m-[2px]">
+                            class="select rounded-md w-10 h-10 lg:w-[60px] lg:h-[60px] shrink-0 outline outline-1 m-[2px]">
                             <img
                                 :src="image"
                                 alt="Imagem do Produto"
-                                class="image rounded-sm w-full h-full object-contain" />
+                                class="image rounded-xs w-full h-full object-contain" />
                         </button>
                     </div>
 
@@ -63,10 +63,11 @@
 
                         <slot name="product-statistic" />
                         <slot name="opcoes" />
-                        <div class="buttons-chips flex flex-col lg:flex-row flex-wrap gap-3 font-semibold">
-                        </div>
+                        <div class="buttons-chips flex flex-col lg:flex-row flex-wrap gap-3 font-semibold"></div>
                     </div>
+
                     <br />
+
                     <div>
                         <h2 class="text-lg mb-1">Descrição:</h2>
                         <p
@@ -92,11 +93,9 @@
                     </span>
                 </div>
 
-                <slot name="product-statistic" />
+                <!-- <slot name="product-statistic" /> -->
 
                 <slot name="opcoes" />
-
-                <!-- Fim da seção de seleção de variações -->
             </div>
         </div>
 

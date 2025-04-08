@@ -22,7 +22,7 @@
         v-model="modelValue"
         :class="
             cn(
-                'flex w-full rounded-md border border-input bg-background px-2 py-[5px] text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:outline outline outline-1 disabled:cursor-not-allowed disabled:opacity-50',
+                'flex w-full rounded-md border border-input bg-background px-2 py-[5px] text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-hidden focus-visible:outline outline outline-1 disabled:cursor-not-allowed disabled:opacity-50',
                 props.class ?? ''
             )
         " />

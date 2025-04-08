@@ -1,5 +1,5 @@
 <!-- <template>
-    <div class="bg-white shadow-md rounded p-6">
+    <div class="bg-white shadow-md rounded-sm p-6">
         <form @submit.prevent="submitVariation">
             <div class="mb-4">
                 <label
@@ -13,12 +13,12 @@
                     class="mb-2 flex items-center">
                     <input
                         v-model="attribute.name"
-                        class="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mr-2"
+                        class="shadow-sm appearance-none border rounded-sm py-2 px-3 text-gray-700 leading-tight focus:outline-hidden focus:shadow-outline mr-2"
                         type="text"
                         placeholder="Nome do Atributo" />
                     <input
                         v-model="attribute.value"
-                        class="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mr-2"
+                        class="shadow-sm appearance-none border rounded-sm py-2 px-3 text-gray-700 leading-tight focus:outline-hidden focus:shadow-outline mr-2"
                         type="text"
                         placeholder="Valor do Atributo" />
                     <button
@@ -29,7 +29,7 @@
                 </div>
                 <button
                     @click.prevent="addAttribute"
-                    class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                    class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-sm focus:outline-hidden focus:shadow-outline">
                     Adicionar Atributo
                 </button>
             </div>
@@ -42,7 +42,7 @@
                 >
                 <input
                     v-model.number="variation.additionalPrice"
-                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    class="shadow-sm appearance-none border rounded-sm w-full py-2 px-3 text-gray-700 leading-tight focus:outline-hidden focus:shadow-outline"
                     type="number"
                     placeholder="Preço adicional" />
             </div>
@@ -55,7 +55,7 @@
                 >
                 <input
                     v-model.number="variation.stock"
-                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    class="shadow-sm appearance-none border rounded-sm w-full py-2 px-3 text-gray-700 leading-tight focus:outline-hidden focus:shadow-outline"
                     type="number"
                     placeholder="Quantidade em estoque" />
             </div>
@@ -68,7 +68,7 @@
                 >
                 <input
                     v-model="variation.sku"
-                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    class="shadow-sm appearance-none border rounded-sm w-full py-2 px-3 text-gray-700 leading-tight focus:outline-hidden focus:shadow-outline"
                     type="text"
                     placeholder="SKU" />
             </div>
@@ -81,14 +81,14 @@
                 >
                 <input
                     v-model="variation.image"
-                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    class="shadow-sm appearance-none border rounded-sm w-full py-2 px-3 text-gray-700 leading-tight focus:outline-hidden focus:shadow-outline"
                     type="text"
                     placeholder="URL da imagem" />
             </div>
 
             <div class="flex items-center justify-between">
                 <button
-                    class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                    class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-sm focus:outline-hidden focus:shadow-outline"
                     type="submit">
                     Criar Variação
                 </button>

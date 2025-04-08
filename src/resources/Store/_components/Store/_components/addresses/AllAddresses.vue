@@ -1,12 +1,12 @@
 <template lang="">
     <div
         v-loading="loading"
-        class="flex flex-col flex-1 gap-2 overflow-auto allAddresses bg-black">
+        class="allAddresses flex flex-1 flex-col gap-2 overflow-auto bg-black">
         <div>
             <div v-if="addresses && addresses.length > 0 && loading === false">
                 <ul
                     v-if="addresses && addresses.length > 0"
-                    class="grid grid-cols-2 md:flex flex-row flex-wrap gap-1">
+                    class="grid grid-cols-2 flex-row flex-wrap gap-1 md:flex">
                     <!-- @click="select(index)" -->
                     <li
                         v-for="(address, index) in addresses"
@@ -18,11 +18,8 @@
                                 modifyDialog = !modifyDialog;
                             }
                         "
-                        class="col-span-1 md:flex flex-col flex-wrap gap-4 p-4 rounded-md cursor-pointer border hover:-translate-y-1 duration-500 border-[#e5e7eb] bg-[#f9fafb] hover:border-[#e0a9a9] shadow-md address">
-                        <AddressComp :address="address" 
-                        
-                        
-                        />
+                        class="address col-span-1 cursor-pointer flex-col flex-wrap gap-4 rounded-md border border-[#e5e7eb] bg-[#f9fafb] p-4 shadow-md duration-500 hover:-translate-y-1 hover:border-[#e0a9a9] md:flex">
+                        <AddressComp :address="address" />
                     </li>
                 </ul>
 
@@ -35,51 +32,51 @@
                     align-center
                     destroy-on-close
                     center>
-                    <div class="informations border p-3 m-3 rounded-md bg-white">
-                        <h2 class="font-semibold text-lg">Informações do Endereço de entrega</h2>
+                    <div class="informations m-3 rounded-md border bg-white p-3">
+                        <h2 class="text-lg font-semibold">Informações do Endereço de entrega</h2>
                         <hr class="my-3" />
                         <div
                             class="flex flex-row"
                             v-if="addressSelected">
-                            <div class="grid sm:grid-cols-2 gap-3 flex-1">
+                            <div class="grid flex-1 gap-3 sm:grid-cols-2">
                                 <div v-if="addressSelected.firstName">
-                                    <p class="font-semibold mb-1">Nome:</p>
+                                    <p class="mb-1 font-semibold">Nome:</p>
                                     <p>{{ addressSelected.firstName }}</p>
                                 </div>
                                 <div v-if="addressSelected.lastName">
-                                    <p class="font-semibold mb-1">Apelido:</p>
+                                    <p class="mb-1 font-semibold">Apelido:</p>
                                     <p>{{ addressSelected.lastName }}</p>
                                 </div>
                                 <div v-if="addressSelected.email">
-                                    <p class="font-semibold mb-1">Email</p>
+                                    <p class="mb-1 font-semibold">Email</p>
                                     <p>{{ addressSelected.email }}</p>
                                 </div>
                                 <div v-if="addressSelected.cellNumber">
-                                    <p class="font-semibold mb-1">Email</p>
+                                    <p class="mb-1 font-semibold">Email</p>
                                     <p>{{ addressSelected.cellNumber }}</p>
                                 </div>
                                 <div v-if="addressSelected.city">
-                                    <p class="font-semibold mb-1">Cidadde:</p>
+                                    <p class="mb-1 font-semibold">Cidadde:</p>
                                     <p>{{ addressSelected.city }}</p>
                                 </div>
                                 <div v-if="addressSelected.complete">
-                                    <p class="font-semibold mb-1">Completo:</p>
+                                    <p class="mb-1 font-semibold">Completo:</p>
                                     <p>{{ addressSelected.complete }}</p>
                                 </div>
                                 <div v-if="addressSelected.complete">
-                                    <p class="font-semibold mb-1">Bairo:</p>
+                                    <p class="mb-1 font-semibold">Bairo:</p>
                                     <p>{{ addressSelected.neighborhood }}</p>
                                 </div>
                                 <div v-if="addressSelected.postalCode">
-                                    <p class="font-semibold mb-1">Código Postal:</p>
+                                    <p class="mb-1 font-semibold">Código Postal:</p>
                                     <p>{{ addressSelected.postalCode }}</p>
                                 </div>
                                 <div v-if="addressSelected.province">
-                                    <p class="font-semibold mb-1">Pronvincia:</p>
+                                    <p class="mb-1 font-semibold">Pronvincia:</p>
                                     <p>{{ addressSelected.province }}</p>
                                 </div>
                                 <div v-if="addressSelected.reference">
-                                    <p class="font-semibold mb-1">Referência:</p>
+                                    <p class="mb-1 font-semibold">Referência:</p>
                                     <p>{{ addressSelected.reference }}</p>
                                 </div>
                             </div>

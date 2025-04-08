@@ -3,7 +3,7 @@
         <div
             v-for="(item, index) in form.deliveryEstimate"
             :key="index"
-            class="flex items-center gap-2 mb-2">
+            class="mb-2 flex items-center gap-2">
             <el-select
                 size="small"
                 v-model="item.estimatedTime"
