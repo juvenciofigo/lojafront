@@ -362,11 +362,13 @@
     }
     function sizesValue(value) {
         variation.value.size = value;
-        images.value = (models.value.find((item) => item._id === value))?.variationImage
+        selectedSize.value =sizes.value.find((item) => item._id === value)
+        images.value = selectedSize.value?.variationImage
     }
     function colorValue(value) {
         variation.value.color = value;
-        images.value = (sizes.value.find((item) => item._id === value))?.variationImage
+        selectedColor.value =colors.value.find((item) => item._id === value)
+        images.value = selectedColor.value?.variationImage
     }
     function modelValue(value) {
         variation.value.model = value;
