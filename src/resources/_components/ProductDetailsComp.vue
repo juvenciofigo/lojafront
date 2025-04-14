@@ -3,7 +3,7 @@
         <div class="flex flex-row justify-between gap-3">
             <div class="flex flex-col sm:flex-row flex-1 bg-white p-2 lg:p-4 gap-4 lg:max-h-[380px]">
                 <!-- Seção de imagens do produto -->
-                <div class="images rounded-md lg:p-2 flex flex-col-reverse lg:flex-row lg:w-max gap-3">
+                <div class="images rounded-md lg:p-2 flex flex-col-reverse lg:flex-row lg:w-max gap-3 justify-end">
                     <div
                         class="changeImage mx-auto sm:mx-0 flex flex-nowrap md:flex-col md:p-1 gap-2 overflow-auto max-w-[360px] lg:w-min"
                         v-if="images && images.length > 1">
