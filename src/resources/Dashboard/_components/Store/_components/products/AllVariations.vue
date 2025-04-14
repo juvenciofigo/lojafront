@@ -72,7 +72,7 @@
     import { useRoute } from "vue-router";
 
     // const variations = ref([]);
-    const variations = computed(()=> store.getters.products.variatios)
+    const variations = computed(()=> store.state.products.variations)
     const store = useStore();
     const route = useRoute();
 
