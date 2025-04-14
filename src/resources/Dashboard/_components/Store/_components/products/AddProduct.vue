@@ -17,6 +17,7 @@
                             <div class="input-field">
                                 <Label><span class="text-red-500">*</span> Título do produto:</Label>
                                 <el-input
+                                :autofocus="true"
                                     v-model="productName.value.value"
                                     :disabled="textAreaDisabled"
                                     autocomplete="off"
@@ -187,22 +188,28 @@
 
                 <div class="Right flex-1 bg-blue-500 p-2 md:p-4 rounded-md">
                     <div class="Pub-Cat">
-                        <!-- Available -->
-                        <div class="input-field">
-                            <Label><span class="text-red-500">* </span>Publicar</Label>
-                            <el-select
-                                v-model="productAvailability.value.value"
-                                :value="true"
-                                :disabled="textAreaDisabled"
-                                filterable
-                                placeholder="Selecione">
-                                <el-option
-                                    v-for="(item, index) in availabilityStatus"
-                                    :key="index"
-                                    :label="item.statusName"
-                                    :value="item.statusValue" />
-                            </el-select>
-                            <span class="error-message">{{ productAvailability.errorMessage.value }}</span>
+                        <div class="flex flex-row">
+                            <!-- Available -->
+                            <div class="input-field">
+                                <Label><span class="text-red-500">* </span>Publicar</Label>
+                                <el-checkbox
+
+                                    v-model="productAvailability.value.value"
+                                    label="Visível"
+                                    checked
+                                     />
+                                <span class="error-message">{{ productAvailability.errorMessage.value }}</span>
+                            </div>
+                            <!-- Stock -->
+                            <div class="input-field">
+                                <Label><span class="text-red-500">* </span>Stock</Label>
+                                <el-checkbox
+                                    v-model="productStock.value.value"
+                                    label="Com estoque"
+                                    checked
+                                     />
+                                <span class="error-message">{{ productStock.errorMessage.value }}</span>
+                            </div>
                         </div>
 
                         <!-- Delivery Estimate Time -->
@@ -257,25 +264,7 @@
                         </div>
                         <!-- Fim Delivery Estimate Time -->
 
-                        <!-- Stock -->
-                        <div class="input-field">
-                            <Label><span class="text-red-500">* </span>Stock</Label>
-                            <el-select
-                                v-model="productStock.value.value"
-                                :disabled="textAreaDisabled"
-                                filterable
-                                clearable
-                                :collapse-tags="true"
-                                :collapse-tags-tooltip="true"
-                                placeholder="Selecione">
-                                <el-option
-                                    v-for="(item, index) in stockStatus"
-                                    :key="index"
-                                    :label="item.stockStatus"
-                                    :value="item.stockValue" />
-                            </el-select>
-                            <span class="error-message">{{ productStock.errorMessage.value }}</span>
-                        </div>
+                        
 
                         <!-- Categories -->
                         <div class="">
@@ -465,15 +454,6 @@
     import { Label } from "@/components/ui/label";
     import CreateCategoryVue from "../_partials/CreateCategory.vue";
 
-    const availabilityStatus = [
-        { statusName: "Visível", statusValue: true },
-        { statusName: "Oculto", statusValue: false },
-    ];
-    const stockStatus = [
-        { stockStatus: "Com estoque", stockValue: true },
-        { stockStatus: "Sem estoque", stockValue: false },
-    ];
-
     const store = useStore();
     const route = useRoute();
 
@@ -560,10 +540,10 @@
     });
 
     const productName = useField("productName"),
+    productAvailability = useField("productAvailability"),
+    productStock = useField("productStock"),
         productDescription = useField("productDescription"),
-        productAvailability = useField("productAvailability"),
         productPrice = useField("productPrice"),
-        productStock = useField("productStock"),
         productCategory = useField("productCategory"),
         productSubcategory = useField("productSubcategory"),
         productSub_category = useField("productSub_category"),
@@ -625,10 +605,6 @@
                 await store.dispatch("products/updateProduct", { productSeleted, formData });
             } else {
                 result.value = await store.dispatch("products/addProduct", formData);
-            }
-
-            if (result.value) {
-                handleReset();
             }
 
             loadSubmitButton.value = false;
