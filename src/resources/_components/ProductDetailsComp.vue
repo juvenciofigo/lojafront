@@ -271,8 +271,9 @@
     import { computed, ref, onBeforeMount, defineProps, defineEmits } from "vue";
     import { formatCurrency, formatDate } from "@/util/functions";
 
-    defineProps({
+   const props= defineProps({
         price: Number,
+        newImages:Array
 
         //     firstButton: { type: Function, required: true },
         //     titleFirst: { type: String, required: true },
@@ -325,7 +326,7 @@
     const product = computed(() => store.state.products.product);
     const imageLink = ref(null);
     const selectedImage = ref(null);
-    const images = ref([]);
+    const images = computed(()=> props?.newImages?.length>0 ? props.newImages : product.value.productImage);
 
     function updateImageLink(index = 0) {
         selectedImage.value = index;
