@@ -5,6 +5,7 @@ import notification from "@/util/notifications";
 const state = {
     products: {},
     product: {},
+    variations:[]
 };
 
 const mutations = {
@@ -19,6 +20,9 @@ const mutations = {
     },
     SET_PRODUCT(state, data) {
         state.product = data;
+    },
+    SET_VARIATIONS(state, data) {
+        state.variations = data;
     },
     CLEAR_PRODUCTS(state) {
         state.products = [];
@@ -91,7 +95,7 @@ const actions = {
         }
     },
 
-    async addVariation(_, payload) {
+    async addVariation({commit}, payload) {
         try {
             const res = await sendAxio({
                 method: "post",
@@ -102,6 +106,7 @@ const actions = {
 
             if (res.status === 200) {
                 notification({ title: "Sucesso", type: "success", message: res.data.message });
+                commit("SET_VARIATIONS", res.data.variations)
                 return true;
             }
             throw new Error();
@@ -111,12 +116,13 @@ const actions = {
         }
     },
 
-    async updateVariation(_, payload) {
+    async updateVariation({commit}, payload) {
         try {
             const res = await sendAxio({ method: "put", url: `/variation/${payload.id}`, data: payload.formData, customHeaders: { "Content-Type": "multipart/form-data" } });
 
             if (res.status === 200) {
                 notification({ title: "Sucesso", type: "success", message: res.data.message });
+                commit("SET_VARIATIONS", res.data.variations)
                 return true;
             }
             throw new Error();
@@ -138,11 +144,12 @@ const actions = {
         }
     },
 
-    async fetchVariationsAdmin(_, payload) {
+    async fetchVariationsAdmin({commit}, payload) {
         try {
             const res = await sendAxio({ method: "get", url: `/variations`, params: { product: payload } });
             if (res.status === 200) {
-                return res.data.variations;
+                commit("SET_VARIATIONS", res.data.variations)
+                return ;
             }
             throw new Error();
         } catch (error) {

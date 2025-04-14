@@ -67,15 +67,16 @@
     </div>
 </template>
 <script setup>
-    import { onBeforeMount, ref } from "vue";
+    import { onBeforeMount, computed } from "vue";
     import { useStore } from "vuex";
     import { useRoute } from "vue-router";
 
-    const variations = ref([]);
+    // const variations = ref([]);
+    const variations = computed(()=> store.getters.products.variatios)
     const store = useStore();
     const route = useRoute();
 
     onBeforeMount(async () => {
-        variations.value = await store.dispatch("products/fetchVariationsAdmin", route.params.id);
+        await store.dispatch("products/fetchVariationsAdmin", route.params.id);
     });
 </script>
