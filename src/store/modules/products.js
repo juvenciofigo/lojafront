@@ -5,18 +5,21 @@ import notification from "@/util/notifications";
 const state = {
     products: {},
     product: {},
-    variations:[]
+    variations: [],
+    brands: [],
 };
 
 const mutations = {
     SET_PRODUCTS(state, data) {
         if (data.page === 1) {
             state.products = data;
-        }
-         else {
+        } else {
             state.products.docs = [...state.products.docs, ...data.docs];
             state.products.hasNextPage = data.hasNextPage;
         }
+    },
+    SET_BRANDS(state, data) {
+        state.brands = data;
     },
     SET_PRODUCT(state, data) {
         state.product = data;
@@ -94,7 +97,7 @@ const actions = {
         }
     },
 
-    async addVariation({commit}, payload) {
+    async addVariation({ commit }, payload) {
         try {
             const res = await sendAxio({
                 method: "post",
@@ -105,7 +108,7 @@ const actions = {
 
             if (res.status === 200) {
                 notification({ title: "Sucesso", type: "success", message: res.data.message });
-                commit("SET_VARIATIONS", res.data.variations)
+                commit("SET_VARIATIONS", res.data.variations);
                 return true;
             }
             throw new Error();
@@ -115,13 +118,13 @@ const actions = {
         }
     },
 
-    async updateVariation({commit}, payload) {
+    async updateVariation({ commit }, payload) {
         try {
             const res = await sendAxio({ method: "put", url: `/variation/${payload.id}`, data: payload.formData, customHeaders: { "Content-Type": "multipart/form-data" } });
 
             if (res.status === 200) {
                 notification({ title: "Sucesso", type: "success", message: res.data.message });
-                commit("SET_VARIATIONS", res.data.variations)
+                commit("SET_VARIATIONS", res.data.variations);
                 return true;
             }
             throw new Error();
@@ -143,12 +146,12 @@ const actions = {
         }
     },
 
-    async fetchVariationsAdmin({commit}, payload) {
+    async fetchVariationsAdmin({ commit }, payload) {
         try {
             const res = await sendAxio({ method: "get", url: `/variations`, params: { product: payload } });
             if (res.status === 200) {
-                commit("SET_VARIATIONS", res.data.variations)
-                return ;
+                commit("SET_VARIATIONS", res.data.variations);
+                return;
             }
             throw new Error();
         } catch (error) {
@@ -175,6 +178,8 @@ const actions = {
             const res = await sendAxio({ method: "get", url: `/product/admin/${produtoId}` });
 
             if (res.status === 200) {
+                console.log(res.data);
+
                 commit("SET_PRODUCT", res.data.product);
                 return true;
             }
@@ -185,10 +190,38 @@ const actions = {
         }
     },
 
+    async fetchBrands({ commit }) {
+        try {
+            const res = await sendAxio({ method: "get", url: "/brands/admin/" });
+
+            if (res.status === 200) {
+                commit("SET_BRANDS", res.data.brands);
+                return;
+            }
+            throw new Error();
+        } catch (error) {
+            errorMessage(error);
+        }
+    },
+
+    async addBrands({ commit }, payload) {
+        try {
+            const res = await sendAxio({ method: "post", url: "/brands/admin/", data: payload });
+
+            if (res.status === 201) {
+                notification({ title: "Sucesso", message: res.data.message, type: "success" });
+                commit("SET_BRANDS", res.data.brands);
+                return;
+            }
+            throw new Error();
+        } catch (error) {
+            errorMessage(error);
+        }
+    },
+
     /////////// Client ////////
 
     async fetchProducts({ commit }, payload) {
-        
         try {
             const res = await sendAxio({ method: "get", url: "/products", query: payload?.query });
             if (res.status === 200) {
@@ -208,7 +241,7 @@ const actions = {
                 commit("SET_PRODUCT", res.data.product);
                 return true;
             }
-            
+
             throw new Error();
         } catch (error) {
             errorMessage(error);

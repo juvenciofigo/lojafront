@@ -17,7 +17,7 @@
                             <div class="input-field">
                                 <Label><span class="text-red-500">*</span> Título do produto:</Label>
                                 <el-input
-                                :autofocus="true"
+                                    :autofocus="true"
                                     v-model="productName.value.value"
                                     :disabled="textAreaDisabled"
                                     autocomplete="off"
@@ -91,13 +91,18 @@
                             <!-- Brand -->
                             <div class="input-field">
                                 <Label>Marca:</Label>
-                                <el-input
+                                <el-select
                                     v-model="productBrand.value.value"
-                                    :disabled="textAreaDisabled"
-                                    autocomplete="off"
-                                    type="text"
-                                    placeholder="Marca do produto"
-                                    aria-label="Marca do produto" />
+                                    filterable
+                                    clearable
+                                    default-first-option
+                                    placeholder="Selecione ou crie marcas">
+                                    <el-option
+                                        v-for="brand in brandOptions"
+                                        :key="brand._id"
+                                        :label="brand.name"
+                                        :value="brand._id" />
+                                </el-select>
                                 <span class="error-message">{{ productBrand.errorMessage.value }}</span>
                             </div>
 
@@ -193,11 +198,9 @@
                             <div class="input-field">
                                 <Label><span class="text-red-500">* </span>Publicar</Label>
                                 <el-checkbox
-
                                     v-model="productAvailability.value.value"
                                     label="Visível"
-                                    checked
-                                     />
+                                    checked />
                                 <span class="error-message">{{ productAvailability.errorMessage.value }}</span>
                             </div>
                             <!-- Stock -->
@@ -206,8 +209,7 @@
                                 <el-checkbox
                                     v-model="productStock.value.value"
                                     label="Com estoque"
-                                    checked
-                                     />
+                                    checked />
                                 <span class="error-message">{{ productStock.errorMessage.value }}</span>
                             </div>
                         </div>
@@ -263,8 +265,6 @@
                             <span class="error-message">{{ productAvailability.errorMessage.value }}</span>
                         </div>
                         <!-- Fim Delivery Estimate Time -->
-
-                        
 
                         <!-- Categories -->
                         <div class="">
@@ -463,6 +463,9 @@
     const textAreaDisabled = ref(false);
     const loadSubmitButton = ref(false);
 
+    const brandOptions = computed(() => store.state.products.brands);
+   
+
     // Estimative Delivery
     import { Plus, Delete } from "@element-plus/icons-vue";
 
@@ -540,8 +543,8 @@
     });
 
     const productName = useField("productName"),
-    productAvailability = useField("productAvailability"),
-    productStock = useField("productStock"),
+        productAvailability = useField("productAvailability"),
+        productStock = useField("productStock"),
         productDescription = useField("productDescription"),
         productPrice = useField("productPrice"),
         productCategory = useField("productCategory"),
@@ -556,6 +559,7 @@
         productLength = useField("productLength"),
         productWidth = useField("productWidth"),
         productHeight = useField("productHeight");
+
     const submit = handleSubmit(
         async (values) => {
             // Garante que deliveryEstimate seja um array puro (sem reatividade)
@@ -616,10 +620,12 @@
         }
     );
 
+
     onBeforeMount(async () => {
         loadSubmitButton.value = true;
         textAreaDisabled.value = true;
         await store.dispatch("categories/fetchCategoriesAdmin");
+        await store.dispatch("products/fetchBrands");
 
         if (productSeleted) {
             await store.dispatch("products/fetchProductByIdAdmin", productSeleted);
@@ -639,7 +645,7 @@
             sku.value.value = product?.sku;
             productVendor.value.value = product?.productVendor;
             productModel.value.value = product?.productModel;
-            productBrand.value.value = product?.productBrand;
+            productBrand.value.value = product?.productBrand?._id;
             productWeight.value.value = product?.productWeight;
             productLength.value.value = product?.productLength;
             productWidth.value.value = product?.productWidth;

@@ -1,5 +1,27 @@
 <template>
     <div class="flex flex-col gap-2">
+        <!-- Criar Marca -->
+        <div class="grid gap-2 bg-slate-100 p-2 rounded-md">
+            <div class="flex flex-col gap-2">
+                <Label for="categoria">Criar Marca:</Label>
+                <el-input
+                    v-model="brandName"
+                    :disabled="loadingBtn"
+                    autocomplete="off"
+                    id="marca"
+                    type="text"
+                    placeholder="Digite o nome da Marca"
+                    aria-label="Digite o nome da Marca" />
+                <el-button
+                    size="small"
+                    :loading="loadingBtn"
+                    @click="createBrand()">
+                    Criar Marca
+                </el-button>
+            </div>
+        </div>
+
+        <!-- Criar Categoria -->
         <div class="grid gap-2 bg-slate-100 p-2 rounded-md">
             <div class="flex flex-col gap-2">
                 <Label for="categoria">Criar Categoria:</Label>
@@ -174,6 +196,7 @@
 
     const store = useStore();
 
+    const brandName = ref(null);
     const categoryName = ref(null);
     const subCategoryName = ref(null);
     const sub_categoryName = ref(null);
@@ -187,6 +210,20 @@
     const notification = (message) => {
         store.commit("SET_NOTIFICATION", { title: "Aviso", type: "warning", message: message });
     };
+
+    async function createBrand() {
+        loadingBtn.value = true;
+
+        if (!brandName.value) {
+            //nome
+            notification("Preencha o campo o nome da Marca");
+            loadingBtn.value = false;
+            return;
+        }
+
+        await store.dispatch("products/addBrands", { brand: brandName.value });
+        loadingBtn.value = false;
+    }
 
     async function createCategory() {
         loadingBtn.value = true;
