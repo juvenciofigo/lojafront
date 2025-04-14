@@ -81,11 +81,11 @@
             <div class="input-field mb-3">
                 <label> Imagens:</label>
                 <el-upload
+                drag
                     v-model:file-list="fileList"
                     :auto-upload="false"
                     multiple
                     :disabled="textAreaDisabled"
-                    :limit="5"
                     accept="image/*"
                     list-type="picture-card"
                     :on-preview="handlePictureCardPreview">
