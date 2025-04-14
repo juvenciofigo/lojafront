@@ -268,7 +268,7 @@
 
     import { differenceInHours } from "date-fns";
     import { useStore } from "vuex";
-    import { computed, ref, onBeforeMount, defineProps, defineEmits } from "vue";
+    import { computed, ref, onBeforeMount, defineProps, defineEmits,watch } from "vue";
     import { formatCurrency, formatDate } from "@/util/functions";
 
    const props= defineProps({
@@ -345,14 +345,14 @@
         return formatDate(date);
     };
 
-    // watch(
-    //     () => product.value.productImage,
-    //     (newValue) => {
-    //         if (newValue.length > 0) {
-    //             updateImageLink();
-    //         }
-    //     }
-    // );
+    watch(
+        () => images.value,
+        (newValue) => {
+            if (newValue.length > 0) {
+                updateImageLink();
+            }
+        }
+    );
 
     // const buttons = ref(null);
 
