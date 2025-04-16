@@ -3,7 +3,7 @@
     <ProductDetailsComp
         v-if="!skeleton && product"
         :price="finalPrice"
-        :newImages = "images"
+        :newImages="images"
         @rating-dialog="ratingDialog = true">
         <template #opcoes>
             <div class="flex flex-col gap-3">
@@ -14,6 +14,7 @@
                         Quantidade:
                     </label>
                     <el-input-number
+                        :controls="false"
                         :disabled="loading_button"
                         v-model="quantity"
                         :min="1"
@@ -301,7 +302,7 @@
     const skeleton = ref(true);
     const variation = ref({});
     const quantity = ref(1);
-    const images = ref([])
+    const images = ref([]);
 
     const materials = computed(() => product.value?.productVariations?.filter((item) => item.variationType === "Material") || []);
     const models = computed(() => product.value?.productVariations?.filter((item) => item.variationType === "Modelo") || []);
@@ -338,17 +339,17 @@
         }
 
         if (selectedColor.value) {
-            basePrice += selectedColor.value.variationPromotion ||selectedColor.value.variationPrice || 0;
+            basePrice += selectedColor.value.variationPromotion || selectedColor.value.variationPrice || 0;
         }
         if (selectedSize.value) {
-            basePrice += selectedSize.value.variationPromotion ||  selectedSize.value.variationPrice ||0;
+            basePrice += selectedSize.value.variationPromotion || selectedSize.value.variationPrice || 0;
         }
         if (selectedModel.value) {
             basePrice += selectedModel.value.variationPromotion || selectedModel.value.variationPrice || 0;
         }
 
         if (selectedMaterial.value) {
-            basePrice += selectedMaterial.value.variationPromotion ||selectedMaterial.value.variationPrice || 0;
+            basePrice += selectedMaterial.value.variationPromotion || selectedMaterial.value.variationPrice || 0;
         }
         return basePrice;
     });
@@ -357,24 +358,23 @@
 
     function materialValue(value) {
         variation.value.material = value;
-        selectedMaterial.value =materials.value.find((item) => item._id === value)
-        images.value = selectedMaterial?.value?.variationImage
+        selectedMaterial.value = materials.value.find((item) => item._id === value);
+        images.value = selectedMaterial?.value?.variationImage;
     }
     function sizesValue(value) {
         variation.value.size = value;
-        selectedSize.value =sizes.value.find((item) => item._id === value)
-        images.value = selectedSize.value?.variationImage
+        selectedSize.value = sizes.value.find((item) => item._id === value);
+        images.value = selectedSize.value?.variationImage;
     }
     function colorValue(value) {
         variation.value.color = value;
-        selectedColor.value =colors.value.find((item) => item._id === value)
-        images.value = selectedColor.value?.variationImage
+        selectedColor.value = colors.value.find((item) => item._id === value);
+        images.value = selectedColor.value?.variationImage;
     }
     function modelValue(value) {
         variation.value.model = value;
-        selectedModel.value =models.value.find((item) => item._id === value)
-        images.value = selectedModel.value?.variationImage
-        
+        selectedModel.value = models.value.find((item) => item._id === value);
+        images.value = selectedModel.value?.variationImage;
     }
     function selectEstimateDelivery() {
         variation.value.deliveryEstimate = selectedEstimate.value;

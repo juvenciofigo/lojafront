@@ -123,6 +123,7 @@
                                 <Label><span class="text-red-500">* </span>Peso:</Label>
                                 <div>
                                     <el-input-number
+                                        :controls="false"
                                         v-model="productWeight.value.value"
                                         :disabled="textAreaDisabled"
                                         autocomplete="off"
@@ -139,6 +140,7 @@
                                 <Label>Comprimento:</Label>
                                 <div>
                                     <el-input-number
+                                        :controls="false"
                                         v-model="productLength.value.value"
                                         :disabled="textAreaDisabled"
                                         autocomplete="off"
@@ -153,6 +155,7 @@
                                 <Label>Largura:</Label>
                                 <div>
                                     <el-input-number
+                                        :controls="false"
                                         v-model="productWidth.value.value"
                                         :disabled="textAreaDisabled"
                                         autocomplete="off"
@@ -167,6 +170,7 @@
                                 <Label>Altura:</Label>
                                 <div>
                                     <el-input-number
+                                        :controls="false"
                                         v-model="productHeight.value.value"
                                         :disabled="textAreaDisabled"
                                         autocomplete="off"
@@ -375,6 +379,7 @@
                         <Label><span class="text-red-500">* </span>Preço do produto:</Label>
                         <div>
                             <el-input-number
+                                :controls="false"
                                 v-model="productPrice.value.value"
                                 :disabled="textAreaDisabled"
                                 autocomplete="off"
@@ -389,6 +394,7 @@
                     <div class="input-field">
                         <div>
                             <el-input-number
+                                :controls="false"
                                 v-model="productPromotion.value.value"
                                 :disabled="textAreaDisabled"
                                 autocomplete="off"
@@ -464,7 +470,6 @@
     const loadSubmitButton = ref(false);
 
     const brandOptions = computed(() => store.state.products.brands);
-   
 
     // Estimative Delivery
     import { Plus, Delete } from "@element-plus/icons-vue";
@@ -619,7 +624,6 @@
             textAreaDisabled.value = false;
         }
     );
-
 
     onBeforeMount(async () => {
         loadSubmitButton.value = true;
