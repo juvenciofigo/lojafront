@@ -14,7 +14,7 @@
             v-if="variations && variations.length > 0"
             v-loading="loading">
             <div>Todas:</div>
-            <div class="p-2 flex flex-wrap gap-5 justify-center">
+            <div class="p-2 flex flex-wrap gap-2 justify-center">
                 <template
                     v-for="variation in variations"
                     :key="variation._id">

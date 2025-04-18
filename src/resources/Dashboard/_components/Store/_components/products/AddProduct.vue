@@ -73,8 +73,7 @@
                                             circle
                                             :icon="FullScreen"
                                             size="small"
-                                            @click="handlePictureCardPreview(file)"
-                                            :disabled="getFileIndex(file) === fileList.length - 1" />
+                                            @click="handlePictureCardPreview(file)"/>
                                         <el-button
                                             circle
                                             :icon="Delete"
