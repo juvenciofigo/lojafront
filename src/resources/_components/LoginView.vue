@@ -346,7 +346,7 @@
         margin-bottom: 10px;
     }
 
-    .input-field {
+    /* .input-field {
         max-width: 380px;
         width: 100%;
         margin: 5px 0;
@@ -359,12 +359,12 @@
         border-radius: 8px;
         width: 100%;
         outline: none;
-    }
+    } */
 
-    .input-field input::placeholder {
+    /* .input-field input::placeholder {
         color: #aaa;
         font-weight: 500;
-    }
+    } */
 
     .social-text {
         padding: 0.7rem 0;

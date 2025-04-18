@@ -726,7 +726,7 @@
     });
 </script>
 <style scoped>
-    .input-field {
+    /* .input-field {
         display: flex;
         flex-direction: column;
         gap: 5px;
@@ -745,5 +745,5 @@
     .v-input__control {
         background-color: white;
         border-radius: 4px;
-    }
+    } */
 </style>

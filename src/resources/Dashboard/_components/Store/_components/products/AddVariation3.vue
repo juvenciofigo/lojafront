@@ -227,6 +227,7 @@
             </div>
             <div class="mt-2">
                 <el-button
+                    size="small"
                     :loading="loadSubmitButton"
                     @click="
                         () => {
@@ -239,6 +240,7 @@
                     <span v-else>Criar Variação</span>
                 </el-button>
                 <el-button
+                    size="small"
                     :loading="loadSubmitButton"
                     @click="
                         () => {
@@ -429,24 +431,3 @@
         textAreaDisabled.value = false;
     });
 </script>
-<style scoped>
-    .input-field {
-        display: flex;
-        flex-direction: column;
-        gap: 5px;
-        width: 100%;
-        margin: 5px 0;
-    }
-    .v-input__control {
-        background-color: white;
-        border-radius: 4px;
-    }
-
-    .input-field input {
-        width: 100%;
-        border: none;
-        font-size: 13px;
-        border-radius: 8px;
-        outline: none;
-    }
-</style>

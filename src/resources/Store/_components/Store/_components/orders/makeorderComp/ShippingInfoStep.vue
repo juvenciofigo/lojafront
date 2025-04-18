@@ -346,7 +346,7 @@
     }
 </script>
 <style scoped>
-    .input-field {
+    /* .input-field {
         max-width: 380px;
         width: 100%;
         margin: 5px 0;
@@ -364,6 +364,6 @@
     .input-field input::placeholder {
         color: #aaa;
         font-weight: 500;
-    }
+    } */
 </style>
 

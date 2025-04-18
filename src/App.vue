@@ -72,10 +72,35 @@
         display: flex;
         align-items: center;
     }
+
+    .input-field {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        width: 100%;
+        margin: 5px 0;
+    }
+
+    .input-field input {
+        width: 100%;
+        border: none;
+        font-size: 13px;
+        border-radius: 8px;
+        width: 100%;
+        outline: none;
+    }
+    .v-input__control {
+        background-color: white;
+        border-radius: 4px;
+    }
+    .input-field input::placeholder {
+        color: #aaa;
+        font-weight: 500;
+    }
     /* Estilizando a barra de rolagem */
     ::-webkit-scrollbar {
         /* Altura da barra de rolagem */
-        height: 5px; 
+        height: 5px;
         width: 5px;
     }
 
