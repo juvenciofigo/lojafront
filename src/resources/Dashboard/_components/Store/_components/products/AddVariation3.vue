@@ -1,5 +1,5 @@
 <template>
-    <div class="bg-white shadow-md rounded p-6 flex flex-col" @keyup.enter="submit">
+    <div class="bg-white shadow-md rounded p-6 flex flex-col">
         <div class="rounded-md self-center p-2 border-2 border-slate-600 flex flex-col gap-2 items-center">
             <div class="w-24 h-24">
                 <v-img
@@ -32,6 +32,7 @@
             <div class="input-field">
                 <label><span class="text-red-500">*</span> Valor da Variação:</label>
                 <el-input
+                    @keyup.enter="submit"
                     v-model="variationValue.value.value"
                     :disabled="textAreaDisabled"
                     autocomplete="off"
@@ -44,6 +45,7 @@
             <div class="input-field">
                 <label><span class="text-red-500">*</span> SKU:</label>
                 <el-input
+                    @keyup.enter="submit"
                     v-model="sku.value.value"
                     :disabled="textAreaDisabled"
                     autocomplete="off"
@@ -56,6 +58,7 @@
             <div class="input-field">
                 <label> Preço da Variação:</label>
                 <el-input-number
+                    @keyup.enter="submit"
                     :controls="false"
                     v-model="variationPrice.value.value"
                     :disabled="textAreaDisabled"
@@ -69,6 +72,7 @@
             <div class="input-field">
                 <label> Promoção da Variação:</label>
                 <el-input-number
+                    @keyup.enter="submit"
                     :controls="false"
                     v-model="variationPromotion.value.value"
                     :disabled="textAreaDisabled"
@@ -164,6 +168,7 @@
                         <div class="input-field">
                             <label> Altura:</label>
                             <el-input-number
+                                @keyup.enter="submit"
                                 :controls="false"
                                 v-model="heightCm.value.value"
                                 :disabled="textAreaDisabled"
@@ -176,6 +181,7 @@
                         <div class="input-field">
                             <label> Largura:</label>
                             <el-input-number
+                                @keyup.enter="submit"
                                 :controls="false"
                                 v-model="widthCm.value.value"
                                 :disabled="textAreaDisabled"
@@ -188,6 +194,7 @@
                         <div class="input-field">
                             <label> Comprimento:</label>
                             <el-input-number
+                                @keyup.enter="submit"
                                 :controls="false"
                                 v-model="depthCm.value.value"
                                 :disabled="textAreaDisabled"
@@ -202,6 +209,7 @@
                 <div class="input-field">
                     <label> Peso (g):</label>
                     <el-input-number
+                        @keyup.enter="submit"
                         :controls="false"
                         v-model="weight.value.value"
                         :disabled="textAreaDisabled"
