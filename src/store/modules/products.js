@@ -159,6 +159,20 @@ const actions = {
         }
     },
 
+    async deleteVariation({ commit }, payload) {
+        try {
+            const res = await sendAxio({ method: "delete", url: `/variation/${payload}` });
+            if (res.status === 200) {
+                notification({ title: "Sucesso", type: "success", message: res.data.message });
+                commit("SET_VARIATIONS", res.data.variations);
+                return;
+            }
+            throw new Error();
+        } catch (error) {
+            errorMessage(error);
+        }
+    },
+
     async fetchAllProductsAdmin({ commit }, payload) {
         try {
             const res = await sendAxio({ method: "get", url: "/products/admin", query: payload.query });

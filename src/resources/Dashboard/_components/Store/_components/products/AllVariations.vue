@@ -16,8 +16,8 @@
                 <template
                     v-for="variation in variations"
                     :key="variation._id">
-                    <router-link :to="{ name: `admin-product-variation-edit`, params: { variation: `${variation._id}` } }">
-                        <v-card class="w-max">
+                    <v-card class="w-max">
+                        <router-link :to="{ name: `admin-product-variation-edit`, params: { variation: `${variation._id}` } }">
                             <div class="flex flex-row justify-between items-center px-1">
                                 <div>
                                     <span class="text-base text-blue-700 font-semibold">{{ variation.variationType }}</span
@@ -64,23 +64,65 @@
                                     </div>
                                 </div>
                             </div>
-                        </v-card>
-                    </router-link>
+                        </router-link>
+
+                        <div class="flex flex-row justify-end items-center p-1">
+                            <el-link
+                                @click="confirmDelete(variation._id)"
+                                type="danger"
+                                link
+                                :icon="Delete">
+                            </el-link>
+                        </div>
+                    </v-card>
                 </template>
             </div>
         </div>
+        <DialogConfirmation
+            :dialog="showDialog"
+            tileConfirmation="Deleção de Endereço"
+            textConfirmation="Você tem certeza de que deseja deletar este endereço?"
+            positiveConfirmation="Deletar"
+            @update:dialog="showDialog = $event"
+            @cancelar="handleCancel"
+            @confirmar="handleConfirm" />
     </div>
 </template>
 <script setup>
-    import { onBeforeMount, computed } from "vue";
+    import { onBeforeMount, computed, ref } from "vue";
     import { useStore } from "vuex";
     import { useRoute } from "vue-router";
-    import { EditPen, Plus } from "@element-plus/icons-vue";
+    import { EditPen, Plus, Delete } from "@element-plus/icons-vue";
 
+    import DialogConfirmation from "@/components/partials/DialogConfirmation.vue";
     const variations = computed(() => store.state.products.variations);
     const store = useStore();
     const route = useRoute();
 
+    const showDialog = ref(false);
+    const deleteIndex = ref(null);
+
+    function confirmDelete(index) {
+        deleteIndex.value = index;
+        showDialog.value = true;
+    }
+
+    const handleCancel = () => {
+        showDialog.value = false;
+    };
+
+    const handleConfirm = () => {
+        deleteVariation();
+    };
+
+    async function deleteVariation() {
+        if (deleteIndex.value !== null) {
+            console.log(deleteIndex.value)
+            await store.dispatch("products/deleteVariation", deleteIndex.value);
+            showDialog.value = false;
+            deleteIndex.value = null;
+        }
+    }
     onBeforeMount(async () => {
         await store.dispatch("products/fetchVariationsAdmin", route.params.id);
     });

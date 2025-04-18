@@ -44,10 +44,10 @@
     defineProps({
         address: { type: Object, required: true },
     });
+    const store = useStore();
 
     const showDialog = ref(false);
     const deleteIndex = ref(null);
-    const store = useStore();
 
     function confirmDelete(index) {
         deleteIndex.value = index;
