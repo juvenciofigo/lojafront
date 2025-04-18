@@ -194,7 +194,7 @@
                 <el-button
                     size="small"
                     :loading="loading_button"
-                    type="success"
+                    type="primary"
                     @click="buyNow">
                     Comprar Agora
                 </el-button>
