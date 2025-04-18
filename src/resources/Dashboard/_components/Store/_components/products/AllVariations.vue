@@ -10,7 +10,9 @@
             </router-link>
         </div>
         <br />
-        <div v-if="variations && variations.length > 0">
+        <div
+            v-if="variations && variations.length > 0"
+            v-loading="loading">
             <div>Todas:</div>
             <div class="p-2 flex flex-wrap gap-5 justify-center">
                 <template
@@ -99,6 +101,7 @@
     const store = useStore();
     const route = useRoute();
 
+    const loading = ref(true);
     const showDialog = ref(false);
     const deleteIndex = ref(null);
 
@@ -116,14 +119,17 @@
     };
 
     async function deleteVariation() {
+        loading.value = true;
         if (deleteIndex.value !== null) {
-            console.log(deleteIndex.value)
+            console.log(deleteIndex.value);
             await store.dispatch("products/deleteVariation", deleteIndex.value);
             showDialog.value = false;
             deleteIndex.value = null;
         }
+        loading.value = false;
     }
     onBeforeMount(async () => {
         await store.dispatch("products/fetchVariationsAdmin", route.params.id);
+        loading.value = false;
     });
 </script>

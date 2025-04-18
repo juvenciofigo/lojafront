@@ -157,13 +157,11 @@
         fetchRouteName: String,
         fetchCategories: String,
         fetchProducts: String,
-        skeleton: Boolean,
     });
 
     const router = useRouter();
     const route = useRoute();
     const store = useStore();
-
     const products = computed(() => store.state.products.products);
     const categories = computed(() => store.state.categories.categories);
     const category = ref(null);
@@ -178,6 +176,7 @@
     const priceValue = ref(0);
     const pricelimit = ref(200000);
     const loading = ref(true);
+    const skeleton = ref(true);
 
     function filterProduct(category, subCategory, sub_category) {
         const query = {
@@ -206,6 +205,7 @@
     const offset = ref(route.query.subcategory || 1);
 
     async function fetchProducts() {
+        loading.value = true;
         const query = { offset: offset.value };
 
         if (route.query.category) {
@@ -228,6 +228,7 @@
             await store.dispatch(props.fetchProducts || "products/fetchProducts", { query });
         }
         head();
+        loading.value = false;
         return;
     }
 
@@ -235,6 +236,7 @@
         await store.dispatch(props.fetchCategories || "categories/fetchCategories");
         await fetchProducts();
         loading.value = false;
+        skeleton.value = false;
     });
 
     const load = async () => {
@@ -243,6 +245,7 @@
         offset.value += 1;
         await fetchProducts();
         loading.value = false;
+        skeleton.value = false;
     };
 
     function head() {
