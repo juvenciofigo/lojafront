@@ -54,17 +54,19 @@
                                 :key="index"
                                 :value="item._id">
                                 <template v-slot:default>
-                                    <el-tooltip :content="item.variationValue">
-                                        <div v-if="item?.variationImage && item?.variationImage?.length > 0">
-                                            <img
-                                                :src="item.variationImage[0]"
-                                                alt="Imagem da variacao do produto"
-                                                class="chip-image object-contain" />
-                                        </div>
-                                        <div v-else>
-                                            {{ item.variationValue }}
-                                        </div>
-                                    </el-tooltip>
+                                    <el-tooltip :content="item.variationValue"> </el-tooltip>
+                                    <div
+                                        class="chip-image"
+                                        v-if="item.variationImage && item.variationImage.length > 0">
+                                        <el-image
+                                            style="width: 100%; height: 100%"
+                                            :src="item.variationImage[0]"
+                                            fit="contain" />
+                                    </div>
+                                    <div v-else>
+                                        {{ item.variationValue }}
+                                    </div>
+                                    <el-tooltip :content="item.variationValue"> </el-tooltip>
                                 </template>
                             </v-chip>
                         </v-chip-group>
@@ -89,12 +91,14 @@
                                 :key="index"
                                 :value="item._id">
                                 <template v-slot:default>
-                                    <el-tooltip :content="item?.variationValue"> </el-tooltip>
-                                    <div v-if="item?.variationImage && item?.variationImage?.length > 0">
-                                        <img
+                                    <el-tooltip :content="item.variationValue"> </el-tooltip>
+                                    <div
+                                        class="chip-image"
+                                        v-if="item.variationImage && item.variationImage.length > 0">
+                                        <el-image
+                                            style="width: 100%; height: 100%"
                                             :src="item.variationImage[0]"
-                                            alt="Imagem da variacao do produto"
-                                            class="chip-image object-contain" />
+                                            fit="contain" />
                                     </div>
                                     <div v-else>
                                         {{ item.variationValue }}
@@ -125,11 +129,13 @@
                                 :value="item._id">
                                 <template v-slot:default>
                                     <el-tooltip :content="item.variationValue"> </el-tooltip>
-                                    <div v-if="item.variationImage && item.variationImage.length > 0">
-                                        <img
+                                    <div
+                                        class="chip-image"
+                                        v-if="item.variationImage && item.variationImage.length > 0">
+                                        <el-image
+                                            style="width: 100%; height: 100%"
                                             :src="item.variationImage[0]"
-                                            alt="Imagem da variacao do produto"
-                                            class="chip-image object-contain" />
+                                            fit="contain" />
                                     </div>
                                     <div v-else>
                                         {{ item.variationValue }}
@@ -160,11 +166,13 @@
                                 :value="item._id">
                                 <template v-slot:default>
                                     <el-tooltip :content="item.variationValue"> </el-tooltip>
-                                    <div v-if="item.variationImage && item.variationImage.length > 0">
-                                        <img
+                                    <div
+                                        class="chip-image"
+                                        v-if="item.variationImage && item.variationImage.length > 0">
+                                        <el-image
+                                            style="width: 100%; height: 100%"
                                             :src="item.variationImage[0]"
-                                            alt="Imagem da variacao do produto"
-                                            class="chip-image object-contain" />
+                                            fit="contain" />
                                     </div>
                                     <div v-else>
                                         {{ item.variationValue }}
@@ -474,5 +482,8 @@
 <style>
     .buttons :nth-child(4) {
         display: none;
+    }
+    .chip-image {
+        width: 40px;
     }
 </style>
