@@ -1,35 +1,41 @@
 <template lang="">
     <div>
         <div>
-            <v-btn :to="{ name: `admin-product-variation-add` }">Adicionar variações</v-btn>
+            <router-link :to="{ name: 'admin-product-variation-add' }">
+                <el-button
+                    :icon="Plus"
+                    size="small">
+                    Adicionar variações
+                </el-button>
+            </router-link>
         </div>
         <br />
-        <br />
         <div v-if="variations && variations.length > 0">
-            <div>Todas</div>
-            <div class="flex flex-wrap gap-5 justify-center">
+            <div>Todas:</div>
+            <div class="p-2 flex flex-wrap gap-5 justify-center">
                 <template
                     v-for="variation in variations"
                     :key="variation._id">
                     <router-link :to="{ name: `admin-product-variation-edit`, params: { variation: `${variation._id}` } }">
-                        <v-card class="w-max p-4">
-                            <div class="flex flex-row justify-between">
+                        <v-card class="w-max">
+                            <div class="flex flex-row justify-between items-center px-1">
                                 <div>
-                                    <span class="text-lg text-blue-700 font-semibold">{{ variation.variationType }}</span
+                                    <span class="text-base text-blue-700 font-semibold">{{ variation.variationType }}</span
                                     >: {{ variation.variationValue }}
                                 </div>
                                 <div>
-                                    <v-btn
-                                        :to="{ name: `admin-product-variation-edit`, params: { variation: `${variation._id}` } }"
-                                        variant="tonal"
-                                        class="bg-primary"
-                                        size="x-small"
-                                        >Modificar</v-btn
-                                    >
+                                    <router-link :to="{ name: `admin-product-variation-edit`, params: { variation: `${variation._id}` } }">
+                                        <el-link
+                                            type="primary"
+                                            link
+                                            :icon="EditPen">
+                                            Modificar
+                                        </el-link>
+                                    </router-link>
                                 </div>
                             </div>
 
-                            <div class="flex flex-row gap-5 lg:ml-6 bg-slate-100 p-3 rounded-md">
+                            <div class="flex flex-row gap-5 bg-blue-100 p-2">
                                 <div>
                                     <div><span class="font-medium">Sku:</span> {{ variation.sku }}</div>
                                     <div>
@@ -42,7 +48,6 @@
 
                                     <div><span class="font-medium">Preço adicional:</span> {{ variation.variationPrice }}</div>
                                     <div><span class="font-medium">Preço promocional:</span> {{ variation.variationPromotion }}</div>
-                                    <!-- <div>{{ variation.variationImage }}</div> -->
                                 </div>
                                 <div>
                                     <div v-if="variation.delivery.dimensions.heightCm || variation.delivery.dimensions.widthCm || variation.delivery.dimensions.depthCm">
@@ -70,9 +75,9 @@
     import { onBeforeMount, computed } from "vue";
     import { useStore } from "vuex";
     import { useRoute } from "vue-router";
+    import { EditPen, Plus } from "@element-plus/icons-vue";
 
-    // const variations = ref([]);
-    const variations = computed(()=> store.state.products.variations)
+    const variations = computed(() => store.state.products.variations);
     const store = useStore();
     const route = useRoute();
 
