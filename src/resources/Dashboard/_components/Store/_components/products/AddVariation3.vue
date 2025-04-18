@@ -1,5 +1,5 @@
 <template>
-    <div class="bg-white shadow-md rounded p-6 flex flex-col">
+    <div class="bg-white shadow-md rounded p-6 flex flex-col" @keyup.enter="submit">
         <div class="rounded-md self-center p-2 border-2 border-slate-600 flex flex-col gap-2 items-center">
             <div class="w-24 h-24">
                 <v-img
@@ -108,7 +108,7 @@
                                     circle
                                     :icon="FullScreen"
                                     size="small"
-                                    @click="handlePictureCardPreview(file)"/>
+                                    @click="handlePictureCardPreview(file)" />
                                 <el-button
                                     circle
                                     :icon="Delete"
@@ -230,8 +230,6 @@
                     :loading="loadSubmitButton"
                     @click="
                         () => {
-                            loadSubmitButton = true;
-                            textAreaDisabled = true;
                             submit();
                         }
                     ">
@@ -350,6 +348,8 @@
 
     const submit = handleSubmit(
         async (values) => {
+            loadSubmitButton.value = true;
+            textAreaDisabled.value = true;
             let response = null;
             const formData = new FormData();
 
