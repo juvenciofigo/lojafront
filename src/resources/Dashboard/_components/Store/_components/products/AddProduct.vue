@@ -49,24 +49,58 @@
                         <el-upload
                             drag
                             v-model:file-list="fileList"
+                            :before-upload="handleBeforeUpload"
                             :auto-upload="false"
                             multiple
                             :disabled="textAreaDisabled"
                             accept="image/*"
-                            list-type="picture-card"
-                            :on-preview="handlePictureCardPreview">
+                            list-type="picture-card">
+                            <template #file="{ file }">
+                                <div class="flex items-center relative">
+                                    <el-image
+                                        style="width: 100%; height: 100%"
+                                        :src="file.url"
+                                        fit="fill" />
+                                    <div class="absolute bottom-1 flex gap-[2px]">
+                                        <el-button
+                                            circle
+                                            :icon="Back"
+                                            size="small"
+                                            @click="moveUp(getFileIndex(file))"
+                                            :disabled="getFileIndex(file) === 0" />
+                                        <el-button
+                                            plain
+                                            circle
+                                            :icon="FullScreen"
+                                            size="small"
+                                            @click="handlePictureCardPreview(file)"
+                                            :disabled="getFileIndex(file) === fileList.length - 1" />
+                                        <el-button
+                                            circle
+                                            :icon="Delete"
+                                            size="small"
+                                            @click="removeFile(getFileIndex(file))" />
+                                        <el-button
+                                            circle
+                                            :icon="Right"
+                                            size="small"
+                                            @click="moveDown(getFileIndex(file))"
+                                            :disabled="getFileIndex(file) === fileList.length - 1" />
+                                    </div>
+                                </div>
+                            </template>
                             <el-icon class="el-icon--upload"><Plus /></el-icon>
                         </el-upload>
                         <el-dialog v-model="dialogVisible">
-                            <img
-                                width="100%"
+                            <el-image
+                                style="width: 100%"
                                 :src="dialogImageUrl"
-                                alt="Preview Image" />
+                                fit="fill" />
                         </el-dialog>
                     </div>
 
                     <div
-                        class="block h-max"
+                        class="block h-max mt-5"
                         v-if="productImage && productImage.length > 0">
                         <label> Imagens EXISTENTES:</label>
 
@@ -451,14 +485,17 @@
     import { useStore } from "vuex";
     import { useRoute } from "vue-router";
     import { ref, onBeforeMount, computed, toRaw } from "vue";
-
-    // import Editor from "@tinymce/tinymce-vue";
+    import CreateCategoryVue from "../_partials/CreateCategory.vue";
+    
+    import { QuillEditor } from "@vueup/vue-quill";
+    import "@vueup/vue-quill/dist/vue-quill.snow.css"; // Estilo do editor
+    
     import { useField, useForm } from "vee-validate";
     import { toTypedSchema } from "@vee-validate/zod";
     import * as z from "zod";
-
+    
+    import { Back, Right, Delete, Plus, FullScreen } from "@element-plus/icons-vue";
     import { Label } from "@/components/ui/label";
-    import CreateCategoryVue from "../_partials/CreateCategory.vue";
 
     const store = useStore();
     const route = useRoute();
@@ -470,9 +507,23 @@
     const loadSubmitButton = ref(false);
 
     const brandOptions = computed(() => store.state.products.brands);
+    
+
+    const editorOptions = {
+        placeholder: "Descrição do produto...",
+        modules: {
+            toolbar: [
+                ["bold", "italic", "underline"], // Formatação básica
+                [{ header: [1, 2, 3, false] }], // Títulos
+                ["blockquote", "code-block"], // Blocos
+                [{ list: "ordered" }, { list: "bullet" }, { list: "check" }], // Listas
+                ["link", "image"], // Mídia
+            ],
+        },
+        theme: "snow",
+    };
 
     // Estimative Delivery
-    import { Plus, Delete } from "@element-plus/icons-vue";
 
     const form = ref({
         deliveryEstimate: [],
@@ -488,34 +539,48 @@
 
     // ///////////
 
-    import { QuillEditor } from "@vueup/vue-quill";
-    import "@vueup/vue-quill/dist/vue-quill.snow.css"; // Estilo do editor
-
-    const editorOptions = {
-        placeholder: "Descrição do produto...",
-        modules: {
-            toolbar: [
-                ["bold", "italic", "underline"], // Formatação básica
-                [{ header: [1, 2, 3, false] }], // Títulos
-                ["blockquote", "code-block"], // Blocos
-                [{ list: "ordered" }, { list: "bullet" }, { list: "check" }], // Listas
-                ["link", "image"], // Mídia
-            ],
-        },
-        theme: "snow",
-    };
     // Função para pré-visualizar as imagens
 
-    const fileList = ref([]);
     const productImage = ref([]);
+    
+    const fileList = ref([]);
+    function moveUp(index) {
+        if (index > 0) {
+            const temp = fileList.value[index];
+            fileList.value[index] = fileList.value[index - 1];
+            fileList.value[index - 1] = temp;
+        }
+    }
 
-    const dialogImageUrl = ref("");
-    const dialogVisible = ref(false);
+    function moveDown(index) {
+        if (index < fileList.value.length - 1) {
+            const temp = fileList.value[index];
+            fileList.value[index] = fileList.value[index + 1];
+            fileList.value[index + 1] = temp;
+        }
+    }
+
+    function handleBeforeUpload(file) {
+        fileList.value.push(file);
+        return false;
+    }
 
     const handlePictureCardPreview = (uploadFile) => {
         dialogImageUrl.value = uploadFile.url;
         dialogVisible.value = true;
     };
+
+    function removeFile(index) {
+        fileList.value.splice(index, 1);
+    }
+
+    function getFileIndex(file) {
+        return fileList.value.findIndex((f) => f.uid === file.uid);
+    }
+    // //////////////
+
+    const dialogImageUrl = ref("");
+    const dialogVisible = ref(false);
 
     function removeImage(index) {
         if (index > -1 && index < productImage.value.length) {
@@ -610,6 +675,7 @@
             }
 
             const result = ref(null);
+
             if (productSeleted) {
                 await store.dispatch("products/updateProduct", { productSeleted, formData });
             } else {

@@ -78,29 +78,64 @@
                 <span class="error-message">{{ variationPromotion.errorMessage.value }}</span>
             </div>
             <!-- ///////// images/////////// -->
+
             <div class="input-field mb-3">
                 <label> Imagens:</label>
                 <el-upload
-                drag
+                    drag
                     v-model:file-list="fileList"
+                    :before-upload="handleBeforeUpload"
                     :auto-upload="false"
                     multiple
                     :disabled="textAreaDisabled"
                     accept="image/*"
-                    list-type="picture-card"
-                    :on-preview="handlePictureCardPreview">
+                    list-type="picture-card">
+                    <template #file="{ file }">
+                        <div class="flex items-center relative">
+                            <el-image
+                                style="width: 100%; height: 100%"
+                                :src="file.url"
+                                fit="fill" />
+                            <div class="absolute bottom-1 flex gap-[2px]">
+                                <el-button
+                                    circle
+                                    :icon="Back"
+                                    size="small"
+                                    @click="moveUp(getFileIndex(file))"
+                                    :disabled="getFileIndex(file) === 0" />
+                                <el-button
+                                    plain
+                                    circle
+                                    :icon="FullScreen"
+                                    size="small"
+                                    @click="handlePictureCardPreview(file)"
+                                    :disabled="getFileIndex(file) === fileList.length - 1" />
+                                <el-button
+                                    circle
+                                    :icon="Delete"
+                                    size="small"
+                                    @click="removeFile(getFileIndex(file))" />
+                                <el-button
+                                    circle
+                                    :icon="Right"
+                                    size="small"
+                                    @click="moveDown(getFileIndex(file))"
+                                    :disabled="getFileIndex(file) === fileList.length - 1" />
+                            </div>
+                        </div>
+                    </template>
                     <el-icon class="el-icon--upload"><Plus /></el-icon>
                 </el-upload>
                 <el-dialog v-model="dialogVisible">
-                    <img
-                        width="100%"
+                    <el-image
+                        style="width: 100%"
                         :src="dialogImageUrl"
-                        alt="Preview Image" />
+                        fit="fill" />
                 </el-dialog>
             </div>
 
             <div
-                class="block h-max"
+                class="block h-max mt-5"
                 v-if="selectedVariation && variationImage && variationImage.length > 0">
                 <label> Imagens EXISTENTES:</label>
 
@@ -226,6 +261,7 @@
     import { useField, useForm } from "vee-validate";
     import { toTypedSchema } from "@vee-validate/zod";
     import * as z from "zod";
+    import { Back, Right, Delete, Plus, FullScreen } from "@element-plus/icons-vue";
 
     const route = useRoute();
     const store = useStore();
@@ -237,17 +273,45 @@
     const options = [`Modelo`, `Cor`, `Tamanho`, `Material`];
 
     ////////image/////////
-    import { Plus } from "@element-plus/icons-vue";
-    const fileList = ref([]);
     const variationImage = ref([]);
 
     const dialogImageUrl = ref("");
     const dialogVisible = ref(false);
 
+    const fileList = ref([]);
+    function moveUp(index) {
+        if (index > 0) {
+            const temp = fileList.value[index];
+            fileList.value[index] = fileList.value[index - 1];
+            fileList.value[index - 1] = temp;
+        }
+    }
+
+    function moveDown(index) {
+        if (index < fileList.value.length - 1) {
+            const temp = fileList.value[index];
+            fileList.value[index] = fileList.value[index + 1];
+            fileList.value[index + 1] = temp;
+        }
+    }
+
+    function handleBeforeUpload(file) {
+        fileList.value.push(file);
+        return false;
+    }
+
     const handlePictureCardPreview = (uploadFile) => {
         dialogImageUrl.value = uploadFile.url;
         dialogVisible.value = true;
     };
+
+    function removeFile(index) {
+        fileList.value.splice(index, 1);
+    }
+
+    function getFileIndex(file) {
+        return fileList.value.findIndex((f) => f.uid === file.uid);
+    }
 
     function removeImage(index) {
         if (index > -1 && index < variationImage.value.length) {
