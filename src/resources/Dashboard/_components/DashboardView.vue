@@ -1,6 +1,6 @@
 <template lang="">
-    <div class="flex flex-col h-full gap-2 lg:p-2 relative">
-        <HeaderTop>
+    <div class="flex flex-col h-full gap-2 lg:px-2 relative overflow-auto">
+        <HeaderTop class="sticky top-0 z-10">
             <!-- esquerda -->
             <template #left>
                 <LogoPart class="mb-2" />
@@ -12,8 +12,7 @@
                         trigger="click"
                         :hide-on-click="true"
                         role="navigation"
-                        popper-class="el-menu-vertical-demo "
-                        >
+                        popper-class="el-menu-vertical-demo ">
                         <span class="el-dropdown-link flex flex-row items-center">
                             Menu
                             <el-icon class="el-icon--right">
@@ -81,7 +80,7 @@
                     </el-menu>
                 </span>
             </div>
-            <router-view class=""></router-view>
+            <router-view class="overflow-auto"></router-view>
         </div>
 
         <FoooterComp />
@@ -94,7 +93,7 @@
     import LogoPart from "@/components/partials/LogoPart.vue";
     import FoooterComp from "@/components/partials/FoooterComp.vue";
     import { ShoppingCart, User, Goods, ShoppingBag, TakeawayBox, Grid, ArrowLeft } from "@element-plus/icons-vue";
-    
+
     const route = useRoute();
 
     const items = [
