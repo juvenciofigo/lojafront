@@ -1,5 +1,5 @@
 <template lang="">
-    <div class="flex flex-col h-full gap-2 lg:px-2 relative overflow-auto">
+    <div class="flex flex-col h-full gap-2 lg:px-2 relative overflow-auto view">
         <HeaderTop class="sticky top-0 z-10">
             <!-- esquerda -->
             <template #left>
@@ -82,7 +82,12 @@
             </div>
             <router-view class="overflow-auto"></router-view>
         </div>
-
+        <el-backtop
+            target=".view"
+            :right="30"
+            :bottom="50">
+            <div class="custom-backtop">Topo</div>
+        </el-backtop>
         <FoooterComp />
     </div>
 </template>

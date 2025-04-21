@@ -137,4 +137,20 @@
         color: #0062bd;
         outline: 1px solid #0062bd;
     }
+
+    .custom-backtop {
+        width: max-content;
+        background-color: #409eff;
+        color: white;
+        text-align: center;
+        font-weight: 300;
+        padding: 2px;
+        font-size: medium;
+        border-radius: 5px;
+    }
+    .el-backtop {
+        height: max-content !important;
+        width: max-content !important;
+        border-radius: 0% !important;
+    }
 </style>

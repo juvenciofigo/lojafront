@@ -1,10 +1,16 @@
 <template>
-    <div class="overflow-auto flex flex-col h-full">
-        <HeaderComp class="header sticky top-0 z-[1]" />
+    <div class="overflow-auto flex flex-col h-full view">
+        <HeaderComp class="header sticky top-0 z-10" />
         <section class="flex-1">
             <router-view></router-view>
         </section>
         <SignaturePart class="footer" />
+        <el-backtop
+            target=".view"
+            :right="30"
+            :bottom="50">
+            <div class="custom-backtop">Topo</div>
+        </el-backtop>
     </div>
 </template>
 

@@ -1,13 +1,13 @@
 <template>
-    <div class="flex flex-row flex-1 gap-">
+    <div class="flex flex-row flex-1">
         <!-- Filtrar -->
-        <section class="w-[274px] hidden lg:flex flex-col gap-4">
-            <div class="w-full categories-list overflow-auto">
+        <section class="w-[274px] hidden lg:flex flex-col gap-4 bg-foreground_2">
+            <div class="w-full categories-list overflow-auto bg-foreground_2">
                 <h2 class="p-1 bg-details font-semibold">Categorias</h2>
 
                 <ul
                     v-if="categories && categories.length > 0"
-                    class="categories-list indent-2 p-1 overflow-auto list-none min-w-52 text-text13">
+                    class="categories-list indent-2 p-1 overflow-auto list-none min-w-52 text-text13 bg-foreground_2">
                     <router-link :to="{ name: 'products-list' }"><li class="duration-75 item-list-category">Todos produtos</li></router-link>
 
                     <li
@@ -32,7 +32,7 @@
                             <ul
                                 v-for="subCategory in category.subCategories"
                                 :key="subCategory._id"
-                                class="list-none indent-2 p-1 min-w-52 text-text13">
+                                class="list-none indent-2 p-1 bg-foreground_2 min-w-52 text-text13">
                                 <li class="subCategory item-list-category">
                                     <v-menu
                                         transition="scale-transition"
@@ -50,7 +50,7 @@
                                         </template>
                                         <ul
                                             v-if="subCategory.sub_categories && subCategory.sub_categories.length > 0"
-                                            class="list-none indent-2 p-1 min-w-52 text-text13">
+                                            class="list-none indent-2 p-1 min-w-52 text-text13 bg-foreground_2">
                                             <li
                                                 v-for="sub_category in subCategory.sub_categories"
                                                 :key="sub_category._id"
@@ -131,12 +131,6 @@
                         >
                     </div>
                 </div>
-                <el-backtop
-                    target=".products"
-                    :right="30"
-                    :bottom="50">
-                    <div class="custom-backtop">Voltar</div>
-                </el-backtop>
             </div>
             <div
                 v-if="!products || (products.docs?.length === 0 && !skeleton)"
@@ -273,9 +267,6 @@
     }
 
     .products {
-        position: relative;
-        height: 90vh;
-        overflow: auto;
         margin: 0 5px;
         display: grid;
         gap: 5px;
@@ -303,20 +294,6 @@
         }
     }
 
-    .custom-backtop {
-        width: max-content;
-        background-color: #409eff;
-        color: white;
-        text-align: center;
-        font-weight: 300;
-        padding: 5px;
-        font-size: medium;
-        border-radius: 5px;
-    }
-    .el-backtop {
-        height: max-content !important;
-        width: max-content !important;
-        border-radius: 0% !important;
-    }
+   
 </style>
 <style></style>
