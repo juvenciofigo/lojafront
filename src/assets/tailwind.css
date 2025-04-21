@@ -34,9 +34,31 @@
         --ring: 222.2 84% 4.9%;
 
         --radius: 0.5rem;
+        /* /////// */
+        --foreground_2: #ffffff;
+        --background_2: #f5f8fa;
+        --secondary_2: #D9E5F1;
+        --text_2: #0f181f;
+        --details: #e8ebed;
+        --details_2: #bdbfc2;
+        --primary_2: #2289ff;
+        /* ///// */
+        --primary_light_2: #6999c9;
+        --accent_2: #5cadd6;
     }
 
     .dark {
+        --foreground_2: #0D1012;
+        --background_2: #05080A;
+        --secondary_2: #0E1B25;
+        --text_2: #e0e9f0;
+        --details: #494b4b;
+        --details_2: #111416;
+        --primary_2: #3e7ed8;
+        /* ///// */
+        --primary_light_2: #2d405777;
+        --accent_2: #2e3f59;
+        /* /////// */
         --background: 222.2 84% 4.9%;
         --foreground: 210 40% 98%;
 

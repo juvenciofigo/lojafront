@@ -1,6 +1,6 @@
 <template lang="">
     <!-- start header-2 -->
-    <nav class="header-2 lg:h-[70px] h-[50px] flex flex-row gap-4 items-center bg-white">
+    <nav class="header-2 h-[50px] flex flex-row gap-4 items-center bg-foreground_2">
         <div class="lg:hidden flex flex-col"></div>
 
         <div class="py-2 px-3 lg:block rounded-md hidden duration-700 hover:-translate-y-1">

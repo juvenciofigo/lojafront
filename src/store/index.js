@@ -63,6 +63,7 @@ export default createStore({
     },
 
     state: {
+        themeMode: false,
         /// Loja
         storeName: process.env.VUE_APP_STORE_NAME,
         // users
@@ -111,7 +112,7 @@ export default createStore({
                 title: data.title,
                 type: data.type,
                 message: data.message,
-                position: 'top-left',
+                position: "top-left",
             });
         },
         SET_loadingPriceUpdate(state) {
@@ -123,6 +124,9 @@ export default createStore({
         SET_COMPLETE_PROFILE(state, data) {
             state.mySelf = data;
             state.completeProfile = !state.completeProfile;
+        },
+        SWITH_THEME(state) {
+            state.themeMode = !state.themeMode;
         },
     },
 
@@ -138,6 +142,9 @@ export default createStore({
             } catch (error) {
                 errorMessage(error);
             }
+        },
+        swithTheme({ commit }) {
+            commit("SWITH_THEME");
         },
     },
 });

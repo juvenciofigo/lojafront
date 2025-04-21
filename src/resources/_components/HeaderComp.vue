@@ -6,13 +6,13 @@
                     <LogoPart />
                 </div>
             </template>
-
             <template #right>
                 <router-link
                     v-loading="loadingPriceUpdate"
-                    :to="{name:'cart-view'}"
+                    :to="{ name: 'cart-view' }"
                     class="flex flex-row items-center gap-1">
                     <lord-icon
+                        colors="primary:#3080e8,secondary:#ffff"
                         class="w-6 md:w-10"
                         src="https://cdn.lordicon.com/odavpkmb.json"
                         trigger="hover">
@@ -24,11 +24,16 @@
                 </router-link>
             </template>
         </HeaderTop>
+
         <Separator
             orientation="horizontal"
-            class="bg-[#2196F3]"
+            class="bg-details"
             decorative />
         <HeaderBottom />
+        <Separator
+            orientation="horizontal"
+            class="bg-accent_2 h-1"
+            decorative />
     </header>
 </template>
 <script setup>

@@ -1,5 +1,5 @@
 <template>
-    <footer class="flex flex-col text-center bg-yellow-300 ">
+    <footer class="flex flex-col text-center bg-accent_2 items-center justify-center">
         <p>© 2024 {{ storeName }} Criado por</p>
         <a
             target="_blank"

@@ -2,7 +2,7 @@ const animate = require("tailwindcss-animate");
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-    darkMode: ["class"],
+    darkMode: "class",
     safelist: ["dark"],
 
     content: ["./pages/**/*.{js,jsx,vue}", "./components/**/*.{js,jsx,vue}", "./app/**/*.{js,jsx,vue}", "./src/**/*.{js,jsx,vue}", "./src/**/*.{vue,js,ts,jsx,tsx}", "./public/**/*.html"],
@@ -24,6 +24,16 @@ module.exports = {
             },
 
             colors: {
+                primary_2: "var(--primary_2)",
+                primary_light_2: "var(--primary_light_2)",
+                secondary_2: "var(--secondary_2)",
+                accent_2: "var(--accent_2)",
+                foreground_2: "var(--foreground_2)",
+                background_2: "var(--background_2)",
+                text_2: "var(--text_2)",
+                details: "var(--details)",
+                details_2: "var(--details_2)",
+                // ////////////////
                 border: "hsl(var(--border))",
                 input: "hsl(var(--input))",
                 ring: "hsl(var(--ring))",

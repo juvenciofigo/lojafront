@@ -1,10 +1,9 @@
 <template>
-    <v-app class="mt-1 dark bg-[#f4f4f4] overflow-hidden text-text13">
+    <div :class="[themeMode ? 'dark' : '', 'pt-1 overflow-hidden text-text13 bg-background_2 text-text_2']">
         <!--  main -->
-        <v-main class="main-vier overflow-hidden">
+        <div class="overflow-hidden main-vier">
             <router-view class="principal-viewr" />
-        </v-main>
-
+        </div>
         <!-- Paymnet -->
         <PaymentDialog />
         <!-- Auth -->
@@ -22,7 +21,7 @@
         </el-dialog>
 
         <LoadPage />
-    </v-app>
+    </div>
 </template>
 
 <script setup>
@@ -34,6 +33,7 @@
     const store = useStore();
 
     const loginOverlay = computed(() => store.state.auth.loginOverlay);
+    const themeMode = computed(() => store.state.themeMode);
 
     function dialogLogClose() {
         store.commit("auth/SET_LOGIN_OVERLAY", false);
@@ -50,8 +50,10 @@
         justify-content: center;
         align-items: center;
         width: 100%;
+        height: 100vh;
     }
     .principal-viewr {
+        overflow: hidden;
         width: 100%;
     }
     @media screen and (min-width: 1350px) {
@@ -106,13 +108,13 @@
 
     /* Cor do track (fundo da barra de rolagem) */
     ::-webkit-scrollbar-track {
-        background: #40a0ff31;
+        background: var(--details);
         border-radius: 10px;
     }
 
     /* Cor da thumb (a parte que se move da barra de rolagem) */
     ::-webkit-scrollbar-thumb {
-        background: #409eff;
+        background: var(--details_2);
         border-radius: 10px;
         /* border: 2px solid #f1f1f1; */
     }
@@ -120,6 +122,19 @@
 
     /* Cor da thumb ao passar o mouse */
     ::-webkit-scrollbar-thumb:hover {
-        background-color: #1c5caf;
+        background-color: #757676;
+        /*  */
+    }
+
+    .item-list-category {
+        padding: 6px 0;
+        font-size: 13px;
+        line-height: 15px;
+        width: 100%;
+    }
+
+    .item-list-category:hover {
+        color: #0062bd;
+        outline: 1px solid #0062bd;
     }
 </style>

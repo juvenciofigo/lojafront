@@ -1,7 +1,7 @@
 <template>
     <div class="flex flex-col gap-4">
         <div class="flex flex-row justify-between gap-3">
-            <div class="flex flex-col sm:flex-row flex-1 bg-white p-2 lg:p-4 gap-4 lg:max-h-[380px]">
+            <div class="flex flex-col sm:flex-row flex-1 bg-foreground_2 p-2 lg:p-4 gap-4 lg:max-h-[380px]">
                 <!-- Seção de imagens do produto -->
                 <div class="images rounded-md lg:p-2 flex flex-col-reverse lg:flex-row lg:w-max gap-3 justify-end">
                     <div
@@ -31,7 +31,11 @@
                                 :preview-teleported="true"
                                 :preview-src-list="images"
                                 :initial-index="selectedImage"
-                                fit="cover" />
+                                fit="cover">
+                                <template #progress="{ activeIndex, total }">
+                                    <span>{{ activeIndex + 1 + "-" + total }}</span>
+                                </template>
+                            </el-image>
                         </div>
                     </div>
                 </div>
@@ -46,7 +50,7 @@
                         v-model="product.ratingAverage"
                         :colors="colorsRate" />
 
-                    <div class="compra-mobile lg:hidden flex flex-col gap-4 bg-white rounded-md">
+                    <div class="compra-mobile lg:hidden flex flex-col gap-4 bg-foreground_2 rounded-md">
                         <div class="text-2xl">
                             <span class="font-medium text-xs">Preço: </span>
                             <span
@@ -63,8 +67,7 @@
 
                         <slot name="product-statistic" />
                         <slot name="opcoes" />
-                        <div class="buttons-chips flex flex-col lg:flex-row flex-wrap gap-3 font-semibold">
-                        </div>
+                        <div class="buttons-chips flex flex-col lg:flex-row flex-wrap gap-3 font-semibold"></div>
                     </div>
                     <br />
                     <div>
@@ -77,7 +80,7 @@
                 <!--Fim Descrição do produto -->
             </div>
 
-            <div class="compra-desktop hidden lg:flex flex-col gap-4 bg-white rounded-md p-2 h-max w-[320px]">
+            <div class="compra-desktop hidden lg:flex flex-col gap-4 bg-foreground_2 rounded-md p-2 h-max w-[320px]">
                 <div class="text-2xl">
                     <span class="font-normal text-xs">Preço: </span>
                     <span
@@ -105,7 +108,7 @@
         <!-- Seção de detalhes do produto -->
         <div class="flex flex-col flex-1 gap-2 lg:overflow-auto lg:max-h-[calc(100vh-82px)]">
             <!-- Especificações do produto -->
-            <div class="Especificatios bg-white rounded-md p-2 md:p-4">
+            <div class="Especificatios bg-foreground_2 rounded-md p-2 md:p-4">
                 <h2 class="mb-4 font-semibold text-lg">Especificações:</h2>
                 <div>
                     <v-table
@@ -125,7 +128,7 @@
             </div>
 
             <!-- Avaliações do produto -->
-            <div class="Avaliations bg-white rounded-md p-2 md:p-4 flex flex-col">
+            <div class="Avaliations bg-foreground_2 rounded-md p-2 md:p-4 flex flex-col">
                 <div
                     class="d-flex flex-column self-center md:self-start p-4 md:w-[400px] shadow-md rounded-md"
                     v-if="product.productRatings && product.productRatings.length > 0">
@@ -268,12 +271,12 @@
 
     import { differenceInHours } from "date-fns";
     import { useStore } from "vuex";
-    import { computed, ref, onBeforeMount, defineProps, defineEmits,watch } from "vue";
+    import { computed, ref, onBeforeMount, defineProps, defineEmits, watch } from "vue";
     import { formatCurrency, formatDate } from "@/util/functions";
 
-   const props= defineProps({
+    const props = defineProps({
         price: Number,
-        newImages:Array
+        newImages: Array,
 
         //     firstButton: { type: Function, required: true },
         //     titleFirst: { type: String, required: true },
@@ -326,7 +329,7 @@
     const product = computed(() => store.state.products.product);
     const imageLink = ref(null);
     const selectedImage = ref(null);
-    const images = computed(()=> props?.newImages?.length>0 ? props.newImages : product.value.productImage);
+    const images = computed(() => (props?.newImages?.length > 0 ? props.newImages : product.value.productImage));
 
     function updateImageLink(index = 0) {
         selectedImage.value = index;

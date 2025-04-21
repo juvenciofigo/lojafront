@@ -1,8 +1,7 @@
 <template lang="">
     <el-table
+        cell-class-name="bg-foreground_2 text-text_2"
         v-loading="loadingPriceUpdate"
-        stripe
-        border
         max-height="400"
         fit
         element-loading-text="Processando"

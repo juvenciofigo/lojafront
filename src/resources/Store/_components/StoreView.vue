@@ -1,76 +1,71 @@
 <template lang="">
     <section class="flex-1 flex flex-col gap-3">
-        <div class="flex flex-row gap-2">
+        <div class="flex flex-row gap-2 bg-foreground_2">
             <!-- Categorias -->
-            <div class="categories-card hidden lg:block flex-col w-72 bg-white pb-1">
-                <p class="bg-yellow-300 p-2 font-semibold">Categorias</p>
+            <div class="categories-card hidden lg:block flex-col w-72 pb-1">
+                <h2 class="p-1 bg-details font-semibold">Categorias</h2>
 
-                <div
+                <ul
                     v-if="categories && categories.length > 0"
-                    class="categories-list indent-4 overflow-auto p-1">
-                    <ul class="list-none">
-                        <li class="duration-75 item-list">
-                            <router-link :to="{ name: 'products-list' }">Todos produtos</router-link>
-                        </li>
-                        <template
-                            v-for="category in categories"
-                            :key="category._id">
-                            <li class="item-list">
-                                <v-menu
-                                    transition="scroll-x-transition"
-                                    location="end"
-                                    close-delay="10"
-                                    open-delay="10"
-                                    open-on-hover>
-                                    <template v-slot:activator="{ props }">
-                                        <button
-                                            @click="filterProduct(category)"
-                                            class="w-[calc(100%-16px)] text-start justify-between"
-                                            v-bind="props">
-                                            {{ category.categoryName }}
-                                        </button>
-                                    </template>
-                                    <div class="bg-white">
+                    class="categories-list indent-2 p-1 overflow-auto list-none bg-foreground_2 min-w-52 text-text13">
+                    <router-link :to="{ name: 'products-list' }"><li class="duration-75 item-list-category">Todos produtos</li></router-link>
+
+                    <li
+                        v-for="category in categories"
+                        :key="category._id"
+                        class="item-list-category">
+                        <v-menu
+                            transition="scroll-x-transition"
+                            location="end"
+                            close-delay="10"
+                            open-delay="10"
+                            open-on-hover>
+                            <template v-slot:activator="{ props }">
+                                <button
+                                    @click="filterProduct(category)"
+                                    class="w-[calc(100%-16px)] text-start justify-between"
+                                    v-bind="props">
+                                    {{ category.categoryName }}
+                                </button>
+                            </template>
+
+                            <ul
+                                v-for="subCategory in category.subCategories"
+                                :key="subCategory._id"
+                                class="list-none indent-2 p-1 bg-foreground_2 min-w-52 text-text13">
+                                <li class="subCategory item-list-category">
+                                    <v-menu
+                                        transition="scale-transition"
+                                        location="end"
+                                        close-delay="10"
+                                        open-delay="10"
+                                        open-on-hover>
+                                        <template v-slot:activator="{ props }">
+                                            <button
+                                                @click="filterProduct(category, subCategory)"
+                                                class="w-full text-start justify-between"
+                                                v-bind="props">
+                                                {{ subCategory.subCategoryName }}
+                                            </button>
+                                        </template>
                                         <ul
-                                            v-for="subCategory in category.subCategories"
-                                            :key="subCategory._id">
-                                            <li class="subCategory item-list">
-                                                <v-menu
-                                                    transition="scale-transition"
-                                                    location="end"
-                                                    close-delay="10"
-                                                    open-delay="10"
-                                                    open-on-hover>
-                                                    <template v-slot:activator="{ props }">
-                                                        <button
-                                                            @click="filterProduct(category, subCategory)"
-                                                            class="w-full text-start justify-between"
-                                                            v-bind="props">
-                                                            {{ subCategory.subCategoryName }}
-                                                        </button>
-                                                    </template>
-                                                    <div
-                                                        v-if="subCategory.sub_categories && subCategory.sub_categories.length > 0"
-                                                        class="bg-white">
-                                                        <ul
-                                                            v-for="sub_category in subCategory.sub_categories"
-                                                            :key="sub_category._id">
-                                                            <li class="item-list">
-                                                                <button @click="filterProduct(category, subCategory, sub_category)">
-                                                                    {{ sub_category.sub_categoryName }}
-                                                                </button>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                </v-menu>
+                                            v-if="subCategory.sub_categories && subCategory.sub_categories.length > 0"
+                                            class="list-none indent-2 p-1 bg-white min-w-52 text-text13">
+                                            <li
+                                                v-for="sub_category in subCategory.sub_categories"
+                                                :key="sub_category._id"
+                                                class="item-list-category">
+                                                <button @click="filterProduct(category, subCategory, sub_category)">
+                                                    {{ sub_category.sub_categoryName }}
+                                                </button>
                                             </li>
                                         </ul>
-                                    </div>
-                                </v-menu>
-                            </li>
-                        </template>
-                    </ul>
-                </div>
+                                    </v-menu>
+                                </li>
+                            </ul>
+                        </v-menu>
+                    </li>
+                </ul>
 
                 <div v-else>
                     <el-skeleton
@@ -189,17 +184,6 @@
 
     .categories-card {
         width: 350px;
-    }
-
-    .item-list {
-        padding: 6px 5px;
-        font-size: 13px;
-        line-height: 20px;
-    }
-
-    .item-list:hover {
-        color: #0062bd;
-        outline: 1px solid #0062bd;
     }
 
     @media (min-width: 1024px) {

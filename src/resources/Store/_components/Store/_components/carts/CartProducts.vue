@@ -23,7 +23,6 @@
             <div>
                 <p class="my-1 font-semibold text-lg">Resumo do pedido</p>
                 <el-descriptions
-                    title=""
                     direction="horizontal"
                     :column="1"
                     border>
@@ -76,3 +75,10 @@
         router.push({ name: "order-create", query: { productsFrom: "cartProducts" } });
     }
 </script>
+<style>
+    .el-descriptions__body,
+    .el-descriptions__cell {
+        background: var(--foreground_2) !important;
+        color: var(--text_2) !important;
+    }
+</style>

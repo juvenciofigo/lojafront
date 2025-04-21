@@ -2,27 +2,26 @@
     <div
         v-if="products"
         class="flex flex-col">
-        <div class="bg-white flex flex-row justify-between p-2">
+        <div class="bg-foreground_2 flex flex-row justify-between p-2 mb-[2px]">
             <h1 class="text-xl">{{ title }}</h1>
             <router-link :to="link">
                 <el-button> Ver Mais</el-button>
             </router-link>
         </div>
-        <hr class="h-1" />
-        <div class="flex flex-row gap-1 overflow-x-auto scroll-container w-[calc(100%)]">
+        <div class="flex flex-row gap-1 overflow-x-auto w-[calc(100%)] py-1">
             <template
                 v-for="(product, index) in products"
                 :key="index">
                 <el-tooltip :content="product.productName">
                     <router-link
                         :to="{ name: 'product-details', params: { id: `${product._id}` } }"
-                        class="product-card">
+                        class="product-card bg-foreground_2">
                         <el-image
                             class="flex-1"
                             v-if="product.productImage && product.productImage.length > 0"
                             :src="product.productImage[0]"
                             :alt="product.productName"
-                            fit="contain">
+                            fit="cover">
                             <template #placeholder>
                                 <el-skeleton-item
                                     animeted
@@ -35,20 +34,21 @@
                                 </div>
                             </template>
                         </el-image>
-                        <div class="title">
-                            <p class="text-center md:group-hover:text-white duration-700 text-[#0062bd] truncate">{{ product.productName }}</p>
-                        </div>
-
-                        <div class="title-price self-end">
-                            <div class="price text-center">
-                                <span class="font-bold">{{ formatCurrency(product.productPrice) }}</span>
+                        <div>
+                            <div class="title">
+                                <p class="text-center text-[14px] p-[2px] font-medium text-primary_2 truncate">{{ product.productName }}</p>
                             </div>
-                            <el-button
-                                size="small"
-                                class="w-full self-center"
-                                :to="{ name: 'product-details', params: { id: `${product._id}` } }">
-                                Detalhes
-                            </el-button>
+                            <div class="title-price self-end">
+                                <div class="price text-center">
+                                    <span class="font-bold">{{ formatCurrency(product.productPrice) }}</span>
+                                </div>
+                                <el-link
+                                    size="small"
+                                    class="w-full self-center "
+                                    :to="{ name: 'product-details', params: { id: `${product._id}` } }">
+                                    Detalhes
+                                </el-link>
+                            </div>
                         </div>
                     </router-link>
                 </el-tooltip>
@@ -69,7 +69,7 @@
                 :rows="0"
                 variant="button" />
         </div>
-        <div class="flex flex-row gap-3 overflow-x-auto scroll-container w-[calc(100%)] py-2">
+        <div class="flex flex-row gap-3 overflow-x-auto w-[calc(100%)]">
             <template
                 v-for="(item, index) in 5"
                 :key="index">
@@ -107,11 +107,9 @@
         width: 210px;
         height: 300px;
         box-shadow: 0 2px 2px 0 rgba(77, 77, 79, 0.08), 0 0 2px 0 rgba(77, 77, 79, 0.16);
-        background-color: #fff;
         display: flex;
         flex-direction: column;
-        justify-content: space-between;
-        padding: 5px;
+        justify-content: end;
     }
     .product-card .image {
         width: 100%;
@@ -119,6 +117,7 @@
     }
 
     .product-card .title-price {
+        padding: 5px;
         display: flex;
         gap: 2px;
         flex-direction: column;

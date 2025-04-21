@@ -1,25 +1,24 @@
 <template lang="">
     <!-- Header-1 -->
-    <nav class="desHheader-1 flex flex-row justify-between items-center p-2 lg:p-2 bg-white">
+    <nav class="desHheader-1 flex flex-row justify-between items-center p-2 lg:p-1 bg-foreground_2">
         <!-- esquerda -->
         <div>
             <div class="text-center hidden lg:block">
                 <span>Bem-vindo ao {{ storeName }}</span>
             </div>
-            
-            <slot name="left">
-                
-            </slot>
+
+            <slot name="left"> </slot>
         </div>
-        
+
         <!-- direita -->
-        <div class="flex flex-col md:flex-col items-end gap-1 justify-between h-full">
+        <div class="flex flex-col md:flex-row items-end gap-1 justify-between md:items-center h-full text-text_2">
             <el-dropdown
+                popper-class="bg-red-500"
                 v-if="isAuthenticated"
                 @command="navigate"
                 size="small"
                 class="">
-                <div class="">
+                <div class="text-text_2">
                     <p>
                         <span>
                             {{ user?.firstName?.split(" ")?.[0] || "" }}
@@ -46,7 +45,21 @@
                                     {{ user?.lastName?.split(" ")?.slice(-1)?.[0] || "" }}
                                 </p>
                                 <span class="text-[10px] text-red-500">Sair</span>
+
                                 <LogOut class="w-4 h-4" />
+                            </div>
+                        </el-dropdown-item>
+                        <el-dropdown-item>
+                            <div>
+                                <span>Tema:</span>
+                                <el-switch
+                                    size="small"
+                                    @change="swithTheme()"
+                                    v-model="themeMode"
+                                    style="margin-left: 24px"
+                                    inline-prompt
+                                    :active-icon="Sunny"
+                                    :inactive-icon="Moon" />
                             </div>
                         </el-dropdown-item>
                     </el-dropdown-menu>
@@ -70,7 +83,7 @@
     import { computed, ref, onBeforeMount } from "vue";
     import { useStore } from "vuex";
     import { useRouter } from "vue-router";
-    import { ArrowDown } from "@element-plus/icons-vue";
+    import { ArrowDown, Sunny, Moon } from "@element-plus/icons-vue";
     import { LogOut } from "lucide-vue-next";
 
     const store = useStore();
@@ -80,6 +93,10 @@
     const storeName = store.state.storeName;
     const user = computed(() => JSON.parse(localStorage.getItem("userData")));
     const drawer = ref(false);
+    const themeMode = computed(() => store.state.themeMode);
+    const swithTheme = () => {
+        store.dispatch("swithTheme");
+    };
 
     const navigate = (route) => {
         if (route) {
@@ -115,7 +132,7 @@
         novoVisitante();
     });
 </script>
-<style>
+<style scoped>
     .mobile .el-drawer__header {
         margin: 0 !important;
         padding: 0 !important;

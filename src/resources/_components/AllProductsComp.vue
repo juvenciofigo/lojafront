@@ -1,67 +1,70 @@
 <template>
-    <div class="flex flex-row flex-1 gap-1 rounded-md bg-slate-100">
+    <div class="flex flex-row flex-1 gap-">
         <!-- Filtrar -->
         <section class="w-[274px] hidden lg:flex flex-col gap-4">
-            <div class="w-full p-3 bg-white categories-list indent-4 overflow-auto">
-                <h2 class="bg-[#3a7ebe] p-2 font-semibold">Categorias</h2>
+            <div class="w-full categories-list overflow-auto">
+                <h2 class="p-1 bg-details font-semibold">Categorias</h2>
 
-                <ul class="list-none">
-                    <li class="whitespace-nowrap hover:text-[#0062bd] duration-500"><router-link :to="{ name: 'products-list' }">Todos produtos</router-link></li>
-                    <template
+                <ul
+                    v-if="categories && categories.length > 0"
+                    class="categories-list indent-2 p-1 overflow-auto list-none min-w-52 text-text13">
+                    <router-link :to="{ name: 'products-list' }"><li class="duration-75 item-list-category">Todos produtos</li></router-link>
+
+                    <li
                         v-for="category in categories"
-                        :key="category._id">
-                        <li class="whitespace-nowrap hover:text-[#0062bd] duration-500">
-                            <v-menu
-                                transition="scroll-x-transition"
-                                location="end"
-                                close-delay="10"
-                                open-delay="10"
-                                open-on-hover>
-                                <template v-slot:activator="{ props }">
-                                    <button
-                                        @click="filterProduct(category)"
-                                        class="w-[calc(100%-16px)] text-start justify-between"
-                                        v-bind="props">
-                                        {{ category.categoryName }}
-                                    </button>
-                                </template>
-                                <div class="bg-white p-2 flex flex-col gap-2">
-                                    <ul
-                                        v-for="subCategory in category.subCategories"
-                                        :key="subCategory._id">
-                                        <li class="whitespace-nowrap hover:text-[#0062bd]">
-                                            <v-menu
-                                                transition="scale-transition"
-                                                location="end"
-                                                close-delay="10"
-                                                open-delay="10"
-                                                open-on-hover>
-                                                <template v-slot:activator="{ props }">
-                                                    <button
-                                                        @click="filterProduct(category, subCategory)"
-                                                        class="w-full text-start justify-between"
-                                                        v-bind="props">
-                                                        {{ subCategory.subCategoryName }}
-                                                    </button>
-                                                </template>
-                                                <div
-                                                    v-if="subCategory.sub_categories && subCategory.sub_categories.length > 0"
-                                                    class="bg-white p-2 flex flex-col gap-2">
-                                                    <ul
-                                                        v-for="sub_category in subCategory.sub_categories"
-                                                        :key="sub_category._id">
-                                                        <li class="whitespace-nowrap hover:text-[#0062bd]">
-                                                            <button @click="filterProduct(category, subCategory, sub_category)">{{ sub_category.sub_categoryName }}</button>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </v-menu>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </v-menu>
-                        </li>
-                    </template>
+                        :key="category._id"
+                        class="item-list-category">
+                        <v-menu
+                            transition="scroll-x-transition"
+                            location="end"
+                            close-delay="10"
+                            open-delay="10"
+                            open-on-hover>
+                            <template v-slot:activator="{ props }">
+                                <button
+                                    @click="filterProduct(category)"
+                                    class="w-[calc(100%-16px)] text-start justify-between"
+                                    v-bind="props">
+                                    {{ category.categoryName }}
+                                </button>
+                            </template>
+
+                            <ul
+                                v-for="subCategory in category.subCategories"
+                                :key="subCategory._id"
+                                class="list-none indent-2 p-1 min-w-52 text-text13">
+                                <li class="subCategory item-list-category">
+                                    <v-menu
+                                        transition="scale-transition"
+                                        location="end"
+                                        close-delay="10"
+                                        open-delay="10"
+                                        open-on-hover>
+                                        <template v-slot:activator="{ props }">
+                                            <button
+                                                @click="filterProduct(category, subCategory)"
+                                                class="w-full text-start justify-between"
+                                                v-bind="props">
+                                                {{ subCategory.subCategoryName }}
+                                            </button>
+                                        </template>
+                                        <ul
+                                            v-if="subCategory.sub_categories && subCategory.sub_categories.length > 0"
+                                            class="list-none indent-2 p-1 min-w-52 text-text13">
+                                            <li
+                                                v-for="sub_category in subCategory.sub_categories"
+                                                :key="sub_category._id"
+                                                class="item-list-category">
+                                                <button @click="filterProduct(category, subCategory, sub_category)">
+                                                    {{ sub_category.sub_categoryName }}
+                                                </button>
+                                            </li>
+                                        </ul>
+                                    </v-menu>
+                                </li>
+                            </ul>
+                        </v-menu>
+                    </li>
                 </ul>
             </div>
 
