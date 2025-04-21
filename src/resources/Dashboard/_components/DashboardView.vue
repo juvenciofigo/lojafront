@@ -46,7 +46,7 @@
                         v-for="(route, index) in breadcrumb"
                         :key="index"
                         :to="route.route">
-                        <span>{{ route.name }}</span>
+                        <span class="text-text13">{{ route.name }}</span>
                     </el-breadcrumb-item>
                 </el-breadcrumb>
             </template>
