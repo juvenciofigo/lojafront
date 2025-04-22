@@ -1,5 +1,5 @@
 <template>
-    <div class="bg-white shadow-md rounded p-6 flex flex-col" @keyup.enter="submit">
+    <div class="bg-white shadow-md w-full p-6 flex flex-col" @keyup.enter="submit">
         <div class="rounded-md self-center p-2 border-2 border-slate-600 flex flex-col gap-2 items-center">
             <div class="w-24 h-24">
                 <v-img
