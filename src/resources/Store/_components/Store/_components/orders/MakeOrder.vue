@@ -18,14 +18,16 @@
             <ConfirmationStep v-if="active === 1" />
         </div>
 
-        <div class="mt-2 flex flex-row justify-end gap-3">
+        <div class="mt-2 mr-2 flex flex-row justify-end gap-3">
             <div>
                 <el-button
+                    size="small"
                     :disabled="active === 0 || loading || !addressRes"
                     @click="previous"
                     >Anterior</el-button
                 >
                 <el-button
+                    size="small"
                     :disabled="active === 1 || !addressRes"
                     @click="next"
                     >Próximo</el-button
@@ -34,6 +36,7 @@
 
             <span :class="active !== 1 ? 'hidden' : ''">
                 <el-button
+                    size="small"
                     :disabled="active !== 1"
                     :loading="loading || loadingPriceUpdate || !addressRes"
                     @click="createOrder()">

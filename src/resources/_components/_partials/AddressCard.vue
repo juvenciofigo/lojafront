@@ -1,6 +1,6 @@
 <template lang="">
-    <div class="flex flex-col gap-2">
-        <div class="flex flex-col gap-1 text-center text-gray-700">
+    <div class="flex flex-col gap-2 bg-foreground_2 text-text_2">
+        <div class="flex flex-col gap-1 text-center ">
             <div class="font-medium text-lg">{{ address.firstName.split(" ").at(0) }} {{ address.lastName.split(" ").at(-1) }}</div>
             <div class="text-sm">
                 <div>{{ address.complete }}</div>

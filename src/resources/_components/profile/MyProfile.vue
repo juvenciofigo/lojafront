@@ -1,126 +1,129 @@
 <template>
     <div
         v-loading="loading"
-        >
-        <div v-if="mySelf && !loading">
-            <!-- Perfil e Botões -->
-            <div class="profile-buttons p-4 flex flex-col gap-2">
-                <div class="name-photo flex flex-row gap-4 items-center">
-                    <Avatar class="photo w-20 lg:w-28 h-20 lg:h-28">
-                        <AvatarImage
-                            src="https://github.com/radix-vue.png"
-                            alt="foto de perfil" />
-                        <AvatarFallback>{{ mySelf.firstName.split(" ")[0] }}</AvatarFallback>
-                    </Avatar>
-                    <div class="name text-3xl text-muted-foreground font-semibold">
-                        <span>{{ mySelf.firstName.split(" ")[0] }}</span>
-                        <span>{{ mySelf.lastName.split(" ").at(-1) }}</span>
-                    </div>
-                </div>
-                <div class="buttons flex-row justify-around hidden">
-                    <button class="favorite flex flex-col items-center">
-                        <Heart class="h-14 w-14" />
-                        <p class="text-lg">Favorite</p>
-                    </button>
-                    <!-- Repetido para exemplo, pode ser ajustado conforme necessário -->
+        v-if="mySelf && !loading"
+        class="bg-foreground_2">
+        <!-- Perfil e Botões -->
+        <div class="profile-buttons p-4 flex flex-col gap-2">
+            <div class="name-photo flex flex-row gap-4 items-center">
+                <Avatar class="photo w-20 lg:w-28 h-20 lg:h-28">
+                    <AvatarImage
+                        src="https://github.com/radix-vue.png"
+                        alt="foto de perfil" />
+                    <AvatarFallback>{{ mySelf.firstName.split(" ")[0] }}</AvatarFallback>
+                </Avatar>
+                <div class="name text-3xl text-muted-foreground font-semibold">
+                    <span>{{ mySelf.firstName.split(" ")[0] }}</span>
+                    <span>{{ mySelf.lastName.split(" ").at(-1) }}</span>
                 </div>
             </div>
+            <div class="buttons flex-row justify-around hidden">
+                <button class="favorite flex flex-col items-center">
+                    <Heart class="h-14 w-14" />
+                    <p class="text-lg">Favorite</p>
+                </button>
+                <!-- Repetido para exemplo, pode ser ajustado conforme necessário -->
+            </div>
+        </div>
 
-            <!-- Informações Pessoais -->
-            <div class="informations border p-3 m-3 rounded-md">
-                <div class="flex flex-row justify-between items-center">
-                    <h2 class="font-semibold text-lg">Informações pessoais</h2>
-                    <el-button
-                        @click="modifyDialog = !modifyDialog"
-                        class="mr-5"
-                        size="small"
-                        :icon="Edit">
-                        Modificar
-                    </el-button>
+        <!-- Informações Pessoais -->
+        <div class="informations border p-3 m-3 bg-foreground_2">
+            <div class="flex flex-row justify-between items-center">
+                <h2 class="font-semibold text-lg">Informações pessoais</h2>
+                <el-button
+                    @click="modifyDialog = !modifyDialog"
+                    class="mr-5"
+                    size="small"
+                    :icon="Edit">
+                    Modificar
+                </el-button>
+            </div>
+            <hr class="my-3" />
+            <div class="flex flex-row">
+                <div class="grid sm:grid-cols-2 gap-3 flex-1">
+                    <div>
+                        <p class="font-semibold mb-1">Nome:</p>
+                        <p>{{ mySelf.firstName }}</p>
+                    </div>
+                    <div>
+                        <p class="font-semibold mb-1">Apelido:</p>
+                        <p>{{ mySelf.lastName }}</p>
+                    </div>
+                    <div>
+                        <p class="font-semibold mb-1">Email:</p>
+                        <p>{{ mySelf.email }}</p>
+                    </div>
+                    <div v-if="mySelf.cell">
+                        <p class="font-semibold mb-1">Telefone:</p>
+                        <p>{{ mySelf.cell }}</p>
+                    </div>
+                    <div>
+                        <p class="font-semibold mb-1">Criado em:</p>
+                        <p>{{ formatDate(mySelf.createdAt) }}</p>
+                    </div>
                 </div>
+            </div>
+        </div>
+
+        <!-- Diálogo de Modificação -->
+        <el-dialog
+            v-model="modifyDialog"
+            max-width="800px"
+            class="bg-transparent"
+            :show-close="false"
+            align-center
+            destroy-on-close>
+            <div class="informations border p-3 m-3 bg-foreground_2">
+                <h2 class="font-semibold text-lg">Informações pessoais</h2>
                 <hr class="my-3" />
-                <div class="flex flex-row">
+                <div
+                    class="flex flex-row"
+                    v-if="mySelf">
                     <div class="grid sm:grid-cols-2 gap-3 flex-1">
                         <div>
                             <p class="font-semibold mb-1">Nome:</p>
-                            <p>{{ mySelf.firstName }}</p>
+                            <el-input
+                                size="small"
+                                v-model="firstName.value.value"
+                                placeholder="Nome" />
+                            <span class="error-message">{{ firstName.errorMessage.value }}</span>
                         </div>
                         <div>
                             <p class="font-semibold mb-1">Apelido:</p>
-                            <p>{{ mySelf.lastName }}</p>
+                            <el-input
+                                size="small"
+                                v-model="lastName.value.value"
+                                placeholder="Apelido" />
+                            <span class="error-message">{{ lastName.errorMessage.value }}</span>
                         </div>
                         <div>
                             <p class="font-semibold mb-1">Email:</p>
-                            <p>{{ mySelf.email }}</p>
+                            <el-input
+                                size="small"
+                                v-model="email.value.value"
+                                placeholder="Email" />
+                            <span class="error-message">{{ email.errorMessage.value }}</span>
                         </div>
                         <div v-if="mySelf.cell">
                             <p class="font-semibold mb-1">Telefone:</p>
-                            <p>{{ mySelf.cell }}</p>
-                        </div>
-                        <div>
-                            <p class="font-semibold mb-1">Criado em:</p>
-                            <p>{{ formatDate(mySelf.createdAt) }}</p>
+                            <el-input
+                                size="small"
+                                v-model="cell.value.value"
+                                placeholder="Nr de telefone" />
+                            <span class="error-message">{{ cell.errorMessage.value }}</span>
                         </div>
                     </div>
                 </div>
+                <el-button
+                    @click="submit"
+                    class="mt-3"
+                    size="small"
+                    :icon="Edit"
+                    :loading="loadbtn">
+                    Modificar
+                </el-button>
             </div>
-
-            <!-- Diálogo de Modificação -->
-            <el-dialog
-                v-model="modifyDialog"
-                max-width="800px"
-                class="bg-transparent"
-                :show-close="false"
-                align-center
-                destroy-on-close>
-                <div class="informations border p-3 m-3 rounded-md bg-white">
-                    <h2 class="font-semibold text-lg">Informações pessoais</h2>
-                    <hr class="my-3" />
-                    <div
-                        class="flex flex-row"
-                        v-if="mySelf">
-                        <div class="grid sm:grid-cols-2 gap-3 flex-1">
-                            <div>
-                                <p class="font-semibold mb-1">Nome:</p>
-                                <el-input
-                                    v-model="firstName.value.value"
-                                    placeholder="Nome" />
-                                <span class="error-message">{{ firstName.errorMessage.value }}</span>
-                            </div>
-                            <div>
-                                <p class="font-semibold mb-1">Apelido:</p>
-                                <el-input
-                                    v-model="lastName.value.value"
-                                    placeholder="Apelido" />
-                                <span class="error-message">{{ lastName.errorMessage.value }}</span>
-                            </div>
-                            <div>
-                                <p class="font-semibold mb-1">Email:</p>
-                                <el-input
-                                    v-model="email.value.value"
-                                    placeholder="Email" />
-                                <span class="error-message">{{ email.errorMessage.value }}</span>
-                            </div>
-                            <div v-if="mySelf.cell">
-                                <p class="font-semibold mb-1">Telefone:</p>
-                                <el-input
-                                    v-model="cell.value.value"
-                                    placeholder="Nr de telefone" />
-                                <span class="error-message">{{ cell.errorMessage.value }}</span>
-                            </div>
-                        </div>
-                    </div>
-                    <el-button
-                        @click="submit"
-                        class="mt-3"
-                        size="small"
-                        :icon="Edit"
-                        :loading="loadbtn">
-                        Modificar
-                    </el-button>
-                </div>
-            </el-dialog>
-        </div>
+        </el-dialog>
     </div>
 </template>
 

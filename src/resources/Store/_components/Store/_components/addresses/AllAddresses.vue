@@ -1,7 +1,7 @@
 <template lang="">
     <div
         v-loading="loading"
-        class="flex flex-col flex-1 gap-2 overflow-auto allAddresses bg-black">
+        class="flex flex-col flex-1 gap-2 overflow-auto allAddresses ">
         <div>
             <div v-if="addresses && addresses.length > 0 && loading === false">
                 <ul
@@ -18,7 +18,7 @@
                                 modifyDialog = !modifyDialog;
                             }
                         "
-                        class="col-span-1 md:flex flex-col flex-wrap gap-4 p-4 rounded-md cursor-pointer border hover:-translate-y-1 duration-500 border-[#e5e7eb] bg-[#f9fafb] hover:border-[#e0a9a9] shadow-md address">
+                        class="col-span-1 md:flex flex-col flex-wrap gap-4 p-4 cursor-pointer border hover:-translate-y-1 duration-500 bg-foreground_2 shadow-md address">
                         <AddressComp :address="address" 
                         
                         
@@ -35,7 +35,7 @@
                     align-center
                     destroy-on-close
                     center>
-                    <div class="informations border p-3 m-3 rounded-md bg-white">
+                    <div class="informations border p-3 m-3 rounded-md bg-background_2">
                         <h2 class="font-semibold text-lg">Informações do Endereço de entrega</h2>
                         <hr class="my-3" />
                         <div

@@ -6,29 +6,36 @@
             :tableRowHeight="'h-20'"
             :actionButton="'hidden'" />
         <br />
-        <div class="flex flex-row justify-end">
-            <Table v-loading="loadingPriceUpdate">
-                <TableBody>
-                    <TableRow>
-                        <TableCell class="h-10 items-center flex flex-row justify-between">
-                            <div>Total de produtos:</div>
-                            <div>{{ formatCurrency(priceTotal) }}</div>
-                        </TableCell>
-                    </TableRow>
-                    <TableRow>
-                        <TableCell class="items-center h-10 flex flex-row justify-between">
-                            <div>Taxa de envio</div>
-                            <div>{{ formatCurrency(shippingPrice) }}</div>
-                        </TableCell>
-                    </TableRow>
-                    <TableRow>
-                        <TableCell class="items-center h-10 flex flex-row justify-between">
-                            <div>Total</div>
-                            <div>{{ formatCurrency(totalPedido) }}</div>
-                        </TableCell>
-                    </TableRow>
-                </TableBody>
-            </Table>
+        <div
+            class="w-full"
+            v-loading="loadingPriceUpdate">
+            <el-descriptions
+                border
+                size="small"
+                direction="horizontal"
+                :column="1">
+                <el-descriptions-item
+                    align="center"
+                    label-class-name="tabela"
+                    class-name="tabela"
+                    label="Total de produtos:"
+                    >{{ formatCurrency(priceTotal) }}</el-descriptions-item
+                >
+                <el-descriptions-item
+                    align="center"
+                    label-class-name="tabela"
+                    class-name="tabela"
+                    label="Taxa de envio:"
+                    >{{ formatCurrency(shippingPrice) }}</el-descriptions-item
+                >
+                <el-descriptions-item
+                    align="center"
+                    label-class-name="tabela"
+                    class-name="tabela"
+                    label="Total"
+                    >{{ formatCurrency(totalPedido) }}</el-descriptions-item
+                >
+            </el-descriptions>
         </div>
         <br />
     </div>
@@ -37,7 +44,6 @@
     import { useStore } from "vuex";
     import { computed, ref, defineEmits, onBeforeMount, watch } from "vue";
     import CartProductsComp from "@/resources/Store/_components/CartProductsComp.vue";
-    import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
     import { formatCurrency } from "@/util/functions";
 
     const store = useStore();
@@ -79,3 +85,8 @@
         sendData();
     });
 </script>
+<style>
+    .el-descriptions {
+        --el-descriptions-table-border: ;
+    }
+</style>

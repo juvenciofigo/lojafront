@@ -9,7 +9,7 @@
     </div>
     <div
         v-else
-        class="flex flex-col lg:items-start lg:flex-row lg:pr-5 gap-4 p-3">
+        class="flex flex-col lg:items-start lg:flex-row lg:pr-5 gap-4 p-3 flex-wrap">
         <div
             v-if="cart"
             class="w-full flex justify-center">
@@ -53,7 +53,7 @@
                 :disabled="buttonStatus"
                 size="small"
                 @click="makeOrder()">
-                Fazer pedido
+                <span class="text-primary">Fazer pedido</span>
             </el-link>
         </div>
     </div>
@@ -92,10 +92,3 @@
         router.push({ name: "order-create", query: { productsFrom: "cartProducts" } });
     }
 </script>
-<style>
-    /* .el-descriptions__body,
-    .el-descriptions__cell {
-        background: var(--foreground_2) !important;
-        color: var(--text_2) !important;
-    } */
-</style>

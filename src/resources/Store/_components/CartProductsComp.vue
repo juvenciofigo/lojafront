@@ -192,9 +192,12 @@
         update();
     }
 </script>
-<style>
+<style scoped>
     input::-webkit-inner-spin-button,
     input::-webkit-outer-spin-button {
         appearance: none;
+    }
+    .el-table {
+        --el-table-row-hover-bg-color: var(--accent_2);
     }
 </style>

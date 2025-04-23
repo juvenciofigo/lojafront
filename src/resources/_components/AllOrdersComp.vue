@@ -2,98 +2,90 @@
     <div
         v-loading="loading || pageloadLoading"
         class="flex flex-col flex-1 gap-2 overflow-auto allOlders">
-        <div>
-            <div v-if="orders && orders?.docs?.length > 0 && loading === false">
-                <div class="p-4">
-                    <Input
-                        class="max-w-sm"
-                        placeholder="Filter emails..." />
-                </div>
-                <el-table
-                    border
+        <div v-if="orders && orders?.docs?.length > 0 && loading === false">
+            <el-table
+                border
+                align="center"
+                :row-class-name="tableRowClassName"
+                :data="orders.docs"
+                fit
+                show-header
+                size="small">
+                <el-table-column
                     align="center"
-                    :row-class-name="tableRowClassName"
-                    :data="orders.docs"
-                    fit
-                    show-header
-                    size="small">
-                    <el-table-column
-                        align="center"
-                        prop="referenceOrder"
-                        label="Referência" />
-                    <el-table-column
-                        align="center"
-                        prop="customer.lastName"
-                        label="Cliente" />
-                    <el-table-column
-                        align="center"
-                        prop="createdAt"
-                        label="Data"
-                        :formatter="(row) => formatDate(row.createdAt)" />
-                    <el-table-column
-                        align="center"
-                        prop="payment.amount"
-                        label="Total"
-                        :formatter="(row) => formatCurrency(row.payment.amount)" />
-                    <el-table-column
-                        align="center"
-                        prop="payment.paymentMethod"
-                        label="Forma de pagamento"
-                        :formatter="(row) => (row.payment.paymentMethod ? row.payment?.paymentMethod : row.payment?.status)" />
-                    <el-table-column
-                        align="center"
-                        prop="payment.status"
-                        label="Estado do pagamento" />
-                    <el-table-column
-                        align="center"
-                        prop="delivery.status"
-                        label="Estado da entrega" />
-                    <el-table-column
-                        align="center"
-                        fixed="right"
-                        width="110"
-                        label="Ações"
-                        min-width="120"
-                        class-name="bg-white">
-                        <template #default="scope">
-                            <el-button
-                                link
-                                type="primary"
-                                size="small"
-                                @click="handleView(scope.row)">
-                                Ver
-                            </el-button>
-                            <el-button
-                                link
-                                type="danger"
-                                size="small"
-                                @click="confirmDelete(scope.row._id, scope.row.payment.status)">
-                                Apagar
-                            </el-button>
-                        </template>
-                    </el-table-column>
-                </el-table>
-                <div class="flex items-center space-x-2 py-4">
-                    <el-pagination
-                        v-model:current-page="orders.page"
-                        :total="orders.totalDocs"
-                        :page-size="orders.limit"
-                        :pager-count="5"
-                        layout="total,prev, pager, next"
-                        prev-text="Voltar"
-                        next-text="Próxima"
-                        background
-                        :disabled="loading"
-                        hide-on-single-page
-                        small
-                        @current-change="pageEvent" />
-                </div>
+                    prop="referenceOrder"
+                    label="Referência" />
+                <el-table-column
+                    align="center"
+                    prop="customer.lastName"
+                    label="Cliente" />
+                <el-table-column
+                    align="center"
+                    prop="createdAt"
+                    label="Data"
+                    :formatter="(row) => formatDate(row.createdAt)" />
+                <el-table-column
+                    align="center"
+                    prop="payment.amount"
+                    label="Total"
+                    :formatter="(row) => formatCurrency(row.payment.amount)" />
+                <el-table-column
+                    align="center"
+                    prop="payment.paymentMethod"
+                    label="Forma de pagamento"
+                    :formatter="(row) => (row.payment.paymentMethod ? row.payment?.paymentMethod : row.payment?.status)" />
+                <el-table-column
+                    align="center"
+                    prop="payment.status"
+                    label="Estado do pagamento" />
+                <el-table-column
+                    align="center"
+                    prop="delivery.status"
+                    label="Estado da entrega" />
+                <el-table-column
+                    align="center"
+                    fixed="right"
+                    width="110"
+                    label="Ações"
+                    min-width="120">
+                    <template #default="scope">
+                        <el-button
+                            link
+                            type="primary"
+                            size="small"
+                            @click="handleView(scope.row)">
+                            Ver
+                        </el-button>
+                        <el-button
+                            link
+                            type="danger"
+                            size="small"
+                            @click="confirmDelete(scope.row._id, scope.row.payment.status)">
+                            Apagar
+                        </el-button>
+                    </template>
+                </el-table-column>
+            </el-table>
+            <div class="flex items-center space-x-2 py-4">
+                <el-pagination
+                    v-model:current-page="orders.page"
+                    :total="orders.totalDocs"
+                    :page-size="orders.limit"
+                    :pager-count="5"
+                    layout="total,prev, pager, next"
+                    prev-text="Voltar"
+                    next-text="Próxima"
+                    background
+                    :disabled="loading"
+                    hide-on-single-page
+                    small
+                    @current-change="pageEvent" />
             </div>
-            <div
-                v-else
-                class="text-center">
-                <p>Sem pedidos</p>
-            </div>
+        </div>
+        <div
+            v-else
+            class="text-center">
+            <p>Sem pedidos</p>
         </div>
 
         <el-dialog
@@ -128,7 +120,6 @@
     import { computed, watch, ref, onBeforeUnmount, defineProps, defineEmits, onMounted, onUnmounted, onBeforeMount } from "vue";
     import { useStore } from "vuex";
     import { useRoute, useRouter } from "vue-router";
-    import { Input } from "@/components/ui/input";
     import { formatCurrency, formatDate } from "@/util/functions";
 
     import OrdersDetails from "@/resources/_components/OrdersDetails.vue";
@@ -145,7 +136,6 @@
     });
 
     const orders = computed(() => store.state.orders.orders);
-    // const orderDocs = computed(() => orders.value.docs);
     const offset = ref(route.query.offset || 1);
     const loading = ref(true);
 
@@ -250,5 +240,15 @@
     .allOlders .el-dialog__headerbtn {
         top: unset !important;
         margin: 10px !important;
+    }
+
+    .el-table {
+        --el-table-border-color: var(--el-border-color-lighter);
+        --el-table-border: 1px solid var(--el-table-border-color);
+        --el-table-text-color: var(--text_2) !important;
+        --el-table-row-hover-bg-color: var(--accent_2);
+        --el-table-header-bg-color: var(--foreground_2);
+        background-color: var(--foreground_2);
+        --el-table-tr-bg-color: var(--foreground_2);
     }
 </style>

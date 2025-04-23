@@ -55,20 +55,23 @@
         <div class="flex flex-row flex-1">
             <div class="flex flex-col">
                 <span class="hidden md:block">
-                    <el-button
+                    <div
                         @click="isCollapse = !isCollapse"
-                        class="duration-300 w-full">
+                        class="duration-300 transition-all w-full bg-details h-10 flex justify-center items-center gap-2 cursor-pointer">
+                        <span :class="['transition-all duration-1000', isCollapse ? 'hidden' : 'rotate-0']">Contrair</span>
                         <el-icon :class="['transition-transform duration-300', isCollapse ? 'rotate-180' : 'rotate-0']">
                             <ArrowLeft />
                         </el-icon>
-                    </el-button>
+                    </div>
                     <el-menu
+                        :router="true"
                         class="el-menu-vertical-demo"
                         :collapse="isCollapse">
                         <el-menu-item
                             v-for="(item, index) in items"
                             :key="index"
-                            :index="String(index)">
+                            :index="String(index)"
+                            :route="{ name: item.link }">
                             <router-link
                                 :to="{ name: item.link }"
                                 exact-active-class="text-blue-400"
@@ -130,5 +133,16 @@
 <style scoped>
     .el-menu-vertical-demo:not(.el-menu--collapse) {
         width: 200px;
+    }
+
+    .el-menu {
+        background-color: var(--foreground_2);
+        border-right: 1px solid transparent;
+        margin: 0;
+        --el-menu-hover-bg-color: var(--details);
+        --el-menu-item-height: 35px;
+    }
+    .el-menu-item {
+        color: var(--text_2);
     }
 </style>

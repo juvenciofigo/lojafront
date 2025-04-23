@@ -16,7 +16,7 @@
                     placeholder="Pesquise pelo nome do produto"
                     class="input-with-select">
                     <template #prepend>
-                        <div>
+                        <div class="flex flex-row">
                             <div class="hidden lg:block">
                                 <el-select
                                     clearable
@@ -30,12 +30,10 @@
                                         :label="category.categoryName" />
                                 </el-select>
                             </div>
-                            <Button
-                                class="lg:hidden block"
-                                @click.stop="drawer = !drawer"
-                                variant="gost">
-                                <Menu class="h-7.5 w-7.5" />
-                            </Button>
+
+                            <div class="lg:hidden block self-center">
+                                <el-icon @click.stop="drawer = !drawer"><Menu /></el-icon>
+                            </div>
                         </div>
                     </template>
                     <template #append>
@@ -91,9 +89,9 @@
 
     import { Search } from "lucide-vue-next";
     import LogoPart from "./LogoPart.vue";
-
-    import { Button } from "@/components/ui/button";
-    import { Menu } from "lucide-vue-next";
+    import { Menu } from "@element-plus/icons-vue";
+    // import { Button } from "@/components/ui/button";
+    // import { Menu } from "lucide-vue-next";
 
     const store = useStore();
     const router = useRouter();
