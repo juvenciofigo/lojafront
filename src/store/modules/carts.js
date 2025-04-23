@@ -2,7 +2,6 @@ import { setCookie, removeCookie, getCookie, errorMessage, getTempCart } from "@
 import notification from "@/util/notifications";
 import sendAxio from "@/util/sendAxio";
 
-
 const state = {
     cart: {},
     cartPrice: 0,
@@ -49,27 +48,33 @@ const actions = {
 
     /////////////////Client ///////////
     async addToCart(_, { isAuthenticated, item }) {
-        const itemProduct = item;
-        const user = JSON.parse(localStorage.getItem("userData"));
-
         try {
-            if (!isAuthenticated) {
-                let tempCart = getCookie("tempCart");
+            const itemProduct = item;
 
-                if (!tempCart) {
-                    tempCart = [];
-                } else {
-                    tempCart = JSON.parse(tempCart);
+            if (!isAuthenticated) {
+                // Obter carrinho temporário
+                let tempCart = [];
+                const cookie = getCookie("tempCart");
+
+                if (cookie) {
+                    try {
+                        tempCart = JSON.parse(cookie);
+                    } catch (err) {
+                        console.warn("Erro ao parsear tempCart:", err);
+                        tempCart = [];
+                    }
                 }
 
-                const existingProductIndex = tempCart.findIndex((item) => {
-                    item.productId == itemProduct.productId &&
-                    item.variation.color == itemProduct.variation.color &&
-                    item.variation.model == itemProduct.variation.model &&
-                    item.variation.material == itemProduct.variation.material &&
-                    item.variation.size == itemProduct.variation.size,
-                    item.deliveryEstimate == itemProduct.deliveryEstimate;
-                });
+                // Verificar se item já existe no carrinho
+                const existingProductIndex = tempCart.findIndex(
+                    (cartItem) =>
+                        cartItem.productId === itemProduct.productId &&
+                        cartItem.variation.color === itemProduct.variation.color &&
+                        cartItem.variation.model === itemProduct.variation.model &&
+                        cartItem.variation.material === itemProduct.variation.material &&
+                        cartItem.variation.size === itemProduct.variation.size &&
+                        cartItem.deliveryEstimate === itemProduct.deliveryEstimate
+                );
 
                 if (existingProductIndex !== -1) {
                     tempCart[existingProductIndex].quantity += Number(itemProduct.quantity) || 1;
@@ -90,22 +95,40 @@ const actions = {
 
                 setCookie("tempCart", JSON.stringify(tempCart), 7);
 
-                notification({ title: "Sucesso", type: "success", message: "Produto adicionado ao carrinho" });
+                notification({
+                    title: "Sucesso",
+                    type: "success",
+                    message: "Produto adicionado ao carrinho",
+                });
 
                 return;
-            } else {
-                const res = await sendAxio({ method: "post", url: `/cart/${user.id}/addProduct`, data: item });
+            }
+            console.log(true);
+            
 
-                if (res.status === 200) {
-                    notification({ title: "Sucesso", type: "success", message: res.data.message });
-                    return;
-                }
+            // Usuário autenticado
+            const userData = localStorage.getItem("userData");
+            if (!userData) throw new Error("Usuário não encontrado no localStorage.");
+
+            const user = JSON.parse(userData);
+
+            const res = await sendAxio({
+                method: "post",
+                url: `/cart/${user.id}/addProduct`,
+                data: item,
+            });
+
+            if (res.status === 200) {
+                notification({
+                    title: "Sucesso",
+                    type: "success",
+                    message: res.data.message,
+                });
             }
         } catch (error) {
             errorMessage(error);
         }
     },
-
     async removeFromCart(_, payload) {
         const user = JSON.parse(localStorage.getItem("userData"));
 
