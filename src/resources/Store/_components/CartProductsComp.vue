@@ -1,9 +1,11 @@
 <template lang="">
     <el-table
-        cell-class-name="bg-foreground_2 text-text_2"
+        header-cell-class-name="tabela"
+        row-class-name="tabela"
         v-loading="loadingPriceUpdate"
         max-height="400"
         fit
+        :highlight-current-row="false"
         element-loading-text="Processando"
         style="width: max-content"
         size="small"

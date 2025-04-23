@@ -19,25 +19,42 @@
         <div
             v-if="cart && cart.items && cart.items.length > 0"
             v-loading="loadingPriceUpdate"
-            class="shadow-md rounded-md text-center w-full md:max-w-[410px] flex flex-col gap-6 bg-white">
-            <div>
-                <p class="my-1 font-semibold text-lg">Resumo do pedido</p>
-                <el-descriptions
-                    direction="horizontal"
-                    :column="1"
-                    border>
-                    <el-descriptions-item label="Total de produtos:">{{ formatCurrency(priceTotal) }}</el-descriptions-item>
-                    <el-descriptions-item label="Taxa de envio:">{{ formatCurrency(shippingPrice) }}</el-descriptions-item>
-                    <el-descriptions-item label="Total">{{ formatCurrency(totalPedido) }}</el-descriptions-item>
-                </el-descriptions>
-                <el-button
-                    class="w-full my-1"
-                    :disabled="buttonStatus"
-                    size="small"
-                    @click="makeOrder()">
-                    Fazer pedido
-                </el-button>
-            </div>
+            class="shadow-md text-center w-full md:max-w-[350px] flex flex-col gap-1 bg-foreground_2 text-text_2">
+            <p class="font-semibold text-lg ">Resumo do pedido</p>
+            <el-descriptions
+                border
+                size="small"
+                direction="horizontal"
+                :column="1">
+                <el-descriptions-item
+                    align="center"
+                    label-class-name="tabela"
+                    class-name="tabela"
+                    label="Total de produtos:"
+                    >{{ formatCurrency(priceTotal) }}</el-descriptions-item
+                >
+                <el-descriptions-item
+                    align="center"
+                    label-class-name="tabela"
+                    class-name="tabela"
+                    label="Taxa de envio:"
+                    >{{ formatCurrency(shippingPrice) }}</el-descriptions-item
+                >
+                <el-descriptions-item
+                    align="center"
+                    label-class-name="tabela"
+                    class-name="tabela"
+                    label="Total"
+                    >{{ formatCurrency(totalPedido) }}</el-descriptions-item
+                >
+            </el-descriptions>
+            <el-link
+                class="w-full my-1"
+                :disabled="buttonStatus"
+                size="small"
+                @click="makeOrder()">
+                Fazer pedido
+            </el-link>
         </div>
     </div>
 </template>
@@ -76,9 +93,9 @@
     }
 </script>
 <style>
-    .el-descriptions__body,
+    /* .el-descriptions__body,
     .el-descriptions__cell {
         background: var(--foreground_2) !important;
         color: var(--text_2) !important;
-    }
+    } */
 </style>

@@ -153,4 +153,8 @@
         width: max-content !important;
         border-radius: 0% !important;
     }
+    .tabela {
+        background: var(--foreground_2) !important;
+        color: var(--text_2) !important;
+    }
 </style>
