@@ -57,6 +57,73 @@ const mutations = {
     },
 };
 
+const handleUserConfirmation = async (commit, state, authData) => {
+    try {
+        // Métodos auxiliares
+
+        // 1. Configurar autenticação
+        const isAdmin = authData.role?.includes("admin");
+        const tokenExpiry = isAdmin ? 1 : 4; // em dias
+
+        setCookie("authToken", authData.token, tokenExpiry);
+
+        if (isAdmin) {
+            setCookie("poRO", authData.role[1], 1);
+        }
+
+        // 2. Armazenar dados do usuário
+        const userData = {
+            firstName: authData.firstName,
+            lastName: authData.lastName,
+            email: authData.email,
+            id: authData._id,
+            profilePhoto: authData.profilePhoto,
+        };
+
+        localStorage.setItem("userData", JSON.stringify(userData));
+
+        // 3. Processar carrinho temporário se existir
+        const tempCart = getTempCart("tempCart");
+
+        // Verifica se já é objeto ou precisa parsear
+        const cartData = typeof tempCart === "string" ? JSON.parse(tempCart) : tempCart;
+
+        if (Array.isArray(cartData) && cartData.length > 0) {
+
+            const response = await sendAxio({
+                method: "post",
+                url: `/cart/${authData._id}/addProduct`,
+                data: cartData,
+            });
+
+            if (response.status === 200) {
+                removeCookie("tempCart");
+            }
+        }
+
+        // 4. Notificar sucesso
+        notification({
+            title: "Sucesso",
+            type: "success",
+            message: "Bem-vindo",
+        });
+
+        setTimeout(() => {
+            if (state.redirectTo) {
+                const redirectUrl = state.redirectTo;
+                commit("SET_REDIRECT_TO", null);
+                commit("SET_LOGIN_OVERLAY", false);
+                window.location.href = redirectUrl;
+            } else {
+                window.location.reload();
+            }
+        }, 2000);
+    } catch (error) {
+        console.error("Erro na confirmação do usuário:", error);
+        throw error;
+    }
+};
+
 const actions = {
     async fetchCustomers({ commit }, payload) {
         try {
@@ -71,64 +138,43 @@ const actions = {
             errorMessage(error);
         }
     },
+
     /////////////////////Client/////////////////////
-    async signIn({ commit, state }, payload) {
+    signIn: async ({ commit, state }, payload) => {
         try {
             const res = await sendAxio({ method: "post", url: `/signIn`, data: payload.values });
 
             if (res.status === 200) {
                 const auth = res.data.user;
 
-                // Definir o tempo de expiração do cookie baseado no papel do usuário
-                if (auth.role.includes("admin")) {
-                    setCookie("authToken", auth.token, 1);
-                    setCookie("poRO", auth.role[1], 1);
-                } else {
-                    setCookie("authToken", auth.token, 4);
-                }
-
-                // Armazenar dados do usuário no localStorage
-                localStorage.setItem(
-                    "userData", // name //
-                    JSON.stringify({
-                        firstName: auth.firstName,
-                        lastName: auth.lastName,
-                        email: auth.email,
-                        id: auth._id,
-                        profilePhoto: auth.profilePhoto,
-                    })
-                );
+                await handleUserConfirmation(commit, state, auth);
             } else {
                 notification({ title: "Error", type: "error", message: res.data.message });
                 return;
             }
-
-            const user = JSON.parse(localStorage.getItem("userData"));
-            const tempCart = getTempCart("tempCart");
-
-            if (tempCart && tempCart.length > 0) { 
-                
-                const res = await sendAxio({ method: "post", url: `/cart/${user.id}/addProduct`, data: JSON.parse(tempCart) });
-                if (res.status === 200) {
-                    // Limpar o cookie do carrinho
-                    removeCookie("tempCart");
-                }
-            }
-
-            notification({ title: "Sucesso", type: "success", message: "Bem-vindo" });
-
-            let redirect = null;
-            if (state.redirectTo !== null) {
-                redirect = state.redirectTo;
-                commit("SET_REDIRECT_TO", null);
-                commit("SET_LOGIN_OVERLAY", false);
-                window.location.href = redirect;
-                return;
-            }
-            window.location.reload();
+            throw new Error();
         } catch (error) {
             errorMessage(error);
             return;
+        }
+    },
+
+    signUp: async ({ commit, state }, payload) => {
+        const values = {
+            email: payload.emailSignUp,
+            password: payload.passwordSignUp,
+            firstName: payload.firstNameSignUp,
+            lastName: payload.lastNameSignUp,
+        };
+        try {
+            const res = await sendAxio({ method: "post", url: `/signUp`, data: values });
+            if (res.status === 200) {
+                const auth = res.data.user;
+                await handleUserConfirmation(commit, state, auth);
+            }
+            throw new Error();
+        } catch (error) {
+            errorMessage(error);
         }
     },
 
@@ -142,25 +188,6 @@ const actions = {
             commit("carts/SET_CART_PRICE");
             window.location.reload();
             return;
-        } catch (error) {
-            errorMessage(error);
-        }
-    },
-
-    async signUp(_, payload) {
-        const values = {
-            email: payload.emailSignUp,
-            password: payload.passwordSignUp,
-            firstName: payload.firstNameSignUp,
-            lastName: payload.lastNameSignUp,
-        };
-        try {
-            const res = await sendAxio({ method: "post", url: `/signUp`, data: values });
-            if (res.status === 200) {
-                notification({ title: "Sucesso", type: "success", message: "Conta criada, faça o Login!" });
-                return;
-            }
-            throw new Error();
         } catch (error) {
             errorMessage(error);
         }
