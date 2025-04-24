@@ -100,7 +100,6 @@
                     </template>
                 </el-table-column>
             </el-table>
-            <!-- //////////////////////////////////////////////////////////////// -->
 
             <div class="flex items-center space-x-2 py-4">
                 <v-pagination

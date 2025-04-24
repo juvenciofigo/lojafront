@@ -277,54 +277,12 @@
     const props = defineProps({
         price: Number,
         newImages: Array,
-
-        //     firstButton: { type: Function, required: true },
-        //     titleFirst: { type: String, required: true },
-        //     styl_firstbutton: String,
-        //     loading_button: Boolean,
-        //     first_icon: { type: String },
-
-        //     titleSecond: { type: String, required: true },
-        //     secondButton: { type: Function, required: true },
-        //     styl_secondbutton: String,
-        //     second_icon: { type: String },
-
-        //     titleThird: { type: String },
-        //     thirdButton: { type: Function },
-        //     styl_thirdbutton: String,
-        //     third_icon: { type: String },
-
-        //     titleFourth: { type: String },
-        //     fourthButton: { type: Function },
-        //     styl_fourthbutton: String,
-        //     fourth_icon: { type: String },
-
-        //     titleFifth: { type: String },
-        //     fifthButton: { type: Function },
-        //     styl_fifthbutton: String,
     });
-
-    // const materials = ref([]);
-    // const models = ref([]);
-    // const colors = ref([]);
-    // const sizes = ref([]);
-
-    // const selectedMaterial = ref(null);
-    // const selectedModel = ref(null);
-    // const selectedColor = ref(null);
-    // const selectedSize = ref(null);
-    // ////////////////////////
-
-    // const ref1 = ref(null);
-    // const ref2 = ref(null);
-    // const ref3 = ref(null);
 
     const colorsRate = ref(["#99A9BF", "#F7BA2A", "#FF9900"]);
 
     const open = ref(false);
-    //////////////////////////
     defineEmits(["rating-dialog"]);
-
     const store = useStore();
     const product = computed(() => store.state.products.product);
     const imageLink = ref(null);
@@ -356,22 +314,6 @@
             }
         }
     );
-
-    // const buttons = ref(null);
-
-    // const observer = new IntersectionObserver((entries) => {
-    //     entries.forEach((entry) => {
-    //         if (entry.isIntersecting) {
-    //             if (product.value.productImage && product.value.productImage.length > 0) {
-    //                 if (!localStorage.getItem("tourShown")) {
-    //                     open.value = true;
-    //                     localStorage.setItem("tourShown", "true");
-    //                     document.body.style.overflow = "hidden";
-    //                 }
-    //             }
-    //         }
-    //     });
-    // });
 
     onBeforeMount(() => {
         if (product.value.productImage && product.value.productImage.length > 0) {

@@ -58,9 +58,9 @@
                     <div
                         @click="isCollapse = !isCollapse"
                         class="duration-300 transition-all w-full bg-details h-10 flex justify-center items-center gap-2 cursor-pointer">
-                        <span :class="['transition-all duration-1000', isCollapse ? 'hidden' : 'rotate-0']">Contrair</span>
+                        <span :class="['transition-all duration-150', isCollapse ? 'hidden' : 'rotate-0']">Contrair</span>
                         <el-icon :class="['transition-transform duration-300', isCollapse ? 'rotate-180' : 'rotate-0']">
-                            <ArrowLeft />
+                            <el-icon><Fold /></el-icon>
                         </el-icon>
                     </div>
                     <el-menu
@@ -100,7 +100,7 @@
     import { useRoute } from "vue-router";
     import LogoPart from "@/components/partials/LogoPart.vue";
     import FoooterComp from "@/components/partials/FoooterComp.vue";
-    import { ShoppingCart, User, Goods, ShoppingBag, TakeawayBox, Grid, ArrowLeft, Top } from "@element-plus/icons-vue";
+    import { ShoppingCart, User, Goods, ShoppingBag, TakeawayBox, Grid, Fold, Top } from "@element-plus/icons-vue";
 
     const route = useRoute();
 
@@ -144,5 +144,12 @@
     }
     .el-menu-item {
         color: var(--text_2);
+    }
+
+    .el-breadcrumb {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+        font-size: 13px;
     }
 </style>

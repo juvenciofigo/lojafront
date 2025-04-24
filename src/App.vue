@@ -142,7 +142,6 @@
         background-color: var(--accent_2) !important;
         color: var(--text_2) !important;
         z-index: 20 !important;
-        
     }
 
     .tabela {

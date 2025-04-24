@@ -73,7 +73,6 @@ const actions = {
 
             if (res.status === 200) {
                 notification({ title: "Sucesso", type: "success", message: res.data.message });
-                // window.location.reload();
                 return;
             }
             throw new Error();

@@ -31,7 +31,8 @@
                                 </el-select>
                             </div>
 
-                            <div class="lg:hidden block self-center">
+                            <div class="block self-center lg:hidden">
+                                
                                 <el-icon @click.stop="drawer = !drawer"><Menu /></el-icon>
                             </div>
                         </div>
@@ -89,9 +90,7 @@
 
     import { Search } from "lucide-vue-next";
     import LogoPart from "./LogoPart.vue";
-    import { Menu } from "@element-plus/icons-vue";
-    // import { Button } from "@/components/ui/button";
-    // import { Menu } from "lucide-vue-next";
+    import { Menu } from "lucide-vue-next";
 
     const store = useStore();
     const router = useRouter();

@@ -7,7 +7,7 @@
                     class="duration-300 transition-all w-full bg-details h-10 flex justify-center items-center gap-2 cursor-pointer">
                     <span :class="['transition-all duration-1000', isCollapse ? 'hidden' : 'rotate-0']">Contrair</span>
                     <el-icon :class="['transition-transform duration-300', isCollapse ? 'rotate-180' : 'rotate-0']">
-                        <ArrowLeft />
+                        <el-icon><Fold /></el-icon>
                     </el-icon>
                 </div>
                 <el-menu
@@ -37,7 +37,7 @@
 <script setup>
     import { onBeforeMount, computed, ref } from "vue";
     import { useRoute, useRouter } from "vue-router";
-    import { UserFilled, List, CreditCard, Location, ArrowLeft } from "@element-plus/icons-vue";
+    import { UserFilled, List, CreditCard, Location, Fold } from "@element-plus/icons-vue";
 
     const route = useRoute();
     const router = useRouter();
