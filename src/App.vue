@@ -92,7 +92,7 @@
         outline: none;
     }
     .v-input__control {
-        background-color: white;
+        background-color: red;
         border-radius: 4px;
     }
     .input-field input::placeholder {
@@ -138,23 +138,74 @@
         outline: 1px solid #0062bd;
     }
 
-    .custom-backtop {
-        width: max-content;
-        background-color: #409eff;
-        color: white;
-        text-align: center;
-        font-weight: 300;
-        padding: 2px;
-        font-size: medium;
-        border-radius: 5px;
-    }
     .el-backtop {
-        height: max-content !important;
-        width: max-content !important;
-        border-radius: 0% !important;
+        background-color: var(--accent_2) !important;
+        color: var(--text_2) !important;
+        z-index: 20 !important;
     }
+
     .tabela {
         background: var(--foreground_2) !important;
         color: var(--text_2) !important;
+    }
+    .el-input {
+        --el-input-text-color: var(--el-text-color-regular);
+        --el-input-border-color: var(--details_2) !important;
+    }
+    .el-input__wrapper {
+        background-color: var(--details) !important;
+    }
+    .el-input__inner {
+        color: var(--text_2) !important;
+    }
+    .el-select__wrapper {
+        background: var(--details) !important;
+    }
+    .el-select {
+        --el-select-input-color: var(--details) !important;
+    }
+
+    .el-popper.is-light,
+    .el-popper.is-light > .el-popper__arrow:before {
+        background: #5cadd6 !important;
+        border: none !important;
+    }
+    .el-select-dropdown__item.is-hovering {
+        background-color: var(--details) !important;
+    }
+    .el-select-dropdown__item {
+        color: var(--text_2) !important;
+    }
+    .el-select__wrapper {
+        box-shadow: 0 0 0 1px var(--details_2) inset !important;
+    }
+
+    .el-dropdown-menu {
+        background-color: #5cadd6 !important;
+    }
+
+    .el-dropdown-menu__item {
+        color: black !important;
+    }
+    .el-button {
+        height: 20px !important;
+    }
+    .el-upload--picture-card {
+        background-color: var(--details_2) !important;
+        height: unset !important;
+        border: 0 !important;
+    }
+    .el-upload-dragger {
+        border: 0 !important;
+        background-color: transparent !important;
+    }
+    .el-upload-list__item {
+        background-color: unset !important;
+        border: unset !important;
+        margin: 8px 8px !important;
+    }
+    .el-upload-list--picture-card {
+        display: flex !important;
+        align-content: center !important;
     }
 </style>

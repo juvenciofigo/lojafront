@@ -89,7 +89,7 @@
             target=".view"
             :right="30"
             :bottom="50">
-            <div class="custom-backtop">Topo</div>
+            <el-icon><Top /></el-icon>
         </el-backtop>
         <FoooterComp />
     </div>
@@ -100,7 +100,7 @@
     import { useRoute } from "vue-router";
     import LogoPart from "@/components/partials/LogoPart.vue";
     import FoooterComp from "@/components/partials/FoooterComp.vue";
-    import { ShoppingCart, User, Goods, ShoppingBag, TakeawayBox, Grid, ArrowLeft } from "@element-plus/icons-vue";
+    import { ShoppingCart, User, Goods, ShoppingBag, TakeawayBox, Grid, ArrowLeft, Top } from "@element-plus/icons-vue";
 
     const route = useRoute();
 

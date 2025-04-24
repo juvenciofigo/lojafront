@@ -2,10 +2,10 @@
     <div
         v-if="products"
         class="flex flex-col">
-        <div class="bg-foreground_2 flex flex-row justify-between p-2 mb-[2px]">
+        <div class="bg-foreground_2 flex flex-row justify-between items-center p-2 mb-[2px]">
             <h1 class="text-xl">{{ title }}</h1>
             <router-link :to="link">
-                <el-button> Ver Mais</el-button>
+                <el-link type="primary"> Ver Mais...</el-link>
             </router-link>
         </div>
         <div class="flex flex-row gap-1 overflow-x-auto w-[calc(100%)] py-1">
@@ -42,12 +42,7 @@
                                 <div class="price text-center">
                                     <span class="font-bold">{{ formatCurrency(product.productPrice) }}</span>
                                 </div>
-                                <el-link
-                                    size="small"
-                                    class="w-full self-center "
-                                    :to="{ name: 'product-details', params: { id: `${product._id}` } }">
-                                    Detalhes
-                                </el-link>
+                                <el-link type="primary"> Detalhes </el-link>
                             </div>
                         </div>
                     </router-link>

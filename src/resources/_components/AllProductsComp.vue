@@ -2,7 +2,7 @@
     <div class="flex flex-row flex-1">
         <!-- Filtrar -->
         <section class="w-[274px] hidden lg:flex flex-col gap-4 bg-foreground_2">
-            <div class="w-full categories-list overflow-auto bg-foreground_2">
+            <div class="w-full categories-list overflow-auto">
                 <h2 class="p-1 bg-details font-semibold">Categorias</h2>
 
                 <ul
@@ -68,7 +68,7 @@
                 </ul>
             </div>
 
-            <div class="filter-container w-full bg-white">
+            <div class="filter-container w-full ">
                 <div class="price p-3">
                     <h2 class="p-2 font-semibold">Preço</h2>
                     <div class="slider-demo-block">
@@ -98,7 +98,7 @@
         <!-- Filtrar -->
 
         <section class="flex-1 flex flex-col gap-1">
-            <div class="h-[40px] p-2 bg-white justify-between flex flex-row items-center">
+            <div class="h-[40px] p-2 bg-foreground_2 justify-between flex flex-row items-center">
                 <div class="flex flex-row justify-between">
                     <h2>{{ category || "Todos Produtos" }}</h2>
                 </div>
@@ -293,7 +293,5 @@
             grid-template-columns: repeat(5, minmax(0, 1fr));
         }
     }
-
-   
 </style>
 <style></style>

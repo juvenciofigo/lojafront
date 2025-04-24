@@ -1,6 +1,6 @@
 <template lang="">
-    <div class="bottom-0 top-[4px] p-4 right-0 flex-1 w-full flex flex-col overflow-auto bg-white gap-2 flex-nowrap">
-        <div>
+    <div class="bottom-0 addProduct top-[4px] p-4 right-0 flex-1 w-full flex flex-col overflow-auto gap-2 flex-nowrap">
+        <div class="bg-foreground_2 px-2 py-1">
             <h1 class="text-lg font-semibold">Informações Básicas</h1>
             <p class="indent-2">Preencha as informações abaixo</p>
         </div>
@@ -10,7 +10,7 @@
             @submit.prevent="submit"
             enctype="multipart/form-data">
             <div class="flex flex-col md:flex-row gap-8">
-                <div class="Left flex-[2] flex flex-col gap-8 bg-blue-500 p-2 md:p-4 rounded-md">
+                <div class="Left flex-[2] flex flex-col gap-8 bg-foreground_2 p-2 md:p-4">
                     <div class="TIT_Desc">
                         <div class="Tit-Des flex flex-col gap-4">
                             <!-- Title Product -->
@@ -30,7 +30,7 @@
                             <!-- Description -->
                             <div class="input-field descr">
                                 <Label><span class="text-red-500">*</span> Descriçao:</Label>
-                                <div class="bg-white">
+                                <div class="bg-details text-text_2">
                                     <!-- :disable="true" -->
                                     <QuillEditor
                                         v-model:content="productDescription.value.value"
@@ -44,76 +44,78 @@
                     </div>
 
                     <!-- ///////// images/////////// -->
-                    <div class="input-field mb-3">
-                        <label> Imagens:</label>
-                        <el-upload
-                            drag
-                            v-model:file-list="fileList"
-                            :before-upload="handleBeforeUpload"
-                            :auto-upload="false"
-                            multiple
-                            :disabled="textAreaDisabled"
-                            accept="image/*"
-                            list-type="picture-card">
-                            <template #file="{ file }">
-                                <div class="flex items-center relative">
-                                    <el-image
-                                        style="width: 100%; height: 100%"
-                                        :src="file.url"
-                                        fit="fill" />
-                                    <div class="absolute bottom-1 flex gap-[2px]">
-                                        <el-button
-                                            circle
-                                            :icon="Back"
-                                            size="small"
-                                            @click="moveUp(getFileIndex(file))"
-                                            :disabled="getFileIndex(file) === 0" />
-                                        <el-button
-                                            plain
-                                            circle
-                                            :icon="FullScreen"
-                                            size="small"
-                                            @click="handlePictureCardPreview(file)"/>
-                                        <el-button
-                                            circle
-                                            :icon="Delete"
-                                            size="small"
-                                            @click="removeFile(getFileIndex(file))" />
-                                        <el-button
-                                            circle
-                                            :icon="Right"
-                                            size="small"
-                                            @click="moveDown(getFileIndex(file))"
-                                            :disabled="getFileIndex(file) === fileList.length - 1" />
+                    <div class="input-field mb-3 p-2">
+                        <Label> Imagens:</Label>
+
+                        <div class="bg-details w-max">
+                            <el-upload
+                                drag
+                                v-model:file-list="fileList"
+                                :before-upload="handleBeforeUpload"
+                                :auto-upload="false"
+                                multiple
+                                :disabled="textAreaDisabled"
+                                accept="image/*"
+                                list-type="picture-card">
+                                <template #file="{ file }">
+                                    <div class="flex items-center relative">
+                                        <el-image
+                                            style="width: 100%; height: 100%"
+                                            :src="file.url"
+                                            fit="fill" />
+                                        <div class="absolute bottom-1 flex gap-[2px]">
+                                            <el-button
+                                                circle
+                                                :icon="Back"
+                                                size="small"
+                                                @click="moveUp(getFileIndex(file))"
+                                                :disabled="getFileIndex(file) === 0" />
+                                            <el-button
+                                                plain
+                                                circle
+                                                :icon="FullScreen"
+                                                size="small"
+                                                @click="handlePictureCardPreview(file)" />
+                                            <el-button
+                                                circle
+                                                :icon="Delete"
+                                                size="small"
+                                                @click="removeFile(getFileIndex(file))" />
+                                            <el-button
+                                                circle
+                                                :icon="Right"
+                                                size="small"
+                                                @click="moveDown(getFileIndex(file))"
+                                                :disabled="getFileIndex(file) === fileList.length - 1" />
+                                        </div>
                                     </div>
+                                </template>
+                                <el-icon class="el-icon--upload"><Plus /></el-icon>
+                            </el-upload>
+                            <el-dialog v-model="dialogVisible">
+                                <el-image
+                                    style="width: 100%"
+                                    :src="dialogImageUrl"
+                                    fit="fill" />
+                            </el-dialog>
+                        </div>
+
+                        <div
+                            class="block h-max mt-5"
+                            v-if="productImage && productImage.length > 0">
+                            <label> Imagens EXISTENTES:</label>
+                            <div class="flex gap-">
+                                <div
+                                    @click="removeImage(index)"
+                                    class="m-1 relative"
+                                    v-for="(image, index) in productImage"
+                                    :key="index"
+                                    :closable="true">
+                                    <img
+                                        class="w-20 h-20 object-cover"
+                                        :src="image"
+                                        alt="" />
                                 </div>
-                            </template>
-                            <el-icon class="el-icon--upload"><Plus /></el-icon>
-                        </el-upload>
-                        <el-dialog v-model="dialogVisible">
-                            <el-image
-                                style="width: 100%"
-                                :src="dialogImageUrl"
-                                fit="fill" />
-                        </el-dialog>
-                    </div>
-
-                    <div
-                        class="block h-max mt-5"
-                        v-if="productImage && productImage.length > 0">
-                        <label> Imagens EXISTENTES:</label>
-
-                        <div class="flex gap-">
-                            <div
-                                @click="removeImage(index)"
-                                class="m-1 relative"
-                                v-for="(image, index) in productImage"
-                                :key="index"
-                                :closable="true">
-                                <img
-                                    class="w-20 h-20 object-cover"
-                                    :src="image"
-                                    alt="" />
                             </div>
                         </div>
                     </div>
@@ -228,7 +230,7 @@
                     </div>
                 </div>
 
-                <div class="Right flex-1 bg-blue-500 p-2 md:p-4 rounded-md">
+                <div class="Right flex-1 bg-foreground_2 p-2 md:p-4">
                     <div class="Pub-Cat">
                         <div class="flex flex-row">
                             <!-- Available -->
@@ -308,21 +310,14 @@
                             <Label>Categoria:</Label>
 
                             <!-- Create Categories -->
-                            <Dialog>
-                                <DialogTrigger as-child>
-                                    <el-button size="small"> Criar categoria </el-button>
-                                </DialogTrigger>
-                                <DialogContent class="sm:max-w-[425px] grid-rows-[auto_minmax(0,1fr)_auto] p-0 max-h-[90dvh]">
-                                    <DialogHeader class="p-6 pb-0">
-                                        <DialogTitle>Criar categoria </DialogTitle>
-                                        <DialogDescription> Aqui pode criar categoria, subCategoria da categoria e subCategoria da subCategoria! </DialogDescription>
-                                    </DialogHeader>
-                                    <div class="grid gap-4 py-4 overflow-y-auto px-6">
-                                        <CreateCategoryVue />
-                                    </div>
-                                    <DialogFooter class="p-6 pt-0"> </DialogFooter>
-                                </DialogContent>
-                            </Dialog>
+                            <el-button
+                                @click="createCategoreDiag = true"
+                                size="small">
+                                Criar categoria
+                            </el-button>
+                            <el-dialog v-model="createCategoreDiag">
+                                <CreateCategoryVue />
+                            </el-dialog>
 
                             <div>
                                 <!-- Category -->
@@ -485,14 +480,14 @@
     import { useRoute } from "vue-router";
     import { ref, onBeforeMount, computed, toRaw } from "vue";
     import CreateCategoryVue from "../_partials/CreateCategory.vue";
-    
+
     import { QuillEditor } from "@vueup/vue-quill";
     import "@vueup/vue-quill/dist/vue-quill.snow.css"; // Estilo do editor
-    
+
     import { useField, useForm } from "vee-validate";
     import { toTypedSchema } from "@vee-validate/zod";
     import * as z from "zod";
-    
+
     import { Back, Right, Delete, Plus, FullScreen } from "@element-plus/icons-vue";
     import { Label } from "@/components/ui/label";
 
@@ -504,9 +499,9 @@
 
     const textAreaDisabled = ref(false);
     const loadSubmitButton = ref(false);
+    const createCategoreDiag = ref(false);
 
     const brandOptions = computed(() => store.state.products.brands);
-    
 
     const editorOptions = {
         placeholder: "Descrição do produto...",
@@ -541,7 +536,7 @@
     // Função para pré-visualizar as imagens
 
     const productImage = ref([]);
-    
+
     const fileList = ref([]);
     function moveUp(index) {
         if (index > 0) {
@@ -724,25 +719,22 @@
         textAreaDisabled.value = false;
     });
 </script>
-<style scoped>
-    /* .input-field {
-        display: flex;
-        flex-direction: column;
-        gap: 5px;
-        width: 100%;
-        margin: 5px 0;
+<style>
+    .ql-container.ql-snow {
+        border: 1px solid var(--details_2) !important;
+    }
+    .ql-toolbar.ql-snow {
+        border: 1px solid var(--details_2) !important;
+        padding: 4px !important;
+    }
+    .ql-snow .ql-stroke {
+        stroke: var(--text_2) !important;
+    }
+    .ql-snow .ql-picker {
+        color: var(--text_2) !important;
     }
 
-    .input-field input {
-        width: 100%;
-        border: none;
-        font-size: 13px;
-        border-radius: 8px;
-        width: 100%;
-        outline: none;
+    .addProduct .el-dialog {
+        --el-dialog-bg-color: var(--foreground_2) !important;
     }
-    .v-input__control {
-        background-color: white;
-        border-radius: 4px;
-    } */
 </style>

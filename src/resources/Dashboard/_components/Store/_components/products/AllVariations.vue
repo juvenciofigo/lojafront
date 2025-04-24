@@ -25,16 +25,14 @@
                                     <span class="text-base text-blue-700 font-semibold">{{ variation.variationType }}</span
                                     >: {{ variation.variationValue }}
                                 </div>
-                                <div>
-                                    <router-link :to="{ name: `admin-product-variation-edit`, params: { variation: `${variation._id}` } }">
-                                        <el-link
-                                            type="primary"
-                                            link
-                                            :icon="EditPen">
-                                            Modificar
-                                        </el-link>
-                                    </router-link>
-                                </div>
+                                <router-link :to="{ name: `admin-product-variation-edit`, params: { variation: `${variation._id}` } }">
+                                    <el-link
+                                        type="primary"
+                                        link
+                                        :icon="EditPen">
+                                        Modificar
+                                    </el-link>
+                                </router-link>
                             </div>
 
                             <div class="flex flex-row gap-5 bg-blue-100 p-2">
@@ -72,7 +70,6 @@
                             <el-link
                                 @click="confirmDelete(variation._id)"
                                 type="danger"
-                                link
                                 :icon="Delete">
                             </el-link>
                         </div>

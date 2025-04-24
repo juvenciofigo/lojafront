@@ -20,7 +20,7 @@
             v-if="cart && cart.items && cart.items.length > 0"
             v-loading="loadingPriceUpdate"
             class="shadow-md text-center w-full md:max-w-[350px] flex flex-col gap-1 bg-foreground_2 text-text_2">
-            <p class="font-semibold text-lg ">Resumo do pedido</p>
+            <p class="font-semibold text-lg">Resumo do pedido</p>
             <el-descriptions
                 border
                 size="small"
@@ -49,6 +49,7 @@
                 >
             </el-descriptions>
             <el-link
+                type="primary"
                 class="w-full my-1"
                 :disabled="buttonStatus"
                 size="small"

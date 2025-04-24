@@ -1,6 +1,6 @@
 <template lang="">
-    <div class="flex flex-col md:flex-col w-full justify-center md:flex-nowrap gap-4">
-        <el-row class="bg-white">
+    <div class="flex flex-col md:flex-col w-full justify-center md:flex-nowrap bg-foreground_2 gap-4 text-text_2">
+        <el-row class="bg-details statisticDahs">
             <!--  -->
             <el-col :span="6">
                 <el-statistic
@@ -30,7 +30,7 @@
             <!--  -->
         </el-row>
 
-        <div class="flex-1 bg-white p-2 rounded-md">
+        <div class="flex-1 p-2">
             <ChartComp />
         </div>
     </div>
@@ -54,8 +54,12 @@
         });
     });
 </script>
-<style scoped>
-    .el-col {
+<style>
+    .statisticDahs .el-col {
         text-align: center;
+    }
+
+    .statisticDahs .el-statistic__head {
+        color: unset !important;
     }
 </style>

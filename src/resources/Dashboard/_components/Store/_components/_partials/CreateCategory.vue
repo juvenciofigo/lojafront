@@ -1,10 +1,11 @@
 <template>
-    <div class="flex flex-col gap-2">
+    <div class="flex createCategoy flex-col gap-2">
         <!-- Criar Marca -->
-        <div class="grid gap-2 bg-slate-100 p-2 rounded-md">
+        <div class="grid gap-2 bg-foreground_2 p-2">
             <div class="flex flex-col gap-2">
                 <Label for="categoria">Criar Marca:</Label>
                 <el-input
+                    size="small"
                     v-model="brandName"
                     :disabled="loadingBtn"
                     autocomplete="off"
@@ -22,10 +23,11 @@
         </div>
 
         <!-- Criar Categoria -->
-        <div class="grid gap-2 bg-slate-100 p-2 rounded-md">
+        <div class="grid gap-2 bg-foreground_2 p-2">
             <div class="flex flex-col gap-2">
                 <Label for="categoria">Criar Categoria:</Label>
                 <el-input
+                    size="small"
                     v-model="categoryName"
                     :disabled="loadingBtn"
                     autocomplete="off"
@@ -43,11 +45,12 @@
         </div>
 
         <!-- Criar Subcategoria -->
-        <div class="grid gap-2 bg-slate-100 p-2 rounded-md">
+        <div class="grid gap-2 bg-foreground_2 p-2">
             <div class="flex flex-col gap-2">
                 <Label for="subcategoria">Criar Subcategoria:</Label>
 
                 <el-input
+                    size="small"
                     v-model="subCategoryName"
                     :disabled="loadingBtn"
                     autocomplete="off"
@@ -108,10 +111,11 @@
         </div>
 
         <!-- Criar Subcategoria de Subcategoria -->
-        <div class="grid gap-2 bg-slate-100 p-2 rounded-md">
+        <div class="grid gap-2 bg-foreground_2 p-2">
             <div class="flex flex-col gap-2">
                 <Label for="categoria">Criar sub_categoria:</Label>
                 <el-input
+                    size="small"
                     v-model="sub_categoryName"
                     :disabled="loadingBtn"
                     autocomplete="off"
@@ -276,3 +280,6 @@
         loadingBtn.value = false;
     }
 </script>
+<style>
+  
+</style>

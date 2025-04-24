@@ -10,7 +10,6 @@
                     type="primary"
                     size="small">
                     <el-icon class="el-icon--right"> <Plus /></el-icon>
-
                     Novo Produto
                 </el-button>
             </router-link>

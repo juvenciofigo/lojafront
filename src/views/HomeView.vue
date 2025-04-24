@@ -9,7 +9,7 @@
             target=".view"
             :right="30"
             :bottom="50">
-            <div class="custom-backtop">Topo</div>
+            <el-icon><Top /></el-icon>
         </el-backtop>
     </div>
 </template>
@@ -17,4 +17,5 @@
 <script setup>
     import HeaderComp from "@/resources/_components/HeaderComp.vue";
     import SignaturePart from "@/components/partials/FoooterComp.vue";
+    import { Top } from "@element-plus/icons-vue";
 </script>
