@@ -66,14 +66,17 @@
                         </div>
                     </div>
                 </div>
-                <div>
+                <div class="flex items-center flex-wrap">
                     <span class="font-semibold">Fornecedor: </span>
-                    <span> {{ product.productVendor }}</span>
+                    <span class="break-words whitespace-pre-wrap">
+                        <el-input
+                            v-model="product.productVendor"
+                            readonly />
+                    </span>
                 </div>
             </div>
         </template>
     </ProductDetailsComp>
-
     <DialogConfirmation
         :dialog="showDialog"
         :tileConfirmation="`Deleção de ${text}`"
@@ -155,13 +158,13 @@
     };
 
     function navigateTo() {
-        router.push({ name: "admin-product-update", params: { productID: route.params.id } });
+        router.push({ name: "admin-product-update", params: { id: route.params.id } });
     }
     function addImage() {
         router.push({ name: "admin-product-images", params: { id: route.params.id } });
     }
     function variations() {
-        router.push({ name: "admin-product-variations", params: { id: route.params.id } });
+        router.push({ name: "admin-product-variations-list", params: { id: route.params.id } });
     }
     onBeforeMount(async () => {
         await store.dispatch("products/fetchProductByIdAdmin", route.params.id);

@@ -194,7 +194,6 @@
         image: "",
     });
 
-    
     function addColor() {
         if (newColor.value && !variation.value.colors.includes(newColor.value)) {
             variation.value.colors.push(newColor.value);
@@ -241,10 +240,8 @@
 
     async function submitVariation() {
         try {
-            // Supondo que o ID do produto seja passado como uma propriedade (prop)
-            const productId = route.params.productId; // ou passe como uma prop
-            const response = await axios.post(`/api/products/${productId}/variations`, variation.value);
-            // Limpar o formulário após a submissão
+            const productId = route.params.id;
+            await axios.post(`/api/products/${productId}/variations`, variation.value);
             variation.value = {
                 colors: [],
                 sizes: [],

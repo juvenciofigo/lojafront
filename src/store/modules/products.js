@@ -191,8 +191,6 @@ const actions = {
             const res = await sendAxio({ method: "get", url: `/product/admin/${produtoId}` });
 
             if (res.status === 200) {
-                console.log(res.data);
-
                 commit("SET_PRODUCT", res.data.product);
                 return true;
             }

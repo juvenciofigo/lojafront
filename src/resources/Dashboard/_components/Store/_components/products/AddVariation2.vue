@@ -1,4 +1,4 @@
-<!-- <template>
+<template>
     <div class="bg-white shadow-md rounded p-6">
         <form @submit.prevent="submitVariation">
             <div class="mb-4">
@@ -140,4 +140,4 @@
             console.error("Erro ao criar variação:", error);
         }
     }
-</script> -->
+</script>

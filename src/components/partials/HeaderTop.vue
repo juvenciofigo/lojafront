@@ -2,7 +2,7 @@
     <!-- Header-1 -->
     <nav class="desHheader-1 flex flex-row justify-between items-center p-2 lg:p-1 bg-foreground_2">
         <!-- esquerda -->
-        <div>
+        <div class="h-full flex flex-col justify-between">
             <div class="text-center hidden lg:block">
                 <span>Bem-vindo ao {{ storeName }}</span>
             </div>
@@ -11,7 +11,7 @@
         </div>
 
         <!-- direita -->
-        <div class="flex flex-col md:flex-row items-end gap-1 justify-between md:items-center h-full text-text_2">
+        <div class="flex flex-col items-end gap-1 justify-between md:items-end h-full text-text_2">
             <el-dropdown
                 popper-class="bg-red-500"
                 v-if="isAuthenticated"

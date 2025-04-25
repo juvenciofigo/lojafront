@@ -100,6 +100,7 @@
     import { useRoute } from "vue-router";
     import LogoPart from "@/components/partials/LogoPart.vue";
     import FoooterComp from "@/components/partials/FoooterComp.vue";
+    import HeaderTop from "@/components/partials/HeaderTop.vue";
     import { ShoppingCart, User, Goods, ShoppingBag, TakeawayBox, Grid, Fold, Top } from "@element-plus/icons-vue";
 
     const route = useRoute();
@@ -116,13 +117,21 @@
     const isCollapse = ref(false);
     const breadcrumb = computed(() => {
         const seen = new Set();
+
         return route.matched
             .map((r) => {
-                const el = r.path.split("/").filter(Boolean); // Filtro para evitar uma string vazia
-                return { name: el[el.length - 1]?.toUpperCase(), route: r.path };
+                let trocarPath = r.path;
+                for (const [chave, value] of Object.entries(route.params)) {
+                    trocarPath = trocarPath.replace(`:${chave}`, value);
+                }
+
+                const el = trocarPath.split("/").filter(Boolean);
+                return {
+                    name: el[el.length - 1]?.toUpperCase(),
+                    route: trocarPath,
+                };
             })
             .filter((item) => {
-                // Se já vimos este nome, filtra fora
                 if (seen.has(item.name)) return false;
                 seen.add(item.name);
                 return true;

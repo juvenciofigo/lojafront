@@ -495,7 +495,7 @@
     const route = useRoute();
 
     const categories = computed(() => store.state.categories.categories);
-    const productSeleted = route.params.productID;
+    const productSeleted = route.params.id;
 
     const textAreaDisabled = ref(false);
     const loadSubmitButton = ref(false);

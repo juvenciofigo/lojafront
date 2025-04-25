@@ -108,41 +108,48 @@ const routes = [
                         component: () => import("@/resources/Dashboard/_components/Store/_components/products/AddProduct.vue"),
                     },
                     {
-                        path: "produto/:id",
+                        path: "produto/:id/detalhes",
                         name: "admin-product",
-                        redirect: { name: "admin-product-variations" },
+                        component: () => import("@/resources/Dashboard/_components/Store/_components/products/ProductComp.vue"),
                         children: [
+                            {
+                                path: "",
+                                name: "admin-product-details",
+                                component: () => import("@/resources/Dashboard/_components/Store/_components/products/ProductDetails.vue"),
+                            },
+                            {
+                                path: "produto/:id/fotos",
+                                name: "admin-product-images",
+                                component: () => import("@/resources/Dashboard/_components/Store/_components/products/AddImage.vue"),
+                            },
+                            {
+                                path: "produto/:id/actualizar",
+                                name: "admin-product-update",
+                                component: () => import("@/resources/Dashboard/_components/Store/_components/products/AddProduct.vue"),
+                            },
                             {
                                 path: "variacoes",
                                 name: "admin-product-variations",
-                                component: () => import("@/resources/Dashboard/_components/Store/_components/products/AllVariations.vue"),
-                            },
-                            {
-                                path: "addVariacoes",
-                                name: "admin-product-variation-add",
-                                component: () => import("@/resources/Dashboard/_components/Store/_components/products/AddVariation3.vue"),
-                            },
-                            {
-                                path: ":variation/modificar",
-                                name: "admin-product-variation-edit",
-                                component: () => import("@/resources/Dashboard/_components/Store/_components/products/AddVariation3.vue"),
+                                component: () => import("@/resources/Dashboard/_components/Store/_components/products/VariationsComp.vue"),
+                                children: [
+                                    {
+                                        path: "",
+                                        name: "admin-product-variations-list",
+                                        component: () => import("@/resources/Dashboard/_components/Store/_components/products/AllVariations.vue"),
+                                    },
+                                    {
+                                        path: "addVariacoes",
+                                        name: "admin-product-variation-add",
+                                        component: () => import("@/resources/Dashboard/_components/Store/_components/products/AddVariation3.vue"),
+                                    },
+                                    {
+                                        path: ":variation/modificar",
+                                        name: "admin-product-variation-edit",
+                                        component: () => import("@/resources/Dashboard/_components/Store/_components/products/AddVariation3.vue"),
+                                    },
+                                ],
                             },
                         ],
-                    },
-                    {
-                        path: "produto/:id/fotos",
-                        name: "admin-product-images",
-                        component: () => import("@/resources/Dashboard/_components/Store/_components/products/AddImage.vue"),
-                    },
-                    {
-                        path: "produto/:id/detalhes",
-                        name: "admin-product-details",
-                        component: () => import("@/resources/Dashboard/_components/Store/_components/products/ProductDetails.vue"),
-                    },
-                    {
-                        path: "produto/:productID/actualizar",
-                        name: "admin-product-update",
-                        component: () => import("@/resources/Dashboard/_components/Store/_components/products/AddProduct.vue"),
                     },
                 ],
             },

@@ -18,11 +18,11 @@
                 <template
                     v-for="variation in variations"
                     :key="variation._id">
-                    <v-card class="w-max">
+                    <div class="w-max bg-foreground_2 px-1">
                         <router-link :to="{ name: `admin-product-variation-edit`, params: { variation: `${variation._id}` } }">
                             <div class="flex flex-row justify-between items-center px-1">
                                 <div>
-                                    <span class="text-base text-blue-700 font-semibold">{{ variation.variationType }}</span
+                                    <span class="text-base font-semibold">{{ variation.variationType }}</span
                                     >: {{ variation.variationValue }}
                                 </div>
                                 <router-link :to="{ name: `admin-product-variation-edit`, params: { variation: `${variation._id}` } }">
@@ -34,8 +34,8 @@
                                     </el-link>
                                 </router-link>
                             </div>
-
-                            <div class="flex flex-row gap-5 bg-blue-100 p-2">
+                            <hr />
+                            <div class="flex flex-row gap-5 p-2">
                                 <div>
                                     <div><span class="font-medium">Sku:</span> {{ variation.sku }}</div>
                                     <div>
@@ -73,7 +73,7 @@
                                 :icon="Delete">
                             </el-link>
                         </div>
-                    </v-card>
+                    </div>
                 </template>
             </div>
         </div>
@@ -118,7 +118,6 @@
     async function deleteVariation() {
         loading.value = true;
         if (deleteIndex.value !== null) {
-            console.log(deleteIndex.value);
             await store.dispatch("products/deleteVariation", deleteIndex.value);
             showDialog.value = false;
             deleteIndex.value = null;

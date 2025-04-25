@@ -103,8 +103,6 @@ const actions = {
 
                 return;
             }
-            console.log(true);
-            
 
             // Usuário autenticado
             const userData = localStorage.getItem("userData");
