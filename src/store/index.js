@@ -63,7 +63,7 @@ export default createStore({
     },
 
     state: {
-        themeMode:true,
+        themeMode:false,
         /// Loja
         storeName: process.env.VUE_APP_STORE_NAME,
         // users

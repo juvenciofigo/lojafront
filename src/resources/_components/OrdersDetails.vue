@@ -5,12 +5,12 @@
                 <div class="">
                     <div class="overflow-auto flex flex-col gap-1">
                         <el-table
-                            stripe
-                            border
-                            max-height="400"
+                            header-cell-class-name="tabela"
+                            row-class-name="tabela"
+                            max-height="420"
                             fit
+                            :highlight-current-row="false"
                             element-loading-text="Processando"
-                            style="width: max-content"
                             size="small"
                             show-header
                             :data="order.cart">
@@ -104,17 +104,33 @@
                             </el-table-column>
                         </el-table>
 
-                        <div class="shadow-md rounded-md text-center w-full md:max-w-[410px] flex flex-col gap-6 bg-white">
+                        <div class="shadow-md rounded-md text-center w-full md:max-w-[410px] flex flex-col gap-6 bg-foreground_2">
                             <el-descriptions
-                                title=""
+                                size="small"
                                 direction="horizontal"
                                 :column="1"
-                                :size="5"
                                 border>
-                                <el-descriptions-item label="Sub Total:">{{ formatCurrency(order.payment.totalProductsPrice) }}</el-descriptions-item>
-                                <el-descriptions-item label="Taxa de envio:">{{ formatCurrency(order.delivery.cost) }}</el-descriptions-item>
-                                <!-- <el-descriptions-item label="Iva:">incluso</el-descriptions-item> -->
-                                <el-descriptions-item label="Total pago:">{{ formatCurrency(order.payment.amount) }}</el-descriptions-item>
+                                <el-descriptions-item
+                                    label-class-name="tabela"
+                                    class-name="tabela"
+                                    label="Sub Total:"
+                                    >{{ formatCurrency(order.payment.totalProductsPrice) }}</el-descriptions-item
+                                >
+                                <el-descriptions-item
+                                    label-class-name="tabela"
+                                    class-name="tabela"
+                                    label="Taxa de envio:"
+                                    >{{ formatCurrency(order.delivery.cost) }}</el-descriptions-item
+                                >
+                                <!-- <el-descriptions-item
+                                 label-class-name="tabela"
+                    class-name="tabela" label="Iva:">incluso</el-descriptions-item> -->
+                                <el-descriptions-item
+                                    label-class-name="tabela"
+                                    class-name="tabela"
+                                    label="Total pago:"
+                                    >{{ formatCurrency(order.payment.amount) }}</el-descriptions-item
+                                >
                             </el-descriptions>
                         </div>
                     </div>
@@ -470,7 +486,7 @@
 </script>
 <style scoped>
     .card {
-        background: white;
+        background: var(--foreground_2);
         border-radius: 10px;
     }
     .v-timeline-item__opposite {

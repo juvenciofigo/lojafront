@@ -1,9 +1,9 @@
 <template lang="">
     <div class="flex flex-col lg:flex-row p-1 gap-1 flex-1 h-max">
         <!-- Seção de imagens do produto -->
-        <div class="images bg-white rounded-md w-full p-2 lg:w-[360px] flex flex-col gap-3 items-center">
+        <div class="images bg-foreground_2 rounded-md w-full p-2 lg:w-[360px] flex flex-col gap-3 items-center">
             <div class="image self-center max-w-[450px] lg:w-full">
-                <div class="bg-slate-100 rounded-md">
+                <div class="bg-foreground_2 rounded-md">
                     <v-skeleton-loader type="image"> </v-skeleton-loader>
                 </div>
             </div>
@@ -14,7 +14,7 @@
 
         <!-- Seção de detalhes do produto -->
         <div class="flex flex-col flex-1 gap-2 lg:overflow-auto lg:max-h-[calc(100vh-82px)]">
-            <div class="Descriptions flex-1 flex flex-col gap-1 bg-white rounded-md p-2 md:p-4">
+            <div class="Descriptions flex-1 flex flex-col gap-1 bg-foreground_2 rounded-md p-2 md:p-4">
                 <div>
                     <v-skeleton-loader type="subtitle"> </v-skeleton-loader>
                 </div>
@@ -73,7 +73,7 @@
             </div>
 
             <!-- Especificações do produto -->
-            <div class="Especificatios bg-white rounded-md p-2 md:p-4">
+            <div class="Especificatios bg-foreground_2 rounded-md p-2 md:p-4">
                 <v-skeleton-loader type="subtitle"> </v-skeleton-loader>
                 <div>
                     <v-skeleton-loader type="text"> </v-skeleton-loader>
@@ -81,7 +81,7 @@
             </div>
 
             <!-- Avaliações do produto -->
-            <div class="Avaliations bg-white rounded-md p-2 md:p-4">
+            <div class="Avaliations bg-foreground_2 rounded-md p-2 md:p-4">
                 <v-skeleton-loader type="subtitle"> </v-skeleton-loader>
                 <div class="flex flex-col gap-4">
                     <v-skeleton-loader type="text"> </v-skeleton-loader>

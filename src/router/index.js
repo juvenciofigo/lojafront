@@ -187,7 +187,7 @@ const router = createRouter({
 
 router.beforeEach(async (to, from, next) => {
     NProgress.done();
-    NProgress.start(); // Inicia a barra de progresso
+    NProgress.start();
     try {
         if (to.matched.some((record) => record.meta.requiresLogin)) {
             const isAuthenticated = await store.getters.isAuthenticated("authToken");

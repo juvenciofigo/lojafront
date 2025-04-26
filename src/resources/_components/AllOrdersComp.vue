@@ -100,7 +100,7 @@
             :title="`Detalhes do Pedido ${selectedOrder.referenceOrder}`">
             <template #default>
                 <OrdersDetails
-                    class="bg-[#f3f3f9]"
+                    class="bg-background_2"
                     :order="selectedOrder">
                 </OrdersDetails>
             </template>

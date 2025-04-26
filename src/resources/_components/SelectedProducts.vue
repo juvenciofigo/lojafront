@@ -34,16 +34,14 @@
                                 </div>
                             </template>
                         </el-image>
-                        <div>
-                            <div class="title">
-                                <p class="text-center text-[14px] p-[2px] font-medium text-primary_2 truncate">{{ product.productName }}</p>
-                            </div>
-                            <div class="title-price self-end">
-                                <div class="price text-center">
-                                    <span class="font-bold">{{ formatCurrency(product.productPrice) }}</span>
-                                </div>
-                                <el-link type="primary"> Detalhes </el-link>
-                            </div>
+                        <div class="p-[2px] text-center">
+                            <p class="text-[14px] font-medium text-primary_2 truncate">{{ product.productName }}</p>
+                            <span class="font-bold">{{ formatCurrency(product.productPrice) }}</span>
+                            <el-link
+                                class="w-full"
+                                type="primary">
+                                Detalhes
+                            </el-link>
                         </div>
                     </router-link>
                 </el-tooltip>
@@ -106,17 +104,10 @@
         flex-direction: column;
         justify-content: end;
     }
+    
     .product-card .image {
         width: 100%;
         flex-shrink: 1;
-    }
-
-    .product-card .title-price {
-        padding: 5px;
-        display: flex;
-        gap: 2px;
-        flex-direction: column;
-        width: 100%;
     }
 
     @media screen and (min-width: 768px) {
