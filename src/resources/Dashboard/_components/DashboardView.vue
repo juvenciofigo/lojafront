@@ -83,7 +83,7 @@
                     </el-menu>
                 </span>
             </div>
-            <router-view class="overflow-auto"></router-view>
+            <router-view class="overflow-auto ml-2"></router-view>
         </div>
         <el-backtop
             target=".view"
@@ -101,13 +101,14 @@
     import LogoPart from "@/components/partials/LogoPart.vue";
     import FoooterComp from "@/components/partials/FoooterComp.vue";
     import HeaderTop from "@/components/partials/HeaderTop.vue";
-    import { ShoppingCart, User, Goods, ShoppingBag, TakeawayBox, Grid, Fold, Top } from "@element-plus/icons-vue";
+    import { ShoppingCart, User, Goods, ShoppingBag, TakeawayBox, Grid, Fold, Top, Plus } from "@element-plus/icons-vue";
 
     const route = useRoute();
 
     const items = [
         { name: "Dahsboard", link: "admin-home", icon: Grid },
         { name: "Produtos", link: "admin-products-list", icon: ShoppingBag },
+        { name: "Novo Produto", link: "admin-product-create", icon: Plus },
         { name: "Pedidos", link: "admin-orders", icon: TakeawayBox },
         { name: "Clientes", link: "admin-customers", icon: User },
         { name: "Carrinhos", link: "admin-carts", icon: ShoppingCart },

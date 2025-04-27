@@ -1,7 +1,7 @@
 <template lang="">
-    <div class="bottom-0 addProduct top-[4px] p-4 right-0 flex-1 w-full flex flex-col overflow-auto gap-2 flex-nowrap">
-        <div class="bg-foreground_2 px-2 py-1">
-            <h1 class="text-lg font-semibold">Informações Básicas</h1>
+    <div class="addProduct flex-1 w-full flex flex-col overflow-auto gap-2 flex-nowrap">
+        <div class="bg-foreground_2 px-2 h-[40px]">
+            <h1 class="text-base font-semibold">Informações Básicas</h1>
             <p class="indent-2">Preencha as informações abaixo</p>
         </div>
 
@@ -39,6 +39,20 @@
                                 </div>
 
                                 <span class="error-message">{{ productDescription.errorMessage.value }}</span>
+                            </div>
+                            
+                            <!-- Especificacao -->
+                            <div class="input-field descr">
+                                <Label><span class="text-red-500">*</span> Especificações:</Label>
+                                <div class="bg-details text-text_2">
+                                    <!-- :disable="true" -->
+                                    <QuillEditor
+                                        v-model:content="productSpecifications.value.value"
+                                        contentType="html"
+                                        :options="editorOptions" />
+                                </div>
+
+                                <span class="error-message">{{ productSpecifications.errorMessage.value }}</span>
                             </div>
                         </div>
                     </div>
@@ -587,6 +601,7 @@
             z.object({
                 productName: z.string({ message: "Campo obrigatório" }),
                 productDescription: z.string({ message: "Campo obrigatório" }),
+                productSpecifications: z.string().optional(),
                 productAvailability: z.boolean({ message: "Campo obrigatório" }),
                 productPrice: z.number({ message: "Campo obrigatório" }),
                 productStock: z.boolean({ message: "Campo obrigatório" }),
@@ -610,6 +625,7 @@
         productAvailability = useField("productAvailability"),
         productStock = useField("productStock"),
         productDescription = useField("productDescription"),
+        productSpecifications = useField("productSpecifications"),
         productPrice = useField("productPrice"),
         productCategory = useField("productCategory"),
         productSubcategory = useField("productSubcategory"),
@@ -698,6 +714,7 @@
             form.value.deliveryEstimate = product?.deliveryEstimate;
             productName.value.value = product?.productName;
             productDescription.value.value = product?.productDescription;
+            productSpecifications.value.value = product?.productSpecifications;
             productAvailability.value.value = product?.productAvailability;
             productPrice.value.value = product?.productPrice;
             productStock.value.value = product?.productStock;

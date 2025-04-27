@@ -94,6 +94,11 @@ const routes = [
                 component: () => import("@/resources/Dashboard/_components/Store/_components/orders/AllOrders.vue"),
             },
             {
+                path: "novo",
+                name: "admin-product-create",
+                component: () => import("@/resources/Dashboard/_components/Store/_components/products/AddProduct.vue"),
+            },
+            {
                 path: "produtos",
                 name: "admin-products",
                 children: [
@@ -101,11 +106,6 @@ const routes = [
                         path: "",
                         name: "admin-products-list",
                         component: () => import("@/resources/Dashboard/_components/Store/_components/products/AllProducts.vue"),
-                    },
-                    {
-                        path: "novo",
-                        name: "admin-product-create",
-                        component: () => import("@/resources/Dashboard/_components/Store/_components/products/AddProduct.vue"),
                     },
                     {
                         path: "produto/:id/detalhes",

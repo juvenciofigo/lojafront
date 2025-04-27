@@ -3,7 +3,7 @@
         <!-- Filtrar -->
         <section class="w-[274px] hidden lg:flex flex-col gap-4 bg-foreground_2">
             <div class="w-full categories-list overflow-auto">
-                <h2 class="p-1 bg-details font-semibold">Categorias</h2>
+                <h2 class="p-1 bg-details font-semibold h-[40px]">Categorias</h2>
 
                 <ul
                     v-if="categories && categories.length > 0"
@@ -103,7 +103,6 @@
                     <h2>{{ category || "Todos Produtos" }}</h2>
                 </div>
 
-                <slot name="addProduct"></slot>
             </div>
 
             <ProductSkeleton v-if="skeleton" />

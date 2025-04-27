@@ -1,50 +1,53 @@
 <template lang="">
     <ProductDetaislsSkeleton v-if="skeleton"></ProductDetaislsSkeleton>
     <ProductDetailsComp
+        :price="product.productPrice"
         :fifthButton="delRating"
         v-if="!skeleton && product">
         <template #opcoes>
             <!-- Botões de ação -->
             <div
                 ref="buttons"
-                class="buttons flex-row flex flex-nowrap">
-                <el-button
-                    size="small"
-                    :loading="loading_button"
-                    type="danger"
-                    @click="delProduct">
-                    Apagar
-                    <el-icon><Delete /></el-icon>
-                </el-button>
+                class="buttons flex-row flex gap-[5px] flex-wrap">
+                <div>
+                    <el-button
+                        size="small"
+                        :loading="loading_button"
+                        type="danger"
+                        @click="delProduct">
+                        Apagar
+                        <el-icon><Delete /></el-icon>
+                    </el-button>
+                    <el-button
+                        size="small"
+                        :loading="loading_button"
+                        type="primary"
+                        @click="navigateTo">
+                        Actualizar
+                    </el-button>
+                </div>
 
-                <el-button
-                    size="small"
-                    :loading="loading_button"
-                    type="primary"
-                    @click="navigateTo">
-                    Actualizar
-                </el-button>
-
-                <el-button
-                    size="small"
-                    :loading="loading_button"
-                    type="success"
-                    @click="addImage">
-                    Fotos
-                </el-button>
-
-                <el-button
-                    size="small"
-                    :loading="loading_button"
-                    type="info"
-                    @click="variations">
-                    Variações
-                </el-button>
+                <div>
+                    <el-button
+                        size="small"
+                        :loading="loading_button"
+                        type="success"
+                        @click="addImage">
+                        Fotos
+                    </el-button>
+                    <el-button
+                        size="small"
+                        :loading="loading_button"
+                        type="info"
+                        @click="variations">
+                        Variações
+                    </el-button>
+                </div>
             </div>
         </template>
 
         <template #product-statistic>
-            <div class="border border-slate-50 p-1 rounded-md">
+            <div class="">
                 <div class="flex flex-row justify-center flex-nowrap gap-4 my-3">
                     <div class="flex flex-row shadow-md items-center p-2 rounded-md border-[0.6px] border-slate-50 gap-2">
                         <div class="flex items-center p-1">
@@ -68,11 +71,10 @@
                 </div>
                 <div class="flex items-center flex-wrap">
                     <span class="font-semibold">Fornecedor: </span>
-                    <span class="break-words whitespace-pre-wrap">
-                        <el-input
-                            v-model="product.productVendor"
-                            readonly />
-                    </span>
+                    <el-input
+                        size="small"
+                        v-model="product.productVendor"
+                        readonly />
                 </div>
             </div>
         </template>

@@ -42,13 +42,15 @@
                 <!--Fim Seção de imagens do produto -->
 
                 <!-- Descrição do produto -->
-                <div class="flex-1">
-                    <h1 class="text-xl">{{ product.productName }}</h1>
-                    <el-rate
-                        disabled
-                        allow-half
-                        v-model="product.ratingAverage"
-                        :colors="colorsRate" />
+                <div class="flex-1 overflow-auto h-full">
+                    <div class="sticky top-0 bg-foreground_2">
+                        <h1 class="text-xl">{{ product.productName }}</h1>
+                        <el-rate
+                            disabled
+                            allow-half
+                            v-model="product.ratingAverage"
+                            :colors="colorsRate" />
+                    </div>
 
                     <div class="compra-mobile lg:hidden flex flex-col gap-4 bg-foreground_2 rounded-md">
                         <div class="text-2xl">
@@ -70,27 +72,20 @@
                         <div class="buttons-chips flex flex-col lg:flex-row flex-wrap gap-3 font-semibold"></div>
                     </div>
                     <br />
-                    <div>
+                    <div class="">
                         <h2 class="text-lg mb-1">Descrição:</h2>
-                        <p
+                        <div
                             v-html="product.productDescription"
-                            class="font-normal indent-2"></p>
+                            class="font-normal indent-2"></div>
                     </div>
                 </div>
                 <!--Fim Descrição do produto -->
             </div>
 
-            <div class="compra-desktop hidden lg:flex flex-col gap-4 bg-foreground_2 rounded-md p-2 h-max w-[320px]">
+            <div class="compra-desktop hidden lg:flex flex-col gap-4 bg-foreground_2 rounded-md p-2">
                 <div class="text-2xl">
                     <span class="font-normal text-xs">Preço: </span>
-                    <span
-                        class="font-semibold"
-                        v-if="product.productPromotion">
-                        {{ formatCurrency(price) }}
-                    </span>
-                    <span
-                        class="font-semibold"
-                        v-else>
+                    <span class="font-semibold">
                         {{ formatCurrency(price) }}
                     </span>
                 </div>
@@ -111,18 +106,10 @@
             <div class="Especificatios bg-foreground_2 rounded-md p-2 md:p-4">
                 <h2 class="mb-4 font-semibold text-lg">Especificações:</h2>
                 <div>
-                    <v-table
+                    <div
                         density="compact"
-                        v-if="product.productSpecifications && product.productSpecifications.length > 0">
-                        <tbody>
-                            <tr
-                                v-for="(spec, index) in product.productSpecifications"
-                                :key="index">
-                                <td>{{ spec.SpecificationName }}</td>
-                                <td>{{ spec.SpecificationText }}</td>
-                            </tr>
-                        </tbody>
-                    </v-table>
+                        v-if="product.productSpecifications"
+                        v-html="product.productSpecifications"></div>
                     <p v-else>Sem Especificações!!!</p>
                 </div>
             </div>
