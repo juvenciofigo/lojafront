@@ -53,7 +53,7 @@
         </HeaderTop>
 
         <div class="flex flex-row flex-1">
-            <div class="flex flex-col">
+            <div class="flex flex-col bg-foreground_2">
                 <span class="hidden md:block">
                     <div
                         @click="isCollapse = !isCollapse"

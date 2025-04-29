@@ -1,5 +1,5 @@
 <template lang="">
-    <div class="addProduct flex-1 w-full flex flex-col overflow-auto gap-2 flex-nowrap">
+    <div class="addProduct flex-1 w-full flex flex-col gap-2 flex-nowrap">
         <div class="bg-foreground_2 px-2 h-[40px]">
             <h1 class="text-base font-semibold">Informações Básicas</h1>
             <p class="indent-2">Preencha as informações abaixo</p>
@@ -9,8 +9,8 @@
             v-loading="textAreaDisabled"
             @submit.prevent="submit"
             enctype="multipart/form-data">
-            <div class="flex flex-col md:flex-row gap-8">
-                <div class="Left flex-[2] flex flex-col gap-8 bg-foreground_2 p-2 md:p-4">
+            <div class="flex flex-col flex-wrap md:flex-row gap-2 overflow-hidden">
+                <div class="Left flex-[2] flex flex-col flex-wrap gap-8 bg-foreground_2 p-2 md:p-4">
                     <div class="TIT_Desc">
                         <div class="Tit-Des flex flex-col gap-4">
                             <!-- Title Product -->
