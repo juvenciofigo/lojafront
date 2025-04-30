@@ -61,7 +61,7 @@
                     <div class="input-field mb-3 p-2">
                         <Label> Imagens:</Label>
 
-                        <div class="bg-details w-max">
+                        <div class="bg-details">
                             <el-upload
                                 drag
                                 v-model:file-list="fileList"
@@ -118,7 +118,7 @@
                             class="block h-max mt-5"
                             v-if="productImage && productImage.length > 0">
                             <label> Imagens EXISTENTES:</label>
-                            <div class="flex gap-">
+                            <div class="flex gap-1">
                                 <div
                                     @click="removeImage(index)"
                                     class="m-1 relative"
