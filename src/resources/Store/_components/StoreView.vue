@@ -129,9 +129,6 @@
             image: "images/promo/promo1.webp",
         },
         {
-            image: "images/promo/promo2.webp",
-        },
-        {
             image: "images/promo/promo3.webp",
         },
     ];
