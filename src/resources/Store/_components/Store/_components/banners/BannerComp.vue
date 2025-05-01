@@ -31,10 +31,7 @@
                                 class="absolute bottom-[50%] left-[50%]"
                                 v-if="item.productId"
                                 :to="{ name: 'product-details', params: { id: `${item.productId}` } }">
-                                <el-button
-                                    >
-                                    Ver Mais...</el-button
-                                >
+                                <el-button> Ver Mais...</el-button>
                             </router-link>
                         </div>
                     </template>
@@ -69,14 +66,10 @@
                                 </template>
                             </el-image>
                             <router-link
-                                class="absolute bottom-[20px] left-[50%]"
+                                class="absolute bottom-[50%] left-[50%]"
                                 v-if="item.productId"
                                 :to="{ name: 'product-details', params: { id: `${item.productId}` } }">
-                                <el-button
-                                    plain
-                                    type="primary">
-                                    Ver Mais...</el-button
-                                >
+                                <el-button> Ver Mais...</el-button>
                             </router-link>
                         </div>
                     </template>
