@@ -12,10 +12,10 @@
                             :key="index"
                             @click="updateImageLink(index)"
                             class="select rounded-md w-10 h-10 lg:w-[60px] lg:h-[60px] flex-shrink-0 outline outline-1 m-[2px]">
-                            <img
+                            <!-- <img
                                 :src="image"
                                 alt="Imagem do Produto"
-                                class="image rounded-sm w-full h-full object-contain" />
+                                class="image rounded-sm w-full h-full object-contain" /> -->
                         </button>
                     </div>
 
