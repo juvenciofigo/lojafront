@@ -63,7 +63,7 @@ export default createStore({
     },
 
     state: {
-        themeMode: JSON.parse(getCookie("THEME")) ?? false,
+        themeMode: JSON.parse(getCookie("THEME")) ?? true,
         /// Loja
         storeName: process.env.VUE_APP_STORE_NAME,
         // users
