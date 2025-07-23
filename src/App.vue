@@ -1,5 +1,5 @@
 <template>
-    <div :class="[themeMode ? 'dark' : '', 'pt-1 overflow-hidden text-text13 bg-background_2 text-text_2']">
+    <div :class="[themeMode ? '' : 'dark', 'pt-1 overflow-hidden text-text13 bg-background_2 text-text_2']">
         <!--  main -->
         <div class="overflow-hidden main-vier">
             <router-view class="principal-viewr" />

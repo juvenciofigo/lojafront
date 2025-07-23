@@ -196,7 +196,7 @@
     window.addEventListener("resize", () => {
         resize();
     });
-    const color = computed(() => (themeMode.value ? "#fff" : "#3e3535"));
+    const color = computed(() => (themeMode.value ? "#3e3535" : "#fff"));
     themeMode.value;
     onMounted(() => {
         resize();

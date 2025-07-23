@@ -8,11 +8,11 @@
             </template>
             <template #right>
                 <div class="flex flex-row gap-3">
-                    <div  class="flex flex-row items-center">
-                        <Sunny class="h-6"/>
+                    <div class="flex flex-row items-center">
+                        <Sunny class="h-6" />
                         <el-switch
                             size="small"
-                            @change="swithTheme()"
+                            @change="switchTheme()"
                             v-model="themeMode"
                             inline-prompt
                             :active-icon="Sunny"
@@ -63,8 +63,8 @@
     const priceTotal = computed(() => store.state.carts.cartPrice);
 
     const themeMode = computed(() => store.state.themeMode);
-    const swithTheme = () => {
-        store.dispatch("swithTheme");
+    const switchTheme = () => {
+        store.dispatch("switchTheme");
     };
 </script>
 <style lang=""></style>

@@ -1,7 +1,7 @@
 import { createStore } from "vuex";
 import axios from "axios";
 import config from "@/config/config";
-import { getCookie, cookieExists, errorMessage } from "@/util/cookieUtils";
+import { getCookie, setCookie, cookieExists, errorMessage } from "@/util/cookieUtils";
 import router from "@/router";
 import { ElNotification } from "element-plus";
 
@@ -63,7 +63,7 @@ export default createStore({
     },
 
     state: {
-        themeMode:false,
+        themeMode: JSON.parse(getCookie("THEME")) ?? false,
         /// Loja
         storeName: process.env.VUE_APP_STORE_NAME,
         // users
@@ -125,8 +125,8 @@ export default createStore({
             state.mySelf = data;
             state.completeProfile = !state.completeProfile;
         },
-        SWITH_THEME(state) {
-            state.themeMode = !state.themeMode;
+        SWITCH_THEME(state, data) {
+            state.themeMode = data;
         },
     },
 
@@ -143,8 +143,17 @@ export default createStore({
                 errorMessage(error);
             }
         },
-        swithTheme({ commit }) {
-            commit("SWITH_THEME");
+        switchTheme({ commit }) {
+            let theme = JSON.parse(getCookie("THEME"));
+
+            if (theme === null) {
+                theme = true;
+            } else {
+                theme = !theme;
+            }
+
+            setCookie("THEME", theme, 10);
+            commit("SWITCH_THEME", theme);
         },
     },
 });
