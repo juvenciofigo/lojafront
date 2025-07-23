@@ -49,19 +49,6 @@
                                 <LogOut class="w-4 h-4" />
                             </div>
                         </el-dropdown-item>
-                        <el-dropdown-item>
-                            <div>
-                                <span>Tema:</span>
-                                <el-switch
-                                    size="small"
-                                    @change="swithTheme()"
-                                    v-model="themeMode"
-                                    style="margin-left: 24px"
-                                    inline-prompt
-                                    :active-icon="Sunny"
-                                    :inactive-icon="Moon" />
-                            </div>
-                        </el-dropdown-item>
                     </el-dropdown-menu>
                 </template>
             </el-dropdown>
@@ -83,7 +70,7 @@
     import { computed, ref, onBeforeMount } from "vue";
     import { useStore } from "vuex";
     import { useRouter } from "vue-router";
-    import { ArrowDown, Sunny, Moon } from "@element-plus/icons-vue";
+    import { ArrowDown } from "@element-plus/icons-vue";
     import { LogOut } from "lucide-vue-next";
 
     const store = useStore();
@@ -93,10 +80,6 @@
     const storeName = store.state.storeName;
     const user = computed(() => JSON.parse(localStorage.getItem("userData")));
     const drawer = ref(false);
-    const themeMode = computed(() => store.state.themeMode);
-    const swithTheme = () => {
-        store.dispatch("swithTheme");
-    };
 
     const navigate = (route) => {
         if (route) {
