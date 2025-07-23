@@ -9,7 +9,7 @@
             <template #right>
                 <div class="flex flex-row gap-3">
                     <div  class="flex flex-row items-center">
-                        <Sunny class="h-8"/>
+                        <Sunny class="h-6"/>
                         <el-switch
                             size="small"
                             @change="swithTheme()"
